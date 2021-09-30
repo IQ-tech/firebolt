@@ -5,6 +5,8 @@
     "packages/*"
   ],
   "scripts": {
+    "start": "lerna run start",
+    "test": "lerna run test",
     "bootstrap": "lerna bootstrap --use-workspaces",
     "clean": "lerna clean",
     "build": "lerna run build"

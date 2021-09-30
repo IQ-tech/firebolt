@@ -1,0 +1,26 @@
+{
+  "name": "@iq-firebolt/client-core",
+  "version": "0.0.0",
+  "description": "> TODO: description",
+  "author": "Italo Fontes <italo5123@hotmail.com>",
+  "homepage": "https://github.com/IQ-tech/firebolt#readme",
+  "license": "ISC",
+  "main": "lib/client-core.js",
+  "directories": {
+    "lib": "lib",
+    "test": "__tests__"
+  },
+  "files": [
+    "lib"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/IQ-tech/firebolt.git"
+  },
+  "scripts": {
+    "test": "echo \"Error: run tests from root\" && exit 1"
+  },
+  "bugs": {
+    "url": "https://github.com/IQ-tech/firebolt/issues"
+  }
+}
