@@ -1,4 +1,5 @@
-* publish validators
-* move client to here
-* create lab to render form
-* refactor client / define themes
+* install tps
+* move core
+* create playground
+* reacreate react components with tests + tps
+* repensar form local
