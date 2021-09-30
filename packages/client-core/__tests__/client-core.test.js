@@ -1,7 +1,5 @@
-'use strict';
-
-const clientCore = require('..');
+import {createFireboltForm} from "../lib/index"
 
 describe('client-core', () => {
-    it('needs tests');
+    test.todo('testsd')
 });
