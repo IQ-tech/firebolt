@@ -1,0 +1,35 @@
+{
+  "name": "@iq-firebolt/validators",
+  "version": "0.0.0",
+  "description": "> TODO: description",
+  "author": "iq team",
+  "homepage": "https://github.com/IQ-tech/firebolt#readme",
+  "license": "ISC",
+  "main": "lib/validators.js",
+  "directories": {
+    "lib": "lib",
+    "test": "__tests__"
+  },
+  "files": [
+    "lib"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/IQ-tech/firebolt.git"
+  },
+  "scripts": {
+    "clear-dist": "rimraf dist",
+    "test": "jest",
+    "test:watch": "NODE_ENV=test jest --watchAll",
+    "build": "yarn clear-dist && tsc",
+    "clear-jest": "jest --clearCache"
+  },
+  "bugs": {
+    "url": "https://github.com/IQ-tech/firebolt/issues"
+  },
+  "dependencies": {
+    "cpf-cnpj-validator": "^1.0.3",
+    "faker": "^5.5.3",
+    "simple-evaluate": "^1.4.3"
+  }
+}

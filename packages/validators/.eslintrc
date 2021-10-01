@@ -1,0 +1,22 @@
+{
+  "env": {
+    "browser": true,
+    "commonjs": true,
+    "es2021": true,
+    "jest/globals": true
+  },
+  "ignorePatterns": ["/dist/**/*"],
+  "extends": ["airbnb-base"],
+  "parserOptions": {
+    "ecmaVersion": 12
+  },
+  "rules": {
+    "radix": "off",
+    "operator-linebreak": "off",
+    "no-plusplus": "off",
+    "arrow-body-style": "off",
+    "no-multiple-empty-lines": "off",
+    "padded-blocks": "off"
+  },
+  "plugins": ["jest"]
+}
