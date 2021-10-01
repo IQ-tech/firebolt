@@ -1,9 +1,10 @@
-import Button from "@material-ui/core/Button"
-import InputLabel from "@material-ui/core/InputLabel"
-import FormControl from "@material-ui/core/FormControl"
-import FormHelperText from "@material-ui/core/FormHelperText"
-import useUploadWidget from "../../../../hooks/widgetsBehavior/useUploadWidget"
-import FieldHolder from "../../FieldHolder"
+import React from "react";
+import Button from "@material-ui/core/Button";
+import InputLabel from "@material-ui/core/InputLabel";
+import FormControl from "@material-ui/core/FormControl";
+import FormHelperText from "@material-ui/core/FormHelperText";
+import useUploadWidget from "../../../../hooks/widgetsBehavior/useUploadWidget";
+import FieldHolder from "../../FieldHolder";
 
 const UploadWidget = ({
   slug,
@@ -25,7 +26,7 @@ const UploadWidget = ({
       maxFiles,
       allowedExtensions,
       uploadEndpoint,
-    })
+    });
 
   return (
     <FieldHolder>
@@ -63,7 +64,7 @@ const UploadWidget = ({
         )}
       </FormControl>
     </FieldHolder>
-  )
-}
+  );
+};
 
-export default UploadWidget
+export default UploadWidget;

@@ -1,5 +1,5 @@
 import { createContext } from "react";
 
-const FireboltContext = createContext();
+const FireboltContext = createContext({});
 
 export default FireboltContext;

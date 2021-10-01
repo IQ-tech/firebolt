@@ -1,0 +1,50 @@
+const { resolve, join } = require("path");
+
+const srcDir = resolve(__dirname, "../src");
+
+module.exports = {
+  mode: "production",
+  entry: "./src/index.js",
+  output: {
+    filename: "index.js",
+    libraryTarget: "umd",
+    globalObject: "this",
+    chunkFilename: "chunks/[name].js",
+  },
+  externals: {
+    react: "react", //this config keeps react out of the bundle
+    reactDOM: "react-dom",
+  },
+  resolve: {
+    modules: ["node_modules"],
+    extensions: [".js", ".jsx", ".json"], // no necessity to write this extensions on every import
+  },
+  module: {
+    rules: [
+      {
+        test: /\.js$/,
+        use: [
+          {
+            loader: "babel-loader",
+            options: {
+              presets: [
+                "@babel/preset-react",
+
+                [
+                  "@babel/preset-env",
+                  {
+                    targets: {
+                      browsers: ["last 2 versions"],
+                    },
+                    modules: false,
+                  },
+                ],
+              ],
+            },
+          },
+        ],
+        exclude: "/node_modules/",
+      },
+    ],
+  },
+};

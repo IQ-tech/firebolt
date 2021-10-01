@@ -1,4 +1,4 @@
-import defaultTheme from "firebolt-client/react/components/theme"
+import defaultTheme from "../../../theme"
 
 export default function getFieldComponent({ customTheme = {}, widgetName }) {
   const customComponent = customTheme[widgetName]

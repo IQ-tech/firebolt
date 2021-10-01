@@ -1,11 +1,11 @@
-import { useState, useEffect } from "react"
-import FormLabel from "@material-ui/core/FormLabel"
-import FormControl from "@material-ui/core/FormControl"
-import FormGroup from "@material-ui/core/FormGroup"
-import FormControlLabel from "@material-ui/core/FormControlLabel"
-import FormHelperText from "@material-ui/core/FormHelperText"
-import Checkbox from "@material-ui/core/Checkbox"
-import FieldHolder from "../../FieldHolder"
+import React, { useState, useEffect } from "react";
+import FormLabel from "@material-ui/core/FormLabel";
+import FormControl from "@material-ui/core/FormControl";
+import FormGroup from "@material-ui/core/FormGroup";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import FormHelperText from "@material-ui/core/FormHelperText";
+import Checkbox from "@material-ui/core/Checkbox";
+import FieldHolder from "../../FieldHolder";
 
 const CheckboxGroupWidget = ({
   errorMessage,
@@ -17,23 +17,23 @@ const CheckboxGroupWidget = ({
   onChange,
   value = [],
 }) => {
-  const [selectedOptions, setSelectedOptions] = useState(value)
-  const [changedSelectedOptions, setChangedSelectedOptions] = useState(false)
+  const [selectedOptions, setSelectedOptions] = useState(value);
+  const [changedSelectedOptions, setChangedSelectedOptions] = useState(false);
 
   useEffect(() => {
     if (changedSelectedOptions) {
-      onChange(selectedOptions)
+      onChange(selectedOptions);
     }
-  }, [selectedOptions])
+  }, [selectedOptions]);
 
   function handleSelectOption(value) {
-    if (!changedSelectedOptions) setChangedSelectedOptions(true)
-    const isAlreadySelected = selectedOptions.includes(value)
+    if (!changedSelectedOptions) setChangedSelectedOptions(true);
+    const isAlreadySelected = selectedOptions.includes(value);
     const newSelectedOptions = isAlreadySelected
       ? selectedOptions.filter((item) => item !== value)
-      : [...selectedOptions, value]
+      : [...selectedOptions, value];
 
-    setSelectedOptions(newSelectedOptions)
+    setSelectedOptions(newSelectedOptions);
   }
 
   return (
@@ -63,7 +63,7 @@ const CheckboxGroupWidget = ({
         )}
       </FormControl>
     </FieldHolder>
-  )
-}
+  );
+};
 
-export default CheckboxGroupWidget
+export default CheckboxGroupWidget;
