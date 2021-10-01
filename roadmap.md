@@ -5,3 +5,7 @@
 * repensar form local
 
 * passar props-presets pra ser um item de tema
+
+
+
+* build client and validators
