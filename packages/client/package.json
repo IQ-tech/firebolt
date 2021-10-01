@@ -5,13 +5,11 @@
   "author": "iq team",
   "homepage": "https://github.com/IQ-tech/firebolt#readme",
   "license": "ISC",
-  "main": "lib/client.js",
-  "directories": {
-    "lib": "lib",
-    "test": "__tests__"
-  },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "files": [
-    "lib"
+    "/dist",
+    "./"
   ],
   "publishConfig": {
     "access": "public"

@@ -1,5 +1,6 @@
 import { useEffect } from "react";
-import { createFireboltProvider } from "@iq-firebolt/client/src/index";
+/* import { createFireboltProvider } from "@iq-firebolt/client/src/index"; */
+import { createFireboltProvider } from "@iq-firebolt/client";
 
 import "./App.css";
 
