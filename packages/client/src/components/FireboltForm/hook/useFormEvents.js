@@ -1,5 +1,5 @@
 import { useEffect } from "react"
-import { validateFBTField } from "firebolt-validator"
+import { validateFBTField } from "@iq-firebolt/validators"
 
 export default function useFieldsEvents({
   formPayload,

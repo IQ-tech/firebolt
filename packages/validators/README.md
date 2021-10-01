@@ -23,11 +23,11 @@ be ready to go
 
 npm
 
-    npm install --save redventures/firebolt-validator
+    npm install --save redventures/@iq-firebolt/validators
 
 yarn
 
-    yarn add redventures/firebolt-validator
+    yarn add redventures/@iq-firebolt/validators
 
 ## Usage
 
@@ -37,7 +37,7 @@ yarn
 #### Using 'validate' function
 
 ```js
-import { validate } from 'firebolt-validator'
+import { validate } from '@iq-firebolt/validators'
 
 const isValueValid = validate('phone', '(11) 91234-1234).isValid
 ```
@@ -45,7 +45,7 @@ const isValueValid = validate('phone', '(11) 91234-1234).isValid
 #### Using validators map
 
 ```js
-import { validators } from 'firebolt-validator'
+import { validators } from '@iq-firebolt/validators'
 
 const isValueValid = validators.phone.run('(11) 91234-1234').isValid
 ```
@@ -55,7 +55,7 @@ const isValueValid = validators.phone.run('(11) 91234-1234').isValid
 Some validators need some extra data to validate a given value
 
 ```js
-import { validate } from "firebolt-validator"
+import { validate } from "@iq-firebolt/validators"
 
 // validate(validatonName: string, value: any, properties: {})
 
@@ -68,7 +68,7 @@ const isValid = validate('bankAccountNumber', '123242-2', {bankSlug: "itau"}).is
 Is possible to validate multiple fields at the same time with `validateGroup`
 
 ```js
-import { validateGroup } from "firebolt-validator"
+import { validateGroup } from "@iq-firebolt/validators"
 
 const fieldsValidation = validateGroup(
     ['cpf', '584.298.880-12'],
@@ -88,7 +88,7 @@ Validates a field created by a firebolt dynamic form. It relates the field defin
 ex.: To validate a bank account, we need to consider other form fields as bank brand, agency, etc.
 
 ```js
-import { validateFBTField, validateFBTStep } from 'firebolt-validator'
+import { validateFBTField, validateFBTStep } from '@iq-firebolt/validators'
 
 const fireboltStepFieldScheme = {
     fields: [

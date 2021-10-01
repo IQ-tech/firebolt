@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react"
-import { validateFBTStep } from "firebolt-validator"
+import { validateFBTStep } from "@iq-firebolt/validators"
 
 export default function useFormState({ schema, autoFill, remoteErrors }) {
   const [isFormValid, setIsFormValid] = useState(false)
