@@ -1,25 +1,26 @@
-import logo from "./logo.svg";
+import { useEffect } from "react";
+import { createFireboltProvider } from "@iq-firebolt/client/src/index";
+
 import "./App.css";
 
+const withFirebolt = createFireboltProvider({
+  source: {
+    root: "https://dsv-firebolt-api.iq.com.br/",
+    formName: "simplic",
+  },
+  debug: true,
+  stepQueryParam: "passo",
+});
+
 function App() {
+  useEffect(() => {
+    console.log(createFireboltProvider);
+  }, []);
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <p>cebola</p>
     </div>
   );
 }
 
-export default App;
+export default withFirebolt(App);
