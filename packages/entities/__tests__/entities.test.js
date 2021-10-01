@@ -2,6 +2,7 @@
 
 const entities = require('..');
 
-describe('@iq-firebolt/entities', () => {
+/* describe('@iq-firebolt/entities', () => {
     it('needs tests');
 });
+ */

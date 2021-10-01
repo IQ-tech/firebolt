@@ -6,15 +6,17 @@
   ],
   "scripts": {
     "start": "lerna run start",
-    "test": "lerna run test",
+    "test:all": "lerna run test",
+    "build:validators": "",
+    "build:client": "",
     "bootstrap": "lerna bootstrap --use-workspaces",
-    "clean": "lerna clean",
-    "build": "lerna run build"
+    "clean": "lerna clean"
   },
   "devDependencies": {
     "@types/faker": "^5.5.8",
     "@types/jest": "^27.0.2",
     "eslint": "^7.32.0",
+    "eslint-plugin-jest": "^24.5.0",
     "jest": "^27.2.4",
     "lerna": "^4.0.0",
     "rimraf": "^3.0.2",
