@@ -6,7 +6,7 @@ import {
 } from "@iq-firebolt/client-core";
 
 /**
- * @typedef {import("../../../core/entities/StepTransition").default} StepTransition
+ * @typedef {import("@iq-firebolt/client-core/lib/entities/StepTransition").default} StepTransition
  */
 
 export function useFireboltProvider({ formSource, debugMode, stepQueryParam }) {

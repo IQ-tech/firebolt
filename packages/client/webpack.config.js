@@ -1,6 +1,7 @@
 const { resolve, join } = require("path");
 
-const srcDir = resolve(__dirname, "../src");
+const BundleAnalyzerPlugin =
+  require("webpack-bundle-analyzer").BundleAnalyzerPlugin;
 
 module.exports = {
   mode: "production",
@@ -22,13 +23,18 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.js$/,
+        test: /\.(js|jsx)$/,
         use: [
           {
             loader: "babel-loader",
             options: {
               presets: [
-                "@babel/preset-react",
+                [
+                  "@babel/preset-react",
+                  {
+                    runtime: "automatic",
+                  },
+                ],
 
                 [
                   "@babel/preset-env",

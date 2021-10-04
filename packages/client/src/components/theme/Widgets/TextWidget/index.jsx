@@ -1,8 +1,8 @@
-import React, { useRef } from "react"
-import useMaskedInput from "@viewstools/use-masked-input"
-import FormControl from "@material-ui/core/FormControl"
-import TextField from "@material-ui/core/TextField"
-import FieldHolder from "../../FieldHolder"
+import { useRef } from "react";
+import useMaskedInput from "@viewstools/use-masked-input";
+import FormControl from "@material-ui/core/FormControl";
+import TextField from "@material-ui/core/TextField";
+import FieldHolder from "../../FieldHolder";
 
 const TextWidget = ({
   // html attributtes
@@ -23,13 +23,13 @@ const TextWidget = ({
   onChange,
   onBlur,
 }) => {
-  const fieldRef = useRef(null)
+  const fieldRef = useRef(null);
 
   const onChangeMask = useMaskedInput({
     input: fieldRef,
     mask: mask ? mask : false,
     onChange: (e) => onChange(e?.target?.value),
-  })
+  });
 
   return (
     <FieldHolder my="30px">
@@ -52,7 +52,7 @@ const TextWidget = ({
         />
       </FormControl>
     </FieldHolder>
-  )
-}
+  );
+};
 
-export default TextWidget
+export default TextWidget;

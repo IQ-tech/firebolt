@@ -1,4 +1,3 @@
-import React from "react";
 import TextWidget from "../TextWidget"
 
 

@@ -1,10 +1,9 @@
-import React from "react"
 import FireboltContext from "../../context"
 import useFireboltProvider from "./hook"
 import PropTypes from "prop-types"
 
 /**
- * @param {{formSource: import("../../../core/types").FormSource, debugMode: boolean, stepQueryParam: string}} props
+ * @param {{formSource: import("@iq-firebolt/client-core/lib/types").FormSource, debugMode: boolean, stepQueryParam: string}} props
  */
 const FireboltProvider = ({
   formSource,

@@ -1,4 +1,3 @@
-import React from "react"
 import FireboltProvider from "../components/FireboltProvider"
 
 const createFireboltProvider = ({ source, debug, stepQueryParam }) => (

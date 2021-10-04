@@ -1,4 +1,3 @@
-import React from "react";
 import FormControl from "@material-ui/core/FormControl"
 import Checkbox from "@material-ui/core/Checkbox"
 import FormControlLabel from "@material-ui/core/FormControlLabel"

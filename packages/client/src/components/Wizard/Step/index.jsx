@@ -1,4 +1,3 @@
-import React from "react"
 import useStep from "./hook"
 
 const Step = ({ component, ...props }) => {

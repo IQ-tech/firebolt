@@ -1,4 +1,3 @@
-import React from "react"
 import useEmailWidget from "../../../../hooks/widgetsBehavior/useEmailWidget"
 import TextField from "@material-ui/core/TextField"
 import Autocomplete from "@material-ui/lab/Autocomplete"
