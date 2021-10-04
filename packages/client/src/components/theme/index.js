@@ -7,11 +7,12 @@ import UploadWidget from "./Widgets/UploadWidget"
 import RadioWidget from "./Widgets/RadioWidget"
 import CheckboxGroupWidget from "./Widgets/CheckboxGroupWidget"
 import CheckWidget from "./Widgets/CheckWidget"
+import TextAreaWidget from "./Widgets/TextAreaWidget"
 
 const defaultTheme = {
   "Email": EmailWidget,
   "Text": TextWidget,
-  "TextArea": () => <p>textArea</p>,
+  "TextArea": TextAreaWidget,
   "Upload": UploadWidget,
   "Select": SelectWidget,
   "Number": NumberWidget,
