@@ -7,6 +7,7 @@
   "scripts": {
     "start": "lerna run start",
     "test:all": "lerna run test",
+    "test:validators": "lerna run test --scope @iq-firebolt/validators --stream",
     "build:validators": "",
     "build:client": "",
     "bootstrap": "lerna bootstrap --use-workspaces",
