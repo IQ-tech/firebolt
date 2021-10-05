@@ -1,6 +1,6 @@
 {
   "name": "@iq-firebolt/entities",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "> TODO: description",
   "author": "iq team",
   "private": true,
@@ -21,8 +21,7 @@
     "type": "git",
     "url": "git+https://github.com/IQ-tech/firebolt.git"
   },
-  "scripts": {
-  },
+  "scripts": {},
   "bugs": {
     "url": "https://github.com/IQ-tech/firebolt/issues"
   }
