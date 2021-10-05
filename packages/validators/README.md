@@ -2,6 +2,9 @@
 
 ![alt text](./static/Firebolt-logo.png)
 
+Important: this is a package in very early alpha state, usage in production is not recomended due
+to constant core changes.
+
 A package full of brazilian based validations, designed to be used with `firebolt-api` and `firebolt-client`, or also with standalone applications.
 
 ## Getting started
