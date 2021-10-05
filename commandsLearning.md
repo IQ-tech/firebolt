@@ -6,3 +6,10 @@
 
 * instalar um pacote em outro
 - `lerna add @iq-firebolt/client-core --scope=@iq-firebolt/lab`
+
+
+* primeira publicação
+`npm publish --access public`
+
+* publicar lerna
+`lerna publish --no-private`
