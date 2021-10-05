@@ -8,7 +8,7 @@
     "start": "lerna run start",
     "test:all": "lerna run test",
     "test:validators": "cd packages/validators && yarn test",
-    "build:validators": "",
+    "build:validators": "cd packages/validators && yarn build",
     "build:client": "",
     "bootstrap": "lerna bootstrap --use-workspaces",
     "clean": "lerna clean"
