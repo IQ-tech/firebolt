@@ -9,7 +9,7 @@
     "test:all": "lerna run test",
     "test:validators": "cd packages/validators && yarn test",
     "build:validators": "cd packages/validators && yarn build",
-    "build:client": "",
+    "build:libs": "lerna run build --scope @iq-firebolt/validators --scope @iq-firebolt/client",
     "bootstrap": "lerna bootstrap --use-workspaces",
     "clean": "lerna clean"
   },

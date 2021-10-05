@@ -12,4 +12,4 @@
 `npm publish --access public`
 
 * publicar lerna
-`lerna publish --no-private`
+`lerna publish`
