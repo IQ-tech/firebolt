@@ -1,6 +1,6 @@
 # `@iq-firebolt/client`
 
-> TODO: description
+> TODO: descriptions
 
 still in alpha
 
