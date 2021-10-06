@@ -23,6 +23,7 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
           cache: "yarn"
+          registry-url: 'https://registry.npmjs.org'
       - name: Git Identity
         run: |
           git config --global user.name 'github-actions[bot]'
@@ -34,8 +35,6 @@ jobs:
         run: yarn install
       - name: Setup lerna
         run: yarn bootstrap
-      - name: Setup npm key
-        echo "//registry.npmjs.org/:_authToken=${secrets.NPM_TOKEN}" > .npmrc
       - name: Build libs
         run: yarn build:libs
       # Define ${CURRENT_VERSION}
@@ -83,6 +82,8 @@ jobs:
         if: steps.tag_check.outputs.exists_tag == 'false'
         run: |
           yarn lerna publish from-package --yes
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
       - uses: actions/github-script@v4
         with:
           github-token: ${{secrets.GITHUB_TOKEN}}
