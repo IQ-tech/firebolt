@@ -2,6 +2,8 @@
 
 ![alt text](./static/Firebolt-logo.png)
 
+beta change
+
 A package full of brazilian based validations, designed to be used with `firebolt-api` and `firebolt-client`, or also with standalone applications.
 
 ## Getting started
