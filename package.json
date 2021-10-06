@@ -11,7 +11,7 @@
     "build:validators": "cd packages/validators && yarn build",
     "build:libs": "lerna run build --scope @iq-firebolt/validators --scope @iq-firebolt/client",
     "bootstrap": "lerna bootstrap --use-workspaces",
-    "versionup":"lerna version --conventional-commits --no-git-tag-version",
+    "versionup": "lerna version  --no-git-tag-version",
     "clean": "lerna clean"
   },
   "devDependencies": {
