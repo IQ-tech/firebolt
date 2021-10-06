@@ -12,6 +12,7 @@
     "build:libs": "lerna run build --scope @iq-firebolt/validators --scope @iq-firebolt/client",
     "bootstrap": "lerna bootstrap --use-workspaces",
     "versionup": "lerna version  --no-git-tag-version",
+    "publish:libs": "yarn lerna publish from-package --yes",
     "clean": "lerna clean"
   },
   "devDependencies": {
