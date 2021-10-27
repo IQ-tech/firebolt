@@ -12,6 +12,8 @@ export default function useStep() {
   } = useFirebolt()
 
   const fireboltStep = {
+    // #V2-TODO - spread currentStep
+    // #V2-TODO - spread useFirebolt
     id: currentStep.id,
     friendlyname: currentStep.friendlyname,
     fields: currentStep.fields,

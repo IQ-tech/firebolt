@@ -7,6 +7,7 @@ export default function useWizard({
   onFinishForm,
 }) {
   const {
+    // #V2-TODO change to isFormLoading
     hasFormLoaded,
     currentStep,
     stepsHistory,

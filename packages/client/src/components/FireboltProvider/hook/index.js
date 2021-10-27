@@ -1,9 +1,18 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import {
   createFireboltForm,
   clearFormSession,
   getUrlParams,
 } from "@iq-firebolt/client-core";
+
+export function nuseFireboltProvider({
+  formSource,
+  debugMode,
+  stepQueryParam,
+}) {
+  const fireboltForm = useRef(createFireboltForm(formSource, debugMode));
+
+}
 
 /**
  * @typedef {import("@iq-firebolt/client-core/lib/entities/StepTransition").default} StepTransition
@@ -27,12 +36,17 @@ export function useFireboltProvider({ formSource, debugMode, stepQueryParam }) {
   const [lockedNavigation, setLockedNavigation] = useState({
     next: false,
     previous: false,
-  });
+  }); // # V2-TODO remove this feature
+
   const [formCapturedData, setFormCapturedData] = useState({});
+
+  // #v2-TODO remove steps history, replace by last visited step
   const [stepsHistory, setStepsHistory] = useState([]);
+
   const [validationErrors, setValidationErrors] = useState([]);
   const [connectionError, setConnectionError] = useState(false);
   const [formHasBeenFinished, setFormHasBeenFinished] = useState(false);
+  
   const [formEndPayload, setFormEndPayload] = useState({});
   const [webhookResult, setWebhookResult] = useState({});
   const [requestsMetadata, setRequestsMetadata] = useState({});
@@ -133,6 +147,7 @@ export function useFireboltProvider({ formSource, debugMode, stepQueryParam }) {
     }
   }
 
+  // remove this feature
   function lockStepTransition(config) {
     const safeObj = config || {};
     const configKeys = Object.keys(safeObj);

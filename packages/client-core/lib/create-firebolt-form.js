@@ -12,6 +12,7 @@ import {
  * @param {boolean} debugMode - should use debug mode (turn on only on development environmets)
  */
 export function createFireboltForm(formSource, debugMode) {
+  //# v2-TODO-- put debug mode inside options object along with metadata
   validateFormSource(formSource)
   const endpoints = getEndpoints(formSource)
 
@@ -22,5 +23,6 @@ export function createFireboltForm(formSource, debugMode) {
     nextStep: createProceedToNextStep(endpoints),
     previousStep: createGoPreviousStep(endpoints),
     debugStep: createDebugStep(endpoints, debugMode),
+    addMetadata: () => {} //#V2-TODO - add metadata to localstorage
   }
 }
