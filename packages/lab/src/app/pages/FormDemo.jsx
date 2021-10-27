@@ -1,8 +1,5 @@
-import {
-  createFireboltProvider,
-  FireboltForm,
-  Wizard,
-} from "@iq-firebolt/client/src";
+import { createFireboltProvider, Wizard } from "@iq-firebolt/client/src";
+import DefaultTemplate from "../components/templates/DefaultTemplate";
 
 const withFirebolt = createFireboltProvider({
   source: {
@@ -13,21 +10,11 @@ const withFirebolt = createFireboltProvider({
   stepQueryParam: "passo",
 });
 
-const Template = ({ fireboltStep }) => {
-  return (
-    <div>
-      <div style={{ maxWidth: "600px", margin: "0 auto" }}>
-        <FireboltForm schema={fireboltStep?.fields} />
-      </div>
-    </div>
-  );
-};
-
 const FormDemo = () => {
   return (
     <div>
       <Wizard fallback={() => <p>loading</p>}>
-        <Wizard.Step match="*" component={Template} />
+        <Wizard.Step match="*" component={DefaultTemplate} />
       </Wizard>
     </div>
   );
