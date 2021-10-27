@@ -5,7 +5,7 @@
     "packages/*"
   ],
   "scripts": {
-    "start": "lerna run start",
+    "start": "lerna run dev --scope @iq-firebolt/lab",
     "test:all": "lerna run test",
     "test:validators": "cd packages/validators && yarn test",
     "build:validators": "cd packages/validators && yarn build",
