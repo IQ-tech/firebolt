@@ -1,4 +1,5 @@
-import FormDemo from "./pages/FormDemo";
+import FormDemo from "./pages/debug/FormDemo";
+import CoreDemo from "./pages/debug/Core";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 
 const App = () => {
@@ -13,6 +14,9 @@ const App = () => {
           <Switch>
             <Route path="/debug/form">
               <FormDemo />
+            </Route>
+            <Route path="/debug/core">
+              <CoreDemo />
             </Route>
             <Route exact path="/">
               <p>home</p>
