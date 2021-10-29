@@ -20,7 +20,8 @@
   },
   "scripts": {
     "build": "webpack --profile --json=dist/compilation-stats.json",
-    "analyze": "webpack-bundle-analyzer dist/compilation-stats.json"
+    "analyze": "webpack-bundle-analyzer dist/compilation-stats.json",
+    "test": "jest"
   },
   "bugs": {
     "url": "https://github.com/IQ-tech/firebolt/issues"
