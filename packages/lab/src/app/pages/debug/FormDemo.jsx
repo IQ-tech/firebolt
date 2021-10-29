@@ -1,5 +1,5 @@
 import { createFireboltProvider, Wizard } from "@iq-firebolt/client/src";
-import DefaultTemplate from "../components/templates/DefaultTemplate";
+import DefaultTemplate from "../../components/templates/DefaultTemplate";
 
 const withFirebolt = createFireboltProvider({
   source: {
