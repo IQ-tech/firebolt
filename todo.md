@@ -10,3 +10,4 @@
 
 * adicionar botão padrão de submit no firebolt form
 * prop fireboltStep deve ser igual ao useFirebolt
+* adicionar withHistory prop
