@@ -2,6 +2,10 @@ import axios from "axios";
 import APIService from "./API";
 import startFormResponse from "./__mocks__/startFormResponse";
 
+// todo - passar todos os requests, testa-los e error handling
+
+
+
 // receive correct data with mocked requests
 // throw correct error on validation error
 // throw correct error on connection error

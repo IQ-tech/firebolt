@@ -1,7 +1,7 @@
 import StepData from "../entities/StepData";
 import FormMetaData from "../entities/FormMeta";
 
-export default function formatStepTransitionData(requestData = {}) {
+export function formatStepResponseData(requestData = {}) {
   const {
     webhookResult = {},
     auth,
@@ -21,4 +21,23 @@ export default function formatStepTransitionData(requestData = {}) {
       webhookResult,
     },
   };
+}
+
+export function formatReqPayload({
+  stepSlug,
+  stepFieldsPayload = {},
+  metadata = {},
+}) {
+  const formattedFields = Object.keys(stepFieldsPayload).map((itemKey) => ({
+    slug: itemKey,
+    value: stepFieldsPayload[itemKey],
+  }));
+
+  return JSON.stringify({
+    step: {
+      slug: stepSlug,
+      fields: formattedFields,
+    },
+    metadata,
+  });
 }

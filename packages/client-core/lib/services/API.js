@@ -1,14 +1,18 @@
 import axios from "axios";
-import formatRequestData from "../helpers/formatRequestData";
+import {
+  formatStepResponseData,
+  formatReqPayload,
+} from "../helpers/formatData";
 
 class APIService {
   constructor({ formAccess, debug }) {
     const rootEndpoint = this._formatRoot(formAccess?.root);
     this.debug = debug;
+    this.formName = formAccess.formName;
 
     this.endpoints = {
       root: rootEndpoint,
-      base: `${rootEndpoint}form/${formAccess?.formName}`,
+      base: `${rootEndpoint}/form/${formAccess?.formName}`,
     };
   }
 
@@ -20,22 +24,66 @@ class APIService {
 
     return await axios
       .get(this.endpoints.base, { headers: headersConfig })
-      .then((response) => formatRequestData(response?.data?.data)) // #V2-TODO
+      .then((res) => formatStepResponseData(res?.data?.data)) // #V2-TODO
       .catch((err) => {
         // treat api error
         console.log(err);
       });
   }
 
-  async getNextStep() {}
+  async getNextStep(
+    sessionKey,
+    currentStepSlug,
+    { stepFieldsPayload, requestsMetadata }
+  ) {
+    const endpoint = `${this.endpoints.base}/next`;
+    const dataToSend = formatReqPayload({
+      stepSlug: currentStepSlug,
+      stepFieldsPayload,
+      metadata: requestsMetadata,
+    });
 
-  async getPreviousStep() {}
+    return await axios
+      .post(endpoint, dataToSend, {
+        headers: {
+          authorization: `Bearer ${sessionKey}`,
+        },
+      })
+      .then((res) => formatStepResponseData(res?.data?.data)) // #V2-TODO
+      .catch(() => {
+        console.log(err);
+      });
+  }
 
-  async getDebugStep() {}
+  async getPreviousStep(sessionKey, currentStepSlug) {
+    const endpoint = `${this.endpoints.base}/${currentStepSlug}/previous`;
+
+    return await axios
+      .get(endpoint, {
+        headers: {
+          authorization: `Bearer ${sessionKey}`,
+        },
+      })
+      .then((res) => formatStepResponseData(res?.data?.data)) // #V2-TODO
+      .catch(() => {
+        console.log(err);
+      });
+  }
+
+  async getDebugStep(stepSlug) {
+    const endpoint = `${this.endpoints.base}/debug/${this.formName}/${stepSlug}`;
+
+    return await axios
+      .get(endpoint)
+      .then((res) => formatStepResponseData(res?.data?.data)) // #V2-TODO
+      .catch((err) => {
+        console.log(err);
+      });
+  }
 
   _formatRoot(root) {
     const urlEndsWithSlash = root.endsWith("/");
-    return urlEndsWithSlash ? root : `${root}/`;
+    return urlEndsWithSlash ? root.slice(0, -1) : `${root}`;
   }
 }
 
