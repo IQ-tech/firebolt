@@ -1,11 +1,11 @@
 import axios from "axios";
 import APIService from "./API";
+
 import startFormResponse from "./__mocks__/startFormResponse";
 import nextStepFormResponse from "./__mocks__/nextStepFormResponse";
+import previousStepFormResponse from "./__mocks__/previousStepFormResponse";
 
 // todo - passar todos os requests, testa-los e error handling
-
-// receive correct data with mocked requests
 // throw correct error on validation error
 // throw correct error on connection error
 // throw correct error on try to debug without debug mode
@@ -60,6 +60,18 @@ describe("Navigation requests receive correct data", () => {
     );
     expect(response).toEqual(expectedNewStep);
   });
+
+  test("previous step must return correct data", async () => {
+    axios.get.mockResolvedValue({ data: previousStepFormResponse });
+    const response = await serviceInstance.getPreviousStep(
+      "sessionKey",
+      "personal_data"
+    );
+
+    expect(response).toEqual(expectedNewStep);
+  });
+
+  test.todo("debug step must return correct data");
 
   // fix debug step
 });
