@@ -5,15 +5,29 @@ export interface FormSource {
   formName: string;
 }
 
+// ----------- V2-todo ------------
+
+export interface RemoteFormConfig {
+  access: FormSource;
+  debug: boolean;
+  requestMetadata: any;
+}
+
+export interface LocalFormConfig {
+  schema: Object;
+  debug: boolean;
+}
+
+// --------- end v2
+
 export interface SessionData {
   /** key to recover user session (used on authorization headeron request) */
   authKey: string;
 }
 
-export type GetPreviousStepRoute = (currentStep: string | number) => string
+export type GetPreviousStepRoute = (currentStep: string | number) => string;
 
-export type GetDebugStepRoute = (stepId: string | number) => string
-
+export type GetDebugStepRoute = (stepId: string | number) => string;
 
 export interface Endpoints {
   /** Route to start the form */

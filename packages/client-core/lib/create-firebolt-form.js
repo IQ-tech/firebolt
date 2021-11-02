@@ -12,6 +12,9 @@ import {
  * @param {boolean} debugMode - should use debug mode (turn on only on development environmets)
  */
 export function createFireboltForm(formSource, debugMode) {
+  //# v2-TODO-- add local form argument to receive a local json
+
+
   //# v2-TODO-- put debug mode inside options object along with metadata
   validateFormSource(formSource)
   const endpoints = getEndpoints(formSource)
