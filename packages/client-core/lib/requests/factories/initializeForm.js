@@ -27,6 +27,8 @@ export default function createInitializeForm(endpoints) {
       clearFormSession()
     }
 
+    // # v2-todo - clear form if has autofill
+
     const localSession = getFormSession()
     const userHasLocalSession = !!localSession && !!localSession.authKey
     const headersConfig = userHasLocalSession

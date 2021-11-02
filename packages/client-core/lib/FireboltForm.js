@@ -7,7 +7,9 @@ class FireboltForm {
 
   start() {}
 
-  nextStep() {}
+  nextStep() {
+    // 
+  }
 
   previousStep() {}
 
@@ -15,8 +17,7 @@ class FireboltForm {
 
   addRequestMetadataItem(key, data) {
     const currentReqMetadata = this.requestsMetadata;
-    
-    this.requestsMetadata = { ...currentReqMetadata, [key]: data };
+    this._modifyRequestMetadata({ ...currentReqMetadata, [key]: data });
   }
 
   removeRequestMetadataItem(key) {
@@ -26,7 +27,12 @@ class FireboltForm {
       .filter((metaKey) => metaKey !== key)
       .map((itemKey) => currentReqMetaKeys[itemKey]);
 
-    this.requestsMetadata = newMetadata;
+    this._modifyRequestMetadata(newMetadata);
+  }
+
+  _modifyRequestMetadata(newPayload) {
+    // v2-TODO sync with session storage
+    this.requestsMetadata = newPayload;
   }
 }
 
