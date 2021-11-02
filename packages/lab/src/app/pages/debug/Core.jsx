@@ -29,6 +29,7 @@ const CoreTest = () => {
         },
       })
       .then((res) => {
+        console.log(res);
         setAuthKey(res.auth);
         setSlug(res.step.data.slug);
       });
