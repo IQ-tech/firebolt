@@ -1,5 +1,6 @@
 * adicionar funcionalidade para o firebolt client montar o form local
 * mudar id para position
+* capturedData e webhookResult dentro de step
 * enviar os campos do form como o payload do firebolt form tipo
 {
   "email": "teste@cenoura.com",
