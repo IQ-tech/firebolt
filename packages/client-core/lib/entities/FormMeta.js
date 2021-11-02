@@ -1,5 +1,5 @@
-function FormMetadata({ laststep = Number(), steps = [] } = {}) {
-  const formattedSteps = steps.map((step) => ({
+function FormMetadata({ laststep = Number(), forms = [] } = {}) {
+  const formattedSteps = forms.map((step) => ({
     friendlyName: step?.friendlyname,
     position: step?.id,
   }));
