@@ -10,7 +10,7 @@ export function formatFormData(data = {}, previousStep = false) {
   })
 
   return new StepTransition({
-    isValidationError,
+    isValidationError, // v2-TODO - remove
     currentStep: rootStepData?.step,
     formMeta,
     formCapturedData: data?.capturedData,

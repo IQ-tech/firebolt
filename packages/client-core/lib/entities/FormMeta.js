@@ -1,17 +1,14 @@
-/**
- * @typedef {Object} StepMeta
- * @property {number} id
- * @property {string} friendlyname
- */
+function FormMetadata({ laststep = Number(), steps = [] } = {}) {
+  const formattedSteps = steps.map((step) => ({
+    friendlyName: step?.friendlyname,
+    position: step?.id,
+  }));
 
-class FormMeta {
-  constructor({ lastStep = Number(), steps = [] }) {
-    this.lastStep = lastStep
-    /** @type {StepMeta[]} */
-    this.steps = steps
-  }
+  return {
+    /** @type {number} */
+    lastStep: laststep,
+    steps: formattedSteps,
+  };
 }
 
-export default FormMeta
-
-
+export default FormMetadata;

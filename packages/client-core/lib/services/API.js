@@ -1,4 +1,5 @@
 import axios from "axios";
+import formatRequestData from "../helpers/formatRequestData";
 
 class APIService {
   constructor({ formAccess, debug }) {
@@ -17,14 +18,13 @@ class APIService {
       ? { authorization: `Bearer ${sessionKey}` }
       : {};
 
-    const response = await axios
-      .get(this.endpoints.root, { headers: headersConfig })
-      .then((response) => response?.data)
+    return await axios
+      .get(this.endpoints.base, { headers: headersConfig })
+      .then((response) => formatRequestData(response?.data?.data)) // #V2-TODO
       .catch((err) => {
+        // treat api error
         console.log(err);
       });
-
-    return response;
   }
 
   async getNextStep() {}
