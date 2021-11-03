@@ -1,23 +1,29 @@
-import { createFireboltProvider, Wizard } from "@iq-firebolt/client/src";
+/* import { createFireboltProvider, Wizard } from "@iq-firebolt/client/src"; */
 import DefaultTemplate from "../../components/templates/DefaultTemplate";
+import FireboltProvider from "@iq-firebolt/client/src/components/nFireboltProvider/index.jsx";
 
-const withFirebolt = createFireboltProvider({
-  source: {
-    root: "https://dsv-firebolt-api.iq.com.br/",
+/* const withFirebolt = createFireboltProvider({
+  formAccess: {
+    root: "https://btti33t5h5.execute-api.sa-east-1.amazonaws.com/dev",
     formName: "sample",
   },
-  debug: true,
-  stepQueryParam: "passo",
-});
+}); */
 
 const FormDemo = () => {
   return (
     <div>
-    {/*   <Wizard fallback={() => <p>loading</p>}>
-        <Wizard.Step match="*" component={DefaultTemplate} />
-      </Wizard> */}
+      <p>cebola</p>
     </div>
   );
 };
 
-export default withFirebolt(FormDemo);
+export default () => (
+  <FireboltProvider
+    formAccess={{
+      root: "https://btti33t5h5.execute-api.sa-east-1.amazonaws.com/dev",
+      formName: "sample",
+    }}
+  >
+    <FormDemo />
+  </FireboltProvider>
+);
