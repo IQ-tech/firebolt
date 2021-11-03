@@ -1,18 +1,22 @@
 import { LOCALSTORE_KEY } from "../../constants";
+import getFireboltLocalStorage from "./getFireboltLocalStorage";
 
-export function clearFormSession() {
+export function clearAllFormSessions() {
   localStorage.removeItem(LOCALSTORE_KEY);
 }
 
 export function clearFormSession(formName) {
-  const data = localStorage.getItem(LOCALSTORE_KEY) || {};
-  const sessions = JSON.parse(data)?.sessionKeys || {};
+  const fireboltLocalStorage = getFireboltLocalStorage();
+  const sessions = fireboltLocalStorage?.sessionKeys || {};
   const filteredSessionsKeys = Object.keys(sessions)
     .filter((key) => key !== formName)
-    .map((key) => sessions[key]);
+    .reduce((acc, itemKey) => ({ ...acc, [itemKey]: sessions[itemKey] }), {});
 
   localStorage.setItem(
     LOCALSTORE_KEY,
-    JSON.stringify({ ...data, sessionKeys: filteredSessionsKeys })
+    JSON.stringify({
+      ...fireboltLocalStorage,
+      sessionKeys: filteredSessionsKeys,
+    })
   );
 }

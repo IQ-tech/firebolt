@@ -1,7 +1,8 @@
 import FireboltForm from "./FireboltForm";
-export { createFireboltForm } from "./create-firebolt-form";
-export { formatFormData } from "./format-data";
-export { clearFormSession } from "./session";
+export {
+  clearFormSession,
+  clearAllFormSessions,
+} from "./helpers/session/clearFormSession";
 export { default as uploadFilesToBucket } from "./requests/uploadFilesToBucket";
 
 export const createFireboltForm = (config) => new FireboltForm(config);
