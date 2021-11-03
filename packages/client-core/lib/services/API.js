@@ -24,11 +24,7 @@ class APIService {
 
     return await axios
       .get(this.endpoints.base, { headers: headersConfig })
-      .then((res) => formatStepResponseData(res?.data?.data)) // #V2-TODO
-      .catch((err) => {
-        // treat api error
-        console.log(err);
-      });
+      .then((res) => formatStepResponseData(res?.data?.data)); // #V2-TODO
   }
 
   async getNextStep(
@@ -49,10 +45,7 @@ class APIService {
           authorization: `Bearer ${sessionKey}`,
         },
       })
-      .then((res) => formatStepResponseData(res?.data?.data)) // #V2-TODO
-      .catch(() => {
-        console.log(err);
-      });
+      .then((res) => formatStepResponseData(res?.data?.data)); // #V2-TODO
   }
 
   async getPreviousStep(sessionKey, currentStepSlug) {
@@ -64,10 +57,7 @@ class APIService {
           authorization: `Bearer ${sessionKey}`,
         },
       })
-      .then((res) => formatStepResponseData(res?.data?.data)) // #V2-TODO
-      .catch(() => {
-        console.log(err);
-      });
+      .then((res) => formatStepResponseData(res?.data?.data)); // #V2-TODO
   }
 
   async getDebugStep(stepSlug) {
@@ -75,10 +65,7 @@ class APIService {
 
     return await axios
       .get(endpoint)
-      .then((res) => formatStepResponseData(res?.data?.data)) // #V2-TODO
-      .catch((err) => {
-        console.log(err);
-      });
+      .then((res) => formatStepResponseData(res?.data?.data)); // #V2-TODO
   }
 
   _formatRoot(root) {

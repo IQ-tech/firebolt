@@ -16,7 +16,6 @@ export function formatStepResponseData(requestData = {}) {
     meta: FormMetaData(meta),
     capturedData,
     step: {
-      /** @type {StepData} */
       data: StepData({ ...step }),
       webhookResult,
     },

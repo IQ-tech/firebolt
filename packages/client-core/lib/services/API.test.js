@@ -5,7 +5,6 @@ import startFormResponse from "./__mocks__/startFormResponse";
 import nextStepFormResponse from "./__mocks__/nextStepFormResponse";
 import previousStepFormResponse from "./__mocks__/previousStepFormResponse";
 
-// todo - passar todos os requests, testa-los e error handling
 // throw correct error on validation error
 // throw correct error on connection error
 // throw correct error on try to debug without debug mode
@@ -72,6 +71,9 @@ describe("Navigation requests receive correct data", () => {
   });
 
   test.todo("debug step must return correct data");
+});
 
-  // fix debug step
+describe("API Error handling work correctly", () => {
+  test.todo("throw correct errors on connection error");
+  test.todo("throw correct errors on validation error");
 });
