@@ -18,6 +18,7 @@ export function formatStepResponseData(requestData = {}) {
     step: {
       data: StepData({ ...step }),
       webhookResult,
+      position: step?.id,
     },
   };
 }

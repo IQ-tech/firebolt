@@ -1,7 +1,5 @@
-function StepData({ id, slug, type, friendlyname }) {
+function StepData({ slug, type, friendlyname }) {
   return {
-    /** @type {number} */
-    position: id,
     /** @type {string} */
     slug: slug,
     /** @type {string} */

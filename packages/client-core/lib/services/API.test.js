@@ -30,8 +30,8 @@ describe("Navigation requests receive correct data", () => {
     }),
     step: expect.objectContaining({
       webhookResult: expect.any(Object),
+      position: expect.any(Number),
       data: expect.objectContaining({
-        position: expect.any(Number),
         slug: expect.any(String),
         type: expect.any(String),
         friendlyName: expect.any(String),
