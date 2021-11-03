@@ -5,14 +5,7 @@ import {
   getUrlParams,
 } from "@iq-firebolt/client-core";
 
-export function nuseFireboltProvider({
-  formSource,
-  debugMode,
-  stepQueryParam,
-}) {
-  const fireboltForm = useRef(createFireboltForm(formSource, debugMode));
 
-}
 
 /**
  * @typedef {import("@iq-firebolt/client-core/lib/entities/StepTransition").default} StepTransition

@@ -13,9 +13,9 @@ const withFirebolt = createFireboltProvider({
 const FormDemo = () => {
   return (
     <div>
-      <Wizard fallback={() => <p>loading</p>}>
+    {/*   <Wizard fallback={() => <p>loading</p>}>
         <Wizard.Step match="*" component={DefaultTemplate} />
-      </Wizard>
+      </Wizard> */}
     </div>
   );
 };
