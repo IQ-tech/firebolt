@@ -5,8 +5,8 @@ import useFireboltProvider from "./hook";
 
 export const FBContext = createContext();
 
-const FireboltProvider = () => {
-  useFireboltProvider();
+const FireboltProvider = (props) => {
+  const {} = useFireboltProvider(props);
 
   return <FireboltContext.Provider value={{ ...props }} />;
 };
@@ -17,6 +17,7 @@ FireboltProvider.propTypes = {
     formName: PropTypes.string.isRequired,
   }).isRequired,
   debug: PropTypes.bool,
+  withHistory: PropTypes.bool,
   theme: Proptypes.object, // # v3-todo
 };
 

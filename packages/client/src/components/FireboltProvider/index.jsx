@@ -34,24 +34,28 @@ const FireboltProvider = ({
   return (
     <FireboltContext.Provider
       value={{
-        debugMode,
-        formMeta,
-        currentStep,
-        hasFormLoaded,
-        goNextStep,
-        goPreviousStep,
-        stepsHistory,
         connectionError,
         validationErrors,
+        formMeta,
         formCapturedData,
-        formHasBeenFinished,
         formEndPayload,
-        lockStepTransition,
-        lockedNavigation,
-        webhookResult,
-        addRequestsMetadata,
         removeRequestsMetadata,
         requestsMetadata,
+        addRequestsMetadata,
+
+        debugMode,
+        currentStep,
+        hasFormLoaded,
+        formHasBeenFinished,
+        stepsHistory,
+
+        goNextStep,
+        goPreviousStep,
+        webhookResult, //put inside step
+        
+        // kill
+        lockStepTransition,
+        lockedNavigation,
       }}
       {...props}
     />
