@@ -1,14 +1,21 @@
 import axios from "axios";
 import FireboltForm from "./FireboltForm";
+
 import { clearAllFormSessions } from "./helpers/session/clearFormSession";
 import getFireboltLocalStorage from "./helpers/session/getFireboltLocalStorage";
+import createFormSession from "./helpers/session/createFormSession";
 
 import startFormResponse from "./__mocks__/startFormResponse";
+import nextStepFormResponse from "./__mocks__/nextStepFormResponse";
 
 jest.mock("axios");
 
 describe("start form tests", () => {
-  test("start form create key on localStorage", async () => {
+  beforeAll(() => {
+    clearAllFormSessions();
+  });
+
+  test("start form correctly creates session key on localStorage", async () => {
     axios.get.mockResolvedValue({ data: startFormResponse });
 
     const formName = "partnerFormPotato";
@@ -32,13 +39,31 @@ describe("start form tests", () => {
       "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfaWQiOiI2NzkyMTQ0MC01ZDljLTQwMmUtYTI4Yi0wZjJkOGRkNjRiZjYiLCJpYXQiOjE2MzU4NzI4NTV9.7y5GR8_1acwQ5UdttHJK0_LIoMze4COpcwy6bs4ovH4"
     );
   });
+
+  test("start form uses session key already created on localstorage", async () => {
+    axios.get.mockResolvedValue({ data: nextStepFormResponse });
+
+    const formAccess = {
+      root: "https://another-firebolt-api/",
+      formName: "myCustomForm",
+    };
+    createFormSession(formAccess.formName, "myPreviousSessionAuthKey");
+
+    const form = new FireboltForm(formAccess);
+    await form.start();
+
+    expect(axios.get).lastCalledWith(
+      "https://another-firebolt-api/form/myCustomForm",
+      expect.objectContaining({
+        headers: expect.objectContaining({
+          authorization: "Bearer myPreviousSessionAuthKey",
+        }),
+      })
+    );
+  });
+
   test.todo("throw an error when providing invalid api access");
 
-  /* expect(axios.get).toBeCalledWith(
-    "https://my-firebolt-api/form/partnerFormOne",
-    expect.any(Object)
-  ); */
-  test.todo("throw an error on try to debug a step withou debug key");
 
-  test.todo("start form uses session key already created on localstorage");
+  test.todo("throw an error on try to debug a step without debug key");
 });

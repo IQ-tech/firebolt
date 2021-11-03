@@ -15,7 +15,6 @@ class FireboltForm {
     const formSessionKey = getFormSession(this.formName);
     const firstStepData = await this.APIService.getStartForm(formSessionKey);
     if (!formSessionKey) {
-      console.log(firstStepData)
       createFormSession(this.formName, firstStepData?.auth);
     }
     return firstStepData;
