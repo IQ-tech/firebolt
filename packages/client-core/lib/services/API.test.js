@@ -1,9 +1,9 @@
 import axios from "axios";
 import APIService from "./API";
 
-import startFormResponse from "./__mocks__/startFormResponse";
-import nextStepFormResponse from "./__mocks__/nextStepFormResponse";
-import previousStepFormResponse from "./__mocks__/previousStepFormResponse";
+import startFormResponse from "../__mocks__/startFormResponse";
+import nextStepFormResponse from "../__mocks__/nextStepFormResponse";
+import previousStepFormResponse from "../__mocks__/previousStepFormResponse";
 
 
 jest.mock("axios");

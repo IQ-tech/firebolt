@@ -4,7 +4,7 @@ import getFormSession from "./helpers/session/getFormSession";
 import createFormSession from "./helpers/session/createFormSession";
 
 class FireboltForm {
-  constructor(formAccess, { requestMetadata = {}, debug }) {
+  constructor(formAccess, { requestMetadata = {}, debug } = {}) {
     this.requestsMetadata = requestMetadata;
     this.formName = formAccess?.formName;
     this.debug = debug;
@@ -15,16 +15,17 @@ class FireboltForm {
     const formSessionKey = getFormSession(this.formName);
     const firstStepData = await this.APIService.getStartForm(formSessionKey);
     if (!formSessionKey) {
+      console.log(firstStepData)
       createFormSession(this.formName, firstStepData?.auth);
     }
     return firstStepData;
   }
 
-  nextStep(currentStepSlug, stepFieldsPayload, metadata = {}) {
+  nextStep(currentStepSlug, stepFieldsPayload) {
     const formSessionKey = getFormSession(this.formName);
     return this.APIService.getNextStep(formSessionKey, currentStepSlug, {
       stepFieldsPayload,
-      requestsMetadata: metadata,
+      requestsMetadata: this.requestsMetadata,
     });
   }
 
