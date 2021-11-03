@@ -20,10 +20,6 @@ export interface LocalFormConfig {
 
 // --------- end v2
 
-export interface SessionData {
-  /** key to recover user session (used on authorization headeron request) */
-  authKey: string;
-}
 
 export type GetPreviousStepRoute = (currentStep: string | number) => string;
 

@@ -1,19 +1,47 @@
-// join navigator and renderer
+import APIService from "./services/API";
+
+import getFormSession from "./helpers/session/getFormSession";
+import createFormSession from "./helpers/session/createFormSession";
 
 class FireboltForm {
-  constructor({}) {
-    this.requestsMetadata = {};
+  constructor(formAccess, { requestMetadata = {}, debug }) {
+    this.requestsMetadata = requestMetadata;
+    this.formName = formAccess?.formName;
+    this.debug = debug;
+    this.APIService = new APIService({ formAccess, debug });
   }
 
-  start() {}
-
-  nextStep() {
-    // 
+  async start() {
+    const formSessionKey = getFormSession(this.formName);
+    const firstStepData = await this.APIService.getStartForm(formSessionKey);
+    if (!formSessionKey) {
+      createFormSession(this.formName, firstStepData?.auth);
+    }
+    return firstStepData;
   }
 
-  previousStep() {}
+  nextStep(currentStepSlug, stepFieldsPayload, metadata = {}) {
+    const formSessionKey = getFormSession(this.formName);
+    return this.APIService.getNextStep(formSessionKey, currentStepSlug, {
+      stepFieldsPayload,
+      requestsMetadata: metadata,
+    });
+  }
 
-  debugStep() {}
+  previousStep(currentStepSlug) {
+    const formSessionKey = getFormSession(this.formName);
+    return this.APIService.getPreviousStep(formSessionKey, currentStepSlug);
+  }
+
+  debugStep(stepSlug) {
+    if (!this.debug) {
+      throw new Error(
+        "debug step function only works with debug arg === true,"
+      );
+    } else {
+      return this.APIService.getDebugStep(stepSlug);
+    }
+  }
 
   addRequestMetadataItem(key, data) {
     const currentReqMetadata = this.requestsMetadata;
