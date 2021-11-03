@@ -24,7 +24,7 @@ const CoreTest = () => {
     service.current
       .getNextStep(authKey, stepSlug, {
         stepFieldsPayload: {
-          full_name: "teste cneoura",
+          full_name: "teste",
           email: "batata@cenoura.com",
         },
       })

@@ -147,7 +147,7 @@ export function useFireboltProvider({ formSource, debugMode, stepQueryParam }) {
     }
   }
 
-  // remove this feature
+  // #v2-todo - remove this feature
   function lockStepTransition(config) {
     const safeObj = config || {};
     const configKeys = Object.keys(safeObj);

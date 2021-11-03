@@ -5,11 +5,6 @@ import startFormResponse from "./__mocks__/startFormResponse";
 import nextStepFormResponse from "./__mocks__/nextStepFormResponse";
 import previousStepFormResponse from "./__mocks__/previousStepFormResponse";
 
-// throw correct error on validation error
-// throw correct error on connection error
-// throw correct error on try to debug without debug mode
-
-// validation error on next step
 
 jest.mock("axios");
 
