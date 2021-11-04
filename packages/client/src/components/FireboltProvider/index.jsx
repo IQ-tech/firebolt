@@ -1,6 +1,6 @@
-import FireboltContext from "../../context"
-import useFireboltProvider from "./hook"
-import PropTypes from "prop-types"
+import FireboltContext from "../../context";
+import useFireboltProvider from "./hook";
+import PropTypes from "prop-types";
 
 /**
  * @param {{formSource: import("@iq-firebolt/client-core/lib/types").FormSource, debugMode: boolean, stepQueryParam: string}} props
@@ -29,7 +29,7 @@ const FireboltProvider = ({
     addRequestsMetadata,
     removeRequestsMetadata,
     requestsMetadata,
-  } = useFireboltProvider({ formSource, debugMode, stepQueryParam })
+  } = useFireboltProvider({ formSource, debugMode, stepQueryParam });
 
   return (
     <FireboltContext.Provider
@@ -37,35 +37,35 @@ const FireboltProvider = ({
         // data
         connectionError,
         validationErrors,
-        formMeta,
-        formCapturedData,
-        formEndPayload,
-        currentStep,
-        stepsHistory,
+        formMeta, //done
+        formCapturedData, // done
+        formEndPayload, //done
+        currentStep, //done
+        stepsHistory, //done
 
         // move rule to client-core
-        removeRequestsMetadata,
-        requestsMetadata,
-        addRequestsMetadata,
+        removeRequestsMetadata, //done
+        requestsMetadata, // done
+        addRequestsMetadata, //done,
 
         // state
-        debugMode,
-        hasFormLoaded,
-        formHasBeenFinished,
+        debugMode, //remove,
+        hasFormLoaded, //done
+        formHasBeenFinished, //done
 
         // methods
-        goNextStep,
-        goPreviousStep,
-        webhookResult, //put inside step
-        
+        goNextStep, //done
+        goPreviousStep, //done
+        webhookResult, //put inside step / done
+
         // kill
         lockStepTransition,
         lockedNavigation,
       }}
       {...props}
     />
-  )
-}
+  );
+};
 
 FireboltProvider.propTypes = {
   /** use fireboltStep query to debug form steps  */
@@ -74,6 +74,6 @@ FireboltProvider.propTypes = {
     root: PropTypes.string.isRequired,
     formName: PropTypes.string.isRequired,
   }).isRequired,
-}
+};
 
-export default FireboltProvider
+export default FireboltProvider;

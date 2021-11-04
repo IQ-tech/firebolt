@@ -6,9 +6,8 @@ import useFireboltProvider from "./hook";
 export const FBContext = createContext();
 
 const FireboltProvider = (props) => {
-  const {} = useFireboltProvider(props);
-
-  return <FBContext.Provider value={{ test: "cenoura" }} {...props} />;
+  const values = useFireboltProvider(props);
+  return <FBContext.Provider value={values} {...props} />;
 };
 
 FireboltProvider.propTypes = {
