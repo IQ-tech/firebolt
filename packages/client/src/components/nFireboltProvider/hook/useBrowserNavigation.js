@@ -17,7 +17,7 @@ export default function useBrowserNavigation({
       setPopStateEvent();
       updateBrowserHistory();
     }
-  }, []);
+  }, [currentStep]);
 
   function setPopStateEvent() {
     // Treat form navigation with browser arrows
@@ -25,7 +25,7 @@ export default function useBrowserNavigation({
   }
 
   function _onPopStateEventHandler(e = {}) {
-    const previousStep = e?.state?.step;
+    const previousStep = e?.state?.position;
     const totalSteps = formflowMetadata?.lastStep;
     const currentStepPosition = currentStep?.position;
     const isGoingToPreviousStep =
@@ -57,9 +57,9 @@ export default function useBrowserNavigation({
 
     if (history) {
       history.pushState(
-        { step: currentStep.position },
+        { slug: currentStep.data.slug, position: currentStep.position },
         currentStep.data.friendlyName,
-        `?${queryParam}=${currentStep.position}${newQuery}`
+        `?${queryParam}=${currentStep.data.slug}${newQuery}`
       );
     }
   }
