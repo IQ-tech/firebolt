@@ -1,7 +1,6 @@
 import PropTypes from "prop-types";
 import Button from "@material-ui/core/Button";
 
-import If from "../If";
 import Insert from "./Insert";
 
 import useFireboltForm from "./hook";
@@ -36,15 +35,13 @@ const FireboltForm = ({
   return (
     <form className={className} onSubmit={handleSubmit} autoComplete="off">
       {formChildren}
-      <If
-        condition={!!customActionsChild}
-        renderIf={<ActionsChild formData={actionsChildData} />}
-        renderElse={
-          <Button variant="contained" color="primary" type="submit">
-            {submitText}
-          </Button>
-        }
-      />
+      {!!customActionsChild ? (
+        <ActionsChild formData={actionsChildData} />
+      ) : (
+        <Button variant="contained" color="primary" type="submit">
+          {submitText}
+        </Button>
+      )}
     </form>
   );
 };

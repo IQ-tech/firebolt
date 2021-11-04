@@ -8,7 +8,7 @@ export const FBContext = createContext();
 const FireboltProvider = (props) => {
   const {} = useFireboltProvider(props);
 
-  return <FireboltContext.Provider value={{ ...props }} />;
+  return <FBContext.Provider value={{ test: "cenoura" }} {...props} />;
 };
 
 FireboltProvider.propTypes = {
@@ -18,7 +18,7 @@ FireboltProvider.propTypes = {
   }).isRequired,
   debug: PropTypes.bool,
   withHistory: PropTypes.bool,
-  theme: Proptypes.object, // # v3-todo
+  theme: PropTypes.object, // # v3-todo
 };
 
 export default FireboltProvider;

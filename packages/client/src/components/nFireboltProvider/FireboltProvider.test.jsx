@@ -1,4 +1,4 @@
-
+import FireboltProvider from "./index"
 
 
 // se tiver with history, transição de passo deve mudar history e url
