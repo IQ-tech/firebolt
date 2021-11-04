@@ -1,281 +1,161 @@
-import { useState, useEffect, useRef } from "react";
-import {
-  createFireboltForm,
-  clearFormSession,
-  getUrlParams,
-} from "@iq-firebolt/client-core";
+import { useRef, useEffect } from "react";
+import { createFireboltForm } from "@iq-firebolt/client-core";
 
+import useStates from "./useStates";
+import useData from "./useData";
+import useBrowserNavigation from "./useBrowserNavigation";
 
+function useFireboltProvider({
+  formAccess,
+  debug,
+  requestsMetadata = {},
+  theme,
+  withHistory,
+  stepQueryParam = "step",
+}) {
+  const formEngine = useRef(
+    createFireboltForm(formAccess, { requestsMetadata, debug })
+  );
 
-/**
- * @typedef {import("@iq-firebolt/client-core/lib/entities/StepTransition").default} StepTransition
- */
+  const {
+    isFormLoading,
+    setIsFormLoading,
+    formFlowHasBeenFinished,
+    setFormFlowHasBeenFinished,
+  } = useStates();
 
-export function useFireboltProvider({ formSource, debugMode, stepQueryParam }) {
-  const fireboltForm = createFireboltForm(formSource, debugMode);
-  const debugQuery = "debug-step";
+  const {
+    capturedData,
+    setCapturedData,
+    remoteValidationErrors,
+    setRemoteValidationErrors,
+    formflowMetadata,
+    setFormFlowMetadata,
+    formEndPayload,
+    setFormEndPayload,
+    currentStep,
+    setCurrentStep,
+    stagedStep,
+    setStagedStep,
+    lastVisitedStep,
+    setLastVisitedStep,
+  } = useData();
 
-  // States
-  const [hasFormLoaded, setHasFormLoaded] = useState(false);
-  const [formMeta, setFormMeta] = useState({
-    steps: [],
-    lastStep: null,
+  useBrowserNavigation({
+    withHistory,
+    currentStep,
+    formflowMetadata,
+    goPreviousStep,
+    goNextStep,
+    stepQueryParam,
+    debug,
   });
-  const [currentStep, setCurrentStep] = useState({
-    id: 0,
-    fields: [],
-    type: "",
-  });
-  const [lockedNavigation, setLockedNavigation] = useState({
-    next: false,
-    previous: false,
-  }); // # V2-TODO remove this feature
 
-  const [formCapturedData, setFormCapturedData] = useState({});
-
-  // #v2-TODO remove steps history, replace by last visited step
-  const [stepsHistory, setStepsHistory] = useState([]);
-
-  const [validationErrors, setValidationErrors] = useState([]);
-  const [connectionError, setConnectionError] = useState(false);
-  const [formHasBeenFinished, setFormHasBeenFinished] = useState(false);
-  
-  const [formEndPayload, setFormEndPayload] = useState({});
-  const [webhookResult, setWebhookResult] = useState({});
-  const [requestsMetadata, setRequestsMetadata] = useState({});
-
-  // Lifecycle
   useEffect(() => {
-    const debugStep = debugMode ? _getDebugStep() : false;
+    const debugStep = debug ? _getDebugStep() : false;
     if (!debugStep) {
-      _startFireboltExperience();
+      _startForm();
     } else {
-      _startStepDebug(debugStep);
+      _startDebugStep(debugStep);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  useEffect(setPopStateEvent, [currentStep, lockedNavigation]);
-
-  // Methods
   function _getDebugStep() {
     const params = new URLSearchParams(window.location.search);
-    const stepToDebug = params.get(debugQuery);
+    const stepToDebug = params.get("debug-step");
     return stepToDebug;
   }
 
-  function setPopStateEvent() {
-    // Treat form navigation with browser arrows
-    window.onpopstate = _onPopStateEventHandler;
-  }
-
-  function _startStepDebug(stepId) {
-    fireboltForm
-      .debugStep(stepId)
-      .then((res) => {
-        _changeFormStep(res, true);
-      })
-      .catch(_handleConnectionError);
-  }
-
-  function _startFireboltExperience() {
-    fireboltForm
+  function _startForm() {
+    setIsFormLoading(true);
+    formEngine.current
       .start()
-      .then((response) => {
-        _changeFormStep(response);
+      .then((data) => {
+        setIsFormLoading(false);
+        setCurrentStep(data.step);
+        setCapturedData(data.capturedData);
+        setFormFlowMetadata(data.meta);
       })
-      .catch(_handleConnectionError);
+      .catch(_handleTransitionError);
   }
 
-  /** @param {StepTransition} apiResponse */
-  function _validateAndProceedStep(apiResponse) {
-    const isValidationError = apiResponse.isValidationError;
-    if (!isValidationError) {
-      _changeFormStep(apiResponse);
-    } else {
-      setValidationErrors(apiResponse?.invalidFields);
-      setHasFormLoaded(true);
-    }
+  function _startDebugStep(stepSlug) {
+    setIsFormLoading(true);
+    formEngine.current.debugStep(stepSlug).then((data) => {
+      setIsFormLoading(false);
+      setCurrentStep(data.step);
+      setCapturedData(data.capturedData);
+      setFormFlowMetadata(data.meta);
+    });
   }
 
-  /** @param {StepTransition} apiResponse */
-  function _changeFormStep(apiResponse, debug) {
-    const pastStep = currentStep;
-    const newStep = apiResponse?.currentStep;
-    const newStepId = newStep?.id;
-    const newStepLabel = newStep?.friendlyname;
-
-    setWebhookResult(apiResponse.webhookResult);
-    setCurrentStep({ ...newStep, webhookResult: apiResponse?.webhookResult });
-    setFormMeta(apiResponse?.formMeta);
-    setFormCapturedData(apiResponse?.formCapturedData);
-    _updateBrowserHistory(newStepId, newStepLabel, debug);
-    _updateStepsHistory(pastStep);
-    setHasFormLoaded(true);
-    setValidationErrors([]);
-  }
-
-  function _onPopStateEventHandler(e = {}) {
-    const previousStep = e?.state?.step;
-    const totalSteps = formMeta?.lastStep;
-    const currentStepId = currentStep?.id;
-    const isGoingToPreviousStep =
-      !!previousStep && previousStep === currentStepId - 1;
-
-    const isGoingToNextStep =
-      !!previousStep &&
-      previousStep === currentStepId + 1 &&
-      currentStepId + 1 < totalSteps;
-
-    const shouldLockTransition =
-      (isGoingToNextStep && !!lockedNavigation?.next) ||
-      (isGoingToPreviousStep && !!lockedNavigation?.previous);
-
-    if (shouldLockTransition) {
-      _reloadStep();
-    } else if (isGoingToPreviousStep) {
-      goPreviousStep();
-    } else if (isGoingToNextStep) {
-      goNextStep();
-    }
-  }
-
-  // #v2-todo - remove this feature
-  function lockStepTransition(config) {
-    const safeObj = config || {};
-    const configKeys = Object.keys(safeObj);
-    const configKeysAreValid = configKeys.every((item) =>
-      configKeys.includes(item)
-    );
-
-    if (configKeysAreValid) {
-      setLockedNavigation(config);
-    }
-  }
-
-  function _handleConnectionError(err) {
-    setConnectionError(true);
-  }
-
-  // Navigation
-
-  function _updateStepsHistory(stepToAdd) {
-    const isBaseStep = currentStep?.id === 0;
-    if (!isBaseStep) {
-      setStepsHistory([...stepsHistory, stepToAdd]);
-    }
-  }
-
-  function _updateBrowserHistory(stepId, stepLabel, debug) {
-    const currentParams = getUrlParams();
-    const queryParam = debug ? "debug-step" : stepQueryParam;
-    const filteredParamsKeys = Object.keys(currentParams).filter(
-      (key) => key !== "debug-step" && key !== stepQueryParam
-    );
-
-    const newQuery = filteredParamsKeys.reduce(
-      (acc, key) => `${acc}&${key}=${currentParams[key]}`,
-      ""
-    );
-
-    if (history) {
-      history.pushState(
-        { step: stepId },
-        stepLabel,
-        `?${queryParam}=${stepId}${newQuery}`
-      );
-    }
-  }
-
-  function _reloadStep(debug) {
-    _updateBrowserHistory(currentStep?.id, currentStep?.friendlyname, debug);
-  }
-
-  function _finalizeForm(stepFieldsData) {
-    fireboltForm
-      .nextStep(currentStep?.id, stepFieldsData, requestsMetadata)
-      .then((response) => {
-        const isValidationError = response.isValidationError;
-        if (!isValidationError) {
-          clearFormSession();
-          setFormEndPayload(response);
-          setFormHasBeenFinished(true);
+  function goNextStep(stepFieldsPayload) {
+    setIsFormLoading(true);
+    const isLastStep = currentStep?.position === formflowMetadata.lastStep;
+    formEngine.current
+      .nextStep(currentStep.data.slug, stepFieldsPayload)
+      .then((data) => {
+        if (isLastStep) {
+          setFormEndPayload(data);
+          setFormFlowHasBeenFinished(true);
         } else {
-          setValidationErrors(response.invalidFields);
-          setHasFormLoaded(true);
+          setIsFormLoading(false);
+          setCapturedData(data.capturedData);
+          setStagedStep(data.step);
+          setFormFlowMetadata(data.meta);
         }
       })
-      .catch(_handleConnectionError);
-  }
-
-  function goNextStep(stepFieldsData) {
-    const isNextLocked = !!lockedNavigation?.next;
-    if (!isNextLocked) {
-      const isLastStep = currentStep?.id === formMeta?.lastStep;
-      setHasFormLoaded(false);
-      if (!isLastStep) {
-        fireboltForm
-          .nextStep(currentStep?.id, stepFieldsData, requestsMetadata)
-          .then((response) => {
-            _validateAndProceedStep(response);
-          })
-          .catch(_handleConnectionError);
-      } else {
-        _finalizeForm(stepFieldsData);
-      }
-    }
+      .catch(_handleTransitionError);
   }
 
   function goPreviousStep() {
-    const isPreviousLocked = !!lockedNavigation?.previous;
-    if (!isPreviousLocked) {
-      setHasFormLoaded(false);
-      fireboltForm
-        .previousStep(currentStep?.id)
-        .then((response) => {
-          _validateAndProceedStep(response);
-        })
-        .catch(_handleConnectionError);
-    }
+    formEngine.current
+      .previousStep(currentStep.data.slug)
+      .then((data) => {
+        setCapturedData(data.capturedData);
+        setStagedStep(data.step);
+        setFormFlowMetadata(data.meta);
+      })
+      .catch(_handleTransitionError);
   }
 
-  function addRequestsMetadata(data = {}) {
-    setRequestsMetadata({ ...requestsMetadata, ...data });
+  function commitStepChange() {
+    setLastVisitedStep(currentStep);
+    setCurrentStep(stagedStep);
+    setStagedStep(null);
   }
 
+  function addRequestsMetadata(key, data = {}) {
+    formEngine.current.addRequestMetadataItem(key, data);
+  }
   function removeRequestsMetadata(key) {
-    const filteredKeys = Object.keys(requestsMetadata).filter(
-      (item) => item !== key
-    );
-    const newMetadata = filteredKeys.reduce(
-      (acc, key) => ({
-        ...acc,
-        [key]: requestsMetadata[key],
-      }),
-      {}
-    );
-
-    setRequestsMetadata(newMetadata);
+    formEngine.current.removeRequestMetadataItem(key);
   }
+
+  function getRequestsMetadata() {
+    return formEngine.current.requestsMetadata;
+  }
+
+  function _handleTransitionError() {}
 
   return {
-    formMeta,
+    //states
+    isFormLoading,
+    formFlowHasBeenFinished,
+    //data
     currentStep,
-    hasFormLoaded,
+    formflowMetadata,
+    capturedData,
+    formEndPayload,
+    lastVisitedStep,
+    remoteValidationErrors,
+    // methods
     goNextStep,
     goPreviousStep,
-    stepsHistory,
-    connectionError,
-    validationErrors,
-    formCapturedData,
-    formHasBeenFinished,
-    formEndPayload,
-    lockStepTransition,
-    lockedNavigation,
-    webhookResult,
+    commitStepChange,
     addRequestsMetadata,
     removeRequestsMetadata,
-    requestsMetadata,
+    getRequestsMetadata,
   };
 }
 

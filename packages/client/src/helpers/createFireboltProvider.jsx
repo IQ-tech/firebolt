@@ -1,4 +1,4 @@
-import FireboltProvider from "../components/nFireboltProvider"; // v2-todo change
+import FireboltProvider from "../components/FireboltProvider";
 
 const createFireboltProvider =
   ({ formAccess, debug, stepQueryParam, requestsMetadata }) =>
