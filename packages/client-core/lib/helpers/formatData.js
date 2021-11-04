@@ -1,26 +1,19 @@
+import Step from "../entities/Step";
 import StepData from "../entities/StepData";
 import FormMetaData from "../entities/FormMeta";
 
 export function formatStepResponseData(requestData = {}) {
-  const {
-    webhookResult = {},
-    auth,
-    step = {},
-    meta = {},
-    capturedData = {},
-  } = requestData;
+  const { auth, step = {}, meta = {}, capturedData = {} } = requestData;
 
-  return {
+  const formattedData = {
     /** @type {string} */
     auth,
     meta: FormMetaData(meta),
     capturedData,
-    step: {
-      data: StepData({ ...step }),
-      webhookResult,
-      position: step?.id,
-    },
+    step: Step(step),
   };
+
+  return formattedData;
 }
 
 export function formatReqPayload({

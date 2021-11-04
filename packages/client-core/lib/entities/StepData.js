@@ -1,11 +1,16 @@
-function StepData({ slug, type, friendlyname, fields = [] }) {
+function StepData({
+  slug = String(),
+  type = String(),
+  friendlyName = String(),
+  fields = [],
+} = {}) {
   return {
     /** @type {string} */
-    slug: slug,
+    slug,
     /** @type {string} */
     type: type,
     /** @type {string} */
-    friendlyName: friendlyname, // # v2-todo change when change on api,
+    friendlyName,
     /** @type {Array} */
     fields,
   };
