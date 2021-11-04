@@ -34,21 +34,26 @@ const FireboltProvider = ({
   return (
     <FireboltContext.Provider
       value={{
+        // data
         connectionError,
         validationErrors,
         formMeta,
         formCapturedData,
         formEndPayload,
+        currentStep,
+        stepsHistory,
+
+        // move rule to client-core
         removeRequestsMetadata,
         requestsMetadata,
         addRequestsMetadata,
 
+        // state
         debugMode,
-        currentStep,
         hasFormLoaded,
         formHasBeenFinished,
-        stepsHistory,
 
+        // methods
         goNextStep,
         goPreviousStep,
         webhookResult, //put inside step

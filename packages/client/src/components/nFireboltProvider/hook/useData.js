@@ -1,10 +1,13 @@
 import { useState } from "react";
 
 const defaultStep = {
-  slug: "",
-  type: "",
-  friendlyName: "",
-  fields: [],
+  data: {
+    slug: "",
+    type: "",
+    friendlyName: "",
+    fields: [],
+  },
+  position: 0,
   webhookResult: {},
 };
 
@@ -20,17 +23,23 @@ export default function useData() {
   const [capturedData, setCapturedData] = useState({});
   // validation errors that come from firebolt api
   const [remoteValidationErrors, setRemoteValidationErrors] = useState([]);
-  const [requestsMetadata, setRequestsMetadata] = useState({});
-  const [lastVisitedStep, setLastVisitedStep] = useState({})
-  const [formEndPayload, formEndPayload] = useState({}) //step, meta, capturedData
+  const [lastVisitedStep, setLastVisitedStep] = useState({});
+  const [formEndPayload, setFormEndPayload] = useState({}); //step, meta, capturedData
 
   return {
-    currentStep,
-    stagedStep,
-    formflowMetadata,
-    formCapturedData,
+    capturedData,
+    setCapturedData,
     remoteValidationErrors,
-    requestsMetadata,
-    lastVisitedStep
+    setRemoteValidationErrors,
+    formflowMetadata,
+    setFormFlowMetadata,
+    formEndPayload,
+    setFormEndPayload,
+    currentStep,
+    setCurrentStep,
+    stagedStep,
+    setStagedStep,
+    lastVisitedStep,
+    setLastVisitedStep,
   };
 }

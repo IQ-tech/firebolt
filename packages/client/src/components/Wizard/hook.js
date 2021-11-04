@@ -10,7 +10,7 @@ export default function useWizard({
     // #V2-TODO change to isFormLoading
     hasFormLoaded,
     currentStep,
-    stepsHistory,
+    stepsHistory, // v2-todo change to last step
     connectionError,
     formHasBeenFinished,
     formEndPayload,

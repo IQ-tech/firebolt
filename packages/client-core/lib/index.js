@@ -5,7 +5,7 @@ export {
 } from "./helpers/session/clearFormSession";
 export { default as uploadFilesToBucket } from "./requests/uploadFilesToBucket";
 
-export const createFireboltForm = (config) => new FireboltForm(config);
+export const createFireboltForm = (...args) => new FireboltForm(...args);
 
 // consts
 export { default as uiPropsPresets } from "./constants/ui-props-presets";

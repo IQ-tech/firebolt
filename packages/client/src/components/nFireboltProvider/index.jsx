@@ -17,8 +17,10 @@ FireboltProvider.propTypes = {
     formName: PropTypes.string.isRequired,
   }).isRequired,
   debug: PropTypes.bool,
+  requestsMetadata: PropTypes.object,
   withHistory: PropTypes.bool,
   theme: PropTypes.object, // # v3-todo
+  stepQueryParam: PropTypes.string,
 };
 
 export default FireboltProvider;
