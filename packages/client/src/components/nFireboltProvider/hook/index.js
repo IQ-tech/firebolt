@@ -48,6 +48,7 @@ function useFireboltProvider({
     goPreviousStep,
     goNextStep,
     stepQueryParam,
+    debug,
   });
 
   useEffect(() => {
@@ -61,7 +62,7 @@ function useFireboltProvider({
 
   function _getDebugStep() {
     const params = new URLSearchParams(window.location.search);
-    const stepToDebug = params.get(debugQuery);
+    const stepToDebug = params.get("debug-step");
     return stepToDebug;
   }
 

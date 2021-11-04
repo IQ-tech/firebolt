@@ -1,15 +1,18 @@
-import FireboltProvider from "../components/FireboltProvider"
+import FireboltProvider from "../components/nFireboltProvider"; // v2-todo change
 
-const createFireboltProvider = ({ source, debug, stepQueryParam }) => (
-  Component
-) => () => (
-  <FireboltProvider
-    formSource={source}
-    debugMode={debug}
-    stepQueryParam={stepQueryParam}
-  >
-    <Component />
-  </FireboltProvider>
-)
+const createFireboltProvider =
+  ({ formAccess, debug, stepQueryParam, requestsMetadata }) =>
+  (Component) =>
+  () =>
+    (
+      <FireboltProvider
+        formAccess={formAccess}
+        debug={debug}
+        stepQueryParam={stepQueryParam}
+        requestsMetadata={requestsMetadata}
+      >
+        <Component />
+      </FireboltProvider>
+    );
 
-export default createFireboltProvider
+export default createFireboltProvider;

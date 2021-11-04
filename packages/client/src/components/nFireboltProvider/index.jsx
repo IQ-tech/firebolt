@@ -3,10 +3,11 @@ import { createContext } from "react";
 import PropTypes from "prop-types";
 import useFireboltProvider from "./hook";
 
-export const FBContext = createContext();
+export const FBContext = createContext({});
 
 const FireboltProvider = (props) => {
   const values = useFireboltProvider(props);
+
   return <FBContext.Provider value={values} {...props} />;
 };
 
@@ -17,9 +18,10 @@ FireboltProvider.propTypes = {
   }).isRequired,
   debug: PropTypes.bool,
   requestsMetadata: PropTypes.object,
+  stepQueryParam: PropTypes.string,
+  children: PropTypes.any,
   withHistory: PropTypes.bool,
   theme: PropTypes.object, // # v3-todo
-  stepQueryParam: PropTypes.string,
 };
 
 export default FireboltProvider;
