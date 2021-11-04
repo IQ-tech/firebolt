@@ -20,7 +20,11 @@ export default function useWizard({
   } = useFirebolt();
 
   useEffect(onStepChangeHandler, [currentStep]);
-  useEffect(onBeforeStepChangeHandler, [stagedStep]);
+
+  useEffect(() => {
+    if (!!stagedStep) onBeforeStepChangeHandler();
+  }, [stagedStep]);
+
   useEffect(onConnectionErrorHandler, [connectionError]);
   useEffect(onFormFinishedCallback, [formFlowHasBeenFinished]);
 
@@ -31,6 +35,7 @@ export default function useWizard({
   }
 
   function onBeforeStepChangeHandler() {
+    console.log("lalals");
     const proceedCallback = () => commitStepChange();
 
     if (!!onBeforeChangeStep) {
@@ -38,6 +43,8 @@ export default function useWizard({
         leavingStep: currentStep,
         newStep: stagedStep,
       });
+    } else {
+      proceedCallback();
     }
   }
 

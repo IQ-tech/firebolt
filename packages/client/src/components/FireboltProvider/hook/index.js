@@ -99,7 +99,6 @@ function useFireboltProvider({
           setFormEndPayload(data);
           setFormFlowHasBeenFinished(true);
         } else {
-          setIsFormLoading(false);
           setCapturedData(data.capturedData);
           setStagedStep(data.step);
           setFormFlowMetadata(data.meta);
@@ -109,6 +108,7 @@ function useFireboltProvider({
   }
 
   function goPreviousStep() {
+    setIsFormLoading(true);
     formEngine.current
       .previousStep(currentStep.data.slug)
       .then((data) => {
@@ -123,6 +123,7 @@ function useFireboltProvider({
     setLastVisitedStep(currentStep);
     setCurrentStep(stagedStep);
     setStagedStep(null);
+    setIsFormLoading(false);
   }
 
   function addRequestsMetadata(key, data = {}) {
@@ -157,6 +158,7 @@ function useFireboltProvider({
     addRequestsMetadata,
     removeRequestsMetadata,
     getRequestsMetadata,
+    theme, //todo
   };
 }
 

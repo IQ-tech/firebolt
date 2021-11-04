@@ -15,10 +15,10 @@ const FormDemo = () => {
     <div>
       <Wizard fallback={<p>my loader</p>}>
         <Wizard.Step match="*" component={DefaultTemplate} />
-        <Wizard.Step
+        {/*       <Wizard.Step
           match={{ slug: "personal_data" }}
           component={() => <p>potato</p>}
-        />
+        /> */}
       </Wizard>
     </div>
   );

@@ -1,7 +1,7 @@
 import FireboltProvider from "../components/FireboltProvider";
 
 const createFireboltProvider =
-  ({ formAccess, debug, stepQueryParam, requestsMetadata }) =>
+  ({ formAccess, debug, stepQueryParam, requestsMetadata, withHistory }) =>
   (Component) =>
   () =>
     (
@@ -10,6 +10,7 @@ const createFireboltProvider =
         debug={debug}
         stepQueryParam={stepQueryParam}
         requestsMetadata={requestsMetadata}
+        withHistory={withHistory}
       >
         <Component />
       </FireboltProvider>
