@@ -144,6 +144,7 @@ function useFireboltProvider({
     formFlowHasBeenFinished,
     //data
     currentStep,
+    stagedStep,
     formflowMetadata,
     capturedData,
     formEndPayload,

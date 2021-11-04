@@ -1,49 +1,62 @@
-import { useEffect } from "react"
-import { useFirebolt } from "../../hooks/useFirebolt"
+import { useEffect } from "react";
+import { useFirebolt } from "../../hooks/useFirebolt";
 
 export default function useWizard({
   onChangeStep,
   onConnectionError,
   onFinishForm,
+  onBeforeChangeStep,
 }) {
   const {
-    // #V2-TODO change to isFormLoading
-    hasFormLoaded,
+    isFormLoading,
     currentStep,
-    stepsHistory, // v2-todo change to last step
-    connectionError,
-    formHasBeenFinished,
+    lastVisitedStep,
+    formFlowHasBeenFinished,
     formEndPayload,
-  } = useFirebolt()
+    stagedStep,
+    commitStepChange,
 
-  const currentStepId = currentStep?.id
+    connectionError,
+  } = useFirebolt();
 
-  useEffect(_runChangeStepCallback, [stepsHistory])
-  useEffect(_runConnectionErrorCallback, [connectionError])
-  useEffect(_runFormFinishedCallback, [formHasBeenFinished])
+  useEffect(onStepChangeHandler, [currentStep]);
+  useEffect(onBeforeStepChangeHandler, [stagedStep]);
+  useEffect(onConnectionErrorHandler, [connectionError]);
+  useEffect(onFormFinishedCallback, [formFlowHasBeenFinished]);
 
-  function _runConnectionErrorCallback() {
+  function onConnectionErrorHandler() {
     if (connectionError && !!onConnectionError) {
-      onConnectionError()
+      onConnectionError();
     }
   }
 
-  function _runChangeStepCallback() {
-    if (stepsHistory.length && !!onChangeStep) {
-      const lastCompletedStep = stepsHistory[stepsHistory.length - 1]
-      onChangeStep({ completedStep: lastCompletedStep, currentStep })
+  function onBeforeStepChangeHandler() {
+    const proceedCallback = () => commitStepChange();
+
+    if (!!onBeforeChangeStep) {
+      onBeforeChangeStep(proceedCallback, {
+        leavingStep: currentStep,
+        newStep: stagedStep,
+      });
     }
   }
 
-  function _runFormFinishedCallback() {
-    if (!!formHasBeenFinished && !!onFinishForm) {
-      const payload = formEndPayload || {}
-      onFinishForm(payload)
+  function onStepChangeHandler() {
+    const notIsFirstStepRendered = !!lastVisitedStep;
+    if (notIsFirstStepRendered && !!onChangeStep) {
+      onChangeStep({ completedStep: lastVisitedStep, currentStep });
+    }
+  }
+
+  function onFormFinishedCallback() {
+    if (!!formFlowHasBeenFinished && !!onFinishForm) {
+      const payload = formEndPayload || {};
+      onFinishForm(payload);
     }
   }
 
   return {
-    hasFormLoaded,
-    currentStepId,
-  }
+    isFormLoading,
+    currentStepSlug: currentStep?.data?.slug,
+  };
 }

@@ -1,6 +1,5 @@
-/* import { createFireboltProvider, Wizard } from "@iq-firebolt/client/src"; */
 import DefaultTemplate from "../../components/templates/DefaultTemplate";
-import { createFireboltProvider } from "@iq-firebolt/client/src";
+import { createFireboltProvider, Wizard } from "@iq-firebolt/client/src";
 
 const withFirebolt = createFireboltProvider({
   formAccess: {
@@ -14,7 +13,13 @@ const withFirebolt = createFireboltProvider({
 const FormDemo = () => {
   return (
     <div>
-      <p>cebola</p>
+      <Wizard fallback={<p>my loader</p>}>
+        <Wizard.Step match="*" component={DefaultTemplate} />
+        <Wizard.Step
+          match={{ slug: "personal_data" }}
+          component={() => <p>potato</p>}
+        />
+      </Wizard>
     </div>
   );
 };

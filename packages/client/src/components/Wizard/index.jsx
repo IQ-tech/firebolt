@@ -1,11 +1,11 @@
-import React, { Fragment } from "react"
-import PropTypes from "prop-types"
+import React, { Fragment } from "react";
+import PropTypes from "prop-types";
 
-import useWizard from "./hook"
-import { childrenOf } from "../../helpers"
-import { filterChildren } from "./helpers"
+import useWizard from "./hook";
+import { childrenOf } from "../../helpers";
+import { filterChildren } from "./helpers";
 
-import Step from "./Step"
+import Step from "./Step";
 
 const Wizard = ({
   children,
@@ -13,25 +13,27 @@ const Wizard = ({
   onChangeStep,
   onConnectionError,
   onFinishForm,
+  onBeforeChangeStep,
 }) => {
-  const { hasFormLoaded, currentStepId } = useWizard({
+  const { isFormLoading, currentStepSlug } = useWizard({
     onChangeStep,
     onConnectionError,
     onFinishForm,
-  })
+    onBeforeChangeStep,
+  });
 
   return (
     <Fragment>
-      {hasFormLoaded
-        ? filterChildren(children, currentStepId)
-        : !!fallback
-        ? fallback
-        : null}
+      {isFormLoading
+        ? !!fallback
+          ? fallback
+          : null
+        : filterChildren(children, currentStepSlug)}
     </Fragment>
-  )
-}
+  );
+};
 
-Wizard.Step = Step
+Wizard.Step = Step;
 Wizard.propTypes = {
   children: childrenOf(Step),
   // render while form load
@@ -42,6 +44,6 @@ Wizard.propTypes = {
   onConnectionError: PropTypes.func,
   /** Callback to run on form end */
   onFinishForm: PropTypes.func,
-}
+};
 
-export default Wizard
+export default Wizard;

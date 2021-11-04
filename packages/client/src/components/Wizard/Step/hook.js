@@ -1,29 +1,26 @@
-import useFirebolt from "../../../hooks/useFirebolt"
+import useFirebolt from "../../../hooks/useFirebolt";
 
 export default function useStep() {
   const {
     goNextStep,
     goPreviousStep,
     currentStep,
-    formMeta,
+    formflowMetadata,
     validationErrors,
-    formCapturedData,
-    webhookResult
-  } = useFirebolt()
+    capturedData,
+  } = useFirebolt();
+
+  const { data: stepData = {}, ...rest } = currentStep;
 
   const fireboltStep = {
-    // #V2-TODO - spread currentStep
-    // #V2-TODO - spread useFirebolt
-    id: currentStep.id,
-    friendlyname: currentStep.friendlyname,
-    fields: currentStep.fields,
+    ...rest,
+    ...stepData,
     goNextStep,
     goPreviousStep,
-    formMeta,
+    formflowMetadata,
     validationErrors,
-    formCapturedData,
-    webhookResult
-  }
+    capturedData,
+  };
 
-  return { fireboltStep }
+  return { fireboltStep };
 }
