@@ -1,7 +1,10 @@
 import { useEffect } from "react";
 import { getUrlParams } from "@iq-firebolt/client-core";
 
-// this hook contains function to treat browser history
+/**
+ * This hook should contain browser history logic
+ * (this logic is only used if FireboltProvider is provided with `withHistory` prop)
+ */
 
 export default function useBrowserNavigation({
   withHistory,
