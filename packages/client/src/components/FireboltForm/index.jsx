@@ -6,8 +6,8 @@ import Insert from "./Insert";
 import useFireboltForm from "./hook";
 
 const FireboltForm = ({
-  fireboltStep,
-  submitText = "",
+  submitBtnText = "Next Step",
+  previousBtnText = "Previous Step",
   className,
   customActionsChild,
   children = [],
@@ -21,10 +21,10 @@ const FireboltForm = ({
 }) => {
   const { handleSubmit, formChildren, actionsChildData } = useFireboltForm({
     autoFill,
-    theme,
-
-    schema,
     remoteErrors,
+
+    theme,
+    schema,
     onSubmit,
     children,
     onChange,
@@ -38,9 +38,18 @@ const FireboltForm = ({
       {!!customActionsChild ? (
         <ActionsChild formData={actionsChildData} />
       ) : (
-        <Button variant="contained" color="primary" type="submit">
-          {submitText}
-        </Button>
+        <>
+          <Button
+            variant="contained"
+            color="secondary"
+            style={{ marginRight: "5px" }}
+          >
+            {previousBtnText}
+          </Button>
+          <Button variant="contained" color="primary" type="submit">
+            {submitBtnText}
+          </Button>
+        </>
       )}
     </form>
   );

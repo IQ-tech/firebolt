@@ -1,3 +1,4 @@
+* receber o fireboltStep como step config
 * mudar id para position
 * clear form session on end form
 *  webhookResult dentro de step - done
@@ -19,9 +20,6 @@
 #lembrar de testar
 * metadata (usado em stantander com anonymous id)
 
-
-# local storage
-* session key
 
 
 
