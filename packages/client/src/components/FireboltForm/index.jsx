@@ -17,18 +17,21 @@ const FireboltForm = ({
   schema,
   remoteErrors,
   onSubmit,
+  onGoBack,
   onChange,
 }) => {
-  const { handleSubmit, formChildren, actionsChildData } = useFireboltForm({
-    autoFill,
-    remoteErrors,
+  const { handleSubmit, formChildren, actionsChildData, handleGoBack } =
+    useFireboltForm({
+      autoFill,
+      remoteErrors,
 
-    theme,
-    schema,
-    onSubmit,
-    children,
-    onChange,
-  });
+      theme,
+      schema,
+      onSubmit,
+      children,
+      onChange,
+      onGoBack,
+    });
 
   const ActionsChild = customActionsChild;
 
@@ -43,6 +46,7 @@ const FireboltForm = ({
             variant="contained"
             color="secondary"
             style={{ marginRight: "5px" }}
+            onClick={handleGoBack}
           >
             {previousBtnText}
           </Button>

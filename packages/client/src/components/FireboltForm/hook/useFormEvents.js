@@ -12,6 +12,7 @@ export default function useFieldsEvents({
   setFieldWarning,
   clearFieldWarning,
   markAllInvalidFields,
+  onGoBack,
 }) {
   useEffect(() => {
     if (!!onChange && hasFormChanged) {
@@ -70,8 +71,16 @@ export default function useFieldsEvents({
     }
   }
 
+  function handleGoBack(e) {
+    e?.preventDefault();
+    if (!!onGoBack) {
+      onGoBack(formPayload);
+    }
+  }
+
   return {
     handleSubmit,
+    handleGoBack,
     getFieldEvent: {
       onBlur: getOnFieldBlur,
       onChange: getOnFieldChange,

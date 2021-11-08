@@ -11,6 +11,7 @@ const DefaultTemplate = ({ fireboltStep }) => {
           schema={fireboltStep?.fields}
           remoteErrors={fireboltStep?.validationErrors}
           onSubmit={fireboltStep.goNextStep}
+          onGoBack={fireboltStep.goPreviousStep}
         />
       </div>
     </div>

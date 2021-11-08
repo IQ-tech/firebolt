@@ -9,6 +9,11 @@
 * mudança do autofill de santander
 
 
+# Api deve retornar dentro do step
+* isLastStep
+* isFirstStep
+
+
 
 # futuro
 * teste de json local

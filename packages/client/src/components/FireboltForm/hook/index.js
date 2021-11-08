@@ -1,6 +1,6 @@
-import useFormState from "./useFormState"
-import useFormEvents from "./useFormEvents"
-import useFormRendering from "./useFormRendering"
+import useFormState from "./useFormState";
+import useFormEvents from "./useFormEvents";
+import useFormRendering from "./useFormRendering";
 
 export default function useFireboltForm({
   schema,
@@ -9,7 +9,8 @@ export default function useFireboltForm({
   onSubmit,
   theme,
   autoFill,
-  remoteErrors
+  remoteErrors,
+  onGoBack,
 }) {
   const {
     isFormValid,
@@ -21,14 +22,14 @@ export default function useFireboltForm({
     setFieldWarning,
     clearFieldWarning,
     markAllInvalidFields,
-    fieldManuallySetErrors
+    fieldManuallySetErrors,
   } = useFormState({
     schema,
     autoFill,
-    remoteErrors
-  })
+    remoteErrors,
+  });
 
-  const { getFieldEvent, handleSubmit } = useFormEvents({
+  const { getFieldEvent, handleSubmit, handleGoBack } = useFormEvents({
     onChange,
     onSubmit,
     formPayload,
@@ -38,8 +39,9 @@ export default function useFireboltForm({
     setHasFormChanged,
     setFieldWarning,
     clearFieldWarning,
-    markAllInvalidFields
-  })
+    markAllInvalidFields,
+    onGoBack,
+  });
 
   const { formChildren } = useFormRendering({
     schema,
@@ -51,12 +53,13 @@ export default function useFireboltForm({
     fieldManuallySetErrors,
     theme,
     setFieldWarning,
-    clearFieldWarning
-  })
+    clearFieldWarning,
+  });
 
   return {
     isFormValid,
     handleSubmit,
+    handleGoBack,
     formChildren,
     actionsChildData: {
       isFormValid,
@@ -64,5 +67,5 @@ export default function useFireboltForm({
       payload: formPayload, // #TODO
       currentStep: 1, //#TODO
     },
-  }
+  };
 }
