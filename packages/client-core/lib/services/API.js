@@ -61,7 +61,7 @@ class APIService {
   }
 
   async getDebugStep(stepSlug) {
-    const endpoint = `${this.endpoints.base}/debug/${this.formName}/${stepSlug}`;
+    const endpoint = `${this.endpoints.root}/debug/${this.formName}/${stepSlug}`;
 
     return await axios
       .get(endpoint)

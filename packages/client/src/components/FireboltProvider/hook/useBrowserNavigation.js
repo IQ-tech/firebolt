@@ -16,7 +16,7 @@ export default function useBrowserNavigation({
   stepQueryParam,
 }) {
   useEffect(() => {
-    if (withHistory) {
+    if (withHistory && !!currentStep.data.slug) {
       setPopStateEvent();
       updateBrowserHistory();
     }
@@ -49,6 +49,7 @@ export default function useBrowserNavigation({
   function updateBrowserHistory() {
     const currentParams = getUrlParams();
     const queryParam = debug ? "debug-step" : stepQueryParam;
+
     const filteredParamsKeys = Object.keys(currentParams).filter(
       (key) => key !== "debug-step" && key !== stepQueryParam
     );

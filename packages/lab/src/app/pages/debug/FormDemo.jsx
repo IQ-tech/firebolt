@@ -8,6 +8,7 @@ const withFirebolt = createFireboltProvider({
   },
   withHistory: true,
   stepQueryParam: "passo",
+  debug: true
 });
 
 const FormDemo = () => {
