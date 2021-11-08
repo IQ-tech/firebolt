@@ -35,7 +35,6 @@ export default function useWizard({
   }
 
   function onBeforeStepChangeHandler() {
-    console.log("lalals");
     const proceedCallback = () => commitStepChange();
 
     if (!!onBeforeChangeStep) {

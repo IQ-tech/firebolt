@@ -1,4 +1,5 @@
 import DefaultTemplate from "../../components/templates/DefaultTemplate";
+import CustomFormTemplate from "../../components/templates/CustomFormTemplate";
 import { createFireboltProvider, Wizard } from "@iq-firebolt/client/src";
 
 const withFirebolt = createFireboltProvider({
@@ -8,7 +9,7 @@ const withFirebolt = createFireboltProvider({
   },
   withHistory: true,
   stepQueryParam: "passo",
-  debug: true
+  debug: true,
 });
 
 const FormDemo = () => {
@@ -16,10 +17,10 @@ const FormDemo = () => {
     <div>
       <Wizard fallback={<p>my loader</p>}>
         <Wizard.Step match="*" component={DefaultTemplate} />
-        {/*       <Wizard.Step
+        <Wizard.Step
           match={{ slug: "personal_data" }}
-          component={() => <p>potato</p>}
-        /> */}
+          component={CustomFormTemplate}
+        />
       </Wizard>
     </div>
   );
