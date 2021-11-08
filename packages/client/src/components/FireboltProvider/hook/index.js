@@ -1,5 +1,6 @@
 import { useRef, useEffect } from "react";
 import { createFireboltForm } from "@iq-firebolt/client-core";
+import getDebugStepName from "../../../helpers/getDebugStepName";
 
 import useStates from "./useStates";
 import useData from "./useData";
@@ -52,19 +53,17 @@ function useFireboltProvider({
   });
 
   useEffect(() => {
-    const debugStep = debug ? _getDebugStep() : false;
-    if (!debugStep) {
-      _startForm();
-    } else {
+    const debugStep = getDebugStepName();
+    if (!!debugStep) {
+      if (!debug)
+        throw new Error(
+          `Debug step is only allowed on debug mode: debug ${debugStep}`
+        );
       _startDebugStep(debugStep);
+    } else {
+      _startForm();
     }
   }, []);
-
-  function _getDebugStep() {
-    const params = new URLSearchParams(window.location.search);
-    const stepToDebug = params.get("debug-step");
-    return stepToDebug;
-  }
 
   function _startForm() {
     setIsFormLoading(true);

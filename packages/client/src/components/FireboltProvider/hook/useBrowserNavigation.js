@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { getUrlParams } from "@iq-firebolt/client-core";
+import getDebugStepName from "../../../helpers/getDebugStepName";
 
 /**
  * This hook should contain browser history logic
@@ -48,7 +49,8 @@ export default function useBrowserNavigation({
 
   function updateBrowserHistory() {
     const currentParams = getUrlParams();
-    const queryParam = debug ? "debug-step" : stepQueryParam;
+    const isDebugging = !!debug && !!getDebugStepName()
+    const queryParam = isDebugging ? "debug-step" : stepQueryParam;
 
     const filteredParamsKeys = Object.keys(currentParams).filter(
       (key) => key !== "debug-step" && key !== stepQueryParam

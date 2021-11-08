@@ -8,7 +8,7 @@ const withFirebolt = createFireboltProvider({
     formName: "sample",
   },
   withHistory: true,
-  stepQueryParam: "passo",
+  stepQueryParam: "step",
   debug: true,
 });
 
