@@ -66,6 +66,8 @@ describe("Navigation requests receive correct data", () => {
   });
 
   test.todo("debug step must return correct data");
+
+  test.todo("upload step working correctly") // descobrir se da pra testar de alguma forma
 });
 
 describe("API Error handling work correctly", () => {
