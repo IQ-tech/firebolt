@@ -68,6 +68,17 @@ class APIService {
       .then((res) => formatStepResponseData(res?.data?.formData));
   }
 
+  async upload(sessionKey, file) {
+    const endpoint = `${this.endpoints.base}/upload`;
+
+    return await axios.post(endpoint, file, {
+      headers: {
+        headers: { "Content-Type": "multipart/form-data" },
+        authorization: `Bearer ${sessionKey}`,
+      },
+    });
+  }
+
   _formatRoot(root) {
     const urlEndsWithSlash = root.endsWith("/");
     return urlEndsWithSlash ? root.slice(0, -1) : `${root}`;
