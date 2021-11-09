@@ -27,7 +27,7 @@ export default function useFilesUpload({
   const [internalError, setInternalError] = useState("");
 
   useEffect(_formatAllowedExtensions, [allowedExtensions]);
-  useEffect(_updateForm, [sentFiles]);
+  /* useEffect(_updateForm, [sentFiles]); */
 
   function _formatAllowedExtensions() {
     const isAllowedListEmpty =

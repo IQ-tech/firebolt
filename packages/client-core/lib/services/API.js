@@ -4,6 +4,8 @@ import {
   formatReqPayload,
 } from "../helpers/formatData";
 
+import startFormWithUpload from "../__mocks__/startFormWithUpload";
+
 class APIService {
   constructor({ formAccess, debug }) {
     const rootEndpoint = this._formatRoot(formAccess?.root);
@@ -24,7 +26,7 @@ class APIService {
 
     return await axios
       .get(this.endpoints.base, { headers: headersConfig })
-      .then((res) => formatStepResponseData(res?.data?.formData)); // #V2-TODO
+      .then((res) => formatStepResponseData(startFormWithUpload.formData)); // #V2-TODO
   }
 
   async getNextStep(
@@ -69,6 +71,9 @@ class APIService {
   }
 
   async upload(sessionKey, file) {
+    const formData = new FormData();
+    formData.append(slug, file);
+
     const endpoint = `${this.endpoints.base}/upload`;
 
     return await axios.post(endpoint, file, {
