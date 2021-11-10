@@ -296,6 +296,15 @@ const fields: FieldConfig[] = [
       'label': 'Telefone Residencial (Opcional)',
     },
   },
+  {
+    'slug': 'agree_with_policy_check',
+    'ui:widget': 'Check',
+    'ui:props': {
+      'label':
+        "<span class='required'>*</span>Li e concordo com a Política de Privacidade",
+    },
+    'validators': [{ 'type': 'requiredboolean' }],
+  },
 ];
 
 const payload = {
@@ -307,6 +316,7 @@ const payload = {
   state: 's',
   time_at_address: '23',
   residence_type: 'own',
+  agree_with_policy_check: false,
 };
 
 export default { fields, payload };
