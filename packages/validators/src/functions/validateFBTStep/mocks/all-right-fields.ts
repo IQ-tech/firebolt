@@ -269,9 +269,18 @@ const fields: FieldConfig[] = [
       'label': 'Telefone celular',
     },
   },
+  {
+    'slug': 'agree_with_policy_check',
+    'ui:widget': 'Check',
+    'ui:props': {
+      'label':
+        "<span class='required'>*</span>Li e concordo com a Política de Privacidade",
+    },
+    'validators': [{ 'type': 'requiredboolean' }],
+  },
 ];
 
-const payload: Record<string, string> = {
+const payload: Record<string, string | boolean> = {
   'gender': 'male',
   'date_of_birth': '20/01/2000',
   'marital_status': 'single',
@@ -280,6 +289,7 @@ const payload: Record<string, string> = {
   'educational_level': 'no education',
   'birth_region': 'BR-AC',
   'main_phone': '(11) 91234-1234',
+  'agree_with_policy_check': true,
 };
 
 export default { fields, payload };

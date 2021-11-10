@@ -10,14 +10,6 @@ describe.each([
     },
   },
   {
-    account: '15964197',
-    properties: {
-      bankBranch: '69736',
-      accountType: null,
-      bankSlug: 'bradesco',
-    },
-  },
-  {
     account: '1182265-7',
     properties: {
       bankBranch: '2921',

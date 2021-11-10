@@ -1,5 +1,6 @@
 import { Validator } from '../classes';
 import isRequired from './required';
+import isRequiredBoolean from './requiredBoolean';
 import isCepValid from './cep';
 import textCharsLength from './textCharsLength';
 import isCnpj from './cnpj';
@@ -26,6 +27,7 @@ import numberRange from './numberRange';
 
 const validators: Record<string, Validator> = {
   'required': isRequired,
+  'requiredboolean': isRequiredBoolean,
   'cep': isCepValid,
   'cnpj': isCnpj,
   'cpf': isCpf,
