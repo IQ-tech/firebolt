@@ -138,6 +138,10 @@ function useFireboltProvider({
 
   function _handleTransitionError() {}
 
+  function uploadFile(file) {
+    return formEngine.current.uploadFile(file);
+  }
+
   return {
     //states
     isFormLoading,
@@ -150,6 +154,7 @@ function useFireboltProvider({
     formEndPayload,
     lastVisitedStep,
     remoteValidationErrors,
+    theme, //todo
     // methods
     goNextStep,
     goPreviousStep,
@@ -157,7 +162,7 @@ function useFireboltProvider({
     addRequestsMetadata,
     removeRequestsMetadata,
     getRequestsMetadata,
-    theme, //todo
+    uploadFile,
   };
 }
 

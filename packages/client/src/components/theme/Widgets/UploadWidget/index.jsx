@@ -54,7 +54,6 @@ const UploadWidget = ({
           variant="contained"
           color="primary"
           tabIndex="0"
-          onBlur={onBlur}
           onClick={() => inputElRef?.current?.click()}
         >
           {placeholder}

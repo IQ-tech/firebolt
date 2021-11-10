@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
-import { uploadFilesToBucket } from "@iq-firebolt/client-core";
 import { File as FbFile } from "@iq-firebolt/client-core";
+import useFirebolt from "../useFirebolt";
 
 export default function useFilesUpload({
   uploadEndpoint,
@@ -21,6 +21,7 @@ export default function useFilesUpload({
   const multiple = maxFiles > 1;
   const [accept, setAccept] = useState();
   const [fileList, setFileList] = useState([]);
+  const { uploadFile } = useFirebolt();
 
   const [sentFiles, setSentFiles] = useState(false);
   const [updatedForm, setUpdatedForm] = useState(false);
@@ -51,42 +52,15 @@ export default function useFilesUpload({
     /** @type {HTMLInputElement} */
     const target = e?.target;
     const files = target?.files || [];
-    const filesArray = Array.from(files);
-    const exceedsLimit = fileList.length + filesArray.length > maxFiles;
 
-    if (exceedsLimit) {
-      if (!!onExceedFileLimit) {
-        onExceedFileLimit({ maxFiles, exceededLimit: exceedsLimit });
-      }
-      setInternalError(exceedFileLimitMessage);
-    } else {
-      const validFiles = filesArray.filter(
-        (file) => !!_checkInputFile(file).isValid
-      );
+    const file = files[0];
 
-      const invalidFiles = filesArray
-        .map((file) => ({
-          file,
-          validation: _checkInputFile(file),
-        }))
-        .filter((file) => !file.validation.isValid)
-        .map(({ file, validation }) => ({
-          name: file.name,
-          size: file.size,
-          message: validation.message,
-        }));
-
-      if (validFiles.length) {
-        setInternalError("");
-        _sendFiles(validFiles);
-      }
-      if (invalidFiles.length && !!onGetInvalidFiles) {
-        onGetInvalidFiles(invalidFiles);
-      }
+    if (!!file) {
+      _sendFiles(file);
     }
   }
 
-  /** @returns {{isValid: boolean, message: string}} */
+  /** @returns {{isValid: boolean, message: string, file: any}} */
   function _checkInputFile(file) {
     const { name, size } = file;
     const extension = name.split(".")[1];
@@ -116,12 +90,13 @@ export default function useFilesUpload({
         message: `o arquivo ${name} excede o limite de 3mb`,
       };
     } else {
-      return { file, isValid: true };
+      return { file, isValid: true, message: "" };
     }
   }
 
-  function _sendFiles(files) {
-    uploadFilesToBucket(uploadEndpoint, { files, slug })
+  function _sendFiles(file) {
+    uploadFile(file);
+    /*     uploadFilesToBucket(uploadEndpoint, { files, slug })
       .then((response) => {
         const uploadReference = response?.data;
         const sentFiles = files.map(
@@ -140,7 +115,7 @@ export default function useFilesUpload({
       .catch((err) => {
         console.error("error on upload files", err);
         if (!!onUploadError) onUploadError();
-      });
+      }); */
   }
 
   return {
