@@ -14,7 +14,7 @@ interface ValidateFBTStepArgs {
   context?: ValidationContext;
 }
 
-interface ValidateFBTStepResult {
+export interface ValidateFBTStepResult {
   isValid: boolean;
   invalidFields: InvalidField[];
 }
