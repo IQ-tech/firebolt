@@ -1,91 +1,94 @@
 const previousStepFormResponse = {
   message: "ok",
-  data: {
+  formData: {
     step: {
-      id: 1,
-      slug: "personal_data",
-      type: "form",
-      friendlyname: "Vamos começar",
-      fields: [
-        {
-          slug: "full_name",
-          "ui:widget": "Text",
-          "ui:props": {
-            label: "Nome completo",
-            placeholder: "Nome completo",
+      data: {
+        id: 1,
+        slug: "personal_data",
+        type: "form",
+        friendlyName: "Vamos começar",
+        fields: [
+          {
+            slug: "full_name",
+            "ui:widget": "Text",
+            "ui:props": {
+              label: "Nome completo",
+              placeholder: "Nome completo",
+            },
+            validators: [
+              {
+                type: "required",
+              },
+              {
+                type: "name",
+              },
+            ],
+            meta: {},
+            value: "test asdsf",
           },
-          validators: [
-            {
-              type: "required",
+          {
+            slug: "email",
+            "ui:widget": "Email",
+            "ui:props": {
+              label: "Email",
+              placeholder: "contato@email.com",
             },
-            {
-              type: "name",
-            },
-          ],
-          meta: {},
-          value: "cenoura batata",
-        },
-        {
-          slug: "email",
-          "ui:widget": "Email",
-          "ui:props": {
-            label: "Email",
-            placeholder: "contato@email.com",
+            validators: [
+              {
+                type: "required",
+              },
+              {
+                type: "email",
+              },
+            ],
+            meta: {},
+            value: "asdf@gmail.com",
           },
-          validators: [
-            {
-              type: "required",
-            },
-            {
-              type: "email",
-            },
-          ],
-          meta: {},
-          value: "teste@teste.com",
-        },
-      ],
+        ],
+      },
+      position: 1,
     },
     meta: {
-      laststep: 5,
+      lastStep: 5,
       forms: [
         {
-          id: 1,
+          position: 1,
           slug: "personal_data",
-          friendlyname: "Vamos começar",
+          friendlyName: "Vamos começar",
         },
         {
-          id: 2,
+          position: 2,
           slug: "documents",
-          friendlyname: "Documentos",
+          friendlyName: "Documentos",
         },
         {
-          id: 3,
+          position: 3,
           slug: "address",
-          friendlyname: "Endereço",
+          friendlyName: "Endereço",
         },
         {
-          id: 4,
+          position: 4,
           slug: "bills",
-          friendlyname: "Adicionar Contas",
+          friendlyName: "Adicionar Contas",
         },
         {
-          id: 5,
+          position: 5,
           slug: "token",
-          friendlyname: "Token",
+          friendlyName: "Token",
         },
       ],
     },
-    auth: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfaWQiOiI2NzkyMTQ0MC01ZDljLTQwMmUtYTI4Yi0wZjJkOGRkNjRiZjYiLCJpYXQiOjE2MzU4NzI4NTV9.7y5GR8_1acwQ5UdttHJK0_LIoMze4COpcwy6bs4ovH4",
+    auth: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfaWQiOiJhYjY0OWE4NC1mNTMyLTQ2NmEtYjRkNC1jZjE1NzY5YjM4Y2EiLCJpYXQiOjE2MzY2NTY1MzN9.EC65IqDQkmMXgSxHyf_moMhcHsVxRDlwoRYiF4Cm0AU",
     capturedData: {
-      updatedAt: 1635886706658,
+      updatedAt: 1636656605584,
       business: "sample",
       partner: "sample",
-      full_name: "cenoura batata",
-      id: "67921440-5d9c-402e-a28b-0f2d8dd64bf6",
-      email: "teste@teste.com",
+      full_name: "test asdsf",
+      id: "ab649a84-f532-466a-b4d4-cf15769b38ca",
+      email: "asdf@gmail.com",
     },
   },
+  errorData: {},
 };
 
-
-export default previousStepFormResponse
+export default previousStepFormResponse;

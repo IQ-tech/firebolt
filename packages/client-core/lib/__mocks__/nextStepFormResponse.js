@@ -1,72 +1,76 @@
 const nextStepFormResponse = {
-  message: "ok",
-  data: {
-    step: {
-      id: 2,
-      slug: "documents",
-      type: "form",
-      friendlyname: "Documentos",
-      fields: [
-        {
-          slug: "brazil_id_number",
-          "ui:widget": "Text",
-          "ui:props": {
-            label: "Número do documento",
-          },
-          validators: [
-            {
-              type: "required",
+  "message": "ok",
+  "formData": {
+    "step": {
+      "data": {
+        "id": 2,
+        "slug": "documents",
+        "type": "form",
+        "friendlyName": "Documentos",
+        "fields": [
+          {
+            "slug": "brazil_id_number",
+            "ui:widget": "Text",
+            "ui:props": {
+              "label": "Número do documento"
             },
-          ],
-          meta: {},
-        },
-      ],
+            "validators": [
+              {
+                "type": "required"
+              }
+            ],
+            "meta": {}
+          }
+        ]
+      },
+      "position": 2,
+      "webhookResult": {
+        "preventContinue": false,
+        "errorSlugField": "",
+        "errorMessage": ""
+      }
     },
-    meta: {
-      laststep: 5,
-      forms: [
+    "meta": {
+      "lastStep": 5,
+      "forms": [
         {
-          id: 1,
-          slug: "personal_data",
-          friendlyname: "Vamos começar",
+          "position": 1,
+          "slug": "personal_data",
+          "friendlyName": "Vamos começar"
         },
         {
-          id: 2,
-          slug: "documents",
-          friendlyname: "Documentos",
+          "position": 2,
+          "slug": "documents",
+          "friendlyName": "Documentos"
         },
         {
-          id: 3,
-          slug: "address",
-          friendlyname: "Endereço",
+          "position": 3,
+          "slug": "address",
+          "friendlyName": "Endereço"
         },
         {
-          id: 4,
-          slug: "bills",
-          friendlyname: "Adicionar Contas",
+          "position": 4,
+          "slug": "bills",
+          "friendlyName": "Adicionar Contas"
         },
         {
-          id: 5,
-          slug: "token",
-          friendlyname: "Token",
-        },
-      ],
+          "position": 5,
+          "slug": "token",
+          "friendlyName": "Token"
+        }
+      ]
     },
-    auth: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfaWQiOiI2NzkyMTQ0MC01ZDljLTQwMmUtYTI4Yi0wZjJkOGRkNjRiZjYiLCJpYXQiOjE2MzU4NzI4NTV9.7y5GR8_1acwQ5UdttHJK0_LIoMze4COpcwy6bs4ovH4",
-    capturedData: {
-      updatedAt: 1635886706658,
-      business: "sample",
-      partner: "sample",
-      full_name: "cenoura batata",
-      id: "67921440-5d9c-402e-a28b-0f2d8dd64bf6",
-      email: "teste@teste.com",
-    },
-    webhookResult: {
-      preventContinue: false,
-      errorSlugField: "",
-      errorMessage: "",
-    },
+    "auth": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfaWQiOiJhYjY0OWE4NC1mNTMyLTQ2NmEtYjRkNC1jZjE1NzY5YjM4Y2EiLCJpYXQiOjE2MzY2NTY1MzN9.EC65IqDQkmMXgSxHyf_moMhcHsVxRDlwoRYiF4Cm0AU",
+    "capturedData": {
+      "updatedAt": 1636656605584,
+      "business": "sample",
+      "partner": "sample",
+      "full_name": "test asdsf",
+      "id": "ab649a84-f532-466a-b4d4-cf15769b38ca",
+      "email": "asdf@gmail.com"
+    }
   },
-};
+  "errorData": {}
+}
 
 export default nextStepFormResponse;

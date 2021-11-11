@@ -1,7 +1,7 @@
 const startFormResponse = {
   message: "ok",
   formData: {
-    auth: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfaWQiOiIyNWFiMjRlNS1hODI1LTQzM2EtYmI4OS0wMjJhMGMzY2IzYmQiLCJpYXQiOjE2MzYwNTk5Nzl9.w7ESWLVXeXkIDJpbOToD2azjUiCF1gdaf6ZIy8Tlb1s",
+    auth: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfaWQiOiI2NzkyMTQ0MC01ZDljLTQwMmUtYTI4Yi0wZjJkOGRkNjRiZjYiLCJpYXQiOjE2MzU4NzI4NTV9.7y5GR8_1acwQ5UdttHJK0_LIoMze4COpcwy6bs4ovH4",
     meta: {
       lastStep: 5,
       forms: [
