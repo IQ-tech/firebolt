@@ -48,7 +48,7 @@ export default function useWizard({
   }
 
   function onStepChangeHandler() {
-    const notIsFirstStepRendered = !!lastVisitedStep;
+    const notIsFirstStepRendered = !!lastVisitedStep?.position;
     if (notIsFirstStepRendered && !!onChangeStep) {
       onChangeStep({ completedStep: lastVisitedStep, currentStep });
     }
