@@ -30,7 +30,16 @@ const UploadWidget = ({
   return (
     <FieldHolder>
       <FormControl required={isRequired} error={hasError} fullWidth>
-        <InputLabel htmlFor={fieldId}>{label}</InputLabel>
+        <InputLabel
+          style={{
+            position: "static",
+            transform: "none",
+            paddingBottom: "10px",
+          }}
+          htmlFor={fieldId}
+        >
+          {label}
+        </InputLabel>
         <input
           ref={inputElRef}
           id={fieldId}
@@ -45,7 +54,6 @@ const UploadWidget = ({
           variant="contained"
           color="primary"
           tabIndex="0"
-          onBlur={onBlur}
           onClick={() => inputElRef?.current?.click()}
         >
           {placeholder}

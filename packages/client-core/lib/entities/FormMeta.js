@@ -1,17 +1,11 @@
-/**
- * @typedef {Object} StepMeta
- * @property {number} id
- * @property {string} friendlyname
- */
+function FormMetadata({ laststep = Number(), forms = [] } = {}) {
 
-class FormMeta {
-  constructor({ lastStep = Number(), steps = [] }) {
-    this.lastStep = lastStep
-    /** @type {StepMeta[]} */
-    this.steps = steps
-  }
+
+  return {
+    /** @type {number} */
+    lastStep: laststep,
+    steps: forms,
+  };
 }
 
-export default FormMeta
-
-
+export default FormMetadata;

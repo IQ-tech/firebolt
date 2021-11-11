@@ -1,5 +1,5 @@
-import { useEffect } from "react"
-import { validateFBTField } from "@iq-firebolt/validators"
+import { useEffect } from "react";
+import { validateFBTField } from "@iq-firebolt/validators";
 
 export default function useFieldsEvents({
   formPayload,
@@ -12,12 +12,13 @@ export default function useFieldsEvents({
   setFieldWarning,
   clearFieldWarning,
   markAllInvalidFields,
+  onGoBack,
 }) {
   useEffect(() => {
     if (!!onChange && hasFormChanged) {
-      onChange(formPayload)
+      onChange(formPayload);
     }
-  }, [formPayload, onChange])
+  }, [formPayload, onChange]);
 
   function validateField(field, value) {
     return validateFBTField({
@@ -25,61 +26,65 @@ export default function useFieldsEvents({
       field,
       formPayload,
       context: "client",
-    })
+    });
   }
 
   function getOnFieldBlur(field) {
-    const fieldSlug = field?.slug
+    const fieldSlug = field?.slug;
     return (value) => {
-      const fieldValidation = validateField(field, value)
-      const isValueValid = fieldValidation.isValid
+      const fieldValidation = validateField(field, value);
+      const isValueValid = fieldValidation.isValid;
 
       if (isValueValid) {
-        clearFieldWarning(fieldSlug)
+        clearFieldWarning(fieldSlug);
       } else {
-        const errorMessage = fieldValidation?.invalidValidations[0]?.message
-        setFieldWarning(fieldSlug, errorMessage)
+        const errorMessage = fieldValidation?.invalidValidations[0]?.message;
+        setFieldWarning(fieldSlug, errorMessage);
       }
-    }
+    };
   }
 
   function getOnFieldChange(field) {
-    const fieldSlug = field?.slug
+    const fieldSlug = field?.slug;
     return (value) => {
-      const isValueValid = validateField(field, value).isValid
-      if (!hasFormChanged) setHasFormChanged(true)
-      modifyPayloadKeys({ [fieldSlug]: value })
+      const isValueValid = validateField(field, value).isValid;
+      if (!hasFormChanged) setHasFormChanged(true);
+      modifyPayloadKeys({ [fieldSlug]: value });
       if (isValueValid) {
-        clearFieldWarning(fieldSlug)
+        clearFieldWarning(fieldSlug);
       }
-    }
+    };
   }
 
   function getOnFieldFocus(field) {
-    return (value) => console.log(value)
+    return (value) => console.log(value);
   }
 
   function handleSubmit(e) {
-    if (e && e?.preventDefault) e?.preventDefault()
+    if (e && e?.preventDefault) e?.preventDefault();
     if (!!onSubmit && isFormValid) {
-      const fieldsData = Object.keys(formPayload).map((key) => ({
-        slug: key,
-        value: formPayload[key],
-      }))
-      onSubmit(fieldsData)
+      onSubmit(formPayload);
     }
 
     if (!isFormValid) {
-      markAllInvalidFields()
+      markAllInvalidFields();
+    }
+  }
+
+  function handleGoBack(e) {
+    e?.preventDefault();
+    if (!!onGoBack) {
+      onGoBack(formPayload);
     }
   }
 
   return {
     handleSubmit,
+    handleGoBack,
     getFieldEvent: {
       onBlur: getOnFieldBlur,
       onChange: getOnFieldChange,
       onFocus: getOnFieldFocus,
     },
-  }
+  };
 }

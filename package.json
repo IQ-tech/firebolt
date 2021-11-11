@@ -5,9 +5,10 @@
     "packages/*"
   ],
   "scripts": {
-    "start": "lerna run start",
+    "start": "lerna run dev --scope @iq-firebolt/lab --stream",
     "test:all": "lerna run test",
     "test:validators": "cd packages/validators && yarn test",
+    "test:client-core": "cd packages/client-core && yarn test",
     "build:validators": "cd packages/validators && yarn build",
     "build:libs": "lerna run build --scope @iq-firebolt/validators --scope @iq-firebolt/client",
     "bootstrap": "lerna bootstrap --use-workspaces",
@@ -17,6 +18,8 @@
     "publish:canary": "lerna publish --canary --preid next --dist-tag next --force-publish='*' --no-push --no-git-tag-version --yes --no-verify-access"
   },
   "devDependencies": {
+    "@testing-library/jest-dom": "^5.14.1",
+    "@testing-library/react": "^12.1.2",
     "@types/faker": "^5.5.8",
     "@types/jest": "^27.0.2",
     "eslint": "^7.32.0",

@@ -1,70 +1,25 @@
-import FireboltContext from "../../context"
-import useFireboltProvider from "./hook"
-import PropTypes from "prop-types"
+import FireboltContext from "../../context";
 
-/**
- * @param {{formSource: import("@iq-firebolt/client-core/lib/types").FormSource, debugMode: boolean, stepQueryParam: string}} props
- */
-const FireboltProvider = ({
-  formSource,
-  debugMode = false,
-  stepQueryParam = "step",
-  ...props
-}) => {
-  const {
-    goNextStep,
-    goPreviousStep,
-    currentStep,
-    hasFormLoaded,
-    formMeta,
-    stepsHistory,
-    connectionError,
-    validationErrors,
-    formCapturedData,
-    formHasBeenFinished,
-    formEndPayload,
-    lockStepTransition,
-    lockedNavigation,
-    webhookResult,
-    addRequestsMetadata,
-    removeRequestsMetadata,
-    requestsMetadata,
-  } = useFireboltProvider({ formSource, debugMode, stepQueryParam })
+import PropTypes from "prop-types";
+import useFireboltProvider from "./hook";
 
-  return (
-    <FireboltContext.Provider
-      value={{
-        debugMode,
-        formMeta,
-        currentStep,
-        hasFormLoaded,
-        goNextStep,
-        goPreviousStep,
-        stepsHistory,
-        connectionError,
-        validationErrors,
-        formCapturedData,
-        formHasBeenFinished,
-        formEndPayload,
-        lockStepTransition,
-        lockedNavigation,
-        webhookResult,
-        addRequestsMetadata,
-        removeRequestsMetadata,
-        requestsMetadata,
-      }}
-      {...props}
-    />
-  )
-}
+const FireboltProvider = (props) => {
+  const values = useFireboltProvider(props);
+
+  return <FireboltContext.Provider value={values} {...props} />;
+};
 
 FireboltProvider.propTypes = {
-  /** use fireboltStep query to debug form steps  */
-  debugMode: PropTypes.bool,
-  formSource: PropTypes.shape({
+  formAccess: PropTypes.shape({
     root: PropTypes.string.isRequired,
     formName: PropTypes.string.isRequired,
   }).isRequired,
-}
+  debug: PropTypes.bool,
+  requestsMetadata: PropTypes.object,
+  stepQueryParam: PropTypes.string,
+  children: PropTypes.any,
+  withHistory: PropTypes.bool,
+  theme: PropTypes.object, // # v2-todo
+};
 
-export default FireboltProvider
+export default FireboltProvider;
