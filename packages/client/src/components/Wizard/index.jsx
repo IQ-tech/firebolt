@@ -44,6 +44,8 @@ Wizard.propTypes = {
   onConnectionError: PropTypes.func,
   /** Callback to run on form end */
   onFinishForm: PropTypes.func,
+  /** Callback to run before step change */
+  onBeforeChangeStep: PropTypes.func,
 };
 
 export default Wizard;

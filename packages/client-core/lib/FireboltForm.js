@@ -33,6 +33,11 @@ class FireboltForm {
     return this.APIService.getPreviousStep(formSessionKey, currentStepSlug);
   }
 
+  uploadFile(file) {
+    const formSessionKey = getFormSession(this.formName);
+    return this.APIService.upload(formSessionKey, file);
+  }
+
   debugStep(stepSlug) {
     if (!this.debug) {
       throw new Error(

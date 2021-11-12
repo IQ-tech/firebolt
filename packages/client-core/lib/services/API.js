@@ -4,6 +4,8 @@ import {
   formatReqPayload,
 } from "../helpers/formatData";
 
+import startFormWithUpload from "../__mocks__/startFormWithUpload";
+
 class APIService {
   constructor({ formAccess, debug }) {
     const rootEndpoint = this._formatRoot(formAccess?.root);
@@ -24,7 +26,7 @@ class APIService {
 
     return await axios
       .get(this.endpoints.base, { headers: headersConfig })
-      .then((res) => formatStepResponseData(res?.data?.formData)); // #V2-TODO
+      .then((res) => formatStepResponseData(res?.data?.formData));
   }
 
   async getNextStep(
@@ -45,7 +47,7 @@ class APIService {
           authorization: `Bearer ${sessionKey}`,
         },
       })
-      .then((res) => formatStepResponseData(res?.data?.formData)); // #V2-TODO
+      .then((res) => formatStepResponseData(res?.data?.formData));
   }
 
   async getPreviousStep(sessionKey, currentStepSlug) {
@@ -69,14 +71,21 @@ class APIService {
   }
 
   async upload(sessionKey, file) {
-    const endpoint = `${this.endpoints.base}/upload`;
+    const formData = new FormData();
+    formData.append("file", file);
+    const endpoint = `${this.endpoints.root}/upload`;
 
-    return await axios.post(endpoint, file, {
+    const config = {
+      method: "post",
+      url: endpoint,
       headers: {
-        headers: { "Content-Type": "multipart/form-data" },
-        authorization: `Bearer ${sessionKey}`,
+        Authorization: `Bearer ${sessionKey}`,
+        "Content-Type": "multipart/form-data",
       },
-    });
+      data: formData,
+    };
+
+    return await axios(config);
   }
 
   _formatRoot(root) {

@@ -5,12 +5,7 @@ const DefaultTemplate = ({ fireboltStep }) => {
     <div>
       <div style={{ maxWidth: "600px", margin: "0 auto" }}>
         <p>My custom form template</p>
-        <FireboltForm
-          schema={fireboltStep?.fields}
-          remoteErrors={fireboltStep?.validationErrors}
-          onSubmit={fireboltStep.goNextStep}
-          onGoBack={fireboltStep.goPreviousStep}
-        />
+        
       </div>
     </div>
   );

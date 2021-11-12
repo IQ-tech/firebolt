@@ -1,5 +1,6 @@
 import { useRef, useEffect } from "react";
 import { createFireboltForm } from "@iq-firebolt/client-core";
+import getDebugStepName from "../../../helpers/getDebugStepName";
 
 import useStates from "./useStates";
 import useData from "./useData";
@@ -27,8 +28,8 @@ function useFireboltProvider({
   const {
     capturedData,
     setCapturedData,
-    remoteValidationErrors,
-    setRemoteValidationErrors,
+    remoteErrors,
+    setRemoteErrors,
     formflowMetadata,
     setFormFlowMetadata,
     formEndPayload,
@@ -52,19 +53,17 @@ function useFireboltProvider({
   });
 
   useEffect(() => {
-    const debugStep = debug ? _getDebugStep() : false;
-    if (!debugStep) {
-      _startForm();
-    } else {
+    const debugStep = getDebugStepName();
+    if (!!debugStep) {
+      if (!debug)
+        throw new Error(
+          `Debug step is only allowed on debug mode: debug ${debugStep}`
+        );
       _startDebugStep(debugStep);
+    } else {
+      _startForm();
     }
   }, []);
-
-  function _getDebugStep() {
-    const params = new URLSearchParams(window.location.search);
-    const stepToDebug = params.get("debug-step");
-    return stepToDebug;
-  }
 
   function _startForm() {
     setIsFormLoading(true);
@@ -91,12 +90,12 @@ function useFireboltProvider({
 
   function goNextStep(stepFieldsPayload) {
     setIsFormLoading(true);
-    const isLastStep = currentStep?.position === formflowMetadata.lastStep;
+    const isLastStep = currentStep?.data?.slug === formflowMetadata?.lastStep;
     formEngine.current
       .nextStep(currentStep.data.slug, stepFieldsPayload)
       .then((data) => {
         if (isLastStep) {
-          setFormEndPayload(data);
+          setFormEndPayload(data?.step?.webhookResult);
           setFormFlowHasBeenFinished(true);
         } else {
           setCapturedData(data.capturedData);
@@ -124,6 +123,7 @@ function useFireboltProvider({
     setCurrentStep(stagedStep);
     setStagedStep(null);
     setIsFormLoading(false);
+    setRemoteErrors([])
   }
 
   function addRequestsMetadata(key, data = {}) {
@@ -137,7 +137,19 @@ function useFireboltProvider({
     return formEngine.current.requestsMetadata;
   }
 
-  function _handleTransitionError() {}
+  function _handleTransitionError(err) {
+    const invalidFields = err?.response?.data?.errorData?.invalidFields || [];
+    const isValidationError =
+      err?.response?.status === 400 && !!invalidFields.length;
+    if(isValidationError){
+      setRemoteErrors(invalidFields)
+      setIsFormLoading(false)
+    }
+  }
+
+  function uploadFile(file) {
+    return formEngine.current.uploadFile(file);
+  }
 
   return {
     //states
@@ -150,7 +162,8 @@ function useFireboltProvider({
     capturedData,
     formEndPayload,
     lastVisitedStep,
-    remoteValidationErrors,
+    remoteErrors,
+    theme, //todo
     // methods
     goNextStep,
     goPreviousStep,
@@ -158,7 +171,7 @@ function useFireboltProvider({
     addRequestsMetadata,
     removeRequestsMetadata,
     getRequestsMetadata,
-    theme, //todo
+    uploadFile,
   };
 }
 
