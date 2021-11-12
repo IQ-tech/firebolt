@@ -143,7 +143,6 @@ function useFireboltProvider({
       err?.response?.status === 400 && !!invalidFields.length;
     if(isValidationError){
       setRemoteErrors(invalidFields)
-      console.log(invalidFields)
       setIsFormLoading(false)
     }
   }
