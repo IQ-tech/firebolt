@@ -8,9 +8,10 @@ const DefaultTemplate = ({ fireboltStep }) => {
         <FireboltForm
           submitBtnText="Next Step"
           previousBtnText="Previous step"
+          
           schema={fireboltStep?.fields}
-          remoteErrors={fireboltStep?.validationErrors}
-          onSubmit={(payload) => !console.log(payload) && fireboltStep.goNextStep(payload)}
+          remoteErrors={fireboltStep?.remoteErrors}
+          onSubmit={(payload) => fireboltStep.goNextStep(payload)}
           onGoBack={fireboltStep.goPreviousStep}
         />
       </div>

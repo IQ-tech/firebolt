@@ -22,15 +22,15 @@ export default function useData() {
   });
   const [capturedData, setCapturedData] = useState({});
   // validation errors that come from firebolt api
-  const [remoteValidationErrors, setRemoteValidationErrors] = useState([]);
+  const [remoteErrors, setRemoteErrors] = useState([]);
   const [lastVisitedStep, setLastVisitedStep] = useState({});
   const [formEndPayload, setFormEndPayload] = useState({}); //step, meta, capturedData
 
   return {
     capturedData,
     setCapturedData,
-    remoteValidationErrors,
-    setRemoteValidationErrors,
+    remoteErrors,
+    setRemoteErrors,
     formflowMetadata,
     setFormFlowMetadata,
     formEndPayload,

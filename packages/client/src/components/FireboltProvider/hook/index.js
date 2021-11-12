@@ -28,8 +28,8 @@ function useFireboltProvider({
   const {
     capturedData,
     setCapturedData,
-    remoteValidationErrors,
-    setRemoteValidationErrors,
+    remoteErrors,
+    setRemoteErrors,
     formflowMetadata,
     setFormFlowMetadata,
     formEndPayload,
@@ -123,6 +123,7 @@ function useFireboltProvider({
     setCurrentStep(stagedStep);
     setStagedStep(null);
     setIsFormLoading(false);
+    setRemoteErrors([])
   }
 
   function addRequestsMetadata(key, data = {}) {
@@ -136,7 +137,16 @@ function useFireboltProvider({
     return formEngine.current.requestsMetadata;
   }
 
-  function _handleTransitionError() {}
+  function _handleTransitionError(err) {
+    const invalidFields = err?.response?.data?.errorData?.invalidFields || [];
+    const isValidationError =
+      err?.response?.status === 400 && !!invalidFields.length;
+    if(isValidationError){
+      setRemoteErrors(invalidFields)
+      console.log(invalidFields)
+      setIsFormLoading(false)
+    }
+  }
 
   function uploadFile(file) {
     return formEngine.current.uploadFile(file);
@@ -153,7 +163,7 @@ function useFireboltProvider({
     capturedData,
     formEndPayload,
     lastVisitedStep,
-    remoteValidationErrors,
+    remoteErrors,
     theme, //todo
     // methods
     goNextStep,

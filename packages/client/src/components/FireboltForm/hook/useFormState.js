@@ -13,7 +13,7 @@ export default function useFormState({ schema, autoFill, remoteErrors }) {
   useEffect(validateForm, [formPayload, fieldManuallySetErrors])
   useEffect(autoFillFromProp, [autoFill])
   useEffect(autoFillFromAPI, [schema])
-  useEffect(setRemoteValidationErrors, [remoteErrors])
+  useEffect(setRemoteErrors, [remoteErrors])
 
   // Autofill FormPayload from autofill prop
   function autoFillFromProp() {
@@ -23,7 +23,7 @@ export default function useFormState({ schema, autoFill, remoteErrors }) {
     }
   }
 
-  function setRemoteValidationErrors() {
+  function setRemoteErrors() {
     if (remoteErrors?.length) {
       const newErrorModel = remoteErrors.reduce((acc, nxtItem) => {
         const safeNextObj = nxtItem || {}

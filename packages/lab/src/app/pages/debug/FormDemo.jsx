@@ -17,23 +17,18 @@ const FormDemo = () => {
     <div>
       <Wizard
         fallback={<p>my loader</p>}
-        onFinishForm={(data) => {
-          console.log("finish form", data)
-          /* console.log("finish form");
-          console.log(data); */
+        onFinishForm={(payload) => {
+          console.log("finish form:", payload);
         }}
         onConnectionError={(err) => {
-          /* console.log("connection error");
-          console.log(err); */
+          console.log("connection error:", err);
         }}
-        onBeforeChangeStep={(proceed, { leavingStep, previousStep }) => {
-          /* console.log("before change step");
-          console.log({ leavingStep, previousStep }); */
+        onBeforeChangeStep={(proceed, { leavingStep, enteringStep }) => {
+          console.log("before change:", { leavingStep, enteringStep });
           proceed();
         }}
-        onChangeStep={(change) => {
-          /* console.log("change step");
-          console.log(change); */
+        onChangeStep={({ sentStep, currentStep }) => {
+          console.log("changed step:", { sentStep, currentStep });
         }}
       >
         <Wizard.Step match="*" component={DefaultTemplate} />

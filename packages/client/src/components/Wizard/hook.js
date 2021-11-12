@@ -40,7 +40,7 @@ export default function useWizard({
     if (!!onBeforeChangeStep) {
       onBeforeChangeStep(proceedCallback, {
         leavingStep: currentStep,
-        newStep: stagedStep,
+        enteringStep: stagedStep,
       });
     } else {
       proceedCallback();
@@ -50,7 +50,7 @@ export default function useWizard({
   function onStepChangeHandler() {
     const notIsFirstStepRendered = !!lastVisitedStep?.position;
     if (notIsFirstStepRendered && !!onChangeStep) {
-      onChangeStep({ completedStep: lastVisitedStep, currentStep });
+      onChangeStep({ sentStep: lastVisitedStep, currentStep });
     }
   }
 
