@@ -97,6 +97,8 @@ function useFireboltProvider({
         if (isLastStep) {
           setFormEndPayload(data?.step?.webhookResult);
           setFormFlowHasBeenFinished(true);
+          clearSession();
+          // TODO, clear form session
         } else {
           setCapturedData(data.capturedData);
           setStagedStep(data.step);
@@ -123,7 +125,7 @@ function useFireboltProvider({
     setCurrentStep(stagedStep);
     setStagedStep(null);
     setIsFormLoading(false);
-    setRemoteErrors([])
+    setRemoteErrors([]);
   }
 
   function addRequestsMetadata(key, data = {}) {
@@ -137,13 +139,17 @@ function useFireboltProvider({
     return formEngine.current.requestsMetadata;
   }
 
+  function clearSession() {
+    formEngine.current.clearSession();
+  }
+
   function _handleTransitionError(err) {
     const invalidFields = err?.response?.data?.errorData?.invalidFields || [];
     const isValidationError =
       err?.response?.status === 400 && !!invalidFields.length;
-    if(isValidationError){
-      setRemoteErrors(invalidFields)
-      setIsFormLoading(false)
+    if (isValidationError) {
+      setRemoteErrors(invalidFields);
+      setIsFormLoading(false);
     }
   }
 
@@ -172,6 +178,7 @@ function useFireboltProvider({
     removeRequestsMetadata,
     getRequestsMetadata,
     uploadFile,
+    clearSession
   };
 }
 
