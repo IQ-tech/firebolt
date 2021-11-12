@@ -1,9 +1,8 @@
-function FormMetadata({ laststep = Number(), forms = [] } = {}) {
-
+function FormMetadata({ lastStep = String(), forms = [] } = {}) {
 
   return {
     /** @type {number} */
-    lastStep: laststep,
+    lastStep: lastStep,
     steps: forms,
   };
 }

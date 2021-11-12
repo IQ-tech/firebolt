@@ -90,12 +90,12 @@ function useFireboltProvider({
 
   function goNextStep(stepFieldsPayload) {
     setIsFormLoading(true);
-    const isLastStep = currentStep?.position === formflowMetadata.lastStep;
+    const isLastStep = currentStep?.data?.slug === formflowMetadata?.lastStep;
     formEngine.current
       .nextStep(currentStep.data.slug, stepFieldsPayload)
       .then((data) => {
         if (isLastStep) {
-          setFormEndPayload(data);
+          setFormEndPayload(data?.step?.webhookResult);
           setFormFlowHasBeenFinished(true);
         } else {
           setCapturedData(data.capturedData);

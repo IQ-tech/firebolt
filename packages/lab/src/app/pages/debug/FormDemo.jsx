@@ -18,26 +18,52 @@ const FormDemo = () => {
       <Wizard
         fallback={<p>my loader</p>}
         onFinishForm={(data) => {
-          console.log("finish form");
-          console.log(data);
+          console.log("finish form", data)
+          /* console.log("finish form");
+          console.log(data); */
         }}
         onConnectionError={(err) => {
-          console.log("connection error");
-          console.log(err);
+          /* console.log("connection error");
+          console.log(err); */
         }}
         onBeforeChangeStep={(proceed, { leavingStep, previousStep }) => {
-          console.log("before change step");
-          console.log({ leavingStep, previousStep });
+          /* console.log("before change step");
+          console.log({ leavingStep, previousStep }); */
+          proceed();
         }}
         onChangeStep={(change) => {
-          console.log("change step");
-          console.log(change);
+          /* console.log("change step");
+          console.log(change); */
         }}
       >
         <Wizard.Step match="*" component={DefaultTemplate} />
         <Wizard.Step
-          match={{ slug: "personal_data" }}
-          component={CustomFormTemplate}
+          match={{ slug: "iqc" }}
+          component={({ fireboltStep }) => (
+            <button onClick={() => fireboltStep.goNextStep()}> proceed</button>
+          )}
+        />
+        <Wizard.Step
+          match={{ slug: "sms_token" }}
+          component={({ fireboltStep }) => (
+            <button onClick={() => fireboltStep.goNextStep()}>proceed</button>
+          )}
+        />
+        <Wizard.Step
+          match={{ slug: "summary" }}
+          component={({ fireboltStep }) => (
+            <button
+              onClick={() =>
+                fireboltStep.goNextStep({
+                  lead_uuid: "asjhf",
+                  simulation_uuid: "Sdfgd",
+                  simulation_option_uuid: "sdfdg",
+                })
+              }
+            >
+              proceed
+            </button>
+          )}
         />
       </Wizard>
     </div>
