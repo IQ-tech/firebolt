@@ -6,8 +6,9 @@ export default function useStep() {
     goPreviousStep,
     currentStep,
     formflowMetadata,
-    validationErrors,
     capturedData,
+    remoteErrors,
+    clearSession
   } = useFirebolt();
 
   const { data: stepData = {}, ...rest } = currentStep;
@@ -18,8 +19,9 @@ export default function useStep() {
     goNextStep,
     goPreviousStep,
     formflowMetadata,
-    validationErrors,
     capturedData,
+    remoteErrors,
+    clearSession
   };
 
   return { fireboltStep };

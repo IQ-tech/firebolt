@@ -4,13 +4,13 @@ const DefaultTemplate = ({ fireboltStep }) => {
   return (
     <div>
       <div style={{ maxWidth: "600px", margin: "0 auto" }}>
-        <p>asdf</p>
+        <p>{fireboltStep?.friendlyName}</p>
         <FireboltForm
           submitBtnText="Next Step"
           previousBtnText="Previous step"
           schema={fireboltStep?.fields}
-          remoteErrors={fireboltStep?.validationErrors}
-          onSubmit={fireboltStep.goNextStep}
+          remoteErrors={fireboltStep?.remoteErrors}
+          onSubmit={(payload) => fireboltStep.goNextStep(payload)}
           onGoBack={fireboltStep.goPreviousStep}
         />
       </div>

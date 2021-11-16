@@ -28,8 +28,8 @@ function useFireboltProvider({
   const {
     capturedData,
     setCapturedData,
-    remoteValidationErrors,
-    setRemoteValidationErrors,
+    remoteErrors,
+    setRemoteErrors,
     formflowMetadata,
     setFormFlowMetadata,
     formEndPayload,
@@ -80,7 +80,7 @@ function useFireboltProvider({
 
   function _startDebugStep(stepSlug) {
     setIsFormLoading(true);
-    formEngine.current.debugStep(stepSlug).then((data) => {
+    return formEngine.current.debugStep(stepSlug).then((data) => {
       setIsFormLoading(false);
       setCurrentStep(data.step);
       setCapturedData(data.capturedData);
@@ -90,13 +90,17 @@ function useFireboltProvider({
 
   function goNextStep(stepFieldsPayload) {
     setIsFormLoading(true);
-    const isLastStep = currentStep?.position === formflowMetadata.lastStep;
-    formEngine.current
+    const isLastStep = currentStep?.data?.slug === formflowMetadata?.lastStep;
+    return formEngine.current
       .nextStep(currentStep.data.slug, stepFieldsPayload)
       .then((data) => {
         if (isLastStep) {
-          setFormEndPayload(data);
+          setFormEndPayload({
+            webhookResult: data?.step?.webhookResult,
+            capturedData: data?.step?.capturedData,
+          });
           setFormFlowHasBeenFinished(true);
+          clearSession();
         } else {
           setCapturedData(data.capturedData);
           setStagedStep(data.step);
@@ -108,7 +112,7 @@ function useFireboltProvider({
 
   function goPreviousStep() {
     setIsFormLoading(true);
-    formEngine.current
+    return formEngine.current
       .previousStep(currentStep.data.slug)
       .then((data) => {
         setCapturedData(data.capturedData);
@@ -123,6 +127,7 @@ function useFireboltProvider({
     setCurrentStep(stagedStep);
     setStagedStep(null);
     setIsFormLoading(false);
+    setRemoteErrors([]);
   }
 
   function addRequestsMetadata(key, data = {}) {
@@ -136,7 +141,21 @@ function useFireboltProvider({
     return formEngine.current.requestsMetadata;
   }
 
-  function _handleTransitionError() {}
+  function clearSession() {
+    formEngine.current.clearSession();
+  }
+
+  function _handleTransitionError(err) {
+    const invalidFields = err?.response?.data?.errorData?.invalidFields || [];
+    const isValidationError =
+      err?.response?.status === 400 && !!invalidFields.length;
+    if (isValidationError) {
+      setRemoteErrors(invalidFields);
+      setIsFormLoading(false);
+
+      return { errors: invalidFields };
+    }
+  }
 
   function uploadFile(file) {
     return formEngine.current.uploadFile(file);
@@ -153,7 +172,7 @@ function useFireboltProvider({
     capturedData,
     formEndPayload,
     lastVisitedStep,
-    remoteValidationErrors,
+    remoteErrors,
     theme, //todo
     // methods
     goNextStep,
@@ -163,6 +182,7 @@ function useFireboltProvider({
     removeRequestsMetadata,
     getRequestsMetadata,
     uploadFile,
+    clearSession,
   };
 }
 
