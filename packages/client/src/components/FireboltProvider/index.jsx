@@ -19,7 +19,7 @@ FireboltProvider.propTypes = {
   stepQueryParam: PropTypes.string,
   children: PropTypes.any,
   withHistory: PropTypes.bool,
-  theme: PropTypes.object, // # v2-todo
+  theme: PropTypes.object, // # v2-todos
 };
 
 export default FireboltProvider;
