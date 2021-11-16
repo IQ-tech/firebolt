@@ -3,6 +3,7 @@ import APIService from "./services/API";
 import getFormSession from "./helpers/session/getFormSession";
 import createFormSession from "./helpers/session/createFormSession";
 import { clearFormSession } from "./helpers/session/clearFormSession";
+import getAutofillParam from "./helpers/getAutofillParam";
 
 class FireboltForm {
   constructor(formAccess, { requestMetadata = {}, debug } = {}) {
@@ -13,6 +14,11 @@ class FireboltForm {
   }
 
   async start() {
+    const hasAutofill = getAutofillParam(); // test if clear works correctly
+
+    if (hasAutofill) {
+      this.clearSession();
+    }
     const formSessionKey = getFormSession(this.formName);
     const firstStepData = await this.APIService.getStartForm(formSessionKey);
     if (!formSessionKey) {
