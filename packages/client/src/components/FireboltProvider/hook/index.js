@@ -95,10 +95,12 @@ function useFireboltProvider({
       .nextStep(currentStep.data.slug, stepFieldsPayload)
       .then((data) => {
         if (isLastStep) {
-          setFormEndPayload(data?.step?.webhookResult);
+          setFormEndPayload({
+            webhookResult: data?.step?.webhookResult,
+            capturedData: data?.step?.capturedData,
+          });
           setFormFlowHasBeenFinished(true);
           clearSession();
-          // TODO, clear form session
         } else {
           setCapturedData(data.capturedData);
           setStagedStep(data.step);
@@ -151,7 +153,7 @@ function useFireboltProvider({
       setRemoteErrors(invalidFields);
       setIsFormLoading(false);
 
-      return {errors: invalidFields}
+      return { errors: invalidFields };
     }
   }
 
@@ -180,7 +182,7 @@ function useFireboltProvider({
     removeRequestsMetadata,
     getRequestsMetadata,
     uploadFile,
-    clearSession
+    clearSession,
   };
 }
 
