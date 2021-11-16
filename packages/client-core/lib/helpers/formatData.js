@@ -1,5 +1,4 @@
 import Step from "../entities/Step";
-import StepData from "../entities/StepData";
 import FormMetaData from "../entities/FormMeta";
 
 export function formatStepResponseData(requestData = {}) {

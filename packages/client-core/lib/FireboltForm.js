@@ -2,7 +2,7 @@ import APIService from "./services/API";
 
 import getFormSession from "./helpers/session/getFormSession";
 import createFormSession from "./helpers/session/createFormSession";
-import clearFormSession from "./helpers/session/clearFormSession"
+import { clearFormSession } from "./helpers/session/clearFormSession";
 
 class FireboltForm {
   constructor(formAccess, { requestMetadata = {}, debug } = {}) {
@@ -69,8 +69,8 @@ class FireboltForm {
     this.requestsMetadata = newPayload;
   }
 
-  clearSession(){
-    clearFormSession(this.formName)
+  clearSession() {
+    clearFormSession(this.formName);
   }
 }
 
