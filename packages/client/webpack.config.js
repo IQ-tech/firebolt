@@ -29,13 +29,7 @@ module.exports = {
             loader: "babel-loader",
             options: {
               presets: [
-                [
-                  "@babel/preset-react",
-                  {
-                    runtime: "automatic",
-                  },
-                ],
-
+                ["@babel/preset-react"],
                 [
                   "@babel/preset-env",
                   {
@@ -43,6 +37,14 @@ module.exports = {
                       browsers: ["last 2 versions"],
                     },
                     modules: false,
+                  },
+                ],
+              ],
+              plugins: [
+                [
+                  "@babel/plugin-transform-runtime",
+                  {
+                    regenerator: true,
                   },
                 ],
               ],
