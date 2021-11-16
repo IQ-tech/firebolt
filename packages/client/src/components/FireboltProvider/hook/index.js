@@ -101,7 +101,6 @@ function useFireboltProvider({
           });
           setFormFlowHasBeenFinished(true);
           clearSession();
-          // TODO, clear form session
         } else {
           setCapturedData(data.capturedData);
           setStagedStep(data.step);
