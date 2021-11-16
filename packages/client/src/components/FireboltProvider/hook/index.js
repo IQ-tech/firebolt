@@ -80,7 +80,7 @@ function useFireboltProvider({
 
   function _startDebugStep(stepSlug) {
     setIsFormLoading(true);
-    formEngine.current.debugStep(stepSlug).then((data) => {
+    return formEngine.current.debugStep(stepSlug).then((data) => {
       setIsFormLoading(false);
       setCurrentStep(data.step);
       setCapturedData(data.capturedData);
@@ -91,7 +91,7 @@ function useFireboltProvider({
   function goNextStep(stepFieldsPayload) {
     setIsFormLoading(true);
     const isLastStep = currentStep?.data?.slug === formflowMetadata?.lastStep;
-    formEngine.current
+    return formEngine.current
       .nextStep(currentStep.data.slug, stepFieldsPayload)
       .then((data) => {
         if (isLastStep) {
@@ -110,7 +110,7 @@ function useFireboltProvider({
 
   function goPreviousStep() {
     setIsFormLoading(true);
-    formEngine.current
+    return formEngine.current
       .previousStep(currentStep.data.slug)
       .then((data) => {
         setCapturedData(data.capturedData);
@@ -150,6 +150,8 @@ function useFireboltProvider({
     if (isValidationError) {
       setRemoteErrors(invalidFields);
       setIsFormLoading(false);
+
+      return {errors: invalidFields}
     }
   }
 

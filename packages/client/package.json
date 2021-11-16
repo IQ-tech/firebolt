@@ -53,5 +53,8 @@
     "setupFiles": [
       "<rootDir>/__jest__/browserMocks.js"
     ]
-  }
+  },
+  "browserslist": [
+    "last 1 Chrome version"
+  ]
 }
