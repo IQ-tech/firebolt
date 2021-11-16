@@ -1,7 +1,7 @@
 function StepData({
   slug = String(),
   type = String(),
-  friendlyName = String(),
+  friendlyname = String(),
   fields = [],
 } = {}) {
   return {
@@ -10,7 +10,7 @@ function StepData({
     /** @type {string} */
     type: type,
     /** @type {string} */
-    friendlyName,
+    friendlyName: friendlyname,
     /** @type {Array} */
     fields,
   };
