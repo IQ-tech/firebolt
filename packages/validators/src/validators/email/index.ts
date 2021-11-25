@@ -6,13 +6,15 @@ function isValidEmail(email = '') {
   const regExp =
     /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
+  const noMatchSpecialChars = !email.match(/[~!#$%^&*()+=`{}[\]|\\:;'<>,?]/gi)
+
   const invalidEmailMessage = 'Email inválido';
 
   if (email.indexOf('@-') > 0) {
     return new ValidationResult(false, invalidEmailMessage);
   }
 
-  const isValid = regExp.test(email);
+  const isValid = regExp.test(email) && noMatchSpecialChars;
   const message = isValid ? '' : invalidEmailMessage;
 
   return new ValidationResult(isValid, message);
