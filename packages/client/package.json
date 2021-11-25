@@ -52,7 +52,14 @@
   "jest": {
     "setupFiles": [
       "<rootDir>/__jest__/browserMocks.js"
-    ]
+    ],
+    "setupFilesAfterEnv": [
+      "<rootDir>/__jest__/setup.js"
+    ],
+    "testEnvironment": "jsdom",
+    "transform": {
+      "^.+\\.(ts|tsx|js|jsx)$": "babel-jest"
+    }
   },
   "browserslist": [
     "last 1 Chrome version"
