@@ -9,6 +9,7 @@
     "test:all": "lerna run test",
     "test:validators": "cd packages/validators && yarn test",
     "test:client-core": "cd packages/client-core && yarn test",
+    "test:client": "cd packages/client && yarn test",
     "build:validators": "cd packages/validators && yarn build",
     "build:libs": "lerna run build --scope @iq-firebolt/validators --scope @iq-firebolt/client",
     "bootstrap": "lerna bootstrap --use-workspaces",

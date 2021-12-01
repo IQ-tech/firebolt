@@ -34,6 +34,7 @@
     "@material-ui/icons": "^4.11.2",
     "@material-ui/lab": "^4.0.0-alpha.60",
     "@viewstools/use-masked-input": "^2.0.1",
+    "axios-mock-adapter": "^1.20.0",
     "classnames": "^2.3.1",
     "fast-levenshtein": "^3.0.0",
     "prop-types": "^15.7.2",
@@ -44,6 +45,7 @@
     "@babel/plugin-transform-runtime": "^7.16.0",
     "@babel/preset-env": "^7.15.6",
     "@babel/preset-react": "^7.14.5",
+    "@testing-library/react-hooks": "^7.0.2",
     "babel-loader": "^8.2.2",
     "webpack": "^5.56.0",
     "webpack-bundle-analyzer": "^4.4.2",
@@ -52,7 +54,14 @@
   "jest": {
     "setupFiles": [
       "<rootDir>/__jest__/browserMocks.js"
-    ]
+    ],
+    "setupFilesAfterEnv": [
+      "<rootDir>/__jest__/setup.js"
+    ],
+    "testEnvironment": "jsdom",
+    "transform": {
+      "^.+\\.(ts|tsx|js|jsx)$": "babel-jest"
+    }
   },
   "browserslist": [
     "last 1 Chrome version"
