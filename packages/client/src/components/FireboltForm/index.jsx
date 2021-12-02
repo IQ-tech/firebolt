@@ -1,9 +1,10 @@
 import PropTypes from "prop-types";
+// import classnames from "classnames";
 import Button from "@material-ui/core/Button";
 
 import Insert from "./Insert";
-
 import useFireboltForm from "./hook";
+import "./style.css";
 
 const FireboltForm = ({
   submitBtnText = "Next Step",
@@ -37,7 +38,8 @@ const FireboltForm = ({
 
   return (
     <form className={className} onSubmit={handleSubmit} autoComplete="off">
-      {formChildren}
+      <div className="firebolt-form-wrapper">{formChildren}</div>
+
       {!!customActionsChild ? (
         <ActionsChild formData={actionsChildData} />
       ) : (

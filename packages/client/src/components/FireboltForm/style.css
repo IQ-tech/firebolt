@@ -1,0 +1,19 @@
+.firebolt-input {
+  width: 100%;
+}
+
+.insert-wrapper {
+  width: 100%;
+}
+
+@media (min-width: 720px) {
+  .firebolt-form-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+  }
+
+  .firebolt-input.firebolt-input--half {
+    width: 48%;
+  }
+}

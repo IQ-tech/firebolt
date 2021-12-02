@@ -1,8 +1,7 @@
-import { Fragment } from "react";
 import PropTypes from "prop-types";
 
 const Insert = ({ before, after, render }) => {
-  return <Fragment>{render}</Fragment>;
+  return <div className="insert-wrapper">{render}</div>;
 };
 
 const FormCoordinateShape = PropTypes.shape({
