@@ -1,5 +1,4 @@
 import PropTypes from "prop-types";
-// import classnames from "classnames";
 import Button from "@material-ui/core/Button";
 
 import Insert from "./Insert";
