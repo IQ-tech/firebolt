@@ -26,11 +26,12 @@ export default function useFormRendering({
       "ui:widget": widgetName,
       "ui:props-preset": propsPresetName,
       "ui:props": propsFromSchema = {},
+      "ui:styles": propsStyles = {},
       "ui:props-conditional": propsConditional,
     } = field;
 
     const classes = classnames("firebolt-input", {
-      "firebolt-input--half": propsFromSchema.size === "half",
+      "firebolt-input--half": propsStyles.size === "half",
     });
 
     const safeTheme = theme || {};

@@ -8,6 +8,8 @@ const DefaultTemplate = ({ fireboltStep }) => {
       "ui:props": {
         label: "Nome completoooooo",
         placeholder: "Nome completo",
+      },
+      "ui:styles": {
         size: "half",
       },
       validators: [{ type: "required" }, { type: "name" }],
@@ -19,7 +21,9 @@ const DefaultTemplate = ({ fireboltStep }) => {
       "ui:props": {
         label: "Emaillllll",
         placeholder: "contato@email.com",
-        // size: "half",
+      },
+      "ui:styles": {
+        size: "half",
       },
       validators: [{ type: "required" }, { type: "email" }],
       meta: {},
@@ -37,12 +41,7 @@ const DefaultTemplate = ({ fireboltStep }) => {
           remoteErrors={fireboltStep?.remoteErrors}
           onSubmit={(payload) => fireboltStep.goNextStep(payload)}
           onGoBack={fireboltStep.goPreviousStep}
-        >
-          <FireboltForm.Insert
-            after="first"
-            render={<h1 className="insertttt">insert aqui</h1>}
-          />
-        </FireboltForm>
+        />
       </div>
     </div>
   );
