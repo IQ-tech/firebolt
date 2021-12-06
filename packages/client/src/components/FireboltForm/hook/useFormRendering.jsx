@@ -1,8 +1,10 @@
 import evaluate from "simple-evaluate";
+import classnames from "classnames";
+import { uiPropsPresets } from "@iq-firebolt/client-core";
+
 import getFieldComponent from "./helpers/getFieldComponent";
 import remapFormChildren from "./helpers/remapFormChildren";
 import getConditionalProps from "./helpers/getConditionalProps";
-import { uiPropsPresets } from "@iq-firebolt/client-core";
 
 export default function useFormRendering({
   schema,
@@ -15,6 +17,7 @@ export default function useFormRendering({
   fieldManuallySetErrors,
   setFieldWarning,
   clearFieldWarning,
+  classes,
 }) {
   const fieldsChildren = schema.map((field = {}, index) => {
     const {
@@ -24,8 +27,13 @@ export default function useFormRendering({
       "ui:widget": widgetName,
       "ui:props-preset": propsPresetName,
       "ui:props": propsFromSchema = {},
+      "ui:styles": propsStyles = {},
       "ui:props-conditional": propsConditional,
     } = field;
+
+    const computedClasses = classnames(classes["firebolt-input"], {
+      [classes["firebolt-input--half"]]: propsStyles.size === "half",
+    });
 
     const safeTheme = theme || {};
     const hasConditionalRender = !!conditional;
@@ -87,7 +95,15 @@ export default function useFormRendering({
     };
 
     if (!shouldHideField) {
-      return <FieldComponent key={`form-item-${index}`} {...componentProps} />;
+      return (
+        <div
+          className={computedClasses}
+          key={`form-item-${index}`}
+          data-fieldslug={slug}
+        >
+          <FieldComponent {...componentProps} />
+        </div>
+      );
     }
   });
 

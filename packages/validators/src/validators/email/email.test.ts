@@ -43,6 +43,7 @@ describe('email validation', () => {
     'email@111.222.333.44444',
     'email@example..com',
     'Abc..123@example.com',
+    'P*****4@GMAIL.COM'
   ])('should the function to indicate that the email is invalid', (value) => {
     expect(isValidEmail.run(value).isValid).toBeFalsy();
   });

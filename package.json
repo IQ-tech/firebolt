@@ -9,10 +9,11 @@
     "test:all": "lerna run test",
     "test:validators": "cd packages/validators && yarn test",
     "test:client-core": "cd packages/client-core && yarn test",
+    "test:client": "cd packages/client && yarn test",
     "build:validators": "cd packages/validators && yarn build",
     "build:libs": "lerna run build --scope @iq-firebolt/validators --scope @iq-firebolt/client",
     "bootstrap": "lerna bootstrap --use-workspaces",
-    "versionup": "lerna version  --no-git-tag-version",
+    "versionup": "lerna version  --no-git-tag-version --force-publish",
     "publish:libs": "yarn lerna publish from-package --yes --no-verify-access",
     "clean": "lerna clean",
     "publish:canary": "lerna publish --canary --preid next --dist-tag next --force-publish='*' --yes --no-push --no-git-tag-version --no-verify-access"
