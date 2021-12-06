@@ -11,6 +11,7 @@ export default function useFireboltForm({
   autoFill,
   remoteErrors,
   onGoBack,
+  classes
 }) {
   const {
     isFormValid,
@@ -54,6 +55,7 @@ export default function useFireboltForm({
     theme,
     setFieldWarning,
     clearFieldWarning,
+    classes
   });
 
   return {

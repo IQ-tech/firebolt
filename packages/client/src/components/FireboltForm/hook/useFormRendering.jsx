@@ -17,6 +17,7 @@ export default function useFormRendering({
   fieldManuallySetErrors,
   setFieldWarning,
   clearFieldWarning,
+  classes,
 }) {
   const fieldsChildren = schema.map((field = {}, index) => {
     const {
@@ -30,8 +31,8 @@ export default function useFormRendering({
       "ui:props-conditional": propsConditional,
     } = field;
 
-    const classes = classnames("firebolt-input", {
-      "firebolt-input--half": propsStyles.size === "half",
+    const computedClasses = classnames(classes["firebolt-input"], {
+      [classes["firebolt-input--half"]]: propsStyles.size === "half",
     });
 
     const safeTheme = theme || {};
@@ -96,9 +97,9 @@ export default function useFormRendering({
     if (!shouldHideField) {
       return (
         <div
-          className={classes}
+          className={computedClasses}
           key={`form-item-${index}`}
-          data-fieldSlug={slug}
+          data-fieldslug={slug}
         >
           <FieldComponent {...componentProps} />
         </div>

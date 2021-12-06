@@ -19,7 +19,8 @@
     "url": "git+https://github.com/IQ-tech/firebolt.git"
   },
   "scripts": {
-    "build": "webpack --profile --json=dist/compilation-stats.json",
+    "build": "webpack",
+    "gen:profile": "webpack --profile --json=dist/compilation-stats.json",
     "analyze": "webpack-bundle-analyzer dist/compilation-stats.json",
     "test": "jest"
   },
@@ -47,6 +48,8 @@
     "@babel/preset-react": "^7.14.5",
     "@testing-library/react-hooks": "^7.0.2",
     "babel-loader": "^8.2.2",
+    "css-loader": "^6.5.1",
+    "style-loader": "^3.3.1",
     "webpack": "^5.56.0",
     "webpack-bundle-analyzer": "^4.4.2",
     "webpack-cli": "^4.8.0"
