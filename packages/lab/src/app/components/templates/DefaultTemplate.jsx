@@ -23,7 +23,7 @@ const DefaultTemplate = ({ fireboltStep }) => {
         placeholder: "contato@email.com",
       },
       "ui:styles": {
-        size: "half",
+        size: "full",
       },
       validators: [{ type: "required" }, { type: "email" }],
       meta: {},
@@ -41,7 +41,12 @@ const DefaultTemplate = ({ fireboltStep }) => {
           remoteErrors={fireboltStep?.remoteErrors}
           onSubmit={(payload) => fireboltStep.goNextStep(payload)}
           onGoBack={fireboltStep.goPreviousStep}
-        />
+        >
+          <FireboltForm.Insert
+            after={{fieldSlug: "full_name"}}
+            render={<p>cenoura</p>}
+          />
+        </FireboltForm>
       </div>
     </div>
   );

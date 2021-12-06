@@ -95,8 +95,12 @@ export default function useFormRendering({
 
     if (!shouldHideField) {
       return (
-        <div className={classes}>
-          <FieldComponent key={`form-item-${index}`} {...componentProps} />
+        <div
+          className={classes}
+          key={`form-item-${index}`}
+          data-fieldSlug={slug}
+        >
+          <FieldComponent {...componentProps} />
         </div>
       );
     }
