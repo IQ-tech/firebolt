@@ -1,6 +1,6 @@
 {
   "name": "@iq-firebolt/client",
-  "version": "0.1.5",
+  "version": "0.2.0",
   "description": "> TODO: description",
   "author": "iq team",
   "homepage": "https://github.com/IQ-tech/firebolt#readme",
@@ -19,7 +19,8 @@
     "url": "git+https://github.com/IQ-tech/firebolt.git"
   },
   "scripts": {
-    "build": "webpack --profile --json=dist/compilation-stats.json",
+    "build": "webpack",
+    "gen:profile": "webpack --profile --json=dist/compilation-stats.json",
     "analyze": "webpack-bundle-analyzer dist/compilation-stats.json",
     "test": "jest"
   },
@@ -28,8 +29,8 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.16.3",
-    "@iq-firebolt/client-core": "^0.1.5",
-    "@iq-firebolt/validators": "^0.1.5",
+    "@iq-firebolt/client-core": "^0.2.0",
+    "@iq-firebolt/validators": "^0.2.0",
     "@material-ui/core": "^4.12.3",
     "@material-ui/icons": "^4.11.2",
     "@material-ui/lab": "^4.0.0-alpha.60",
@@ -47,6 +48,8 @@
     "@babel/preset-react": "^7.14.5",
     "@testing-library/react-hooks": "^7.0.2",
     "babel-loader": "^8.2.2",
+    "css-loader": "^6.5.1",
+    "style-loader": "^3.3.1",
     "webpack": "^5.56.0",
     "webpack-bundle-analyzer": "^4.4.2",
     "webpack-cli": "^4.8.0"
