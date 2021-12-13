@@ -1,7 +1,4 @@
-const { resolve, join } = require("path");
-
-const BundleAnalyzerPlugin =
-  require("webpack-bundle-analyzer").BundleAnalyzerPlugin;
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
 module.exports = {
   mode: "production",
@@ -12,6 +9,7 @@ module.exports = {
     globalObject: "this",
     chunkFilename: "chunks/[name].js",
   },
+  plugins: [new MiniCssExtractPlugin()],
   externals: {
     react: "react", //this config keeps react out of the bundle
     reactDOM: "react-dom",
@@ -42,6 +40,10 @@ module.exports = {
           },
         ],
         exclude: "/node_modules/",
+      },
+      {
+        test: /\.css$/i,
+        use: [MiniCssExtractPlugin.loader, "css-loader"],
       },
     ],
   },
