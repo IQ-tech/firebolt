@@ -1,6 +1,6 @@
 {
   "name": "@iq-firebolt/client",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "description": "> TODO: description",
   "author": "iq team",
   "homepage": "https://github.com/IQ-tech/firebolt#readme",
@@ -28,8 +28,8 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.16.3",
-    "@iq-firebolt/client-core": "^0.1.5",
-    "@iq-firebolt/validators": "^0.1.5",
+    "@iq-firebolt/client-core": "^0.1.6",
+    "@iq-firebolt/validators": "^0.1.6",
     "@material-ui/core": "^4.12.3",
     "@material-ui/icons": "^4.11.2",
     "@material-ui/lab": "^4.0.0-alpha.60",
