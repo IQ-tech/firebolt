@@ -24,3 +24,8 @@ global.localStorage = new LocalStorageMock();
 global.window = {
   
 }
+global.location = {
+  search: {
+    substring: () => '' 
+  }
+}
