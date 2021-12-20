@@ -21,43 +21,51 @@ const UIPropsPresets = {
     placeholder: "000.000.000-00",
     label: "CPF",
     mask: CPFMask,
+    useNumericKeyboard: true
   },
   "br-cep": {
     label: "CEP",
     placeholder: "00000-000",
     mask: CEPMask,
+    useNumericKeyboard: true
   },
   "br-currency": {
     placeholder: "R$ 00.000,00",
     mask: BRCurrency,
+    useNumericKeyboard: true
   },
   "br-phone": {
     htmlType: "tel",
     label: "Celular com DDD",
     placeholder: "(00) 00000-0000",
     mask: BRPhoneMask,
+    useNumericKeyboard: true
   },
   "br-phone-residential": {
     htmlType: "tel",
     label: "Telefone com DDD",
     placeholder: "(00) 0000-0000",
     mask: BRPhoneResidentialMask,
+    useNumericKeyboard: true
   },
   "br-phone-hybrid": {
     htmlType: "tel",
     label: "Telefone com DDD",
     placeholder: "(00) 0000-0000",
     mask: BRPhoneHybridMask,
+    useNumericKeyboard: true
   },
   "day-month-year": {
     placeholder: "DD/MM/AAAA",
     label: "",
     mask: DayMonthYearMask,
+    useNumericKeyboard: true
   },
   "month-year": {
     placeholder: "MM/AAAA",
     label: "",
     mask: MonthYearMask,
+    useNumericKeyboard: true
   },
   "month-day-options": {
     options: [...Array(31).keys()].map((_, i) => ({
