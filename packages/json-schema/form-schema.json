@@ -90,6 +90,7 @@
       ],
       "title": "Form Tracks",
       "minItems": 1,
+      "additionalItems": true,
       "type": "array",
       "items": {
         "$id": "#/properties/tracks/items",
@@ -106,7 +107,6 @@
             "required": ["slug", "steps"],
             "title": "any track",
             "type": "object",
-            "additionalItems": true,
             "properties": {
               "slug": {
                 "$id": "#/properties/tracks/items/anyOf/trackItem/properties/slug",
