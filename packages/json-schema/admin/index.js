@@ -9,6 +9,9 @@ const createWindow = () => {
   });
 
   win.loadURL("http://127.0.0.1:3000/");
+
+  win.webContents.openDevTools()
+
   win.on("closed", function () {
     mainWindow = null;
   });
