@@ -22,6 +22,13 @@
       "title": "The category schema",
       "type": "string"
     },
+    "business": {
+      "$id": "#/properties/business",
+      "description": "(deprecate) old way to categorize the form",
+      "examples": ["sample", "loans", "auth"],
+      "title": "The category schema",
+      "type": "string"
+    },
     "webhook": {
       "$id": "#/properties/webhook",
       "description": "While transitioning steps on a form, the Firebolt api can make webhook calls to third party api's. This property can be used to define which steps these calls should be made. it can also define the third party api url that should be used.",
@@ -523,7 +530,7 @@
                     }
                   }
                 },
-                "additionalProperties": true
+                "additionalProperties": false
               }
             },
             "additionalProperties": true
