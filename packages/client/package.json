@@ -22,7 +22,8 @@
     "build": "webpack",
     "gen:profile": "webpack --profile --json=dist/compilation-stats.json",
     "analyze": "webpack-bundle-analyzer dist/compilation-stats.json",
-    "test": "jest"
+    "test": "jest",
+    "test:watch": "jest --watch"
   },
   "bugs": {
     "url": "https://github.com/IQ-tech/firebolt/issues"
@@ -35,9 +36,9 @@
     "@material-ui/icons": "^4.11.2",
     "@material-ui/lab": "^4.0.0-alpha.60",
     "@viewstools/use-masked-input": "^2.0.1",
-    "axios-mock-adapter": "^1.20.0",
     "classnames": "^2.3.1",
     "fast-levenshtein": "^3.0.0",
+    "msw": "^0.36.3",
     "prop-types": "^15.7.2",
     "simple-evaluate": "^1.4.3"
   },

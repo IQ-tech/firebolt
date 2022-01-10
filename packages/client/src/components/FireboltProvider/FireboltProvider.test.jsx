@@ -1,20 +1,17 @@
-import * as axios from "axios";
 import { renderHook, act } from "@testing-library/react-hooks";
 
 import useFireboltProvider from "./hook";
 
-jest.mock("axios");
+const formAccess = {
+  root: "http://api.com.br/",
+  formName: "testing",
+};
 
 describe("FireboltProvider component", () => {
   it('Deve setar o estado "isLoading" como "true" ao chamar a função "goNextStep"', async () => {
-    axios.get.mockImplementation(() => Promise.resolve({ data: {} }));
-
     const { result, waitForNextUpdate } = renderHook(() =>
       useFireboltProvider({
-        formAccess: {
-          root: "http://api.com.br/",
-          formName: "testing",
-        },
+        formAccess,
       })
     );
 
@@ -24,18 +21,16 @@ describe("FireboltProvider component", () => {
     act(() => {
       result.current.goNextStep();
     });
+
+    await waitForNextUpdate();
+
     expect(result.current.isFormLoading).toBe(true);
   });
 
   it('Deve setar o estado "isLoading" como "true" ao chamar a função "goPreviousStep"', async () => {
-    axios.get.mockImplementation(() => Promise.resolve({ data: {} }));
-
     const { result, waitForNextUpdate } = renderHook(() =>
       useFireboltProvider({
-        formAccess: {
-          root: "http://api.com.br/",
-          formName: "testing",
-        },
+        formAccess,
       })
     );
 
@@ -50,62 +45,78 @@ describe("FireboltProvider component", () => {
     expect(result.current.isFormLoading).toBe(true);
   });
 
-  it("Deve mostrar erro avisando que o debug-step só funciona quando o modo debug estiver habilitado", async () => {
-    axios.get.mockImplementation(() => Promise.resolve({ data: {} }));
+  it("transição de step", async () => {
+    const secondStepData = [
+      {
+        slug: "email",
+        "ui:props": { label: "Email", placeholder: "contato@email.com" },
+        "ui:widget": "Email",
+      },
+    ];
+
+    const { result, waitForNextUpdate } = renderHook(() =>
+      useFireboltProvider({
+        formAccess,
+      })
+    );
+
+    expect(result.current.isFormLoading).toBe(true);
+    await waitForNextUpdate();
+    expect(result.current.isFormLoading).toBe(false);
+
+    act(() => {
+      result.current.goNextStep();
+    });
+
+    await waitForNextUpdate();
+    expect(result.current.stagedStep.data.fields).toEqual(secondStepData);
+
+    act(() => {
+      result.current.commitStepChange();
+    });
+
+    expect(result.current.stagedStep).toEqual(null);
+    expect(result.current.currentStep.data.fields).toEqual(secondStepData);
+  });
+});
+
+describe("FireboltProvider component - testes relacionados ao modo de debug", () => {
+  beforeEach(() => {
     global.window = Object.create(window);
 
-    const url = "https://localhost:1234/?debug-step=1";
+    const url = "https://localhost:1234/?debug-step=personal_data";
     Object.defineProperty(window, "location", {
       value: {
         href: url,
-        search: "debug-step=1",
+        search: "debug-step=personal_data",
       },
     });
+  });
 
+  it("Deve mostrar erro avisando que o debug-step só funciona quando o modo debug estiver habilitado", async () => {
     const { result } = renderHook(() =>
       useFireboltProvider({
-        formAccess: {
-          root: "http://api.com.br/",
-          formName: "testing",
-        },
+        formAccess,
       })
     );
 
     expect(result.error).toEqual(
-      Error("Debug step is only allowed on debug mode: debug 1")
+      Error("Debug step is only allowed on debug mode: debug personal_data")
     );
   });
 
-  it("Deve fazer a requisição de debug ", async () => {
-    axios.get.mockImplementation(() => Promise.resolve({ data: {} }));
-    global.window = Object.create(window);
-
-    const url = "https://localhost:1234/?debug-step=1";
-    Object.defineProperty(window, "location", {
-      value: {
-        href: url,
-        search: "debug-step=1",
-      },
-    });
-
-    const apiRoot = "http://api.com.br";
-    const formName = "testing";
-
-    const { waitForNextUpdate } = renderHook(() =>
+  it("Deve fazer a requisição de debug", async () => {
+    const { result, waitForNextUpdate } = renderHook(() =>
       useFireboltProvider({
-        formAccess: {
-          root: apiRoot,
-          formName: formName,
-        },
+        formAccess,
         debug: true,
       })
     );
 
     await waitForNextUpdate();
 
-    expect(axios.get).toHaveBeenCalledWith(`${apiRoot}/debug/${formName}/1`);
+    expect(result.current.currentStep.data.friendlyName).toBe(
+      "Debug - Documentos"
+    );
   });
 });
-
-// se tiver with history, transição de passo deve mudar history e url
-// check if set loading state while is transitioning step
