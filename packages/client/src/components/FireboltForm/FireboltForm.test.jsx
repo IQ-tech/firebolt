@@ -163,7 +163,6 @@ describe("firebolt form test", () => {
     expect(getByText('Test2')).toBeInTheDocument();
     expect(getByText('Test3')).toBeInTheDocument();
   })
-<<<<<<< HEAD
 
   it("able to render 'check' field correctly", () => {
     const checkField = {
@@ -246,7 +245,4 @@ describe("firebolt form test", () => {
     expect(mockBack).toHaveBeenCalledTimes(1);
     expect(mockNext).toHaveBeenCalledTimes(1);
   })
-=======
-  
->>>>>>> 5c6b6fb (test: Wizard (render fallback on component on firebolt change step))
 });
