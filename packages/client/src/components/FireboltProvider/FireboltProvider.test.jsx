@@ -45,7 +45,7 @@ describe("FireboltProvider component", () => {
     expect(result.current.isFormLoading).toBe(true);
   });
 
-  it("transição de step", async () => {
+  it("Deve fazer a transição de step após chamar a função commitStepChange", async () => {
     const secondStepData = [
       {
         slug: "email",
