@@ -25,6 +25,8 @@ jobs:
           node-version: ${{ matrix.node-version }}
           cache: 'yarn'
       - run: yarn install --frozen-lockfile
+      - name: Build lib
+      - run: yarn build:libs
       - name: Jest Annotations & Coverage
         uses: mattallty/jest-github-action@v1.0.3
         env:
