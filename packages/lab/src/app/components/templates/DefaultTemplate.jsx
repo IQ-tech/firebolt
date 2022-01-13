@@ -1,4 +1,4 @@
-import { FireboltForm } from "@iq-firebolt/client/src";
+import { FireboltForm, StepForm } from "@iq-firebolt/client/src";
 
 const DefaultTemplate = ({ fireboltStep }) => {
   const fields = [
@@ -6,7 +6,7 @@ const DefaultTemplate = ({ fireboltStep }) => {
       slug: "full_name",
       "ui:widget": "Text",
       "ui:props": {
-        label: "Nome completoooooo",
+        label: "Nome completo",
         placeholder: "Nome completo",
       },
       "ui:styles": {
@@ -19,7 +19,7 @@ const DefaultTemplate = ({ fireboltStep }) => {
       slug: "email",
       "ui:widget": "Email",
       "ui:props": {
-        label: "Emaillllll",
+        label: "Email",
         placeholder: "contato@email.com",
       },
       "ui:styles": {
@@ -34,7 +34,17 @@ const DefaultTemplate = ({ fireboltStep }) => {
     <div>
       <div style={{ maxWidth: "600px", margin: "0 auto" }}>
         <p>{fireboltStep?.friendlyName}</p>
-        <FireboltForm
+
+        <StepForm>
+          <StepForm.Insert
+            after={"last"}
+            render={
+              <p>insert</p>
+            }
+          />
+        </StepForm>
+
+        {/* <FireboltForm
           submitBtnText="Next Step"
           previousBtnText="Previous step"
           schema={fields}
@@ -46,7 +56,7 @@ const DefaultTemplate = ({ fireboltStep }) => {
             after={{fieldSlug: "full_name"}}
             render={<p>cenoura</p>}
           />
-        </FireboltForm>
+        </FireboltForm> */}
       </div>
     </div>
   );
