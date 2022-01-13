@@ -19,6 +19,7 @@ const EmailWidget = ({
   // events
   onChange,
   onBlur,
+  onFocus
 }) => {
   const { autoSuggestionOptions } = useEmailWidget({
     formPayload: payload,
@@ -43,6 +44,7 @@ const EmailWidget = ({
             required={isRequired}
             helperText={hasError ? errorMessage : ""}
             onBlur={(e) => onBlur(e?.target?.value)}
+            onFocus={(e) => onFocus(e?.target?.value)}
             name={slug}
             variant="outlined"
             placeholder={placeholder}

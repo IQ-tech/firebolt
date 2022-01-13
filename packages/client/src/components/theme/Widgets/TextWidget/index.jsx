@@ -22,6 +22,7 @@ const TextWidget = ({
   // events
   onChange,
   onBlur,
+  onFocus
 }) => {
   const fieldRef = useRef(null);
 
@@ -47,6 +48,7 @@ const TextWidget = ({
           placeholder={placeholder}
           onChange={onChangeMask}
           onBlur={(e) => onBlur(e?.target?.value)}
+          onFocus={(e) => onFocus(e?.target?.value)}
           autoComplete="off"
           variant="outlined"
         />

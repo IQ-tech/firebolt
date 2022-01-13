@@ -11,7 +11,8 @@ export default function useFireboltForm({
   autoFill,
   remoteErrors,
   onGoBack,
-  classes
+  classes,
+  onFocusField
 }) {
   const {
     isFormValid,
@@ -42,6 +43,7 @@ export default function useFireboltForm({
     clearFieldWarning,
     markAllInvalidFields,
     onGoBack,
+    onFocusField
   });
 
   const { formChildren } = useFormRendering({

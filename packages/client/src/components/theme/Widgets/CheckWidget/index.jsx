@@ -9,6 +9,7 @@ const CheckWidget = ({
   value,
   fieldId,
   isRequired,
+  onFocus
 }) => {
   return (
     <FormControl required={isRequired} error={hasError}>
@@ -18,6 +19,7 @@ const CheckWidget = ({
           <Checkbox
             checked={!!value}
             onChange={() => onChange(!value)}
+            onFocus={(e) => onFocus(e?.target?.value)}
             name={fieldId}
           />
         }

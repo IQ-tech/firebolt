@@ -16,6 +16,7 @@ const RadioWidget = ({
   hasError,
   errorMessage,
   isRequired,
+  onFocus
 }) => {
   return (
     <FieldHolder>
@@ -31,6 +32,7 @@ const RadioWidget = ({
           onBlur={(e) => onBlur(e?.target?.value)}
           value={value}
           onChange={(e) => onChange(e?.target?.value)}
+          onFocus={(e) => onFocus(e?.target?.value)}
         >
           {options.map(({ value, label }, index) => (
             <FormControlLabel
