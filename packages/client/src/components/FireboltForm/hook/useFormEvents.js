@@ -13,6 +13,7 @@ export default function useFieldsEvents({
   clearFieldWarning,
   markAllInvalidFields,
   onGoBack,
+  onFocusField
 }) {
   useEffect(() => {
     if (!!onChange && hasFormChanged) {
@@ -57,7 +58,7 @@ export default function useFieldsEvents({
   }
 
   function getOnFieldFocus(field) {
-    return (value) => console.log(value);
+    return () => !!onFocusField && onFocusField(field);
   }
 
   function handleSubmit(e) {

@@ -35,7 +35,7 @@ const DefaultTemplate = ({ fireboltStep }) => {
       <div style={{ maxWidth: "600px", margin: "0 auto" }}>
         <p>{fireboltStep?.friendlyName}</p>
 
-        <StepForm>
+        <StepForm onFocusField={(field) => {console.log(field)}}>
           <StepForm.Insert
             after={"last"}
             render={

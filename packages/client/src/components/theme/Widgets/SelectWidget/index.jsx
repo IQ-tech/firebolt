@@ -18,6 +18,7 @@ const SelectWidget = ({
 
   onChange,
   onBlur,
+  onFocus
 }) => {
   return (
     <FieldHolder>
@@ -36,6 +37,7 @@ const SelectWidget = ({
           value={value}
           onChange={(e) => onChange(e?.target?.value)}
           onBlur={(e) => onBlur(e?.target?.value)}
+          onFocus={(e) => onFocus(e?.target?.value)}
           placeholder={placeholder}
           displayEmpty
         >
