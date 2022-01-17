@@ -66,6 +66,7 @@ export default function useFormState({ schema, autoFill, remoteErrors }) {
   }
 
   function clearFieldWarning(fieldSlug, manualSetError = false) {
+    const { invalidFields } = getFormValidation()
     const usedState = manualSetError
       ? fieldManuallySetErrors
       : fieldValidationErrors
@@ -74,9 +75,12 @@ export default function useFormState({ schema, autoFill, remoteErrors }) {
       : setFieldValidationErrors
 
     const erroredFieldsSlugs = Object.keys(usedState)
-    const filteredSlugs = erroredFieldsSlugs.filter(
-      (slug) => slug !== fieldSlug
+
+    // TODO: Fix 01
+    const validErrors = erroredFieldsSlugs.filter((errorSlug) =>
+      invalidFields.includes(errorSlug)
     )
+    const filteredSlugs = validErrors.filter((slug) => slug !== fieldSlug)
     const newErroredFields = filteredSlugs.reduce((acc, slug) => {
       return {
         ...acc,
@@ -143,3 +147,18 @@ export default function useFormState({ schema, autoFill, remoteErrors }) {
     markAllInvalidFields,
   }
 }
+
+/* Fix 01
+  BUG: 
+    1. campo obrigatório com conditional relacionado a um checkbox
+    2. o checkbox é selecionado, o campo aparece, vc clica nele e não coloca nenhum valor
+    3. esse campo fica marcado com um erro por causa da validação de obrigatório
+    4. o campo checkbox ao qual ele é relacionado é desmarcado mas o erro desse campo ainda continua travando o envio do form
+
+  INVESTIGAÇÃO:
+    - Esse erro está sendo salvo pela função "setFieldWarning", o erro fica dentro do state "fieldValidationErrors"
+
+  SOLUÇÃO ATUAL:
+    Como a validação feita pela função "validateFBTStep" já está validando a conditional ela retorna apenas os erros dos campos que estão visíveis na tela
+    então usei ela pra filtrar dos erros aqueles que são relacionados a outro campo e que não estão mais visíveis na tela
+*/
