@@ -66,6 +66,7 @@ export default function useFormState({ schema, autoFill, remoteErrors }) {
   }
 
   function clearFieldWarning(fieldSlug, manualSetError = false) {
+    const { invalidFields } = getFormValidation()
     const usedState = manualSetError
       ? fieldManuallySetErrors
       : fieldValidationErrors
@@ -74,9 +75,9 @@ export default function useFormState({ schema, autoFill, remoteErrors }) {
       : setFieldValidationErrors
 
     const erroredFieldsSlugs = Object.keys(usedState)
-    const filteredSlugs = erroredFieldsSlugs.filter(
-      (slug) => slug !== fieldSlug
-    )
+    const filteredSlugs = erroredFieldsSlugs
+      .filter((errorSlug) => invalidFields.includes(errorSlug))
+      .filter((slug) => slug !== fieldSlug)
     const newErroredFields = filteredSlugs.reduce((acc, slug) => {
       return {
         ...acc,
