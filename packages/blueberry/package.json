@@ -1,0 +1,51 @@
+{
+  "name": "@iq-firebolt/blueberry-theme",
+  "version": "0.2.7",
+  "description": "> TODO: description",
+  "author": "iq team",
+  "homepage": "https://github.com/IQ-tech/firebolt#readme",
+  "license": "ISC",
+  "main": "./index.js",
+  "files": [
+    "./"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/IQ-tech/firebolt.git"
+  },
+  "scripts": {
+    "test": "jest",
+    "test:watch": "jest --watch"
+  },
+  "bugs": {
+    "url": "https://github.com/IQ-tech/firebolt/issues"
+  },
+  "dependencies": {
+    "iq-blueberry": "^0.0.18"
+  },
+  "peerDependencies": {
+    "iq-blueberry": "0.0.x"
+  },
+  "devDependencies": {},
+  "jest": {
+    "setupFiles": [
+      "<rootDir>/__jest__/browserMocks.js"
+    ],
+    "setupFilesAfterEnv": [
+      "<rootDir>/__jest__/setup.js"
+    ],
+    "moduleNameMapper": {
+      "\\.(css|less)$": "<rootDir>/__jest__/styleMock.js"
+    },
+    "testEnvironment": "jsdom",
+    "transform": {
+      "^.+\\.(ts|tsx|js|jsx)$": "babel-jest"
+    }
+  },
+  "browserslist": [
+    "last 1 Chrome version"
+  ]
+}
