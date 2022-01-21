@@ -1,4 +1,5 @@
 import { FireboltForm, StepForm } from "@iq-firebolt/client/src"
+import Theme from "@iq-firebolt/blueberry-theme"
 
 const DefaultTemplate = ({ fireboltStep }) => {
   const fields = [
@@ -91,6 +92,7 @@ const DefaultTemplate = ({ fireboltStep }) => {
         <p>{fireboltStep?.friendlyName}</p>
 
         <StepForm
+          theme={Theme}
           schema={fields}
           onFocusField={(field) => {
             console.log(field)
@@ -105,6 +107,7 @@ const DefaultTemplate = ({ fireboltStep }) => {
         >
           <StepForm.Insert after={"last"} render={<p>insert</p>} />
         </StepForm>
+      
 
         {/* <FireboltForm
           submitBtnText="Next Step"
