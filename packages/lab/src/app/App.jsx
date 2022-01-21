@@ -1,6 +1,7 @@
 import FormDemo from "./pages/debug/FormDemo";
 import CoreDemo from "./pages/debug/Core";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+import 'iq-blueberry/dist/styles.css'
 
 const App = () => {
   return (

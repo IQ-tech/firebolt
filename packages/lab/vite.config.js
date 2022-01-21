@@ -6,7 +6,7 @@ export default defineConfig({
   publicDir: "public/",
   plugins: [react()],
   optimizeDeps: {
-    include: ["@iq-firebolt/client > @iq-firebolt/validators"],
+    include: ["@iq-firebolt/client > @iq-firebolt/validators", "iq-blueberry"],
   },
   build: {
     outDir: "../dist",
