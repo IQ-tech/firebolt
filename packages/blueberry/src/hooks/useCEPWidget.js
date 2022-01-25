@@ -1,4 +1,4 @@
-import { validate } from "@iq-firebolt/validators"
+import validateCEP from "@iq-firebolt/validators/dist/validators/cep"
 import { useEffect } from "react"
 import getAddress from "../services/getAdress"
 
@@ -13,7 +13,7 @@ export default function useCEPWidget({
   useEffect(onChangeValue, [value])
 
   function onChangeValue() {
-    const { isValid } = validate("cep", value)
+    const { isValid } = validateCEP.run(value)
     if (!!value && isValid) {
       _getAddressData(value)
     }
