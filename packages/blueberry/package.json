@@ -21,10 +21,18 @@
     "url": "https://github.com/IQ-tech/firebolt/issues"
   },
   "dependencies": {
-    "iq-blueberry": "^0.0.18"
+  },
+  "devDependencies": {
+    "iq-blueberry": "^0.0.18",
+    "react": "^16.12.0",
+    "react-dom": "^16.12.0",
+    "@iq-firebolt/validators":"^0.2.9"
   },
   "peerDependencies": {
-    "iq-blueberry": "0.0.x"
+    "iq-blueberry": "0.0.x",
+    "react": "^16.12.0",
+    "react-dom": "^16.12.0",
+    "@iq-firebolt/validators": "^0.2.9"
   },
   "jest": {
     "setupFiles": [
