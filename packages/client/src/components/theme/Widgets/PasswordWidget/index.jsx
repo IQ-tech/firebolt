@@ -13,6 +13,7 @@ const PasswordWidget = ({
   value,
   onChange,
   onBlur,
+  onFocus,
   isRequired,
   fieldId,
   hasError,
@@ -32,6 +33,7 @@ const PasswordWidget = ({
           required={isRequired}
           onChange={(e) => onChange(e?.target?.value)}
           onBlur={(e) => onBlur(e?.target?.value)}
+          onFocus={(e) => onFocus(e?.target?.value)}
           endAdornment={
             <InputAdornment position="end">
               <IconButton

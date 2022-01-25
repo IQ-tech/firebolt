@@ -16,6 +16,7 @@ const CheckboxGroupWidget = ({
   options = [],
   onChange,
   value = [],
+  onFocus
 }) => {
   const [selectedOptions, setSelectedOptions] = useState(value);
   const [changedSelectedOptions, setChangedSelectedOptions] = useState(false);
@@ -49,6 +50,7 @@ const CheckboxGroupWidget = ({
                   checked={value.includes(optionValue)}
                   onChange={() => handleSelectOption(optionValue)}
                   name={`${fieldId}-check-${index}`}
+                  onFocus={(e) => onFocus(e?.target?.value)}
                 />
               }
               label={label}
