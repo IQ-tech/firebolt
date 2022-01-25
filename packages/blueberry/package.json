@@ -1,14 +1,11 @@
 {
   "name": "@iq-firebolt/blueberry-theme",
-  "version": "0.2.8",
+  "version": "0.2.9",
   "description": "> TODO: description",
   "author": "iq team",
   "homepage": "https://github.com/IQ-tech/firebolt#readme",
   "license": "ISC",
   "main": "./index.js",
-  "files": [
-    "./"
-  ],
   "publishConfig": {
     "access": "public"
   },
