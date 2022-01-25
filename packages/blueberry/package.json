@@ -6,9 +6,6 @@
   "homepage": "https://github.com/IQ-tech/firebolt#readme",
   "license": "ISC",
   "main": "./index.js",
-  "files": [
-    "./"
-  ],
   "publishConfig": {
     "access": "public"
   },
