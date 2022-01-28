@@ -1,6 +1,6 @@
 {
   "name": "@iq-firebolt/client-core",
-  "version": "0.2.9",
+  "version": "0.2.10",
   "description": "> TODO: description",
   "author": "iq team",
   "homepage": "https://github.com/IQ-tech/firebolt#readme",
@@ -21,7 +21,8 @@
     "url": "git+https://github.com/IQ-tech/firebolt.git"
   },
   "scripts": {
-    "test": "jest"
+    "test": "jest",
+    "test:watch": "jest --watch"
   },
   "bugs": {
     "url": "https://github.com/IQ-tech/firebolt/issues"
@@ -29,7 +30,8 @@
   "dependencies": {
     "axios": "^0.21.4",
     "simple-evaluate": "^1.4.3",
-    "text-mask-addons": "^3.8.0"
+    "text-mask-addons": "^3.8.0",
+    "text-mask-core": "^5.1.2"
   },
   "devDependencies": {
     "@babel/core": "^7.15.5",

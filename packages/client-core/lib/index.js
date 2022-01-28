@@ -16,3 +16,4 @@ export { default as File } from "./entities/File";
 // helpers
 export { default as handleEmailAutoSuggestion } from "./helpers/handleEmailAutoSuggestion";
 export { default as getUrlParams } from "./helpers/getUrlParams";
+export { default as getAutofillParam } from "./helpers/getAutofillParam";
