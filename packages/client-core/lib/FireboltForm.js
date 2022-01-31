@@ -5,7 +5,9 @@ import createFormSession from "./helpers/session/createFormSession";
 import { clearFormSession } from "./helpers/session/clearFormSession";
 import getAutofillParam from "./helpers/getAutofillParam";
 import getUrlParams from "./helpers/getUrlParams"
+import processAutofillFields from "./helpers/processAutofillFields";
 
+//TODO rename to FireboltFormEngine
 class FireboltForm {
   constructor(formAccess, { requestMetadata = {}, debug } = {}) {
     this.requestsMetadata = requestMetadata;
@@ -18,7 +20,7 @@ class FireboltForm {
     const hasAutofill = getAutofillParam(); // test if clear works correctly
     const urlParams = getUrlParams()
 
-    if (hasAutofill) {
+    if (hasAutofill) {//TODO to avaliate
       this.clearSession();
     }
 
@@ -29,18 +31,32 @@ class FireboltForm {
     }
 
     const firstStepData = await this.APIService.getStartForm(formSessionKey);
+
     if (!formSessionKey) {
       createFormSession(this.formName, firstStepData?.auth);
     }
+
+    if(hasAutofill) {
+      return processAutofillFields(firstStepData, hasAutofill);
+    }
+
     return firstStepData;
   }
 
-  nextStep(currentStepSlug, stepFieldsPayload) {
+  async nextStep(currentStepSlug, stepFieldsPayload) {
+    const hasAutofill = getAutofillParam();
+
     const formSessionKey = getFormSession(this.formName);
-    return this.APIService.getNextStep(formSessionKey, currentStepSlug, {
+    const nextStepData = await this.APIService.getNextStep(formSessionKey, currentStepSlug, {
       stepFieldsPayload,
       requestsMetadata: this.requestsMetadata,
     });
+
+    if(hasAutofill) {
+      return processAutofillFields(nextStepData, hasAutofill);
+    }
+
+    return nextStepData;
   }
 
   previousStep(currentStepSlug) {

@@ -4,109 +4,82 @@ import Theme from "@iq-firebolt/blueberry-theme"
 const DefaultTemplate = ({ fireboltStep }) => {
   const fields = [
     {
-      slug: "university_student_check",
-      "ui:widget": "Check",
-      "ui:props": {
-        label: "Sou universitário",
-      },
-    },
-    {
-      slug: "university_name",
-      "ui:widget": "Select",
-      conditional: "step.university_student_check === true",
-      "ui:props": {
-        label: "Nome da instituição",
-        options: [
-          {
-            value: "00490",
-            label: "Uvv - Universidade Vila Velha",
-          },
-          {
-            value: "01704",
-            label: "Vertice - Faculdade Vertice",
-          },
-          {
-            value: "01796",
-            label: "Vizivali - Faculdade Vizinhanca Vale Do Iguacu",
-          },
-        ],
-      },
-      validators: [{ type: "required" }],
-    },
-    {
-      slug: "university_name_course",
-      "ui:widget": "Select",
-      conditional: "step.university_student_check === true",
-      "ui:props": {
-        label: "Nome do curso",
-        options: [
-          {
-            value: "00125",
-            label: "Terapia Ocupacional",
-          },
-          {
-            value: "00672",
-            label: "Turismo",
-          },
-          {
-            value: "00172",
-            label: "Zootecnia",
-          },
-        ],
-      },
-      validators: [{ type: "required" }],
-    },
-    {
-      slug: "profession_group",
-      "ui:widget": "Select",
-      "ui:props": {
-        label: "Profissão",
-        options: [
-          {
-            value: "4020",
-            label: "Vendedor Pracista",
-          },
-          {
-            value: "9980-1",
-            label: "Outros",
-          },
-        ],
-      },
-      validators: [{ type: "required" }],
-    },
-    {
-      slug: "monthly_income",
+      slug: "name",
       "ui:widget": "Text",
-      "ui:props-preset": "br-currency",
       "ui:props": {
-        label: "Renda mensal",
+        label: "Nome completo",
+        placeholder: "Nome completo",
       },
-      validators: [{ type: "required" }],
+      "ui:styles": {
+        size: "half",
+      },
+      validators: [{ type: "required" }, { type: "name" }],
       meta: {},
     },
-  ]
+    {
+      slug: "cpf",
+      "ui:widget": "Text",
+      "ui:props-preset": "br-cpf",
+      "ui:props": {},
+      validators: [{ "type": "required" }, { "type": "cpf" }],
+      meta: {}
+    },
+    {
+      slug: "income",
+      "ui:props-preset": "br-currency",
+      "ui:widget": "Text",
+      "ui:props": {
+        label: "Renda Principal"
+      },
+      validators: [{ "type": "required" }]
+    },
+    {
+      slug: "phone",
+      "ui:widget": "Text",
+      "ui:props-preset": "br-phone",
+      "ui:props": {
+        label: "Celular com DDD"
+      },
+      validators: [{ "type": "required" }, { "type": "phone" }],
+      meta: {}
+    },
+    {
+      slug: "email",
+      "ui:widget": "Email",
+      "ui:props": {
+        label: "Email",
+        placeholder: "contato@email.com",
+      },
+      "ui:styles": {
+        size: "full",
+      },
+      validators: [{ type: "required" }, { type: "email" }],
+      meta: {},
+    },
+  ];
 
   return (
     <div>
       <div style={{ maxWidth: "600px", margin: "0 auto" }}>
         <p>{fireboltStep?.friendlyName}</p>
-{console.log(Theme)}
-        <FireboltForm
+        <StepForm
           theme={Theme}
-          schema={fields}
+          schema={fireboltStep.fields}
           onFocusField={(field) => {
             console.log(field)
           }}
-          customActionsChild={({ formData }) => {
-            return formData.isFormValid ? (
-              <button>next liberado</button>
-            ) : (
-              <button>next bloqueado</button>
-            )
-          }}
+          onSubmit={(payload) => fireboltStep.goNextStep(payload)}
+          onGoBack={fireboltStep.goPreviousStep}
+          // customActionsChild={({ formData }) => {
+          //   return formData.isFormValid ? (
+          //     <button>next liberado</button>
+          //   ) : (
+          //     <button>next bloqueado</button>
+          //   )
+          // }}
         >
           <StepForm.Insert after={"last"} render={<p>insert</p>} />
-        </FireboltForm>
+        </StepForm>
       
 
         {/* <FireboltForm
