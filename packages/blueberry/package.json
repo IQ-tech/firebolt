@@ -22,7 +22,7 @@
   },
   "devDependencies": {
     "@iq-firebolt/validators": "^0.2.10",
-    "iq-blueberry": "^0.0.18",
+    "iq-blueberry": "^0.0.24",
     "react": "^16.12.0",
     "react-dom": "^16.12.0"
   },
