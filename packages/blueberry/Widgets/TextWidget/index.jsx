@@ -17,7 +17,9 @@ const TextWidget = ({
   isOptional,
   isRequired,
   meta,
+  useNumericKeyboard
 }) => {
+
   return (
     <InputField
       tooltipConfig={getTooltipConfig(meta)}
@@ -34,6 +36,7 @@ const TextWidget = ({
       name={slug}
       value={value}
       mask={mask}
+      useNumericKeyboard={useNumericKeyboard}
     />
   )
 }
