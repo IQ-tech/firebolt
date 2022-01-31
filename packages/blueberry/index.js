@@ -8,6 +8,7 @@ import CheckboxGroupWidget from "./Widgets/CheckboxGroupWidget"
 import RadioWidget from "./Widgets/RadioWidget"
 import CheckWidget from "./Widgets/CheckWidget"
 import BRCityWidget from "./Widgets/BRCityWidget"
+import TextareaWidget from './Widgets/TextareaWidget'
 
 // fields
 const blueberryTheme = {
@@ -23,6 +24,7 @@ const blueberryTheme = {
   "Check": CheckWidget,
   "CheckboxGroup": CheckboxGroupWidget,
   "Radio": RadioWidget,
+  "Textarea": TextareaWidget
 }
 
 export default blueberryTheme
@@ -36,4 +38,5 @@ export {
   CheckWidget,
   CheckboxGroupWidget,
   RadioWidget,
+  TextareaWidget,
 }
