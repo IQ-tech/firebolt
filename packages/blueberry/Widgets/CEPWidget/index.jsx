@@ -9,6 +9,7 @@ const CEPWidget = ({
   value,
   manuallySetFieldError,
   clearManuallySetError,
+  payload,
   ...props
 }) => {
   useCEPWidget({
@@ -18,8 +19,9 @@ const CEPWidget = ({
     value,
     manuallySetFieldError,
     clearManuallySetError,
+    payload
   })
-  return <TextWidget {...props} value={value} />
+  return <TextWidget {...props} value={value} payload={payload} />
 }
 
 export default CEPWidget
