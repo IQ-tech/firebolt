@@ -1,5 +1,5 @@
 import { validate } from "@iq-firebolt/validators"
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import getAddress from "../services/getAdress"
 
 export default function useCEPWidget({
