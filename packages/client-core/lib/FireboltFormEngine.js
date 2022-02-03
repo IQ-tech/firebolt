@@ -7,8 +7,7 @@ import getAutofillParam from "./helpers/getAutofillParam";
 import getUrlParams from "./helpers/getUrlParams"
 import processAutofillFields from "./helpers/processAutofillFields";
 
-//TODO rename to FireboltFormEngine
-class FireboltForm {
+class FireboltFormEngine {
   constructor(formAccess, { requestMetadata = {}, debug } = {}) {
     this.requestsMetadata = requestMetadata;
     this.formName = formAccess?.formName;
@@ -104,4 +103,4 @@ class FireboltForm {
   }
 }
 
-export default FireboltForm;
+export default FireboltFormEngine;

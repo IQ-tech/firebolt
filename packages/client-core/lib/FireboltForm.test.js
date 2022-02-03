@@ -1,5 +1,9 @@
 import axios from "axios";
-import FireboltForm from "./FireboltForm";
+import { render, fireEvent } from '@testing-library/react';
+
+import FireboltForm from '../../client/src/components/FireboltForm';
+
+import FireboltFormEngine from "./FireboltForm";
 
 import { clearAllFormSessions } from "./helpers/session/clearFormSession";
 import getFireboltLocalStorage from "./helpers/session/getFireboltLocalStorage";
@@ -13,6 +17,13 @@ import nextStepFormResponse from "./__mocks__/nextStepFormResponse";
 
 jest.mock("axios");
 
+const formName = "partnerFormPotato";
+
+const form = new FireboltFormEngine({
+  root: "https://my-firebolt-api/",
+  formName,
+});
+
 describe("start form tests", () => {
   beforeAll(() => {
     clearAllFormSessions();
@@ -21,13 +32,7 @@ describe("start form tests", () => {
   test("start form correctly creates session key on localStorage", async () => {
     axios.get.mockResolvedValue({ data: startFormResponse });
 
-    const formName = "partnerFormPotato";
     clearAllFormSessions();
-
-    const form = new FireboltForm({
-      root: "https://my-firebolt-api/",
-      formName,
-    });
 
     // get first step
     await form.start();
@@ -52,7 +57,7 @@ describe("start form tests", () => {
     };
     createFormSession(formAccess.formName, "myPreviousSessionAuthKey");
 
-    const form = new FireboltForm(formAccess);
+    const form = new FireboltFormEngine(formAccess);
     await form.start();
 
     expect(axios.get).lastCalledWith(
@@ -65,10 +70,18 @@ describe("start form tests", () => {
     );
   });
 
-  it("start() must autofill value prop from field", async () => {
-    axios.get.mockResolvedValue({ data: startFormResponse });
+  test.todo("throw an error when providing invalid api access");
 
-    const autoFillBase64 = 'autofill=JTdCJTI3bmFtZSUyNyUzQSU3QiUyN3ZhbHVlJTI3JTNBJTI3UnVhbiUyMEJlcnQlQzMlQTklMjclMkMlMjdtYXNrJTI3JTNBJTI3JTI3JTdEJTJDJTI3Y3BmJTI3JTNBJTdCJTI3dmFsdWUlMjclM0ElMjc0NTAuNTkyLjczOC01NyUyNyUyQyUyN21hc2slMjclM0ElMjdjcGYlMjclN0QlMkMlMjdlbWFpbCUyNyUzQSU3QiUyN3ZhbHVlJTI3JTNBJTI3YmVydGUucnVhbiU0MGdtYWlsLmNvbSUyNyUyQyUyN21hc2slMjclM0ElMjclMjclN0QlMkMlMjdpbmNvbWUlMjclM0ElN0IlMjd2YWx1ZSUyNyUzQSUyNzYwMDAlMjclMkMlMjdtYXNrJTI3JTNBJTI3bW9uZXklMjclN0QlMkMlMjdwaG9uZSUyNyUzQSU3QiUyN3ZhbHVlJTI3JTNBJTI3NDI5OTk4ODM3NjglMjclMkMlMjdtYXNrJTI3JTNBJTI3cGhvbmVfbnVtYmVyJTI3JTdEJTdE';
+  test.todo("throw an error on try to debug a step without debug key");
+});
+
+describe('tests about the form autofill by base64 at URL', () => {
+  const autoFillBase64 = 'autofill=JTdCJTI3bmFtZSUyNyUzQSU3QiUyN3ZhbHVlJTI3JTNBJTI3UnVhbiUyMEJlcnQlQzMlQTklMjclMkMlMjdtYXNrJTI3JTNBJTI3JTI3JTdEJTJDJTI3Y3BmJTI3JTNBJTdCJTI3dmFsdWUlMjclM0ElMjc0NTAuNTkyLjczOC01NyUyNyUyQyUyN21hc2slMjclM0ElMjdjcGYlMjclN0QlMkMlMjdlbWFpbCUyNyUzQSU3QiUyN3ZhbHVlJTI3JTNBJTI3YmVydGUucnVhbiU0MGdtYWlsLmNvbSUyNyUyQyUyN21hc2slMjclM0ElMjclMjclN0QlMkMlMjdpbmNvbWUlMjclM0ElN0IlMjd2YWx1ZSUyNyUzQSUyNzYwMDAlMjclMkMlMjdtYXNrJTI3JTNBJTI3bW9uZXklMjclN0QlMkMlMjdwaG9uZSUyNyUzQSU3QiUyN3ZhbHVlJTI3JTNBJTI3NDI5OTk4ODM3NjglMjclMkMlMjdtYXNrJTI3JTNBJTI3cGhvbmVfbnVtYmVyJTI3JTdEJTdE';
+
+  beforeEach(() => {
+    clearAllFormSessions();
+  
+    axios.get.mockResolvedValue({ data: startFormResponse });
 
     Object.defineProperty(window, 'location', {
       writable: true,
@@ -77,25 +90,30 @@ describe("start form tests", () => {
         href: autoFillBase64
       }
     });
+    
+  });
 
-    const formName = "partnerFormPotato";
-    clearAllFormSessions();
-
-    const form = new FireboltForm({
-      root: "https://my-firebolt-api/",
-      formName,
-    });
-
+  test("form.start() must autofill value prop of the field email", async () => {
     // get first step
     const formStartResult = await form.start();
-
-    console.log(formStartResult.step.data.fields);
 
     expect(formStartResult.step.data.fields[1]).toHaveProperty('value');
     expect(formStartResult.step.data.fields[1].value).toBe('berte.ruan@gmail.com')
   });
 
-  test.todo("throw an error when providing invalid api access");
+  test('Should render the email field with the value already filled', async () => {
+    // get first step
+    const formStartResult = await form.start();
 
-  test.todo("throw an error on try to debug a step without debug key");
-});
+    const { container } = render(<FireboltForm schema={formStartResult.step.data.fields} />);
+    const emailField = container.querySelector(`input[name='email']`);
+
+    console.log(formStartResult.step.data.fields)
+
+
+    expect(emailField.value).toBe('berte.ruan@gmail.com');
+
+
+  });
+
+})
