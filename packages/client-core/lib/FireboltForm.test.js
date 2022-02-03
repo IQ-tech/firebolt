@@ -92,7 +92,7 @@ describe("start form tests", () => {
     console.log(formStartResult.step.data.fields);
 
     expect(formStartResult.step.data.fields[1]).toHaveProperty('value');
-    expect(formStartResult.step.data.fields[1].value).toBe('bertwdsfdsfe.ruan@gmail.com')
+    expect(formStartResult.step.data.fields[1].value).toBe('berte.ruan@gmail.com')
   });
 
   test.todo("throw an error when providing invalid api access");
