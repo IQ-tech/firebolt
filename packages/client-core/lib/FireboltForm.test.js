@@ -5,6 +5,8 @@ import { clearAllFormSessions } from "./helpers/session/clearFormSession";
 import getFireboltLocalStorage from "./helpers/session/getFireboltLocalStorage";
 import createFormSession from "./helpers/session/createFormSession";
 import processAutofillFields from "./helpers/processAutofillFields";
+import { clearFormSession } from "./helpers/session/clearFormSession";
+import getAutofillParam from "./helpers/getAutofillParam";
 
 import startFormResponse from "./__mocks__/startFormResponse";
 import nextStepFormResponse from "./__mocks__/nextStepFormResponse";
@@ -63,40 +65,35 @@ describe("start form tests", () => {
     );
   });
 
-  test.todo("start() must autofill value prop from field")
-  // test("start() must autofill value prop from field", async () => {
-  //   axios.get.mockResolvedValue({ data: startFormResponse });
+  it("start() must autofill value prop from field", async () => {
+    axios.get.mockResolvedValue({ data: startFormResponse });
 
-  //   const newUrl = '?autofill=JTdCJTI3bmFtZSUyNyUzQSU3QiUyN3ZhbHVlJTI3JTNBJTI3UnVhbiUyMEJlcnQlQzMlQTklMjclMkMlMjdtYXNrJTI3JTNBJTI3JTI3JTdEJTJDJTI3Y3BmJTI3JTNBJTdCJTI3dmFsdWUlMjclM0ElMjc0NTAuNTkyLjczOC01NyUyNyUyQyUyN21hc2slMjclM0ElMjdjcGYlMjclN0QlMkMlMjdlbWFpbCUyNyUzQSU3QiUyN3ZhbHVlJTI3JTNBJTI3YmVydGUucnVhbiU0MGdtYWlsLmNvbSUyNyUyQyUyN21hc2slMjclM0ElMjclMjclN0QlMkMlMjdpbmNvbWUlMjclM0ElN0IlMjd2YWx1ZSUyNyUzQSUyNzYwMDAlMjclMkMlMjdtYXNrJTI3JTNBJTI3bW9uZXklMjclN0QlMkMlMjdwaG9uZSUyNyUzQSU3QiUyN3ZhbHVlJTI3JTNBJTI3NDI5OTk4ODM3NjglMjclMkMlMjdtYXNrJTI3JTNBJTI3cGhvbmVfbnVtYmVyJTI3JTdEJTdE';
-    
-  //   const location = {
-  //     ...window.location,
-  //     search: newUrl,
-  //   };
+    const autoFillBase64 = 'autofill=JTdCJTI3bmFtZSUyNyUzQSU3QiUyN3ZhbHVlJTI3JTNBJTI3UnVhbiUyMEJlcnQlQzMlQTklMjclMkMlMjdtYXNrJTI3JTNBJTI3JTI3JTdEJTJDJTI3Y3BmJTI3JTNBJTdCJTI3dmFsdWUlMjclM0ElMjc0NTAuNTkyLjczOC01NyUyNyUyQyUyN21hc2slMjclM0ElMjdjcGYlMjclN0QlMkMlMjdlbWFpbCUyNyUzQSU3QiUyN3ZhbHVlJTI3JTNBJTI3YmVydGUucnVhbiU0MGdtYWlsLmNvbSUyNyUyQyUyN21hc2slMjclM0ElMjclMjclN0QlMkMlMjdpbmNvbWUlMjclM0ElN0IlMjd2YWx1ZSUyNyUzQSUyNzYwMDAlMjclMkMlMjdtYXNrJTI3JTNBJTI3bW9uZXklMjclN0QlMkMlMjdwaG9uZSUyNyUzQSU3QiUyN3ZhbHVlJTI3JTNBJTI3NDI5OTk4ODM3NjglMjclMkMlMjdtYXNrJTI3JTNBJTI3cGhvbmVfbnVtYmVyJTI3JTdEJTdE';
 
-  //   Object.defineProperty(window, 'location', {
-  //     writable: true,
-  //     value: location,
-  //   });
+    Object.defineProperty(window, 'location', {
+      writable: true,
+      value: {
+        search: autoFillBase64,
+        href: autoFillBase64
+      }
+    });
 
-  //   Object.defineProperty(window, 'atob', () => {
-  //     return {'name':{'value':'Ruan Berté','mask':''},'cpf':{'value':'450.592.738-57','mask':'cpf'},'email':{'value':'berte.ruan@gmail.com','mask':''},'income':{'value':'6000','mask':'money'},'phone':{'value':'42999883768','mask':'phone_number'}}
-  //   });
+    const formName = "partnerFormPotato";
+    clearAllFormSessions();
 
-  //   const formName = "partnerFormPotato";
-  //   clearAllFormSessions();
+    const form = new FireboltForm({
+      root: "https://my-firebolt-api/",
+      formName,
+    });
 
-  //   const form = new FireboltForm({
-  //     root: "https://my-firebolt-api/",
-  //     formName,
-  //   });
+    // get first step
+    const formStartResult = await form.start();
 
-  //   // get first step
-  //   const formStart = await form.start();
-  //   console.log(formStart.step.data.fields);
+    console.log(formStartResult.step.data.fields);
 
-  //   expect(false).toBeTruthy();
-  // });
+    expect(formStartResult.step.data.fields[1]).toHaveProperty('value');
+    expect(formStartResult.step.data.fields[1].value).toBe('bertwdsfdsfe.ruan@gmail.com')
+  });
 
   test.todo("throw an error when providing invalid api access");
 
