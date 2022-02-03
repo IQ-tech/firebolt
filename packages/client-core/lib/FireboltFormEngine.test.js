@@ -1,16 +1,10 @@
 import axios from "axios";
-import { render, fireEvent } from '@testing-library/react';
 
-import FireboltForm from '../../client/src/components/FireboltForm';
-
-import FireboltFormEngine from "./FireboltForm";
+import FireboltFormEngine from "./FireboltFormEngine";
 
 import { clearAllFormSessions } from "./helpers/session/clearFormSession";
 import getFireboltLocalStorage from "./helpers/session/getFireboltLocalStorage";
 import createFormSession from "./helpers/session/createFormSession";
-import processAutofillFields from "./helpers/processAutofillFields";
-import { clearFormSession } from "./helpers/session/clearFormSession";
-import getAutofillParam from "./helpers/getAutofillParam";
 
 import startFormResponse from "./__mocks__/startFormResponse";
 import nextStepFormResponse from "./__mocks__/nextStepFormResponse";
@@ -93,27 +87,12 @@ describe('tests about the form autofill by base64 at URL', () => {
     
   });
 
-  test("form.start() must autofill value prop of the field email", async () => {
+  test("form.start() must autofill value prop of the field email at the fields array", async () => {
     // get first step
     const formStartResult = await form.start();
 
     expect(formStartResult.step.data.fields[1]).toHaveProperty('value');
     expect(formStartResult.step.data.fields[1].value).toBe('berte.ruan@gmail.com')
-  });
-
-  test('Should render the email field with the value already filled', async () => {
-    // get first step
-    const formStartResult = await form.start();
-
-    const { container } = render(<FireboltForm schema={formStartResult.step.data.fields} />);
-    const emailField = container.querySelector(`input[name='email']`);
-
-    console.log(formStartResult.step.data.fields)
-
-
-    expect(emailField.value).toBe('berte.ruan@gmail.com');
-
-
   });
 
 })
