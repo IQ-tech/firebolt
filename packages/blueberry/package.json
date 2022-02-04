@@ -1,6 +1,6 @@
 {
   "name": "@iq-firebolt/blueberry-theme",
-  "version": "0.2.16",
+  "version": "0.2.17",
   "description": "> TODO: description",
   "author": "iq team",
   "homepage": "https://github.com/IQ-tech/firebolt#readme",
@@ -21,7 +21,7 @@
     "url": "https://github.com/IQ-tech/firebolt/issues"
   },
   "devDependencies": {
-    "@iq-firebolt/validators": "^0.2.16",
+    "@iq-firebolt/validators": "^0.2.17",
     "iq-blueberry": "^0.0.24",
     "react": "^16.12.0",
     "react-dom": "^16.12.0"

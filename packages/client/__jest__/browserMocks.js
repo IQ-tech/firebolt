@@ -26,3 +26,7 @@ class LocalStorageMock {
 }
 
 global.localStorage = new LocalStorageMock();
+
+global.window = {
+  atob: (base64) => Buffer.from(base64, 'base64').toString()
+}
