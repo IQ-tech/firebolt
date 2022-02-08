@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "@iq-firebolt/blueberry-theme": "^0.2.17",
+    "@iq-firebolt/material-theme": "^0.2.17",
     "@iq-firebolt/client": "^0.2.17",
     "iq-blueberry": "^0.0.18",
     "prop-types": "^15.7.2",

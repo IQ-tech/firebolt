@@ -19,6 +19,7 @@ export default function useFormRendering({
   clearFieldWarning,
   classes,
 }) {
+  // get correct widgets components
   const fieldsChildren = schema.map((field = {}, index) => {
     const {
       slug,
@@ -107,6 +108,7 @@ export default function useFormRendering({
     }
   });
 
+  // join field widgets with form inserts
   const formChildren = remapFormChildren({
     fieldsChildren,
     insertsChildren,

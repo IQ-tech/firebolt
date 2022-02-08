@@ -1,63 +1,64 @@
-import { FireboltForm, StepForm } from "@iq-firebolt/client/src"
+import { StepForm } from "@iq-firebolt/client/src"
 import Theme from "@iq-firebolt/blueberry-theme"
+/* import MatTheme from "@iq-firebolt/material-theme" */
+
+const mockFields = [
+  {
+    slug: "name",
+    "ui:widget": "Text",
+    "ui:props": {
+      label: "Nome completo",
+      placeholder: "Nome completo",
+    },
+    "ui:styles": {
+      size: "half",
+    },
+    validators: [{ type: "required" }, { type: "name" }],
+    meta: {},
+  },
+  {
+    slug: "cpf",
+    "ui:widget": "Text",
+    "ui:props-preset": "br-cpf",
+    "ui:props": {},
+    validators: [{ "type": "required" }, { "type": "cpf" }],
+    meta: {},
+  },
+  {
+    slug: "income",
+    "ui:props-preset": "br-currency",
+    "ui:widget": "Text",
+    "ui:props": {
+      label: "Renda Principal",
+    },
+    validators: [{ "type": "required" }],
+  },
+  {
+    slug: "phone",
+    "ui:widget": "Text",
+    "ui:props-preset": "br-phone",
+    "ui:props": {
+      label: "Celular com DDD",
+    },
+    validators: [{ "type": "required" }, { "type": "phone" }],
+    meta: {},
+  },
+  {
+    slug: "email",
+    "ui:widget": "Email",
+    "ui:props": {
+      label: "Email",
+      placeholder: "contato@email.com",
+    },
+    "ui:styles": {
+      size: "full",
+    },
+    validators: [{ type: "required" }, { type: "email" }],
+    meta: {},
+  },
+]
 
 const DefaultTemplate = ({ fireboltStep }) => {
-  const fields = [
-    {
-      slug: "name",
-      "ui:widget": "Text",
-      "ui:props": {
-        label: "Nome completo",
-        placeholder: "Nome completo",
-      },
-      "ui:styles": {
-        size: "half",
-      },
-      validators: [{ type: "required" }, { type: "name" }],
-      meta: {},
-    },
-    {
-      slug: "cpf",
-      "ui:widget": "Text",
-      "ui:props-preset": "br-cpf",
-      "ui:props": {},
-      validators: [{ "type": "required" }, { "type": "cpf" }],
-      meta: {}
-    },
-    {
-      slug: "income",
-      "ui:props-preset": "br-currency",
-      "ui:widget": "Text",
-      "ui:props": {
-        label: "Renda Principal"
-      },
-      validators: [{ "type": "required" }]
-    },
-    {
-      slug: "phone",
-      "ui:widget": "Text",
-      "ui:props-preset": "br-phone",
-      "ui:props": {
-        label: "Celular com DDD"
-      },
-      validators: [{ "type": "required" }, { "type": "phone" }],
-      meta: {}
-    },
-    {
-      slug: "email",
-      "ui:widget": "Email",
-      "ui:props": {
-        label: "Email",
-        placeholder: "contato@email.com",
-      },
-      "ui:styles": {
-        size: "full",
-      },
-      validators: [{ type: "required" }, { type: "email" }],
-      meta: {},
-    },
-  ];
-
   return (
     <div>
       <div style={{ maxWidth: "600px", margin: "0 auto" }}>
@@ -80,7 +81,6 @@ const DefaultTemplate = ({ fireboltStep }) => {
         >
           <StepForm.Insert after={"last"} render={<p>insert</p>} />
         </StepForm>
-      
 
         {/* <FireboltForm
           submitBtnText="Next Step"

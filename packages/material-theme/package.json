@@ -1,17 +1,12 @@
 {
-  "name": "@iq-firebolt/client",
+  "name": "@iq-firebolt/material-theme",
   "version": "0.2.17",
   "description": "> TODO: description",
   "author": "iq team",
   "homepage": "https://github.com/IQ-tech/firebolt#readme",
   "license": "ISC",
-  "main": "./dist/index.js",
-  "types": "./dist/index.d.ts",
-  "files": [
-    "/dist",
-    "./",
-    "/src"
-  ],
+  "sideEffects": false,
+  "main": "./index.js",
   "publishConfig": {
     "access": "public"
   },
@@ -20,9 +15,6 @@
     "url": "git+https://github.com/IQ-tech/firebolt.git"
   },
   "scripts": {
-    "build": "webpack",
-    "gen:profile": "webpack --profile --json=dist/compilation-stats.json",
-    "analyze": "webpack-bundle-analyzer dist/compilation-stats.json",
     "test": "jest",
     "test:watch": "jest --watch"
   },
@@ -30,29 +22,14 @@
     "url": "https://github.com/IQ-tech/firebolt/issues"
   },
   "dependencies": {
-    "@babel/runtime": "^7.16.3",
-    "@iq-firebolt/client-core": "^0.2.17",
-    "@iq-firebolt/validators": "^0.2.17",
-    "classnames": "^2.3.1",
-    "fast-levenshtein": "^3.0.0",
-    "prop-types": "^15.7.2",
-    "simple-evaluate": "^1.4.3"
+    "@material-ui/core": "^4.12.3",
+    "@material-ui/icons": "^4.11.2",
+    "@material-ui/lab": "^4.0.0-alpha.60",
+    "@viewstools/use-masked-input": "^2.0.1"
   },
   "devDependencies": {
-    "@babel/core": "^7.15.5",
-    "@babel/plugin-transform-runtime": "^7.16.0",
-    "@babel/preset-env": "^7.15.6",
-    "@babel/preset-react": "^7.14.5",
-    "@testing-library/react-hooks": "^7.0.2",
-    "babel-loader": "^8.2.2",
-    "css-loader": "^6.5.1",
-    "mini-css-extract-plugin": "^2.4.5",
-    "msw": "^0.36.3",
     "react": "^16.12.0",
-    "react-dom": "^16.12.0",
-    "webpack": "^5.56.0",
-    "webpack-bundle-analyzer": "^4.4.2",
-    "webpack-cli": "^4.8.0"
+    "react-dom": "^16.12.0"
   },
   "peerDependencies": {
     "react": "^16.12.0",
