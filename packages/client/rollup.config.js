@@ -2,6 +2,8 @@ import dts from "rollup-plugin-dts"
 import esbuild from "rollup-plugin-esbuild"
 import postcss from "rollup-plugin-postcss"
 import autoprefixer from "autoprefixer"
+import { nodeResolve } from "@rollup/plugin-node-resolve"
+const path = require("path")
 
 import packageConfig from "./package.json"
 const input = "src/index.js"
@@ -10,6 +12,10 @@ const esbuildPluginConfig = esbuild({
   jsx: "transform", // default, or 'preserve'
   jsxFactory: "React.createElement",
   jsxFragment: "React.Fragment",
+})
+
+const resolveConfig = nodeResolve({
+  resolveOnly: ["@iq-firebolt/client-core"],
 })
 
 const commonOutputConfig = {
@@ -33,9 +39,10 @@ const cjsBundle = {
     postcss({
       extract: "main.css",
       plugins: [autoprefixer()],
-      modules: true
+      modules: true,
     }),
     esbuildPluginConfig,
+    resolveConfig,
   ],
   external,
 }
@@ -46,11 +53,17 @@ const esBundle = {
     {
       dir: "es",
       format: "es",
-      preserveModules: true,
       ...commonOutputConfig,
     },
   ],
-  plugins: [postcss({ inject: false }), esbuildPluginConfig],
+  plugins: [
+    postcss({ inject: false }),
+    esbuildPluginConfig,
+    nodeResolve({
+      resolveOnly: ["@iq-firebolt/client-core"],
+      rootDir: path.join(process.cwd(), '..')
+    }),
+  ],
   external,
 }
 
