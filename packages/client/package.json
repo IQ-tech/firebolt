@@ -5,6 +5,9 @@
   "author": "iq team",
   "homepage": "https://github.com/IQ-tech/firebolt#readme",
   "license": "ISC",
+  "sideEffects": [
+    "*.css"
+  ], 
   "main": "./dist/index.js",
   "module": "./es/index.js",
   "types": "./dist/index.d.ts",

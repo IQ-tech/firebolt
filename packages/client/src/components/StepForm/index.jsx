@@ -1,3 +1,4 @@
+import React from "react"
 import useFirebolt from "../../hooks/useFirebolt";
 import FireboltForm from "../FireboltForm";
 import Insert from "../FireboltForm/Insert";
