@@ -6,11 +6,14 @@
   "homepage": "https://github.com/IQ-tech/firebolt#readme",
   "license": "ISC",
   "main": "./dist/index.js",
+  "module": "./es/index.js",
   "types": "./dist/index.d.ts",
   "files": [
     "/dist",
     "./",
-    "/src"
+    "/src",
+    "/es",
+    "/types"
   ],
   "publishConfig": {
     "access": "public"
@@ -20,7 +23,7 @@
     "url": "git+https://github.com/IQ-tech/firebolt.git"
   },
   "scripts": {
-    "build": "webpack",
+    "build": "rollup -c",
     "gen:profile": "webpack --profile --json=dist/compilation-stats.json",
     "analyze": "webpack-bundle-analyzer dist/compilation-stats.json",
     "test": "jest",
@@ -43,13 +46,24 @@
     "@babel/plugin-transform-runtime": "^7.16.0",
     "@babel/preset-env": "^7.15.6",
     "@babel/preset-react": "^7.14.5",
+    "@rollup/plugin-babel": "^5.3.0",
+    "@rollup/plugin-commonjs": "^21.0.1",
     "@testing-library/react-hooks": "^7.0.2",
+    "autoprefixer": "^10.4.2",
     "babel-loader": "^8.2.2",
     "css-loader": "^6.5.1",
     "mini-css-extract-plugin": "^2.4.5",
     "msw": "^0.36.3",
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
+    "rollup": "^2.67.1",
+    "rollup-plugin-dts": "^4.1.0",
+    "rollup-plugin-esbuild": "^4.8.2",
+    "rollup-plugin-node-resolve": "^5.2.0",
+    "rollup-plugin-postcss": "^4.0.2",
+    "rollup-plugin-sourcemaps": "^0.6.3",
+    "rollup-plugin-typescript2": "^0.31.2",
+    "typescript": "^4.5.5",
     "webpack": "^5.56.0",
     "webpack-bundle-analyzer": "^4.4.2",
     "webpack-cli": "^4.8.0"
