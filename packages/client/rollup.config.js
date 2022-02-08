@@ -2,7 +2,6 @@ import dts from "rollup-plugin-dts"
 import esbuild from "rollup-plugin-esbuild"
 import postcss from "rollup-plugin-postcss"
 import autoprefixer from "autoprefixer"
-import {resolve} from "path"
 
 import packageConfig from "./package.json"
 const input = "src/index.js"

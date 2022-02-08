@@ -15,6 +15,7 @@ const mockBlur = jest.fn(() => () => {})
 const mockChange = jest.fn(() => () => {})
 const mockSubmit = jest.fn((e) => e.preventDefault())
 const mockGoBack = jest.fn()
+const mockFocus = jest.fn()
 
 jest.mock("./hook/useFormEvents", () => {
   return jest.fn().mockImplementation(() => {
@@ -24,7 +25,7 @@ jest.mock("./hook/useFormEvents", () => {
       getFieldEvent: {
         onBlur: mockBlur,
         onChange: mockChange,
-        onFocus: jest.fn(),
+        onFocus: mockFocus,
       },
     }
   })
