@@ -1,6 +1,6 @@
 {
   "name": "@iq-firebolt/client-core",
-  "version": "0.2.18",
+  "version": "0.2.19",
   "description": "> TODO: description",
   "author": "iq team",
   "homepage": "https://github.com/IQ-tech/firebolt#readme",
@@ -18,7 +18,8 @@
   },
   "files": [
     "lib",
-    "es"
+    "es",
+    "types"
   ],
   "repository": {
     "type": "git",
