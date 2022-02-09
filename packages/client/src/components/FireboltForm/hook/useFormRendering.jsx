@@ -1,3 +1,4 @@
+import React from "react"
 import evaluate from "simple-evaluate";
 import classnames from "classnames";
 import { uiPropsPresets } from "@iq-firebolt/client-core";
@@ -19,6 +20,7 @@ export default function useFormRendering({
   clearFieldWarning,
   classes,
 }) {
+  // get correct widgets components
   const fieldsChildren = schema.map((field = {}, index) => {
     const {
       slug,
@@ -107,6 +109,7 @@ export default function useFormRendering({
     }
   });
 
+  // join field widgets with form inserts
   const formChildren = remapFormChildren({
     fieldsChildren,
     insertsChildren,

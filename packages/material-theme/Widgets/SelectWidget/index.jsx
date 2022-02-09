@@ -37,7 +37,7 @@ const SelectWidget = ({
           value={value}
           onChange={(e) => onChange(e?.target?.value)}
           onBlur={(e) => onBlur(e?.target?.value)}
-          onFocus={(e) => onFocus(e?.target?.value)}
+          onFocus={(e) => !!onFocus && onFocus(e?.target?.value)}
           placeholder={placeholder}
           displayEmpty
         >
