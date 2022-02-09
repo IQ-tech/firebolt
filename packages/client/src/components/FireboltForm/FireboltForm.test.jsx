@@ -14,7 +14,7 @@ jest.mock("axios")
 const mockBlur = jest.fn(() => () => {})
 const mockChange = jest.fn(() => () => {})
 const mockSubmit = jest.fn((e) => e.preventDefault())
-const mockGoBack = jest.fn()
+const mockGoBack = jest.fn(() => {})
 const mockFocus = jest.fn()
 
 jest.mock("./hook/useFormEvents", () => {
@@ -78,7 +78,7 @@ describe("firebolt form test", () => {
       <FireboltForm theme={materialTheme} schema={fields} />
     )
 
-    const button = getByText("Previous Step").parentElement
+    const button = getByText("Previous Step")
     fireEvent.click(button)
 
     expect(mockGoBack).toHaveBeenCalledTimes(1)
