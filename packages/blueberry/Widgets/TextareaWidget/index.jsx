@@ -1,10 +1,9 @@
 import React from 'react'
-import { InputField } from "iq-blueberry"
+import { TextareaField } from "iq-blueberry"
 import getTooltipConfig from "../../helpers/getTooltipConfig"
 
 const TextWidget = ({
   hasError,
-  htmlType = "text",
   errorMessage,
   label,
   onBlur,
@@ -13,20 +12,22 @@ const TextWidget = ({
   placeholder,
   slug,
   value,
-  mask,
   isOptional,
   isRequired,
   meta,
-  useNumericKeyboard
+  rows,
+  cols,
+  spellcheck,
+  resize,
+  minLength,
+  maxLength
 }) => {
-
   return (
-    <InputField
+    <TextareaField
       tooltipConfig={getTooltipConfig(meta)}
       required={isRequired}
       optional={isOptional}
       invalid={hasError}
-      htmlType={htmlType}
       errorMessage={errorMessage}
       label={label}
       onBlur={(e) => onBlur(e?.target?.value)}
@@ -35,8 +36,12 @@ const TextWidget = ({
       placeholder={placeholder}
       name={slug}
       value={value}
-      mask={mask}
-      useNumericKeyboard={useNumericKeyboard}
+      rows={rows}
+      cols={cols}
+      spellcheck={spellcheck}
+      resize={resize}
+      minLength={minLength}
+      maxLength={maxLength}
     />
   )
 }

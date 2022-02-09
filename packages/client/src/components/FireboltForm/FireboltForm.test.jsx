@@ -1,5 +1,13 @@
 import { render, fireEvent } from '@testing-library/react';
+import axios from "axios";
+
+import { createFireboltForm } from "@iq-firebolt/client-core";
+import { clearAllFormSessions } from "@iq-firebolt/client-core/lib/helpers/session/clearFormSession";
+import startFormResponse from "@iq-firebolt/client-core/lib/__mocks__/startFormResponse";
+
 import FireboltForm from './index';
+
+jest.mock("axios");
 
 //#region MOCKS
 const mockBlur = jest.fn(() => () => {});
@@ -245,4 +253,40 @@ describe("firebolt form test", () => {
     expect(mockBack).toHaveBeenCalledTimes(1);
     expect(mockNext).toHaveBeenCalledTimes(1);
   })
+});
+
+describe("tautofilled fields test", () => {
+  const autoFillBase64 = 'autofill=JTdCJTI3bmFtZSUyNyUzQSU3QiUyN3ZhbHVlJTI3JTNBJTI3UnVhbiUyMEJlcnQlQzMlQTklMjclMkMlMjdtYXNrJTI3JTNBJTI3JTI3JTdEJTJDJTI3Y3BmJTI3JTNBJTdCJTI3dmFsdWUlMjclM0ElMjc0NTAuNTkyLjczOC01NyUyNyUyQyUyN21hc2slMjclM0ElMjdjcGYlMjclN0QlMkMlMjdlbWFpbCUyNyUzQSU3QiUyN3ZhbHVlJTI3JTNBJTI3YmVydGUucnVhbiU0MGdtYWlsLmNvbSUyNyUyQyUyN21hc2slMjclM0ElMjclMjclN0QlMkMlMjdpbmNvbWUlMjclM0ElN0IlMjd2YWx1ZSUyNyUzQSUyNzYwMDAlMjclMkMlMjdtYXNrJTI3JTNBJTI3bW9uZXklMjclN0QlMkMlMjdwaG9uZSUyNyUzQSU3QiUyN3ZhbHVlJTI3JTNBJTI3NDI5OTk4ODM3NjglMjclMkMlMjdtYXNrJTI3JTNBJTI3cGhvbmVfbnVtYmVyJTI3JTdEJTdE';
+
+  const formName = "partnerFormPotato";
+
+  const form = createFireboltForm({
+      root: "https://my-firebolt-api/",
+      formName,
+  });
+
+  beforeEach(() => {
+    clearAllFormSessions();
+
+    axios.get.mockResolvedValue({ data: startFormResponse });
+
+    Object.defineProperty(window, 'location', {
+        writable: true,
+        value: {
+        search: autoFillBase64,
+        href: autoFillBase64
+        }
+    });
+      
+  });
+
+  test('Should render the email field with the value already filled', async () => {
+      // get first step
+      const formStartResult = await form.start();
+
+      const { container } = render(<FireboltForm schema={formStartResult.step.data.fields} />);
+      const emailField = container.querySelector(`input[name='email']`);
+
+      expect(emailField.value).toBe('berte.ruan@gmail.com');
+  });
 });

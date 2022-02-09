@@ -1,5 +1,5 @@
 import { validate } from "@iq-firebolt/validators"
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import getAddress from "../services/getAdress"
 
 export default function useCEPWidget({
@@ -9,8 +9,14 @@ export default function useCEPWidget({
   stateFormat,
   manuallySetFieldError,
   clearManuallySetError,
+  payload,
 }) {
+  const [autocompletePayload, setAutoCompletePayload] = useState()
   useEffect(onChangeValue, [value])
+
+  useEffect(() => {
+    updateFormPayload()
+  }, [autocompletePayload])
 
   function onChangeValue() {
     const { isValid } = validate("cep", value)
@@ -19,13 +25,21 @@ export default function useCEPWidget({
     }
   }
 
+  function updateFormPayload() {
+    modifyPayloadKeys({
+      ...payload,
+      ...autocompletePayload,
+    })
+  }
+
   async function _getAddressData(value) {
     const { logradouro, uf, bairro, localidade } = await getAddress(
       value,
       stateFormat
     )
 
-    const hasReturns = !!logradouro && !!uf && !!bairro && !!localidade
+    const hasReturns = !!uf && !!localidade
+
     if (!hasReturns) {
       manuallySetFieldError("CEP Inválido")
     } else {
@@ -38,7 +52,7 @@ export default function useCEPWidget({
       !!relatedFieldsSlugs?.neighborhoodFieldSlug
 
     if (hasRelatedFields && hasReturns) {
-      modifyPayloadKeys({
+      setAutoCompletePayload({
         [relatedFieldsSlugs?.cityFieldSlug]: localidade,
         [relatedFieldsSlugs?.streetFieldSlug]: `${logradouro}`,
         [relatedFieldsSlugs?.stateFieldSlug]: uf,

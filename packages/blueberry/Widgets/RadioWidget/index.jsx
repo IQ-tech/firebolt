@@ -9,6 +9,7 @@ const RadioWidget = ({
   value,
   isRequired,
   options,
+  slug,
 }) => {
   return (
     <RadioField
@@ -16,6 +17,7 @@ const RadioWidget = ({
       required={isRequired}
       value={value}
       label={label}
+      name={slug}
       invalid={hasError}
       errorMessage={errorMessage}
       onChange={onChange}
