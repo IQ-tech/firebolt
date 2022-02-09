@@ -3,7 +3,7 @@ import TextWidget from "./Widgets/TextWidget"
 import NumberWidget from "./Widgets/NumberWidget"
 import SelectWidget from "./Widgets/SelectWidget"
 import PasswordWidget from "./Widgets/PasswordWidget"
-import UploadWidget from "./Widgets/UploadWidget"
+/* import UploadWidget from "./Widgets/UploadWidget" */
 import RadioWidget from "./Widgets/RadioWidget"
 import CheckboxGroupWidget from "./Widgets/CheckboxGroupWidget"
 import CheckWidget from "./Widgets/CheckWidget"
@@ -13,7 +13,7 @@ const defaultTheme = {
   "Email": EmailWidget,
   "Text": TextWidget,
   "TextArea": TextAreaWidget,
-  "Upload": UploadWidget,
+  /* "Upload": UploadWidget, */
   "Select": SelectWidget,
   "Number": NumberWidget,
   "Password": PasswordWidget,

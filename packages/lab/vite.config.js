@@ -8,6 +8,9 @@ export default defineConfig({
   optimizeDeps: {
     include: ["@iq-firebolt/client > @iq-firebolt/validators", "iq-blueberry"],
   },
+  define: {
+    global: {}
+  },
   build: {
     outDir: "../dist",
   },
