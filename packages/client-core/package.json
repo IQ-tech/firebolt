@@ -5,7 +5,10 @@
   "author": "iq team",
   "homepage": "https://github.com/IQ-tech/firebolt#readme",
   "license": "ISC",
-  "main": "lib/index.js",
+  "main": "es/index.js",
+  "module": "es/index.js",
+  "types": "types/index.d.ts",
+  "sideEffects": false,
   "publishConfig": {
     "access": "public"
   },
@@ -14,7 +17,8 @@
     "test": "__tests__"
   },
   "files": [
-    "lib"
+    "lib",
+    "es"
   ],
   "repository": {
     "type": "git",
@@ -22,7 +26,8 @@
   },
   "scripts": {
     "test": "jest",
-    "test:watch": "jest --watch"
+    "test:watch": "jest --watch",
+    "build": "rollup -c"
   },
   "bugs": {
     "url": "https://github.com/IQ-tech/firebolt/issues"
@@ -36,7 +41,10 @@
   "devDependencies": {
     "@babel/core": "^7.15.5",
     "@babel/preset-env": "^7.15.6",
-    "babel-jest": "^27.2.4"
+    "babel-jest": "^27.2.4",
+    "rollup": "^2.67.1",
+    "rollup-plugin-dts": "^4.1.0",
+    "rollup-plugin-esbuild": "^4.8.2"
   },
   "jest": {
     "setupFiles": [
