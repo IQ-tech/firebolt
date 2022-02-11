@@ -56,6 +56,30 @@ const mockFields = [
     validators: [{ type: "required" }, { type: "email" }],
     meta: {},
   },
+  {
+    "slug": "bad_credit",
+    "ui:widget": "Radio",
+    "ui:props": {
+      "label": "Está negativado?",
+      "options": [
+        {
+          "value": "true",
+          "label": "Sim"
+        },
+        {
+          "value": "false",
+          "label": "Não"
+        }
+      ]
+    },
+    "ui:styles": { 
+      "size":"half"
+    },
+    "validators": [{ "type": "required" }],
+    "meta": {
+      "tooltip_text": "Popularmente, o termo negativado significa “ter o nome sujo”. Está negativado(a) quem tem uma dívida em atraso e com o nome registrado em um órgão de proteção de crédito."
+    }
+  }
 ]
 
 const DefaultTemplate = ({ fireboltStep }) => {
@@ -65,7 +89,7 @@ const DefaultTemplate = ({ fireboltStep }) => {
         <p>{fireboltStep?.friendlyName}</p>
         <StepForm
           theme={Theme}
-          schema={fireboltStep.fields}
+          schema={mockFields}
           onFocusField={(field) => {
             console.log(field)
           }}

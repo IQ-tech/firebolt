@@ -1,11 +1,11 @@
 {
   "name": "@iq-firebolt/lab",
-  "version": "0.2.19",
+  "version": "0.2.20",
   "private": true,
   "dependencies": {
-    "@iq-firebolt/blueberry-theme": "^0.2.19",
-    "@iq-firebolt/client": "^0.2.19",
-    "@iq-firebolt/material-theme": "^0.2.19",
+    "@iq-firebolt/blueberry-theme": "^0.2.20",
+    "@iq-firebolt/client": "^0.2.20",
+    "@iq-firebolt/material-theme": "^0.2.20",
     "iq-blueberry": "^0.0.18",
     "prop-types": "^15.7.2",
     "react": "^17.0.0",
