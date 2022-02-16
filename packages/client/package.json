@@ -1,6 +1,6 @@
 {
   "name": "@iq-firebolt/client",
-  "version": "0.2.20",
+  "version": "0.2.21",
   "description": "> TODO: description",
   "author": "iq team",
   "homepage": "https://github.com/IQ-tech/firebolt#readme",
@@ -35,8 +35,8 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.16.3",
-    "@iq-firebolt/client-core": "^0.2.20",
-    "@iq-firebolt/validators": "^0.2.20",
+    "@iq-firebolt/client-core": "^0.2.21",
+    "@iq-firebolt/validators": "^0.2.21",
     "classnames": "^2.3.1",
     "fast-levenshtein": "^3.0.0",
     "prop-types": "^15.7.2",
@@ -47,7 +47,7 @@
     "@babel/plugin-transform-runtime": "^7.16.0",
     "@babel/preset-env": "^7.15.6",
     "@babel/preset-react": "^7.14.5",
-    "@iq-firebolt/material-theme": "^0.2.20",
+    "@iq-firebolt/material-theme": "^0.2.21",
     "@rollup/plugin-node-resolve": "^13.1.3",
     "@testing-library/react-hooks": "^7.0.2",
     "autoprefixer": "^10.4.2",

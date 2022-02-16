@@ -77,14 +77,15 @@ const mockFields = [
     },
     "validators": [{ "type": "required" }],
     "meta": {
-      "tooltip_text": "Popularmente, o termo negativado significa “ter o nome sujo”. Está negativado(a) quem tem uma dívida em atraso e com o nome registrado em um órgão de proteção de crédito."
+      "tooltip_text": "Popularmente, o termo negativado significa “ter o nome sujo”. Está negativado(a) quem tem uma dívida em atraso e com o nome registrado em um órgão de proteção de crédito.",
+      "tooltip_container": ".tooltip-wrapper"
     }
   }
 ]
 
 const DefaultTemplate = ({ fireboltStep }) => {
   return (
-    <div>
+    <div className="tooltip-wrapper">
       <div style={{ maxWidth: "600px", margin: "0 auto" }}>
         <p>{fireboltStep?.friendlyName}</p>
         <StepForm
