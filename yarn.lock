@@ -5577,10 +5577,10 @@ iq-blueberry@^0.0.18:
     react-text-mask "^5.4.3"
     staw "^0.3.0"
 
-iq-blueberry@^0.0.30:
-  version "0.0.30"
-  resolved "https://registry.yarnpkg.com/iq-blueberry/-/iq-blueberry-0.0.30.tgz#051a4d25c4f0452e570ac7439665af868a9ee4ff"
-  integrity sha512-p5xL74gCmH2XccYhU9/4/hghhBMm75n+AOcNpJHzX/O5oRSHAznLGLBabpXDPup832K1y1QRtFlpQtmy/Sf1tw==
+iq-blueberry@^0.0.31:
+  version "0.0.31"
+  resolved "https://registry.yarnpkg.com/iq-blueberry/-/iq-blueberry-0.0.31.tgz#80bb6f13427852d082a4d7a9660978a650d4c266"
+  integrity sha512-6FQJK9U4qeJQs4UAgxAGt+Rw0lGs/ZfD0/kFMNo7kmBISknXe5l9OZMwQAJ/qtMc3FiRCbu0yM6kELwbnhGdXg==
   dependencies:
     fast-levenshtein "^3.0.0"
     jails-js "^4.2.1"
