@@ -5,6 +5,7 @@
     "packages/*"
   ],
   "scripts": {
+    "setup":"yarn && yarn build:libs",
     "start": "lerna run dev --scope @iq-firebolt/lab --stream",
     "test:all": "lerna run test",
     "test:validators": "cd packages/validators && yarn test",
@@ -12,7 +13,6 @@
     "test:client": "cd packages/client && yarn test",
     "build:validators": "cd packages/validators && yarn build",
     "build:libs": "lerna run build --scope @iq-firebolt/client-core --scope @iq-firebolt/validators --scope @iq-firebolt/client",
-    "bootstrap": "lerna bootstrap --use-workspaces",
     "versionup": "lerna version  --no-git-tag-version --force-publish",
     "publish:libs": "yarn lerna publish from-package --yes --no-verify-access",
     "clean": "lerna clean",

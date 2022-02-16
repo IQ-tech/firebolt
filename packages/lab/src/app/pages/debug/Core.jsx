@@ -1,53 +1,30 @@
-import { useEffect, useState, useRef } from "react";
-import APIService from "../../../../../client-core/lib/services/API";
+import { useEffect, useState, useRef } from "react"
+import { createFireboltForm } from "@iq-firebolt/client-core"
+
+const formEngine = createFireboltForm({
+  root: "https://btti33t5h5.execute-api.sa-east-1.amazonaws.com/dev",
+  formName: "sample",
+})
 
 const CoreTest = () => {
-  const [authKey, setAuthKey] = useState();
-  const [stepSlug, setSlug] = useState("");
-  const service = useRef(
-    new APIService({
-      formAccess: {
-        root: "https://btti33t5h5.execute-api.sa-east-1.amazonaws.com/dev/",
-        formName: "sample",
-      },
-    })
-  );
+  const [authKey, setAuthKey] = useState()
+  const [stepSlug, setSlug] = useState("")
 
   useEffect(() => {
-    service.current.getStartForm("sdsf").then((res) => {
-      setAuthKey(res.auth);
-      setSlug(res.step.data.slug);
-    });
-  }, []);
+    formEngine.start()
+  }, [])
 
-  function getNextStep() {
-    service.current
-      .getNextStep(authKey, stepSlug, {
-        stepFieldsPayload: {
-          full_name: "teste",
-          email: "batata@cenoura.com",
-        },
-      })
-      .then((res) => {
-        console.log(res);
-        setAuthKey(res.auth);
-        setSlug(res.step.data.slug);
-      });
-  }
-
-  function getPreviousStep() {
-    service.current.getPreviousStep(authKey, stepSlug).then((res) => {
-      console.log(res);
-    });
+  function goNext() {
+    formEngine.nextStep({"full_name": "asjdhjf", "email": "teste@sdkj.com" })
   }
 
   return (
     <div>
       <p>{stepSlug} </p>
-      <button onClick={getPreviousStep}>previous</button>
-      <button onClick={getNextStep}>next</button>
-    </div>
-  );
-};
 
-export default CoreTest;
+      <button onClick={goNext}>next</button>
+    </div>
+  )
+}
+
+export default CoreTest
