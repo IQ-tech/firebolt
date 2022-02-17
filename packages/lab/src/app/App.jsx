@@ -43,7 +43,7 @@ const App = () => {
                   alignItems: "center",
                 }}
               >
-                Ixiiiiiii &#128540;... Você está metendo o louco ne? &#128514;
+                &#128540;&#128514;
                 <p style={{ fontSize: "100px" }}>&#129300;404&#128579;</p>
               </h1>
             </Route>
