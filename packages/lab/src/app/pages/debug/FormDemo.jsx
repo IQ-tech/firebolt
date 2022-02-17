@@ -16,7 +16,7 @@ const FormDemo = () => {
   return (
     <div>
       <Wizard
-        fallback={<p>my loader</p>}
+        fallback={<p>my loader  <p style={{ fontSize: "100px" }}>&#129300;</p></p>}
         onFinishForm={(payload) => {
           console.log("finish form:", payload);
         }}
