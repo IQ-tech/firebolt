@@ -85,6 +85,7 @@ class APIService {
       data: formData,
     };
 
+    // @ts-ignore
     return await axios(config);
   }
 

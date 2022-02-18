@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from "react"
 // import { createFireboltForm, createPropsPreset } from "@iq-firebolt/client-core"
-import { createFireboltForm } from "@iq-firebolt/client-core"
+import { createFireboltForm } from "@iq-firebolt/client-core/lib"
 import * as S from "./styles.js"
 
 // import BrPropsPresets from "@iq-firebolt/br-presets"

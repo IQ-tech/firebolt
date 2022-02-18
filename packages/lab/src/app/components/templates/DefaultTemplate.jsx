@@ -2,7 +2,6 @@ import { StepForm } from "@iq-firebolt/client/src"
 /* import Theme from "@iq-firebolt/blueberry-theme" */
 import MatTheme from "@iq-firebolt/material-theme"
 
-"MapWidget"
 
 
 const mockFields = [
