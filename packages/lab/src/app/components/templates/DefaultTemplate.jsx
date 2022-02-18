@@ -1,6 +1,9 @@
 import { StepForm } from "@iq-firebolt/client/src"
-import Theme from "@iq-firebolt/blueberry-theme"
-/* import MatTheme from "@iq-firebolt/material-theme" */
+/* import Theme from "@iq-firebolt/blueberry-theme" */
+import MatTheme from "@iq-firebolt/material-theme"
+
+"MapWidget"
+
 
 const mockFields = [
   {
@@ -15,6 +18,13 @@ const mockFields = [
     },
     validators: [{ type: "required" }, { type: "name" }],
     meta: {},
+  },
+  {
+    slug: "location",
+    "ui:widget": "MapWidget",
+    "ui:props": {
+      "label": "cenoura"
+    }
   },
   {
     slug: "cpf",
@@ -89,20 +99,20 @@ const DefaultTemplate = ({ fireboltStep }) => {
       <div style={{ maxWidth: "600px", margin: "0 auto" }}>
         <p>{fireboltStep?.friendlyName}</p>
         <StepForm
-          theme={Theme}
+          theme={MatTheme}
           schema={mockFields}
           onFocusField={(field) => {
             console.log(field)
           }}
           onSubmit={(payload) => fireboltStep.goNextStep(payload)}
           onGoBack={fireboltStep.goPreviousStep}
-          // customActionsChild={({ formData }) => {
-          //   return formData.isFormValid ? (
-          //     <button>next liberado</button>
-          //   ) : (
-          //     <button>next bloqueado</button>
-          //   )
-          // }}
+/*           customActionsChild={({ formData }) => {
+            return formData.isFormValid ? (
+              <button>next liberado</button>
+            ) : (
+              <button>next bloqueado</button>
+            )
+          }} */
         >
           <StepForm.Insert after={"last"} render={<p>insert</p>} />
         </StepForm>

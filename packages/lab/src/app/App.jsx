@@ -13,7 +13,7 @@ const App = () => {
             justifyContent: "space-evenly",
             marginBottom: "20px",
             border: "2px solid",
-            alignItems: "center"
+            alignItems: "center",
           }}
         >
           <h1>Debug Lab</h1>
@@ -43,8 +43,12 @@ const App = () => {
                   alignItems: "center",
                 }}
               >
-                 <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSAuhF8WgdyUkYM7UtRzt0ZbiwWbN_SlShhUuOX766kRAKtgXKKwmuZUO5eFCBIXC5VcXM&usqp=CAU" alt="Algo de errado não está certo." /> &#128540;&#128514;
-                {/* <img src="https://pa1.narvii.com/6326/5c4a1bb861089e73828287285446e268c69e1012_00.gif" alt="Algo de errado não está certo." /> */}
+                <img
+                  src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSAuhF8WgdyUkYM7UtRzt0ZbiwWbN_SlShhUuOX766kRAKtgXKKwmuZUO5eFCBIXC5VcXM&usqp=CAU"
+                  alt="Algo de errado não está certo."
+                />{" "}
+                {/* &#128540;&#128514;
+                <img src="https://pa1.narvii.com/6326/5c4a1bb861089e73828287285446e268c69e1012_00.gif" alt="Algo de errado não está certo." /> */}
                 <p style={{ fontSize: "100px" }}>&#129300;404&#128579;</p>
               </h1>
             </Route>
