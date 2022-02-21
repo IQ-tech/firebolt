@@ -89,9 +89,7 @@ describe("tests about the form autofill by base64 at URL", () => {
   })
 
   test("form.start() must autofill value prop of the field email at the fields array", async () => {
-    // get first step
     const formStartResult = await form.start()
-
     expect(formStartResult.step.data.fields[1]).toHaveProperty("value")
     expect(formStartResult.step.data.fields[1].value).toBe(
       "berte.ruan@gmail.com"
