@@ -13,9 +13,10 @@ function useFireboltProvider({
   theme,
   withHistory,
   stepQueryParam = "step",
+  addons = {}
 }) {
   const formEngine = useRef(
-    createFireboltForm(formAccess, { requestsMetadata, debug })
+    createFireboltForm(formAccess, { requestsMetadata, debug, addons })
   );
 
   const {
