@@ -2,24 +2,10 @@ import { useEffect, useState, useRef } from "react"
 // import { createFireboltForm, createPropsPreset } from "@iq-firebolt/client-core"
 import { createFireboltForm } from "@iq-firebolt/client-core/lib"
 import * as S from "./styles.js"
+import transmorphersPropsPresets from "../../constants/transmorphers-props-presets"
 
 // import BrPropsPresets from "@iq-firebolt/br-presets"
-const customPresets = {
-  name: "Transmorfers",
-  presets: {
-    "dotlh": {
-      label: "Dotlh",
-    },
-    "identificationNumber": {
-      placeholder: "000-000",
-      label: "CPF custom preset",
-    },
-    "email": {
-      placeholder: "000-000",
-      label: "CPF custom preset",
-    },
-  }
-}
+
 
 const CoreTest = () => {
   const [authKey, setAuthKey] = useState()
@@ -43,7 +29,7 @@ const CoreTest = () => {
         debug: true,
         addons: {
           uiPropsPresets: [
-            customPresets
+            transmorphersPropsPresets
           ],
         },
       }

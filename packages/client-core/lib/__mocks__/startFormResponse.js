@@ -74,21 +74,6 @@ const startFormResponse = {
             ],
             meta: {},
           },
-          {
-            slug: "email klingon",
-            "ui:widget": "Email",
-            "ui:props-preset": "email:Transmorfers",
-            "ui:props": {},
-            validators: [
-              {
-                type: "required",
-              },
-              {
-                type: "email",
-              },
-            ],
-            meta: {},
-          },
         ],
       },
       position: 1,

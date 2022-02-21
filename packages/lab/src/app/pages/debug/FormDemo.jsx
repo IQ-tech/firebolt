@@ -1,6 +1,7 @@
 import DefaultTemplate from "../../components/templates/DefaultTemplate";
 import CustomFormTemplate from "../../components/templates/CustomFormTemplate";
 import { createFireboltProvider, Wizard } from "@iq-firebolt/client/src";
+import transmorphersPropsPresets from "../../constants/transmorphers-props-presets"
 
 const withFirebolt = createFireboltProvider({
   formAccess: {
@@ -10,6 +11,11 @@ const withFirebolt = createFireboltProvider({
   withHistory: true,
   stepQueryParam: "step",
   debug: true,
+  addons: {
+    uiPropsPresets: [
+      transmorphersPropsPresets
+    ]
+  }
 });
 
 const FormDemo = () => {

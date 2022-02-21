@@ -9,6 +9,9 @@ import createFormSession from "./helpers/session/createFormSession"
 import startFormResponse from "./__mocks__/startFormResponse"
 import nextStepWithPropsPresets from "./__mocks__/nextStepWithPropsPresets"
 import nextStepFormResponse from "./__mocks__/nextStepFormResponse"
+import {customCollection, secondCollection, getRequestMock} from "./__mocks__/props-presets-steps"
+
+import * as presetsMock from "./__mocks__/props-presets-steps"
 
 jest.mock("axios")
 
@@ -17,6 +20,13 @@ const formName = "partnerFormPotato"
 const form = new FireboltFormEngine({
   root: "https://my-firebolt-api/",
   formName,
+}, {
+  addons: {
+    uiPropsPresets: [
+      presetsMock.customCollection,
+      presetsMock.secondCollection
+    ]
+  }
 })
 
 describe("start form tests", () => {
@@ -98,10 +108,31 @@ describe("tests about the form autofill by base64 at URL", () => {
 })
 
 describe("testing props:preset", () => {
-  test("form.start() should apply props:preset", async () => {
-    axios.get.mockResolvedValue({ data: nextStepWithPropsPresets })
-    const formStartResult = await form.start()
-
-    expect(formStartResult?.step?.data?.fields[0]?.["ui:props"].label).toBe("CEP")
+  beforeEach(() => {
+    clearAllFormSessions()
   })
+
+  test("form.start() should apply props:preset without collection", async () => {
+    axios.get.mockResolvedValue({ data: presetsMock.getRequestMock("bat") })
+    const formStartResult = await form.start()
+    expect(formStartResult?.step?.data?.fields[0]?.["ui:props"].cenoura).toBe("cenoura")
+    console.log("cenouraaaaaaaaaaaa>>>>>", formStartResult?.step?.data)
+  })
+
+  test("form.start() should apply props:preset with collection", async() => {
+    axios.get.mockResolvedValue({ data: presetsMock.getRequestMock("cod:second-preset-collection") })
+    const formStartResult = await form.start()
+    console.log("JASHDJHFS", formStartResult?.step?.data?.fields[0]?.["ui:props"].cod.cebola)
+    expect(formStartResult?.step?.data?.fields[0]?.["ui:props"].cebola).toBe("cebola")
+  })
+
+  test("form.start() should overwrite props:preset", async() => {
+    axios.get.mockResolvedValue({ data: presetsMock.getRequestMock("bat") })
+    const formStartResult = await form.start()
+    expect(formStartResult?.step?.data?.fields[0]?.["ui:props"].cenoura).toBe("cenoura")
+    expect(formStartResult?.step?.data?.fields[0]?.["ui:props"].label).toBe("Nome completo")
+  })
+
 })
+
+

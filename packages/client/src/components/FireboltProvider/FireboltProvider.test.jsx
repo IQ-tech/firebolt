@@ -119,4 +119,7 @@ describe("FireboltProvider component - testes relacionados ao modo de debug", ()
       "Debug - Documentos"
     );
   });
+
+  it.todo("to test addons")
+  // TODO: TEST
 });
