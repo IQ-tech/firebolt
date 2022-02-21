@@ -1,6 +1,6 @@
 import { StepForm } from "@iq-firebolt/client/src"
-import Theme from "@iq-firebolt/blueberry-theme"
-/* import MatTheme from "@iq-firebolt/material-theme" */
+// import Theme from "@iq-firebolt/blueberry-theme"
+import Theme from "@iq-firebolt/material-theme"
 
 
 
@@ -101,7 +101,7 @@ const DefaultTemplate = ({ fireboltStep }) => {
           theme={Theme}
           /* schema={mockFields} */
           onFocusField={(field) => {
-            console.log(field)
+            // console.log(field)
           }}
           onSubmit={(payload) => fireboltStep.goNextStep(payload)}
           onGoBack={fireboltStep.goPreviousStep}

@@ -10,8 +10,8 @@ import applyPropsPresets from "./applyPropsPresets"
  * @param {Object} formData 
  * @param {Object} param1 
  */
-export default function formatFormOutput(formData, { autofillData } = {}) {
-  const withPropsPresets = applyPropsPresets(formData)
+export default function formatFormOutput(formData, { autofillData, addons } = {}) {
+  const withPropsPresets = applyPropsPresets(formData, addons)
   return autofillData
     ? applyAutofill(withPropsPresets, autofillData)
     : withPropsPresets

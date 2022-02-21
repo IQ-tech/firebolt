@@ -4,6 +4,22 @@ import { createFireboltForm } from "@iq-firebolt/client-core/lib"
 import * as S from "./styles.js"
 
 // import BrPropsPresets from "@iq-firebolt/br-presets"
+const customPresets = {
+  name: "Transmorfers",
+  presets: {
+    "dotlh": {
+      label: "Dotlh",
+    },
+    "identificationNumber": {
+      placeholder: "000-000",
+      label: "CPF custom preset",
+    },
+    "email": {
+      placeholder: "000-000",
+      label: "CPF custom preset",
+    },
+  }
+}
 
 const CoreTest = () => {
   const [authKey, setAuthKey] = useState()
@@ -25,11 +41,11 @@ const CoreTest = () => {
           agent: "asjdhf",
         },
         debug: true,
-        // addons: {
-        //   propsPresets: [
-        //     BrPropsPresets
-        //   ],
-        // },
+        addons: {
+          uiPropsPresets: [
+            customPresets
+          ],
+        },
       }
     )
   )
@@ -37,21 +53,16 @@ const CoreTest = () => {
   useEffect(() => {
     formEngine.current.start().then((data) => {
       setSlug(data.step.data.slug)
-      console.log("START >>>>", data)
-      // console.log("START >>>>", data.step.data.slug)
-      console.log("steps >>>>", data.meta.steps[2].slug)
     })
   }, [])
 
   function proceedNext() {
     formEngine.current.next("documents").then((data) => {
-      console.log(data)
     })
   }
   
   function proceedPrevious() {
     formEngine.current.previousStep("addres").then((data) => {
-      console.log(data)
     })
   }
 

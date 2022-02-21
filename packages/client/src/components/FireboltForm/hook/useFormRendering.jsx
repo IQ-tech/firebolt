@@ -32,8 +32,6 @@ export default function useFormRendering({
       "ui:props-conditional": propsConditional,
     } = field;
 
-    console.log({[widgetName]: propsFromSchema})
-
     const computedClasses = classnames(classes["firebolt-input"], {
       [classes["firebolt-input--half"]]: propsStyles.size === "half",
     });

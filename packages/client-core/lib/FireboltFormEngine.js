@@ -7,12 +7,15 @@ import getAutofillParam from "./helpers/getAutofillParam"
 import getUrlParams from "./helpers/getUrlParams"
 import formatFormOutput from "./formatters"
 
+import startFormResponseMock from './__mocks__/startFormResponse';
+
 class FireboltFormEngine {
   // @ts-ignore
-  constructor(formAccess, { requestMetadata = {}, debug } = {}) {
+  constructor(formAccess, { requestMetadata = {}, debug, addons = {} }) {
     this.requestsMetadata = requestMetadata
     this.formName = formAccess?.formName
-    this.debug = debug
+    this.debug = debug,
+    this.addons = addons,
     this.APIService = new APIService({ formAccess, debug })
   }
 
@@ -32,8 +35,9 @@ class FireboltFormEngine {
     if (formSessionKey) {
       createFormSession(this.formName, formSessionKey)
     }
-    const firstStepData = await this.APIService.getStartForm(formSessionKey)
-    const formattedData = formatFormOutput(firstStepData, { autofillData })
+    // const firstStepData = await this.APIService.getStartForm(formSessionKey)
+    const firstStepData = startFormResponseMock.formData;
+    const formattedData = formatFormOutput(firstStepData, { autofillData, addons: this.addons })
 
     if (!formSessionKey) {
       createFormSession(this.formName, formattedData?.auth)
