@@ -5,7 +5,7 @@ import { createFireboltProvider, Wizard } from "@iq-firebolt/client/src";
 const withFirebolt = createFireboltProvider({
   formAccess: {
     root: "https://btti33t5h5.execute-api.sa-east-1.amazonaws.com/dev",
-    formName: "sample",
+    formName: "bradesco",
   },
   withHistory: true,
   stepQueryParam: "step",

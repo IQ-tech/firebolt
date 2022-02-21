@@ -1,6 +1,6 @@
 import { StepForm } from "@iq-firebolt/client/src"
-/* import Theme from "@iq-firebolt/blueberry-theme" */
-import MatTheme from "@iq-firebolt/material-theme"
+import Theme from "@iq-firebolt/blueberry-theme"
+/* import MatTheme from "@iq-firebolt/material-theme" */
 
 
 
@@ -98,7 +98,7 @@ const DefaultTemplate = ({ fireboltStep }) => {
       <div style={{ maxWidth: "600px", margin: "0 auto" }}>
         <p>{fireboltStep?.friendlyName}</p>
         <StepForm
-          theme={MatTheme}
+          theme={Theme}
           /* schema={mockFields} */
           onFocusField={(field) => {
             console.log(field)

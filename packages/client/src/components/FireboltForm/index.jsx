@@ -54,7 +54,7 @@ const FireboltForm = ({
           >
             {previousBtnText}
           </button>
-          <button color="primary" type="submit">
+          <button color="primary" onClick={handleSubmit}>
             {submitBtnText}
           </button>
         </>

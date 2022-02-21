@@ -27,13 +27,12 @@ export default function useFormRendering({
       meta = {},
       conditional,
       "ui:widget": widgetName,
-      "ui:props-preset": propsPresetName,
       "ui:props": propsFromSchema = {},
       "ui:styles": propsStyles = {},
       "ui:props-conditional": propsConditional,
     } = field;
 
-    console.log(propsPresetName)
+    console.log({[widgetName]: propsFromSchema})
 
     const computedClasses = classnames(classes["firebolt-input"], {
       [classes["firebolt-input--half"]]: propsStyles.size === "half",
@@ -64,7 +63,6 @@ export default function useFormRendering({
       widgetName,
       customTheme: safeTheme,
     });
-    const fieldPropsPreset = uiPropsPresets[propsPresetName];
     const fieldsPropsConditional = getConditionalProps({
       formPayload,
       propsConditional,
@@ -92,7 +90,6 @@ export default function useFormRendering({
     };
 
     const componentProps = {
-      ...fieldPropsPreset,
       ...propsFromSchema,
       ...fieldsPropsConditional,
       ...commonFieldsProps,
