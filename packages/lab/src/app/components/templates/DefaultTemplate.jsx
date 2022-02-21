@@ -99,7 +99,7 @@ const DefaultTemplate = ({ fireboltStep }) => {
         <p>{fireboltStep?.friendlyName}</p>
         <StepForm
           theme={MatTheme}
-          schema={mockFields}
+          /* schema={mockFields} */
           onFocusField={(field) => {
             console.log(field)
           }}

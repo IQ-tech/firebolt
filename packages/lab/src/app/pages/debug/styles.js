@@ -1,7 +1,7 @@
 export const styleButton = {
-  fontSize: "30px",
-  width: "200px",
-  height: "60px",
+  fontSize: "15px",
+  width: "100px",
+  height: "30px",
   margin: "20px",
 }
 
