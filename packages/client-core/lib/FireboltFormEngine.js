@@ -6,7 +6,12 @@ import { clearFormSession } from "./helpers/session/clearFormSession"
 import getAutofillParam from "./helpers/getAutofillParam"
 import getUrlParams from "./helpers/getUrlParams"
 import processAutofillFields from "./helpers/processAutofillFields"
+
 import applyAutofill from "./formatters/applyAutofill"
+import applyPropsPresets from "./formatters/applyPropsPresets"
+
+//mock
+/* import nextStepWithPropsPresets from "./__mocks__/nextStepWithPropsPresets" */
 
 class FireboltFormEngine {
   // @ts-ignore
@@ -18,33 +23,38 @@ class FireboltFormEngine {
   }
 
   async start() {
-    const autofillData = getAutofillParam(); // test if clear works correctly
-    const urlParams = getUrlParams();
+    const autofillData = getAutofillParam() // test if clear works correctly
+    const urlParams = getUrlParams()
 
     if (autofillData) {
       //TODO to avaliate
-      this.clearSession();
+      this.clearSession()
     }
 
     // @ts-ignore
     const sessionId = urlParams.session_id
-    const formSessionKey = sessionId ? sessionId : getFormSession(this.formName);
+    const formSessionKey = sessionId ? sessionId : getFormSession(this.formName)
 
     if (formSessionKey) {
-      createFormSession(this.formName, formSessionKey);
+      createFormSession(this.formName, formSessionKey)
     }
     const firstStepData = await this.APIService.getStartForm(formSessionKey)
-    const stepDataWithAutofill = applyAutofill(firstStepData, autofillData)
+
+    const formattedData = applyPropsPresets(
+      applyAutofill(firstStepData, autofillData)
+    )
+
+    console.log(formattedData)
 
     if (!formSessionKey) {
-      createFormSession(this.formName, stepDataWithAutofill?.auth);
+      createFormSession(this.formName, formattedData?.auth)
     }
 
-    return stepDataWithAutofill
+    return formattedData
   }
 
   async nextStep(currentStepSlug, stepFieldsPayload) {
-    const hasAutofill = getAutofillParam()
+    const autofillData = getAutofillParam()
 
     const formSessionKey = getFormSession(this.formName)
     const nextStepData = await this.APIService.getNextStep(
@@ -56,16 +66,21 @@ class FireboltFormEngine {
       }
     )
 
-    if (hasAutofill) {
-      return processAutofillFields(nextStepData, hasAutofill)
-    }
+    const formattedData = applyPropsPresets(
+      applyAutofill(nextStepData, autofillData)
+    )
 
-    return nextStepData
+    return formattedData
   }
 
   previousStep(currentStepSlug) {
     const formSessionKey = getFormSession(this.formName)
-    return this.APIService.getPreviousStep(formSessionKey, currentStepSlug)
+    const previousData = this.APIService.getPreviousStep(
+      formSessionKey,
+      currentStepSlug
+    )
+    const formattedPreviousData = applyPropsPresets(previousData)
+    return formattedPreviousData
   }
 
   uploadFile(file) {
@@ -77,7 +92,9 @@ class FireboltFormEngine {
     if (!this.debug) {
       throw new Error("debug step function only works with debug arg === true,")
     } else {
-      return this.APIService.getDebugStep(stepSlug)
+      const stepToDebugData = this.APIService.getDebugStep(stepSlug)
+      const formattedData = applyPropsPresets(stepToDebugData)
+      return formattedData
     }
   }
 

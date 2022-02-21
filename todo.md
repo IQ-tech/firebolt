@@ -1,30 +1,11 @@
-* receber o fireboltStep como step config
-* mudar id para position
-* clear form session on end form
-*  webhookResult dentro de step - done
-* atualizar validators
-* adicionar upload endpoint
-* permitir adicionar o tema pelo provider tb
-* adicionar botão padrão de submit e go back no firebolt form
-* mudança do autofill de santander
-
-
-# Api deve retornar dentro do step
-* isLastStep
-* isFirstStep
-
-
-
-# futuro
-* teste de json local
-* mover props-presets para o tema
-* criar pacote br-presets
-* adicionar funcionalidade para o firebolt client montar o form local
-
-
-#lembrar de testar
-* metadata (usado em stantander com anonymous id)
-
-
-
-
+/**
+ * objetivos
+ * 1 - adicionar props presets por essa função de formatação - X
+ * 2 - remover essa composição do componente firebolt form
+ * 3 - receber presets pela chave de addons do create firebolt form
+ * 4 - aplicar formatação tanto no start, next, previous e debug
+ * 5 - receber presets pelo createFireboltForm (client)
+ * 6 - definir quais props presets devem continuar no firebolt e quais devem ir para um pacote externo
+ * 7 - criar primeiro pacote de presets
+ * 8 - adicionar segundo parametro no goNextStep e goPreviousStep
+ */
