@@ -1,16 +1,16 @@
-const STATE_OPTIONS = require ("../constants/state-options")
+const STATE_OPTIONS = require ("./constants/state-options")
 
 // masks
-const CPFMask = require("../masks/br/CPF")
-const CEPMask = require("../masks/br/CEP")
-const BRCurrency = require("../masks/br/currency")
+const CPFMask = require("./masks/br/CPF")
+const CEPMask = require("./masks/br/CEP")
+const BRCurrency = require("./masks/br/currency")
 const {
   BRPhoneMask,
   BRPhoneResidentialMask,
   BRPhoneHybridMask,
-} = require("../masks/br/phone")
-const MonthYearMask = require("../masks/date/month-year")
-const DayMonthYearMask = require("../masks/date/day-month-year")
+} = require("./masks/br/phone")
+const MonthYearMask = require("./masks/date/month-year")
+const DayMonthYearMask = require("./masks/date/day-month-year")
 
 const UIPropsPresetsList = {
   "br-states": {
