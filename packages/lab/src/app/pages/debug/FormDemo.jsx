@@ -2,6 +2,8 @@ import DefaultTemplate from "../../components/templates/DefaultTemplate";
 import CustomFormTemplate from "../../components/templates/CustomFormTemplate";
 import { createFireboltProvider, Wizard } from "@iq-firebolt/client/src";
 import transmorphersPropsPresets from "../../constants/transmorphers-props-presets"
+import brAddons from "@iq-firebolt/br-addons"
+
 
 const withFirebolt = createFireboltProvider({
   formAccess: {
@@ -13,7 +15,7 @@ const withFirebolt = createFireboltProvider({
   debug: true,
   addons: {
     uiPropsPresets: [
-      transmorphersPropsPresets
+      brAddons.propsPresets
     ]
   }
 });
@@ -22,7 +24,7 @@ const FormDemo = () => {
   return (
     <div>
       <Wizard
-        fallback={<p>my loader  <p style={{ fontSize: "100px" }}>&#129300;</p></p>}
+        fallback={<p>my loader  <span style={{ fontSize: "100px" }}>&#129300;</span></p>}
         onFinishForm={(payload) => {
           // console.log("finish form:", payload);
         }}

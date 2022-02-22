@@ -18,13 +18,6 @@ const mockFields = [
     meta: {},
   },
   {
-    slug: "location",
-    "ui:widget": "MapWidget",
-    "ui:props": {
-      "label": "cenoura"
-    }
-  },
-  {
     slug: "cpf",
     "ui:widget": "Text",
     "ui:props-preset": "br-cpf",
