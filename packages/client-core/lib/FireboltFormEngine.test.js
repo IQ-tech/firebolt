@@ -7,10 +7,7 @@ import getFireboltLocalStorage from "./helpers/session/getFireboltLocalStorage"
 import createFormSession from "./helpers/session/createFormSession"
 
 import startFormResponse from "./__mocks__/startFormResponse"
-import nextStepWithPropsPresets from "./__mocks__/nextStepWithPropsPresets"
 import nextStepFormResponse from "./__mocks__/nextStepFormResponse"
-import {customCollection, secondCollection, getRequestMock} from "./__mocks__/props-presets-steps"
-
 import * as presetsMock from "./__mocks__/props-presets-steps"
 
 jest.mock("axios")

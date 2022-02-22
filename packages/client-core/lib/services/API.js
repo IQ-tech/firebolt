@@ -4,7 +4,7 @@ import {
   formatReqPayload,
 } from "../helpers/formatData";
 
-import startFormWithUpload from "../__mocks__/startFormWithUpload";
+/* import startFormWithUpload from "../__mocks__/startFormWithUpload"; */
 
 class APIService {
   constructor({ formAccess, debug }) {

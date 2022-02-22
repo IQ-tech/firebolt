@@ -1,7 +1,6 @@
 import React from "react"
 import evaluate from "simple-evaluate";
 import classnames from "classnames";
-import { uiPropsPresets } from "@iq-firebolt/client-core";
 
 import getFieldComponent from "./helpers/getFieldComponent";
 import remapFormChildren from "./helpers/remapFormChildren";
