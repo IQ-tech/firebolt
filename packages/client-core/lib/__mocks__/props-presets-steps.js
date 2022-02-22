@@ -5,6 +5,7 @@ export const customCollection = {
       label: "Press F to pay respects",
       placeholder: "write something",
       batata: "batata",
+    },
     "bat": {
       "label": "i'm batman",
       "placeholder": "bat placeholder",
@@ -12,7 +13,7 @@ export const customCollection = {
     }
   }
  }
-}
+
 
 export const secondCollection = {
   name: "second-preset-collection",

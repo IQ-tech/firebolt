@@ -116,13 +116,11 @@ describe("testing props:preset", () => {
     axios.get.mockResolvedValue({ data: presetsMock.getRequestMock("bat") })
     const formStartResult = await form.start()
     expect(formStartResult?.step?.data?.fields[0]?.["ui:props"].cenoura).toBe("cenoura")
-    console.log("cenouraaaaaaaaaaaa>>>>>", formStartResult?.step?.data)
   })
 
   test("form.start() should apply props:preset with collection", async() => {
     axios.get.mockResolvedValue({ data: presetsMock.getRequestMock("cod:second-preset-collection") })
     const formStartResult = await form.start()
-    console.log("JASHDJHFS", formStartResult?.step?.data?.fields[0]?.["ui:props"].cod.cebola)
     expect(formStartResult?.step?.data?.fields[0]?.["ui:props"].cebola).toBe("cebola")
   })
 
