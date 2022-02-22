@@ -31,7 +31,7 @@ export const secondCollection = {
 }
 
 
-export const getRequestMock = (preset = "cod") => ({
+export const getRequestMock = (preset = "cod", withReplaceProps = false) => ({
   message: "ok",
   formData: {
     step: {
@@ -45,8 +45,8 @@ export const getRequestMock = (preset = "cod") => ({
             "ui:widget": "Text",
             "ui:props-preset": preset,
             "ui:props": {
-              label: "Nome completo",
-              placeholder: "Nome completo",
+              ...(withReplaceProps ? {label: "Nome completo",
+              placeholder: "Nome completo"} : {})
             },
             validators: [],
             meta: {},

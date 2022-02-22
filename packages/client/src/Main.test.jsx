@@ -1,4 +1,4 @@
-import { render, fireEvent, waitFor } from "@testing-library/react"
+import { render, fireEvent, waitFor, screen, debug } from "@testing-library/react"
 import axios from "axios"
 import { StepForm, Wizard, clearFormSession, FireboltProvider } from "./index"
 import Theme from "@iq-firebolt/material-theme"
@@ -13,6 +13,20 @@ const formAccess = {
 
 const DefaultTemplate = (fireboltStep) => <StepForm theme={Theme} />
 
+const MockComponent = (addons = []) =>
+  render(
+    <FireboltProvider
+      formAccess={formAccess}
+      addons={{
+        uiPropsPresets: addons,
+      }}
+    >
+      <Wizard fallback={<p>loading</p>}>
+        <Wizard.Step match="*" component={DefaultTemplate} />
+      </Wizard>
+    </FireboltProvider>
+  )
+
 describe("testing props-presets render", () => {
   beforeEach(() => {
     clearFormSession()
@@ -20,42 +34,37 @@ describe("testing props-presets render", () => {
 
   it("should render field with props:preset without collection", async () => {
     axios.get.mockResolvedValue({
-      data: propsPresetsMock.getRequestMock("bat"),
+      data: propsPresetsMock.getRequestMock("cod"),
     })
 
-    const { getByText } = render(
-      <FireboltProvider
-        formAccess={formAccess}
-        addons={{
-          uiPropsPresets: [
-            propsPresetsMock.customCollection,
-            propsPresetsMock.secondCollection,
-          ],
-        }}
-      >
-        <Wizard>
-          <Wizard.Step component={DefaultTemplate} />
-        </Wizard>
-      </FireboltProvider>
-    )
+    MockComponent([propsPresetsMock.customCollection])
 
-    await waitFor(() => {
-      /* expect(getByText("Fallback")).toBeInTheDocument(); */
-      expect(true).toBeTruthy()
-    })
+    await waitFor(() => {})
+
+    expect(screen.getByPlaceholderText("write something")).toBeInTheDocument()
   })
 
-  it("should render field with props:preset with collection", () => {
+  it("should render field with props:preset with collection", async () => {
     axios.get.mockResolvedValue({
       data: propsPresetsMock.getRequestMock("cod:second-preset-collection"),
     })
-    expect(true).toBeTruthy()
+
+    MockComponent([propsPresetsMock.customCollection, propsPresetsMock.secondCollection])
+    
+    await waitFor(() => {})
+
+    expect(screen.getByPlaceholderText('second collection cod')).toBeInTheDocument()
   })
 
-  it("should render field with overwriten props:preset", () => {
+  it("should render field with overwritten props:preset", async () => {
     axios.get.mockResolvedValue({
-      data: propsPresetsMock.getRequestMock("bat"),
+      data: propsPresetsMock.getRequestMock("bat", true),
     })
-    expect(true).toBeTruthy()
+
+   MockComponent([propsPresetsMock.customCollection])
+
+    await waitFor(() => {})
+    
+    expect(screen.getByPlaceholderText('Nome completo'))
   })
 })
