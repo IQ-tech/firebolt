@@ -22,7 +22,7 @@ export default function applyPropsPresets(stepData, addons) {
   }
 }
 
-function mappedFieldsFromAPI(fieldsFromAPI, collectionsMap, allPresetsMap) {
+function mappedFieldsFromAPI(fieldsFromAPI = [], collectionsMap, allPresetsMap) {
   const mappedFields = fieldsFromAPI.map((field) => {
     const fieldPresetName = field?.["ui:props-preset"] || ""
     const [collectionPreset, specificCollection] = fieldPresetName?.split(":")
@@ -30,11 +30,11 @@ function mappedFieldsFromAPI(fieldsFromAPI, collectionsMap, allPresetsMap) {
     const fieldProps = field?.["ui:props"]
 
     if (useSpecificCollection) {
-      const collection = collectionsMap[specificCollection]
+      const collection = collectionsMap?.[specificCollection]
       if (!collection) {
         throw new Error("Collection does not exists")
       }
-      const hasPreset = !!collection[collectionPreset]
+      const hasPreset = !!collection?.[collectionPreset]
       if (!hasPreset) {
         throw new Error(
           `Collection ${specificCollection} doesn't have preset ${collectionPreset}`

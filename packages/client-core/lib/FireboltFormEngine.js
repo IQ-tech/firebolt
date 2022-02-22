@@ -60,9 +60,9 @@ class FireboltFormEngine {
     return formatFormOutput(nextStepData, autofillData)
   }
 
-  previousStep(currentStepSlug) {
+  async previousStep(currentStepSlug) {
     const formSessionKey = getFormSession(this.formName)
-    const previousData = this.APIService.getPreviousStep(
+    const previousData = await this.APIService.getPreviousStep(
       formSessionKey,
       currentStepSlug
     )
@@ -74,12 +74,12 @@ class FireboltFormEngine {
     return this.APIService.upload(formSessionKey, file)
   }
 
-  debugStep(stepSlug) {
+  async debugStep(stepSlug) {
     if (!this.debug) {
       throw new Error("debug step function only works with debug arg === true,")
     } else {
       const autofillData = getAutofillParam()
-      const stepToDebugData = this.APIService.getDebugStep(stepSlug)
+      const stepToDebugData = await this.APIService.getDebugStep(stepSlug)
       return formatFormOutput(stepToDebugData, { autofillData })
     }
   }
