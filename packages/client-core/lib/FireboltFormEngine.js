@@ -36,7 +36,6 @@ class FireboltFormEngine {
       createFormSession(this.formName, formSessionKey)
     }
     const firstStepData = await this.APIService.getStartForm(formSessionKey)
-    /* const firstStepData = startFormResponseMock.formData; */
     const formattedData = formatFormOutput(firstStepData, { autofillData, addons: this.addons })
 
     if (!formSessionKey) {
@@ -46,7 +45,7 @@ class FireboltFormEngine {
     return formattedData
   }
 
-  async nextStep(currentStepSlug, stepFieldsPayload) {
+  async nextStep(currentStepSlug, stepFieldsPayload, {extraRequestsMetaData = {}} = {}) {
     const autofillData = getAutofillParam()
     const formSessionKey = getFormSession(this.formName)
     const nextStepData = await this.APIService.getNextStep(
@@ -54,7 +53,7 @@ class FireboltFormEngine {
       currentStepSlug,
       {
         stepFieldsPayload,
-        requestsMetadata: this.requestsMetadata,
+        requestsMetadata: {...this.requestsMetadata, ...extraRequestsMetaData}
       }
     )
     return formatFormOutput(nextStepData, autofillData)

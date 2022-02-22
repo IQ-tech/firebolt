@@ -89,11 +89,11 @@ function useFireboltProvider({
     });
   }
 
-  function goNextStep(stepFieldsPayload) {
+  function goNextStep(stepFieldsPayload, {extraRequestsMetaData}) {
     setIsFormLoading(true);
     const isLastStep = currentStep?.data?.slug === formflowMetadata?.lastStep;
     return formEngine.current
-      .nextStep(currentStep.data.slug, stepFieldsPayload)
+      .nextStep(currentStep.data.slug, stepFieldsPayload, {extraRequestsMetaData})
       .then((data) => {
         if (isLastStep) {
           setFormEndPayload({
