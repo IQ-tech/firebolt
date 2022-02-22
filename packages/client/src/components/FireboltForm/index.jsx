@@ -50,6 +50,7 @@ const FireboltForm = ({
           <button
             color="secondary"
             style={{ marginRight: "5px" }}
+            data-testid="fbt-submit-button"
             onClick={handleGoBack}
           >
             {previousBtnText}
