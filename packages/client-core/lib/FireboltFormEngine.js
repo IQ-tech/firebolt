@@ -14,8 +14,8 @@ class FireboltFormEngine {
   constructor(formAccess, { requestMetadata = {}, debug, addons = {} } = {}) {
     this.requestsMetadata = requestMetadata
     this.formName = formAccess?.formName
-    this.debug = debug,
-    this.addons = addons,
+    this.debug = debug
+    this.addons = addons
     this.APIService = new APIService({ formAccess, debug })
   }
 
@@ -36,7 +36,10 @@ class FireboltFormEngine {
       createFormSession(this.formName, formSessionKey)
     }
     const firstStepData = await this.APIService.getStartForm(formSessionKey)
-    const formattedData = formatFormOutput(firstStepData, { autofillData, addons: this.addons })
+    const formattedData = formatFormOutput(firstStepData, {
+      autofillData,
+      addons: this.addons,
+    })
 
     if (!formSessionKey) {
       createFormSession(this.formName, formattedData?.auth)
@@ -45,7 +48,11 @@ class FireboltFormEngine {
     return formattedData
   }
 
-  async nextStep(currentStepSlug, stepFieldsPayload, {extraRequestsMetaData = {}} = {}) {
+  async nextStep(
+    currentStepSlug,
+    stepFieldsPayload,
+    { extraRequestsMetaData = {} } = {}
+  ) {
     const autofillData = getAutofillParam()
     const formSessionKey = getFormSession(this.formName)
     const nextStepData = await this.APIService.getNextStep(
@@ -53,10 +60,13 @@ class FireboltFormEngine {
       currentStepSlug,
       {
         stepFieldsPayload,
-        requestsMetadata: {...this.requestsMetadata, ...extraRequestsMetaData}
+        requestsMetadata: {
+          ...this.requestsMetadata,
+          ...extraRequestsMetaData,
+        },
       }
     )
-    return formatFormOutput(nextStepData, autofillData)
+    return formatFormOutput(nextStepData, { addons: this.addons, autofillData })
   }
 
   async previousStep(currentStepSlug) {
@@ -65,7 +75,7 @@ class FireboltFormEngine {
       formSessionKey,
       currentStepSlug
     )
-    return formatFormOutput(previousData)
+    return formatFormOutput(previousData, { addons: this.addons })
   }
 
   uploadFile(file) {
