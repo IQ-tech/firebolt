@@ -1,12 +1,13 @@
 {
   "name": "@iq-firebolt/br-addons",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "> TODO: description",
   "author": "iq team",
   "homepage": "https://github.com/IQ-tech/firebolt#readme",
   "license": "MIT",
   "sideEffects": false,
   "main": "./src/index.js",
+  "module": "./src/index.js",
   "publishConfig": {
     "access": "public"
   },

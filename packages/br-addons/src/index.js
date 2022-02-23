@@ -1,3 +1,1 @@
-const propsPresets = require("./props-presets")
-
-exports.propsPresets = propsPresets
+export { default as propsPresets } from "./props-presets"
