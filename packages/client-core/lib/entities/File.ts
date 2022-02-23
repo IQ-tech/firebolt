@@ -1,4 +1,8 @@
 export default class FbFile {
+  storageReference: any
+  extension: string
+  size: number
+  name: string
   constructor({
     storageReference,
     extension = String(),

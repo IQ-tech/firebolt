@@ -6,11 +6,8 @@ export default function Step({
   position = Number(),
 }) {
   return {
-    /**  @type {StepData} */
     data: StepData(data),
-    /**  @type {Object} */
     webhookResult,
-    /**  @type {number} */
     position,
   };
 }
