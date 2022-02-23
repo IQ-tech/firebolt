@@ -1,16 +1,12 @@
 import applyAutofill from "./applyAutofill"
 import applyPropsPresets from "./applyPropsPresets"
 
-/* interface IFormatFormOutput {
-  autofillData?: Object
-} */
+ interface IFormatFormOutput {
+  autofillData?: Object | any
+  addons?: Object | any
+} 
 
-/**
- * TODO - create formData type 
- * @param {Object} formData 
- * @param {Object} param1 
- */
-export default function formatFormOutput(formData, { autofillData, addons } = {}) {
+export default function formatFormOutput(formData, { autofillData, addons }: IFormatFormOutput = {}) {
   const withPropsPresets = applyPropsPresets(formData, addons)
   return autofillData
     ? applyAutofill(withPropsPresets, autofillData)

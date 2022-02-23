@@ -5,13 +5,9 @@ function StepData({
   fields = [],
 } = {}) {
   return {
-    /** @type {string} */
     slug,
-    /** @type {string} */
     type: type,
-    /** @type {string} */
     friendlyName: friendlyname,
-    /** @type {Array} */
     fields,
   };
 }
