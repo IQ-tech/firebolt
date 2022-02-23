@@ -21,7 +21,8 @@ FireboltProvider.propTypes = {
   children: PropTypes.any,
   withHistory: PropTypes.bool,
   theme: PropTypes.object, // # v2-todo
-  addons: PropTypes.object
+  addons: PropTypes.object,
+  firstStepPreRender: PropTypes.object
 };
 
 export default FireboltProvider;

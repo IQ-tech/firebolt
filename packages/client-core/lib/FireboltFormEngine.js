@@ -19,6 +19,15 @@ class FireboltFormEngine {
     this.APIService = new APIService({ formAccess, debug })
   }
 
+  formatStepData(stepData, { autofillData } = {}) {
+    const formattedData = formatFormOutput(stepData, {
+      autofillData,
+      addons: this.addons,
+    });
+
+    return formattedData;
+  }
+
   async start() {
     const autofillData = getAutofillParam() // test if clear works correctly
     const urlParams = getUrlParams()
@@ -35,11 +44,9 @@ class FireboltFormEngine {
     if (formSessionKey) {
       createFormSession(this.formName, formSessionKey)
     }
-    const firstStepData = await this.APIService.getStartForm(formSessionKey)
-    const formattedData = formatFormOutput(firstStepData, {
-      autofillData,
-      addons: this.addons,
-    })
+    const firstStepData = await this.APIService.getStartForm(formSessionKey);
+
+    const formattedData = this.formatStepData(firstStepData, { autofillData });
 
     if (!formSessionKey) {
       createFormSession(this.formName, formattedData?.auth)
@@ -66,7 +73,7 @@ class FireboltFormEngine {
         },
       }
     )
-    return formatFormOutput(nextStepData, { addons: this.addons, autofillData })
+    return this.formatStepData(nextStepData, { autofillData });
   }
 
   async previousStep(currentStepSlug) {
@@ -75,7 +82,7 @@ class FireboltFormEngine {
       formSessionKey,
       currentStepSlug
     )
-    return formatFormOutput(previousData, { addons: this.addons })
+    return this.formatStepData(previousData);
   }
 
   uploadFile(file) {
@@ -89,7 +96,7 @@ class FireboltFormEngine {
     } else {
       const autofillData = getAutofillParam()
       const stepToDebugData = await this.APIService.getDebugStep(stepSlug)
-      return formatFormOutput(stepToDebugData, { autofillData })
+      return this.formatStepData(stepToDebugData, { autofillData });
     }
   }
 
