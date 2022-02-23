@@ -2,10 +2,9 @@ import Step from "../entities/Step";
 import FormMetaData from "../entities/FormMeta";
 
 export function formatStepResponseData(requestData = {}) {
-  const { auth, step = {}, meta = {}, capturedData = {} } = requestData;
+  const { auth, step = {}, meta = {}, capturedData = {} }: any = requestData;
 
   const formattedData = {
-    /** @type {string} */
     auth,
     meta: FormMetaData(meta),
     capturedData,

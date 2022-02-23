@@ -11,7 +11,7 @@ describe("something", () => {
   test("createFormSession correctly create form session on storage", () => {
     createFormSession("partnerForm", "myAuthKey");
     const fireboltLocalStorage = JSON.parse(
-      localStorage.getItem(LOCALSTORE_KEY) || {}
+      localStorage.getItem(LOCALSTORE_KEY) || "{}"
     );
     const fireboltFormKey = fireboltLocalStorage?.sessionKeys?.["partnerForm"];
 
