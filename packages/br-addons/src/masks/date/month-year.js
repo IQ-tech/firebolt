@@ -1,1 +1,1 @@
-module.exports = [/\d/, /\d/, "/", /\d/, /\d/, /\d/, /\d/]
+export default [/\d/, /\d/, "/", /\d/, /\d/, /\d/, /\d/]
