@@ -1,4 +1,4 @@
-export default function phoneMask(value) {
+module.exports = function phoneMask(value) {
   const safeValue = value || ""
   const onlyNums = safeValue.replace(/\D/g, "")
   const filledResidencial = onlyNums.length >= 11

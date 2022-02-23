@@ -1,7 +1,6 @@
 import React from "react"
 import evaluate from "simple-evaluate";
 import classnames from "classnames";
-import { uiPropsPresets } from "@iq-firebolt/client-core";
 
 import getFieldComponent from "./helpers/getFieldComponent";
 import remapFormChildren from "./helpers/remapFormChildren";
@@ -27,7 +26,6 @@ export default function useFormRendering({
       meta = {},
       conditional,
       "ui:widget": widgetName,
-      "ui:props-preset": propsPresetName,
       "ui:props": propsFromSchema = {},
       "ui:styles": propsStyles = {},
       "ui:props-conditional": propsConditional,
@@ -62,7 +60,6 @@ export default function useFormRendering({
       widgetName,
       customTheme: safeTheme,
     });
-    const fieldPropsPreset = uiPropsPresets[propsPresetName];
     const fieldsPropsConditional = getConditionalProps({
       formPayload,
       propsConditional,
@@ -90,7 +87,6 @@ export default function useFormRendering({
     };
 
     const componentProps = {
-      ...fieldPropsPreset,
       ...propsFromSchema,
       ...fieldsPropsConditional,
       ...commonFieldsProps,

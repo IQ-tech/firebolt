@@ -1,4 +1,4 @@
-export default [
+module.exports = [
   /\d/,
   /\d/,
   /\d/,

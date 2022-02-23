@@ -1,4 +1,4 @@
-export default [
+module.exports = [
   {
     "value": "BR-AC",
     "label": "Acre",

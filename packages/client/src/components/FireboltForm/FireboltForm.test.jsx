@@ -63,11 +63,11 @@ describe("firebolt form test", () => {
   })
 
   it("able to call the submit function", () => {
-    const { container } = render(
+    const { getByTestId } = render(
       <FireboltForm theme={materialTheme} schema={fields} />
     )
-
-    const button = container.querySelector("button[type='submit']")
+    
+    const button = getByTestId("fbt-submit-button")
     fireEvent.click(button)
 
     expect(mockSubmit).toHaveBeenCalled()
@@ -275,7 +275,7 @@ describe("firebolt form test", () => {
   })
 })
 
-describe("tautofilled fields test", () => {
+describe("autofilled fields test", () => {
   const autoFillBase64 =
     "autofill=JTdCJTI3bmFtZSUyNyUzQSU3QiUyN3ZhbHVlJTI3JTNBJTI3UnVhbiUyMEJlcnQlQzMlQTklMjclMkMlMjdtYXNrJTI3JTNBJTI3JTI3JTdEJTJDJTI3Y3BmJTI3JTNBJTdCJTI3dmFsdWUlMjclM0ElMjc0NTAuNTkyLjczOC01NyUyNyUyQyUyN21hc2slMjclM0ElMjdjcGYlMjclN0QlMkMlMjdlbWFpbCUyNyUzQSU3QiUyN3ZhbHVlJTI3JTNBJTI3YmVydGUucnVhbiU0MGdtYWlsLmNvbSUyNyUyQyUyN21hc2slMjclM0ElMjclMjclN0QlMkMlMjdpbmNvbWUlMjclM0ElN0IlMjd2YWx1ZSUyNyUzQSUyNzYwMDAlMjclMkMlMjdtYXNrJTI3JTNBJTI3bW9uZXklMjclN0QlMkMlMjdwaG9uZSUyNyUzQSU3QiUyN3ZhbHVlJTI3JTNBJTI3NDI5OTk4ODM3NjglMjclMkMlMjdtYXNrJTI3JTNBJTI3cGhvbmVfbnVtYmVyJTI3JTdEJTdE"
 

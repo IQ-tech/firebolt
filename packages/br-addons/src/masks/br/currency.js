@@ -1,6 +1,6 @@
-import createNumberMask from "text-mask-addons/dist/createNumberMask"
+const createNumberMask = require("text-mask-addons/dist/createNumberMask")
 
-export default createNumberMask({
+module.exports = createNumberMask({
   prefix: "R$ ",
   suffix: "",
   includeThousandsSeparator: true,

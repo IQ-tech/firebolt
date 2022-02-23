@@ -1,6 +1,6 @@
 {
   "name": "@iq-firebolt/client-core",
-  "version": "0.2.21",
+  "version": "0.3.0",
   "description": "> TODO: description",
   "author": "iq team",
   "homepage": "https://github.com/IQ-tech/firebolt#readme",
@@ -27,6 +27,7 @@
   },
   "scripts": {
     "test": "jest",
+    "test:coverage": "jest --collect-coverage",
     "test:watch": "jest --watch",
     "build": "rollup -c"
   },

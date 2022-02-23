@@ -1,35 +1,30 @@
 {
-  "name": "@iq-firebolt/validators",
+  "name": "@iq-firebolt/br-addons",
   "version": "0.3.0",
   "description": "> TODO: description",
   "author": "iq team",
   "homepage": "https://github.com/IQ-tech/firebolt#readme",
-  "license": "ISC",
+  "license": "MIT",
+  "sideEffects": false,
+  "main": "./src/index.js",
   "publishConfig": {
     "access": "public"
   },
-  "main": "./dist/index.js",
-  "types": "./dist/index.d.ts",
-  "files": [
-    "/dist"
-  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/IQ-tech/firebolt.git"
   },
   "scripts": {
-    "clear-dist": "rimraf dist",
     "test": "jest",
-    "test:watch": "NODE_ENV=test jest --watchAll",
-    "build": "yarn clear-dist && tsc",
-    "clear-jest": "jest --clearCache"
+    "test:watch": "jest --watch"
   },
   "bugs": {
     "url": "https://github.com/IQ-tech/firebolt/issues"
   },
   "dependencies": {
-    "cpf-cnpj-validator": "^1.0.3",
-    "faker": "^5.5.3",
-    "simple-evaluate": "^1.4.3"
-  }
+    "text-mask-addons": "^3.8.0"
+  },
+  "browserslist": [
+    "last 1 Chrome version"
+  ]
 }
