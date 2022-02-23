@@ -1,9 +1,7 @@
-/**
- * @param {import("../types").FormSource} formSource
- */
- export default function validateFormSource(formSource) {
+
+ export default function validateFormSource(formSource: { root: string; formName: string }) {
   const { root, formName } = formSource
-  const validateConfig = (config) => !!config && typeof config === "string"
+  const validateConfig = (config: string) => !!config && typeof config === "string"
 
   if (!validateConfig(root) || !validateConfig(formName)) {
     throw new TypeError(

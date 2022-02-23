@@ -5,7 +5,6 @@ import startFormResponse from "../__mocks__/startFormResponse";
 import nextStepFormResponse from "../__mocks__/nextStepFormResponse";
 import previousStepFormResponse from "../__mocks__/previousStepFormResponse";
 
-
 jest.mock("axios");
 
 describe("Navigation requests receive correct data", () => {
