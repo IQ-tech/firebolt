@@ -5,7 +5,7 @@
     "packages/*"
   ],
   "scripts": {
-    "setup":"yarn && yarn build:libs",
+    "setup": "yarn && yarn build:libs",
     "clean": "lerna clean",
     "bootstrap": "lerna bootstrap --use-workspaces",
     "start": "lerna run dev --scope @iq-firebolt/lab --stream",
@@ -31,5 +31,6 @@
     "rimraf": "^3.0.2",
     "ts-jest": "^27.0.5",
     "typescript": "^4.4.3"
-  }
+  },
+  "version": "0.0.0"
 }
