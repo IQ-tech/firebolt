@@ -12,6 +12,7 @@
     "test:validators": "cd packages/validators && yarn test",
     "test:client-core": "cd packages/client-core && yarn test",
     "test:client": "cd packages/client && yarn test",
+    "bootstrap": "lerna bootstrap --use-workspaces",
     "build:validators": "cd packages/validators && yarn build",
     "build:libs": "lerna run build --scope @iq-firebolt/client-core --scope @iq-firebolt/validators --scope @iq-firebolt/client",
     "versionup": "lerna version  --no-git-tag-version --force-publish",
