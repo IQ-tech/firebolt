@@ -33,7 +33,7 @@ export const BRPhoneResidentialMask = [
   /\d/,
 ]
 
-export const BRPhoneHybridMask = function BRPhoneHybridMask(value) {
+export function BRPhoneHybridMask(value) {
   const safeValue = value || ""
   const onlyNums = safeValue.replace(/\D/g, "")
   const filledResidencial = onlyNums.length >= 11
