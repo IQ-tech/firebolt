@@ -56,7 +56,6 @@ function useFireboltProvider({
 
   useEffect(() => {
     const debugStep = getDebugStepName();
-    console.log(firstStepPreRender)
     if (!!debugStep) {
       if (!debug)
         throw new Error(
@@ -64,7 +63,6 @@ function useFireboltProvider({
         );
       _startDebugStep(debugStep);
     } else if (firstStepPreRender) {
-      console.log('pre render');
       _preRenderFirstStep()
 
     } else {
@@ -75,7 +73,6 @@ function useFireboltProvider({
   function _preRenderFirstStep() {
     setIsFormLoading(false);
     const formattedFirstStep = formEngine.current.formatStepData(firstStepPreRender);
-    console.log(formattedFirstStep);
     setCurrentStep(formattedFirstStep.step);
     setCapturedData(formattedFirstStep.capturedData);
     setFormFlowMetadata(formattedFirstStep.meta);
