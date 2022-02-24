@@ -1,14 +1,14 @@
 import React from "react"
-import FireboltContext from "../../context";
+import FireboltContext from "../../context"
 
-import PropTypes from "prop-types";
-import useFireboltProvider from "./hook";
+import PropTypes from "prop-types"
+import useFireboltProvider from "./hook"
 
 const FireboltProvider = (props) => {
-  const values = useFireboltProvider(props);
+  const values = useFireboltProvider(props)
 
-  return <FireboltContext.Provider value={values} {...props} />;
-};
+  return <FireboltContext.Provider value={values} {...props} />
+}
 
 FireboltProvider.propTypes = {
   formAccess: PropTypes.shape({
@@ -21,7 +21,7 @@ FireboltProvider.propTypes = {
   children: PropTypes.any,
   withHistory: PropTypes.bool,
   theme: PropTypes.object, // # v2-todo
-  addons: PropTypes.object
-};
+  addons: PropTypes.object,
+}
 
-export default FireboltProvider;
+export default FireboltProvider

@@ -50,3 +50,11 @@ export interface IPropsPresetCollection {
 export interface IAddonsConfig {
   uiPropsPresets?: IPropsPresetCollection[] 
 }
+
+export interface IFormEngineOptions {
+  requestMetadata?: Object
+  debug?: boolean
+  addons?: IAddonsConfig
+}
+
+export {}

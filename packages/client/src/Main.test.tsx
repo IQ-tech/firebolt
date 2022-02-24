@@ -1,4 +1,4 @@
-import { render, fireEvent, waitFor, screen, debug } from "@testing-library/react"
+import { render, fireEvent, waitFor, screen } from "@testing-library/react"
 import axios from "axios"
 import { StepForm, Wizard, clearFormSession, FireboltProvider } from "./index"
 import Theme from "@iq-firebolt/material-theme"
@@ -33,7 +33,10 @@ describe("testing props-presets render", () => {
   })
 
   it("should render field with props:preset without collection", async () => {
-    axios.get.mockResolvedValue({
+    // ;(axios.get as jest.Mock).mockResolvedValue({
+    //   data: propsPresetsMock.getRequestMock("cod"),
+    // })
+    ;(axios.get as jest.Mock).mockResolvedValue({
       data: propsPresetsMock.getRequestMock("cod"),
     })
 
@@ -45,26 +48,31 @@ describe("testing props-presets render", () => {
   })
 
   it("should render field with props:preset with collection", async () => {
-    axios.get.mockResolvedValue({
+    ;(axios.get as jest.Mock).mockResolvedValue({
       data: propsPresetsMock.getRequestMock("cod:second-preset-collection"),
     })
 
-    MockComponent([propsPresetsMock.customCollection, propsPresetsMock.secondCollection])
-    
+    MockComponent([
+      propsPresetsMock.customCollection,
+      propsPresetsMock.secondCollection,
+    ])
+
     await waitFor(() => {})
 
-    expect(screen.getByPlaceholderText('second collection cod')).toBeInTheDocument()
+    expect(
+      screen.getByPlaceholderText("second collection cod")
+    ).toBeInTheDocument()
   })
 
   it("should render field with overwritten props:preset", async () => {
-    axios.get.mockResolvedValue({
+    ;(axios.get as jest.Mock).mockResolvedValue({
       data: propsPresetsMock.getRequestMock("bat", true),
     })
 
-   MockComponent([propsPresetsMock.customCollection])
+    MockComponent([propsPresetsMock.customCollection])
 
     await waitFor(() => {})
-    
-    expect(screen.getByPlaceholderText('Nome completo'))
+
+    expect(screen.getByPlaceholderText("Nome completo"))
   })
 })

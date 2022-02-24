@@ -5,14 +5,10 @@ import { clearFormSession } from "./helpers/session/clearFormSession"
 import getAutofillParam from "./helpers/getAutofillParam"
 import getUrlParams from "./helpers/getUrlParams"
 import formatFormOutput from "./formatters"
-import { IFormAccess, IAddonsConfig } from "./types"
+import { IFormAccess, IAddonsConfig, IFormEngineOptions } from "./types"
 
 // TODO: requestMataData Type.
-interface IFormEngine {
-  requestMetadata?: Object
-  debug?: boolean
-  addons?: IAddonsConfig
-}
+
 class FireboltFormEngine {
   requestsMetadata?: {}
   formName: string
@@ -22,7 +18,7 @@ class FireboltFormEngine {
 
   constructor(
     formAccess: IFormAccess,
-    { requestMetadata = {}, debug = false, addons = {} }: IFormEngine = {}
+    { requestMetadata = {}, debug = false, addons = {} }: IFormEngineOptions = {}
   ) {
     this.requestsMetadata = requestMetadata
     this.formName = formAccess?.formName
