@@ -61,7 +61,7 @@ class FireboltFormEngine {
 
   async nextStep(
     currentStepSlug: string,
-    stepFieldsPayload,
+    stepFieldsPayload: Object,
     { extraRequestsMetaData = {} } = {}
   ) {
     const autofillData = getAutofillParam()
@@ -89,12 +89,12 @@ class FireboltFormEngine {
     return formatFormOutput(previousData)
   }
 
-  uploadFile(file) {
+  uploadFile(file: any) { // TODO: type any
     const formSessionKey = getFormSession(this.formName)
     return this.APIService.upload(formSessionKey, file)
   }
 
-  async debugStep(stepSlug) {
+  async debugStep(stepSlug: string) {
     if (!this.debug) {
       throw new Error("debug step function only works with debug arg === true,")
     } else {
@@ -104,12 +104,12 @@ class FireboltFormEngine {
     }
   }
 
-  addRequestMetadataItem(key, data) {
+  addRequestMetadataItem(key: string, data: AnalyserOptions) {
     const currentReqMetadata = this.requestsMetadata
     this.modifyRequestMetadata({ ...currentReqMetadata, [key]: data })
   }
 
-  removeRequestMetadataItem(key) {
+  removeRequestMetadataItem(key: string) {
     const currentReqMetadata = this.requestsMetadata
     const currentReqMetaKeys = Object.keys(currentReqMetadata)
     const newMetadata = currentReqMetaKeys
