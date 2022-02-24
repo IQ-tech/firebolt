@@ -6,7 +6,7 @@ export {
   clearAllFormSessions,
 } from "./helpers/session/clearFormSession";
 export { default as uploadFilesToBucket } from "./requests/uploadFilesToBucket";
-export const createFireboltForm = (access: IFormAccess, options: IFormEngineOptions) => new FireboltFormEngine(access, options);
+export const createFireboltForm = (access: IFormAccess, options?: IFormEngineOptions) => new FireboltFormEngine(access, options);
 
 //entities
 export { default as File } from "./entities/File";

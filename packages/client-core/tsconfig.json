@@ -28,6 +28,7 @@
     // next to the .js files
     "outDir": "dist/types",
     "skipLibCheck": true,
-    "downlevelIteration": true
+    "downlevelIteration": true,
+    "isolatedModules": true
   }
 }

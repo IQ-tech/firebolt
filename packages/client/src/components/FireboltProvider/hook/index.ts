@@ -5,6 +5,7 @@ import getDebugStepName from "../../../helpers/getDebugStepName";
 import useStates from "./useStates";
 import useData from "./useData";
 import useBrowserNavigation from "./useBrowserNavigation";
+import { IFireboltProvider } from '../../../types'
 
 function useFireboltProvider({
   formAccess,
@@ -14,7 +15,7 @@ function useFireboltProvider({
   withHistory,
   stepQueryParam = "step",
   addons = {}
-}) {
+} : IFireboltProvider) {
   const formEngine = useRef(
     createFireboltForm(formAccess, { requestsMetadata, debug, addons })
   );

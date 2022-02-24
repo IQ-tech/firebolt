@@ -52,9 +52,7 @@ export interface IAddonsConfig {
 }
 
 export interface IFormEngineOptions {
-  requestMetadata?: Object
+  requestsMetadata?: Object
   debug?: boolean
   addons?: IAddonsConfig
 }
-
-export {}

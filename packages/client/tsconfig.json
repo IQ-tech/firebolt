@@ -1,6 +1,6 @@
 {
   // Change this to match your project
-  "include": ["src/index.js"],
+  "include": ["src/index.ts"],
   "exclude": ["/bin", "/obj"],
   "compilerOptions": {
     "baseUrl": "./",
@@ -32,6 +32,7 @@
       "firebolt-client/*": ["src/*"],
       "core/*": ["src/core/*"],
     },
-    "downlevelIteration": true
+    "downlevelIteration": true,
+    "isolatedModules": true
   }
 }

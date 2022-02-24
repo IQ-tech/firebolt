@@ -18,9 +18,9 @@ class FireboltFormEngine {
 
   constructor(
     formAccess: IFormAccess,
-    { requestMetadata = {}, debug = false, addons = {} }: IFormEngineOptions = {}
+    { requestsMetadata = {}, debug = false, addons = {} }: IFormEngineOptions = {}
   ) {
-    this.requestsMetadata = requestMetadata
+    this.requestsMetadata = requestsMetadata
     this.formName = formAccess?.formName
     this.debug = debug
     this.addons = addons
