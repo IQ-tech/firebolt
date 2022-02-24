@@ -1,21 +1,33 @@
 import APIService from "./services/API"
-
 import getFormSession from "./helpers/session/getFormSession"
 import createFormSession from "./helpers/session/createFormSession"
 import { clearFormSession } from "./helpers/session/clearFormSession"
 import getAutofillParam from "./helpers/getAutofillParam"
 import getUrlParams from "./helpers/getUrlParams"
 import formatFormOutput from "./formatters"
+import { IFormAccess, IAddonsConfig } from "./types"
 
-/* import startFormResponseMock from './__mocks__/startFormResponse'; */
-
+// TODO: requestMataData Type.
+interface IFormEngine {
+  requestMetadata?: Object
+  debug?: boolean
+  addons?: IAddonsConfig
+}
 class FireboltFormEngine {
-  // @ts-ignore
-  constructor(formAccess, { requestMetadata = {}, debug, addons = {} } = {}) {
+  requestsMetadata?: {}
+  formName: string
+  debug?: boolean
+  addons?: IAddonsConfig
+  APIService: APIService
+
+  constructor(
+    formAccess: IFormAccess,
+    { requestMetadata = {}, debug = false, addons = {} }: IFormEngine = {}
+  ) {
     this.requestsMetadata = requestMetadata
     this.formName = formAccess?.formName
-    this.debug = debug,
-    this.addons = addons,
+    this.debug = debug
+    this.addons = addons
     this.APIService = new APIService({ formAccess, debug })
   }
 
@@ -28,15 +40,17 @@ class FireboltFormEngine {
       this.clearSession()
     }
 
-    // @ts-ignore
-    const sessionId = urlParams.session_id
+    const sessionId = urlParams?.session_id
     const formSessionKey = sessionId ? sessionId : getFormSession(this.formName)
 
     if (formSessionKey) {
       createFormSession(this.formName, formSessionKey)
     }
     const firstStepData = await this.APIService.getStartForm(formSessionKey)
-    const formattedData = formatFormOutput(firstStepData, { autofillData, addons: this.addons })
+    const formattedData = formatFormOutput(firstStepData, {
+      autofillData,
+      addons: this.addons,
+    })
 
     if (!formSessionKey) {
       createFormSession(this.formName, formattedData?.auth)
@@ -45,7 +59,11 @@ class FireboltFormEngine {
     return formattedData
   }
 
-  async nextStep(currentStepSlug, stepFieldsPayload, {extraRequestsMetaData = {}} = {}) {
+  async nextStep(
+    currentStepSlug: string,
+    stepFieldsPayload,
+    { extraRequestsMetaData = {} } = {}
+  ) {
     const autofillData = getAutofillParam()
     const formSessionKey = getFormSession(this.formName)
     const nextStepData = await this.APIService.getNextStep(
@@ -53,13 +71,16 @@ class FireboltFormEngine {
       currentStepSlug,
       {
         stepFieldsPayload,
-        requestsMetadata: {...this.requestsMetadata, ...extraRequestsMetaData}
+        requestsMetadata: {
+          ...this.requestsMetadata,
+          ...extraRequestsMetaData,
+        },
       }
     )
     return formatFormOutput(nextStepData, autofillData)
   }
 
-  async previousStep(currentStepSlug) {
+  async previousStep(currentStepSlug: string) {
     const formSessionKey = getFormSession(this.formName)
     const previousData = await this.APIService.getPreviousStep(
       formSessionKey,
@@ -85,7 +106,7 @@ class FireboltFormEngine {
 
   addRequestMetadataItem(key, data) {
     const currentReqMetadata = this.requestsMetadata
-    this._modifyRequestMetadata({ ...currentReqMetadata, [key]: data })
+    this.modifyRequestMetadata({ ...currentReqMetadata, [key]: data })
   }
 
   removeRequestMetadataItem(key) {
@@ -95,10 +116,10 @@ class FireboltFormEngine {
       .filter((metaKey) => metaKey !== key)
       .map((itemKey) => currentReqMetaKeys[itemKey])
 
-    this._modifyRequestMetadata(newMetadata)
+    this.modifyRequestMetadata(newMetadata)
   }
 
-  _modifyRequestMetadata(newPayload) {
+  private modifyRequestMetadata(newPayload) {
     // v2-TODO sync with session storage
     this.requestsMetadata = newPayload
   }

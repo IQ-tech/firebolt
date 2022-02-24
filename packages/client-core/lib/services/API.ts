@@ -3,14 +3,20 @@ import {
   formatStepResponseData,
   formatReqPayload,
 } from "../helpers/formatData";
-
-/* import startFormWithUpload from "../__mocks__/startFormWithUpload"; */
-
+import { IFormAccess } from '../types'
+interface IApiService {
+  formAccess: IFormAccess,
+  debug?: boolean
+}
 class APIService {
-  constructor({ formAccess, debug }) {
-    const rootEndpoint = this._formatRoot(formAccess?.root);
+  debug?: boolean;
+  formName?: string;
+  endpoints?: { root: string; base: string; };
+  
+  constructor({ formAccess, debug }: IApiService) {
+    const rootEndpoint = this.formatRoot(formAccess?.root);
     this.debug = debug;
-    this.formName = formAccess.formName;
+    this.formName = formAccess?.formName;
 
     this.endpoints = {
       root: rootEndpoint,
@@ -18,7 +24,7 @@ class APIService {
     };
   }
 
-  async getStartForm(sessionKey) {
+  async getStartForm(sessionKey?: string) {
     const userHasLocalSession = !!sessionKey;
     const headersConfig = userHasLocalSession
       ? { authorization: `Bearer ${sessionKey}` }
@@ -89,7 +95,7 @@ class APIService {
     return await axios(config);
   }
 
-  _formatRoot(root) {
+  private formatRoot(root) {
     const urlEndsWithSlash = root.endsWith("/");
     return urlEndsWithSlash ? root.slice(0, -1) : `${root}`;
   }

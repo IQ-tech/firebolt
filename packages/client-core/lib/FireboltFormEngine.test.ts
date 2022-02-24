@@ -27,14 +27,12 @@ const form = new FireboltFormEngine({
 })
 
 describe("start form tests", () => {
-  beforeAll(() => {
+  beforeEach(() => {
     clearAllFormSessions()
   })
 
   test("start form correctly creates session key on localStorage", async () => {
-    axios.get.mockResolvedValue({ data: startFormResponse })
-
-    clearAllFormSessions()
+    (axios.get as jest.Mock).mockResolvedValue({ data: startFormResponse })
 
     // get first step
     await form.start()
@@ -51,7 +49,7 @@ describe("start form tests", () => {
   })
 
   test("start form uses session key already created on localstorage", async () => {
-    axios.get.mockResolvedValue({ data: nextStepFormResponse })
+    (axios.get as jest.Mock).mockResolvedValue({ data: nextStepFormResponse })
 
     const formAccess = {
       root: "https://another-firebolt-api/",
@@ -62,7 +60,7 @@ describe("start form tests", () => {
     const form = new FireboltFormEngine(formAccess)
     await form.start()
 
-    expect(axios.get).lastCalledWith(
+    expect((axios.get as jest.Mock)).lastCalledWith(
       "https://another-firebolt-api/form/myCustomForm",
       expect.objectContaining({
         headers: expect.objectContaining({
@@ -80,11 +78,9 @@ describe("start form tests", () => {
 describe("tests about the form autofill by base64 at URL", () => {
   const autoFillBase64 =
     "autofill=JTdCJTI3bmFtZSUyNyUzQSU3QiUyN3ZhbHVlJTI3JTNBJTI3UnVhbiUyMEJlcnQlQzMlQTklMjclMkMlMjdtYXNrJTI3JTNBJTI3JTI3JTdEJTJDJTI3Y3BmJTI3JTNBJTdCJTI3dmFsdWUlMjclM0ElMjc0NTAuNTkyLjczOC01NyUyNyUyQyUyN21hc2slMjclM0ElMjdjcGYlMjclN0QlMkMlMjdlbWFpbCUyNyUzQSU3QiUyN3ZhbHVlJTI3JTNBJTI3YmVydGUucnVhbiU0MGdtYWlsLmNvbSUyNyUyQyUyN21hc2slMjclM0ElMjclMjclN0QlMkMlMjdpbmNvbWUlMjclM0ElN0IlMjd2YWx1ZSUyNyUzQSUyNzYwMDAlMjclMkMlMjdtYXNrJTI3JTNBJTI3bW9uZXklMjclN0QlMkMlMjdwaG9uZSUyNyUzQSU3QiUyN3ZhbHVlJTI3JTNBJTI3NDI5OTk4ODM3NjglMjclMkMlMjdtYXNrJTI3JTNBJTI3cGhvbmVfbnVtYmVyJTI3JTdEJTdE"
-
-  beforeEach(() => {
-    clearAllFormSessions()
-
-    axios.get.mockResolvedValue({ data: startFormResponse })
+  
+  test("form.start() must autofill value prop of the field email at the fields array", async () => {
+    (axios.get as jest.Mock).mockResolvedValue({ data: startFormResponse })
 
     Object.defineProperty(window, "location", {
       writable: true,
@@ -93,9 +89,7 @@ describe("tests about the form autofill by base64 at URL", () => {
         href: autoFillBase64,
       },
     })
-  })
 
-  test("form.start() must autofill value prop of the field email at the fields array", async () => {
     const formStartResult = await form.start()
     expect(formStartResult.step.data.fields[1]).toHaveProperty("value")
     expect(formStartResult.step.data.fields[1].value).toBe(
@@ -110,19 +104,19 @@ describe("testing props:preset", () => {
   })
 
   test("form.start() should apply props:preset without collection", async () => {
-    axios.get.mockResolvedValue({ data: presetsMock.getRequestMock("bat") })
+    (axios.get as jest.Mock).mockResolvedValue({ data: presetsMock.getRequestMock("bat") })
     const formStartResult = await form.start()
     expect(formStartResult?.step?.data?.fields[0]?.["ui:props"].cenoura).toBe("cenoura")
   })
 
   test("form.start() should apply props:preset with collection", async() => {
-    axios.get.mockResolvedValue({ data: presetsMock.getRequestMock("cod:second-preset-collection") })
+    (axios.get as jest.Mock).mockResolvedValue({ data: presetsMock.getRequestMock("cod:second-preset-collection") })
     const formStartResult = await form.start()
     expect(formStartResult?.step?.data?.fields[0]?.["ui:props"].cebola).toBe("cebola")
   })
 
   test("form.start() should overwrite props:preset", async() => {
-    axios.get.mockResolvedValue({ data: presetsMock.getRequestMock("bat") })
+    (axios.get as jest.Mock).mockResolvedValue({ data: presetsMock.getRequestMock("bat") })
     const formStartResult = await form.start()
     expect(formStartResult?.step?.data?.fields[0]?.["ui:props"].cenoura).toBe("cenoura")
     expect(formStartResult?.step?.data?.fields[0]?.["ui:props"].label).toBe("Nome completo")

@@ -1,7 +1,14 @@
 import Step from "../entities/Step";
 import FormMetaData from "../entities/FormMeta";
 
-export function formatStepResponseData(requestData = {}) {
+interface IRequestData {
+  auth?: string
+  step?: Object
+  meta?: Object
+  capturedData?: Object
+}
+
+export function formatStepResponseData(requestData: IRequestData = {}) {
   const { auth, step = {}, meta = {}, capturedData = {} } = requestData;
 
   const formattedData = {

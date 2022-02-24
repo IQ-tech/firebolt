@@ -1,4 +1,4 @@
-export interface FormSource {
+export interface IFormAccess {
   /** Firebolt root endpoint */
   root: string;
   /** Identifier to find form on endpoint */
@@ -8,7 +8,7 @@ export interface FormSource {
 // ----------- V2-todo ------------
 
 export interface RemoteFormConfig {
-  access: FormSource;
+  access: IFormAccess;
   debug: boolean;
   requestMetadata: any;
 }
@@ -34,4 +34,19 @@ export interface Endpoints {
   getPreviousStepRoute: GetPreviousStepRoute;
   /** return url to get previous step */
   getDebugStepRoute: GetDebugStepRoute;
+};
+
+export interface IUrlParams {
+  [key: string]: string
+};
+
+export interface IPropsPresetCollection {
+  name: string
+  presets: {
+    [key: string]: any
+  }
+};
+
+export interface IAddonsConfig {
+  uiPropsPresets?: IPropsPresetCollection[] 
 }

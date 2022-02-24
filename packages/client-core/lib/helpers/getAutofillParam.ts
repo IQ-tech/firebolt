@@ -1,6 +1,6 @@
 export default function getAutofillParam() {
   const params = new URLSearchParams(window?.location?.search);
-  let autoFillString = params.get("autofill");
+  let autoFillString = params?.get("autofill");
 
   if (autoFillString) {
     autoFillString = window.atob(autoFillString);

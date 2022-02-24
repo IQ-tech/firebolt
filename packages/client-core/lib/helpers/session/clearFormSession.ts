@@ -1,11 +1,11 @@
 import { LOCALSTORE_KEY } from "../../constants";
 import getFireboltLocalStorage from "./getFireboltLocalStorage";
 
-export function clearAllFormSessions() {
-  localStorage.removeItem(LOCALSTORE_KEY);
+export function clearAllFormSessions(): void {
+ localStorage?.removeItem(LOCALSTORE_KEY);
 }
 
-export function clearFormSession(formName) {
+export function clearFormSession(formName?: string) {
   const fireboltLocalStorage = getFireboltLocalStorage();
   const sessions = fireboltLocalStorage?.sessionKeys || {};
   const filteredSessionsKeys = Object.keys(sessions)

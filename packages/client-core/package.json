@@ -47,10 +47,5 @@
     "rollup": "^2.67.1",
     "rollup-plugin-dts": "^4.1.0",
     "rollup-plugin-esbuild": "^4.8.2"
-  },
-  "jest": {
-    "setupFiles": [
-      "<rootDir>/__jest__/browserMocks.js"
-    ]
   }
 }

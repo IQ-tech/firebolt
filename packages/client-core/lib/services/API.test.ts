@@ -39,23 +39,24 @@ describe("Navigation requests receive correct data", () => {
   });
 
   test("start form return correct data", async () => {
-    axios.get.mockResolvedValue({ data: startFormResponse });
+    (axios.get as jest.Mock).mockResolvedValue({ data: startFormResponse });
     const response = await serviceInstance.getStartForm();
     expect(response).toEqual(expectedNewStep);
   });
 
   test("next step return correct data", async () => {
-    axios.post.mockResolvedValue({ data: nextStepFormResponse });
+    (axios.post as jest.Mock).mockResolvedValue({ data: nextStepFormResponse });
     const response = await serviceInstance.getNextStep(
       "sessionKey",
       "personal_data",
-      { name: "teste cenoura", email: "batata@teste.com" }
-    );
+      { stepFieldsPayload: "test cenoura", requestsMetadata: "paranaue" }
+      );
+      // { name: "teste cenoura", email: "batata@teste.com" }
     expect(response).toEqual(expectedNewStep);
   });
 
   test("previous step must return correct data", async () => {
-    axios.get.mockResolvedValue({ data: previousStepFormResponse });
+    (axios.get as jest.Mock).mockResolvedValue({ data: previousStepFormResponse });
     const response = await serviceInstance.getPreviousStep(
       "sessionKey",
       "personal_data"
