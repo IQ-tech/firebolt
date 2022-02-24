@@ -24,7 +24,6 @@ export interface LocalFormConfig {
 export type GetPreviousStepRoute = (currentStep: string | number) => string;
 
 export type GetDebugStepRoute = (stepId: string | number) => string;
-
 export interface Endpoints {
   /** Route to start the form */
   base: string;
@@ -35,7 +34,6 @@ export interface Endpoints {
   /** return url to get previous step */
   getDebugStepRoute: GetDebugStepRoute;
 };
-
 export interface IUrlParams {
   [key: string]: string
 };
@@ -46,13 +44,73 @@ export interface IPropsPresetCollection {
     [key: string]: any
   }
 };
-
 export interface IAddonsConfig {
   uiPropsPresets?: IPropsPresetCollection[] 
 }
-
 export interface IFormEngineOptions {
   requestsMetadata?: Object
   debug?: boolean
   addons?: IAddonsConfig
+}
+export interface IDefaultStep {
+  data: {
+    slug: string,
+    type: string,
+    friendlyName: string,
+    fields: Object[],
+  },
+  position: number,
+  webhookResult: Object,
+}
+
+export interface IFormResponseData {
+  auth: string
+  meta: IFormMetadata
+  capturedData: {
+    [key: string]: any
+  }
+  step: IFormStep
+}
+
+export interface IFormStep {
+  data: IStepData
+  webhookResult: Object
+  position: number
+}
+
+export interface IFormStepBasicInfo {
+  slug: string
+  friendlyName: string
+  position: number
+}
+
+export interface IFormMetadata {
+  lastStep: string
+  steps: IFormStepBasicInfo[]
+}
+
+export interface IStepData {
+  slug: string
+  type: string
+  friendlyName: string
+  fields: IStepConfigField[]
+}
+
+export interface IStepConfigFieldUiProps {
+  label?: string
+  placeholder?: string;
+  [key : string]: any;
+}
+export interface IStepConfigFieldValidator {
+  type: string
+}
+
+export interface IStepConfigField {
+  slug: string
+  "ui:widget": string
+  "ui:props": IStepConfigFieldUiProps
+  validators: IStepConfigFieldValidator[]
+  meta: Object
+  component: string
+  value?: any
 }

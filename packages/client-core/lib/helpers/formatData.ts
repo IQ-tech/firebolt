@@ -1,24 +1,51 @@
-import Step from "../entities/Step";
-import FormMetaData from "../entities/FormMeta";
+import { 
+  IFormResponseData,
+  IFormStep,
+  IFormStepBasicInfo,
+} from "../types"
 
-interface IRequestData {
-  auth?: string
-  step?: Object
-  meta?: Object
-  capturedData?: Object
-}
+export function formatStepResponseData(requestData): IFormResponseData {
+  const safeRequestData = requestData || {}
+  const {
+    auth,
+    step: stepFromJSON,
+    meta: metaFromJSON,
+    capturedData = {},
+  } = safeRequestData
 
-export function formatStepResponseData(requestData: IRequestData = {}) {
-  const { auth, step = {}, meta = {}, capturedData = {} } = requestData;
+  const formatFormMetaItem = ({
+    slug = "",
+    position = Number(),
+    friendlyname = "",
+  } = {}): IFormStepBasicInfo => {
+    return { slug, friendlyName: friendlyname, position }
+  }
+
+  const formatStepData = (stepFromJSON): IFormStep => {
+    const { data, webhookResult = {} } = stepFromJSON || {}
+    const { friendlyname: friendlyName = "", ...restData } = data || {}
+    return {
+    ...stepFromJSON,
+    webhookResult,
+    data: {
+      ...restData,
+      friendlyName,
+    }
+  }}
+
+  const metaSteps = metaFromJSON?.forms || []
 
   const formattedData = {
     auth,
-    meta: FormMetaData(meta),
+    step: formatStepData(stepFromJSON),
+    meta: {
+      lastStep: metaFromJSON?.lastStep,
+      steps: metaSteps.map(item => formatFormMetaItem(item))
+    },
     capturedData,
-    step: Step(step),
-  };
+  }
 
-  return formattedData;
+  return formattedData
 }
 
 export function formatReqPayload({
@@ -29,7 +56,7 @@ export function formatReqPayload({
   const formattedFields = Object.keys(stepFieldsPayload).map((itemKey) => ({
     slug: itemKey,
     value: stepFieldsPayload[itemKey],
-  }));
+  }))
 
   return JSON.stringify({
     step: {
@@ -37,5 +64,5 @@ export function formatReqPayload({
       fields: formattedFields,
     },
     metadata,
-  });
+  })
 }

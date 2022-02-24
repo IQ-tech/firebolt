@@ -24,6 +24,7 @@ describe("Navigation requests receive correct data", () => {
         expect.objectContaining({
           friendlyName: expect.any(String),
           position: expect.any(Number),
+          slug: expect.any(String)
         }),
       ]),
     }),
