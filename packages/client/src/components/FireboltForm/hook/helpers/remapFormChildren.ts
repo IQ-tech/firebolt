@@ -11,7 +11,7 @@ export default function remapFormChildren({
 }) {
   const insertsChildrenArray = React.Children.toArray(insertsChildren)
 
-  const slugInsertsMap = insertsChildrenArray.reduce((acc, insertComponent) => {
+  const slugInsertsMap = insertsChildrenArray.reduce((acc: any, insertComponent: any) => {
     const componentProps = insertComponent?.props
     const insertBefore = componentProps?.before
     const insertAfter = componentProps?.after

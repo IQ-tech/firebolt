@@ -1,16 +1,12 @@
 import React from "react"
-import useFirebolt from "../../hooks/useFirebolt";
-import FireboltForm from "../FireboltForm";
-import Insert from "../FireboltForm/Insert";
+import useFirebolt from "../../hooks/useFirebolt"
+import FireboltForm from "../FireboltForm"
+import Insert from "../FireboltForm/Insert"
 
 const StepForm = (props) => {
-  const {
-    goNextStep,
-    goPreviousStep,
-    remoteErrors,
-    currentStep
-  } = useFirebolt();
-  
+  const { goNextStep, goPreviousStep, remoteErrors, currentStep }: any =
+    useFirebolt()
+
   return (
     <FireboltForm
       schema={currentStep.data?.fields}
@@ -19,9 +15,9 @@ const StepForm = (props) => {
       remoteErrors={remoteErrors}
       {...props}
     />
-  );
-};
+  )
+}
 
-StepForm.Insert = Insert;
+StepForm.Insert = Insert
 
-export default StepForm;
+export default StepForm

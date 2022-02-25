@@ -1,10 +1,10 @@
 import React from "react"
-import evaluate from "simple-evaluate";
-import classnames from "classnames";
+import evaluate from "simple-evaluate"
+import classnames from "classnames"
 
-import getFieldComponent from "./helpers/getFieldComponent";
-import remapFormChildren from "./helpers/remapFormChildren";
-import getConditionalProps from "./helpers/getConditionalProps";
+import getFieldComponent from "./helpers/getFieldComponent"
+import remapFormChildren from "./helpers/remapFormChildren"
+import getConditionalProps from "./helpers/getConditionalProps"
 
 export default function useFormRendering({
   schema,
@@ -20,7 +20,7 @@ export default function useFormRendering({
   classes,
 }) {
   // get correct widgets components
-  const fieldsChildren = schema.map((field = {}, index) => {
+  const fieldsChildren = schema.map((field: any = {}, index) => {
     const {
       slug,
       meta = {},
@@ -29,41 +29,41 @@ export default function useFormRendering({
       "ui:props": propsFromSchema = {},
       "ui:styles": propsStyles = {},
       "ui:props-conditional": propsConditional,
-    } = field;
+    } = field
 
     const computedClasses = classnames(classes["firebolt-input"], {
       [classes["firebolt-input--half"]]: propsStyles.size === "half",
-    });
+    })
 
-    const safeTheme = theme || {};
-    const hasConditionalRender = !!conditional;
+    const safeTheme = theme || {}
+    const hasConditionalRender = !!conditional
     const isConditionallyValid = hasConditionalRender
       ? evaluate({ step: formPayload }, conditional)
-      : true;
-    const shouldHideField = widgetName === "hidden" || !isConditionallyValid;
-    const fieldId = `firebolt-form-field-${slug}`;
-    const fieldValidators = field?.validators || [];
+      : true
+    const shouldHideField = widgetName === "hidden" || !isConditionallyValid
+    const fieldId = `firebolt-form-field-${slug}`
+    const fieldValidators = field?.validators || []
     const isRequiredField = !!fieldValidators.find(
       (validator) => validator?.type === "required"
-    );
-    const isOptionalField = !isRequiredField;
-    const value = formPayload[slug] || "";
+    )
+    const isOptionalField = !isRequiredField
+    const value = formPayload[slug] || ""
     const hasError =
       Object.keys(fieldValidationErrors).includes(slug) ||
-      Object.keys(fieldManuallySetErrors).includes(slug);
+      Object.keys(fieldManuallySetErrors).includes(slug)
     const errorMessage =
       fieldValidationErrors?.[slug] ||
       fieldManuallySetErrors?.[slug] ||
-      "Campo inválido";
+      "Campo inválido"
 
     const FieldComponent = getFieldComponent({
       widgetName,
       customTheme: safeTheme,
-    });
+    })
     const fieldsPropsConditional = getConditionalProps({
       formPayload,
       propsConditional,
-    });
+    })
 
     // all fields receives this props by default
     const commonFieldsProps = {
@@ -84,13 +84,13 @@ export default function useFormRendering({
       fieldId,
       manuallySetFieldError: (message) => setFieldWarning(slug, message, true),
       clearManuallySetError: () => clearFieldWarning(slug, true),
-    };
+    }
 
     const componentProps = {
       ...propsFromSchema,
       ...fieldsPropsConditional,
       ...commonFieldsProps,
-    };
+    }
 
     if (!shouldHideField) {
       return (
@@ -101,15 +101,15 @@ export default function useFormRendering({
         >
           <FieldComponent {...componentProps} />
         </div>
-      );
+      )
     }
-  });
+  })
 
   // join field widgets with form inserts
   const formChildren = remapFormChildren({
     fieldsChildren,
     insertsChildren,
-  });
+  })
 
-  return { formChildren };
+  return { formChildren }
 }

@@ -1,11 +1,21 @@
 import { useEffect } from "react";
-import { getUrlParams } from "@iq-firebolt/client-core";
+import { getUrlParams, IFormMetadata, IFormStep, IStepData, IUrlParams } from "@iq-firebolt/client-core";
 import getDebugStepName from "../../../helpers/getDebugStepName";
 
 /**
  * This hook should contain browser history logic
  * (this logic is only used if FireboltProvider is provided with `withHistory` prop)
  */
+
+// interface IBrowserNavigation {
+//   withHistory?: boolean
+//   currentStep?: IFormStep
+//   formflowMetadata?: IFormMetadata
+//   goPreviousStep?(): void
+//   goNextStep?(): void
+//   debug?: boolean
+//   stepQueryParam?: string
+// }
 
 export default function useBrowserNavigation({
   withHistory,
@@ -15,7 +25,7 @@ export default function useBrowserNavigation({
   goNextStep,
   debug,
   stepQueryParam,
-}) {
+}: any) {
   useEffect(() => {
     if (withHistory && !!currentStep.data.slug) {
       setPopStateEvent();
@@ -30,7 +40,7 @@ export default function useBrowserNavigation({
 
   function _onPopStateEventHandler(e: any = {}) {
     const previousStep = e?.state?.position;
-    const totalSteps = formflowMetadata?.lastStep;
+    const totalSteps = Number(formflowMetadata?.lastStep);
     const currentStepPosition = currentStep?.position;
     const isGoingToPreviousStep =
       !!previousStep && previousStep === currentStepPosition - 1;
@@ -53,7 +63,7 @@ export default function useBrowserNavigation({
     const queryParam = isDebugging ? "debug-step" : stepQueryParam;
 
     const filteredParamsKeys = Object.keys(currentParams).filter(
-      (key) => key !== "debug-step" && key !== stepQueryParam
+      (key: string) => key !== "debug-step" && key !== stepQueryParam
     );
 
     const newQuery = filteredParamsKeys.reduce(

@@ -76,7 +76,7 @@ export default function useFormState({ schema, autoFill, remoteErrors }) {
 
     const erroredFieldsSlugs = Object.keys(usedState)
     const filteredSlugs = erroredFieldsSlugs
-      .filter((errorSlug) => invalidFields.includes(errorSlug))
+      .filter((errorSlug: any) => invalidFields.includes(errorSlug))
       .filter((slug) => slug !== fieldSlug)
     const newErroredFields = filteredSlugs.reduce((acc, slug) => {
       return {

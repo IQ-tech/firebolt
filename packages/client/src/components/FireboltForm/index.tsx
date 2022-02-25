@@ -6,6 +6,23 @@ import useFireboltForm from "./hook"
 // @ts-ignore
 import classes from "./style.module.css"
 
+interface outroTest {
+  submitBtnText?: any
+  previousBtnText?: any
+  className?: any
+  customActionsChild?: any
+  children?: any
+  autoFill?: any
+
+  theme?: any
+  schema?: any
+  remoteErrors?: any
+  onSubmit?: any
+  onGoBack?: any
+  onChange?: any
+  onFocusField?: any
+}
+
 const FireboltForm = ({
   submitBtnText = "Next Step",
   previousBtnText = "Previous Step",
@@ -21,7 +38,7 @@ const FireboltForm = ({
   onGoBack,
   onChange,
   onFocusField,
-}) => {
+}: outroTest) => {
   const { handleSubmit, formChildren, actionsChildData, handleGoBack } =
     useFireboltForm({
       autoFill,

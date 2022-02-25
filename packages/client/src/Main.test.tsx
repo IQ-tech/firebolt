@@ -1,19 +1,21 @@
-import { render, fireEvent, waitFor, screen } from "@testing-library/react"
+import { render, waitFor, screen } from "@testing-library/react"
 import axios from "axios"
 import { StepForm, Wizard, clearFormSession, FireboltProvider } from "./index"
 import Theme from "@iq-firebolt/material-theme"
 import * as propsPresetsMock from "../__mocks__/props-presets-steps" // TODO - create common mocks on root
 
+import { IFormAccess, IPropsPresetCollection } from "@iq-firebolt/client-core"
+
 jest.mock("axios")
 
-const formAccess = {
+const formAccess: IFormAccess = {
   root: "http://api.com.br/",
   formName: "testing",
 }
 
-const DefaultTemplate = (fireboltStep) => <StepForm theme={Theme} />
+const DefaultTemplate = (firebolt) => <StepForm theme={Theme} />
 
-const MockComponent = (addons = []) =>
+const MockComponent = (addons: IPropsPresetCollection[]) =>
   render(
     <FireboltProvider
       formAccess={formAccess}
@@ -33,9 +35,6 @@ describe("testing props-presets render", () => {
   })
 
   it("should render field with props:preset without collection", async () => {
-    // ;(axios.get as jest.Mock).mockResolvedValue({
-    //   data: propsPresetsMock.getRequestMock("cod"),
-    // })
     ;(axios.get as jest.Mock).mockResolvedValue({
       data: propsPresetsMock.getRequestMock("cod"),
     })
@@ -44,7 +43,7 @@ describe("testing props-presets render", () => {
 
     await waitFor(() => {})
 
-    expect(screen.getByPlaceholderText("write something")).toBeInTheDocument()
+    expect(screen.getByPlaceholderText(/write something/)).toBeInTheDocument()
   })
 
   it("should render field with props:preset with collection", async () => {
@@ -58,9 +57,8 @@ describe("testing props-presets render", () => {
     ])
 
     await waitFor(() => {})
-
     expect(
-      screen.getByPlaceholderText("second collection cod")
+      screen.getByPlaceholderText(/second collection cod/)
     ).toBeInTheDocument()
   })
 
@@ -72,7 +70,6 @@ describe("testing props-presets render", () => {
     MockComponent([propsPresetsMock.customCollection])
 
     await waitFor(() => {})
-
-    expect(screen.getByPlaceholderText("Nome completo"))
+    expect(screen.getByPlaceholderText(/Nome completo/)).toBeInTheDocument()
   })
 })

@@ -19,7 +19,7 @@ describe("FireboltProvider component", () => {
     expect(result.current.isFormLoading).toBe(false)
 
     act(() => {
-      result.current.goNextStep()
+      result.current.goNextStep("")
     })
 
     await waitForNextUpdate()
@@ -65,7 +65,7 @@ describe("FireboltProvider component", () => {
     expect(result.current.isFormLoading).toBe(false)
 
     act(() => {
-      result.current.goNextStep()
+      result.current.goNextStep("")
     })
 
     await waitForNextUpdate()

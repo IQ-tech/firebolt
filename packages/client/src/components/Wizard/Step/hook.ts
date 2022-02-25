@@ -9,7 +9,7 @@ export default function useStep() {
     capturedData,
     remoteErrors,
     clearSession
-  } = useFirebolt();
+  }: any = useFirebolt();
 
   const { data: stepData = {}, ...rest } = currentStep;
 

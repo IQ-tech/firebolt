@@ -23,6 +23,5 @@ module.exports = {
       lines: MINIMUM_PERCENTAGE_OF_COVERAGE,
     },
   },
-
-  // TODO: jest-transform-stub ????
+  testEnvironment: "jsdom",
 }
