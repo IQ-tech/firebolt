@@ -1,16 +1,16 @@
-const STATE_OPTIONS = require ("./constants/state-options")
+import STATE_OPTIONS from "./constants/state-options"
 
 // masks
-const CPFMask = require("./masks/br/CPF")
-const CEPMask = require("./masks/br/CEP")
-const BRCurrency = require("./masks/br/currency")
-const {
+import CPFMask from "./masks/CPF"
+import CEPMask from "./masks/CEP"
+import BRCurrency from "./masks/currency"
+import {
   BRPhoneMask,
   BRPhoneResidentialMask,
   BRPhoneHybridMask,
-} = require("./masks/br/phone")
-const MonthYearMask = require("./masks/date/month-year")
-const DayMonthYearMask = require("./masks/date/day-month-year")
+} from "./masks/phone"
+import MonthYearMask from "./masks/date/month-year"
+import DayMonthYearMask from "./masks/date/day-month-year"
 
 const UIPropsPresetsList = {
   "br-states": {
@@ -21,51 +21,51 @@ const UIPropsPresetsList = {
     placeholder: "000.000.000-00",
     label: "CPF",
     mask: CPFMask,
-    useNumericKeyboard: true
+    useNumericKeyboard: true,
   },
   "br-cep": {
     label: "CEP",
     placeholder: "00000-000",
     mask: CEPMask,
-    useNumericKeyboard: true
+    useNumericKeyboard: true,
   },
   "br-currency": {
     placeholder: "R$ 00.000,00",
     mask: BRCurrency,
-    useNumericKeyboard: true
+    useNumericKeyboard: true,
   },
   "br-phone": {
     htmlType: "tel",
     label: "Celular com DDD",
     placeholder: "(00) 00000-0000",
     mask: BRPhoneMask,
-    useNumericKeyboard: true
+    useNumericKeyboard: true,
   },
   "br-phone-residential": {
     htmlType: "tel",
     label: "Telefone com DDD",
     placeholder: "(00) 0000-0000",
     mask: BRPhoneResidentialMask,
-    useNumericKeyboard: true
+    useNumericKeyboard: true,
   },
   "br-phone-hybrid": {
     htmlType: "tel",
     label: "Telefone com DDD",
     placeholder: "(00) 0000-0000",
     mask: BRPhoneHybridMask,
-    useNumericKeyboard: true
+    useNumericKeyboard: true,
   },
   "day-month-year": {
     placeholder: "DD/MM/AAAA",
     label: "",
     mask: DayMonthYearMask,
-    useNumericKeyboard: true
+    useNumericKeyboard: true,
   },
   "month-year": {
     placeholder: "MM/AAAA",
     label: "",
     mask: MonthYearMask,
-    useNumericKeyboard: true
+    useNumericKeyboard: true,
   },
   "month-day-options": {
     options: [...Array(31).keys()].map((_, i) => ({
@@ -75,9 +75,7 @@ const UIPropsPresetsList = {
   },
 }
 
-
-
-module.exports = {
+export default {
   name: "br-addons",
-  presets: UIPropsPresetsList
+  presets: UIPropsPresetsList,
 }

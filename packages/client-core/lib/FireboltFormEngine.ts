@@ -73,7 +73,7 @@ class FireboltFormEngine {
         },
       }
     )
-    return formatFormOutput(nextStepData, autofillData)
+    return formatFormOutput(nextStepData, { addons: this.addons, autofillData })
   }
 
   async previousStep(currentStepSlug: string) {
@@ -82,7 +82,7 @@ class FireboltFormEngine {
       formSessionKey,
       currentStepSlug
     )
-    return formatFormOutput(previousData)
+    return formatFormOutput(previousData, { addons: this.addons })
   }
 
   uploadFile(file: any) { // TODO: type any

@@ -1,41 +1,42 @@
-module.exports = function phoneMask(value) {
+export const BRPhoneMask = [
+  "(",
+  /\d/,
+  /\d/,
+  ")",
+  " ",
+  /\d/,
+  /\d/,
+  /\d/,
+  /\d/,
+  /\d/,
+  "-",
+  /\d/,
+  /\d/,
+  /\d/,
+  /\d/,
+]
+
+export const BRPhoneResidentialMask = [
+  "(",
+  /\d/,
+  /\d/,
+  ")",
+  " ",
+  /\d/,
+  /\d/,
+  /\d/,
+  /\d/,
+  "-",
+  /\d/,
+  /\d/,
+  /\d/,
+  /\d/,
+]
+
+export function BRPhoneHybridMask(value) {
   const safeValue = value || ""
   const onlyNums = safeValue.replace(/\D/g, "")
   const filledResidencial = onlyNums.length >= 11
 
-  const residencialMask = [
-    "(",
-    /\d/,
-    /\d/,
-    ")",
-    " ",
-    /\d/,
-    /\d/,
-    /\d/,
-    /\d/,
-    "-",
-    /\d/,
-    /\d/,
-    /\d/,
-    /\d/,
-  ]
-
-  const phoneMask = [
-    "(",
-    /\d/,
-    /\d/,
-    ")",
-    " ",
-    /\d/,
-    /\d/,
-    /\d/,
-    /\d/,
-    /\d/,
-    "-",
-    /\d/,
-    /\d/,
-    /\d/,
-    /\d/,
-  ]
-  return filledResidencial ? phoneMask : residencialMask
+  return filledResidencial ? BRPhoneMask : BRPhoneResidentialMask
 }
