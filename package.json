@@ -5,7 +5,7 @@
     "packages/*"
   ],
   "scripts": {
-    "setup":"yarn && yarn build:libs",
+    "setup": "yarn && yarn build:libs",
     "clean": "lerna clean",
     "bootstrap": "lerna bootstrap --use-workspaces",
     "start": "lerna run dev --scope @iq-firebolt/lab --stream",
@@ -27,6 +27,7 @@
     "eslint": "^7.32.0",
     "eslint-plugin-jest": "^24.5.0",
     "jest": "^27.2.4",
+    "jest-transform-stub": "^2.0.0",
     "lerna": "^4.0.0",
     "rimraf": "^3.0.2",
     "ts-jest": "^27.0.5",
