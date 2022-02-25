@@ -1,6 +1,7 @@
+import { IDefaultStep, IFormMetadata, IFormStep } from "@iq-firebolt/client-core";
 import { useState } from "react";
 
-const defaultStep = {
+const defaultStep: IDefaultStep = {
   data: {
     slug: "",
     type: "",
@@ -12,11 +13,11 @@ const defaultStep = {
 };
 
 export default function useData() {
-  const [currentStep, setCurrentStep] = useState(defaultStep);
+  const [currentStep, setCurrentStep] = useState<IDefaultStep>(defaultStep);
 
   // holds the form data before updating state, this is used by the wizard in the beforeChangeStep callback
-  const [stagedStep, setStagedStep] = useState();
-  const [formflowMetadata, setFormFlowMetadata] = useState({
+  const [stagedStep, setStagedStep] = useState<IFormStep>({} as IFormStep);
+  const [formflowMetadata, setFormFlowMetadata] = useState<IFormMetadata>({
     steps: [],
     lastStep: null,
   });

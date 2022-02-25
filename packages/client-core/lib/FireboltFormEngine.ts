@@ -100,7 +100,7 @@ class FireboltFormEngine {
     }
   }
 
-  addRequestMetadataItem(key: string, data: AnalyserOptions) {
+  addRequestMetadataItem(key: string, data: any) {
     const currentReqMetadata = this.requestsMetadata
     this.modifyRequestMetadata({ ...currentReqMetadata, [key]: data })
   }

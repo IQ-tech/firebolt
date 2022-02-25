@@ -28,7 +28,7 @@ export default function useBrowserNavigation({
     window.onpopstate = _onPopStateEventHandler;
   }
 
-  function _onPopStateEventHandler(e = {}) {
+  function _onPopStateEventHandler(e: any = {}) {
     const previousStep = e?.state?.position;
     const totalSteps = formflowMetadata?.lastStep;
     const currentStepPosition = currentStep?.position;

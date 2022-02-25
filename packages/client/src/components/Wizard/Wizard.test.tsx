@@ -12,6 +12,7 @@ describe("Wizard component", () => {
     root: "http://api.com.br/",
     formName: "testing",
   }
+
   ;(axios.get as jest.Mock).mockResolvedValue({ data: {} })
 
   it("Should render fallback when go to the next step - call goNextStep function", async () => {

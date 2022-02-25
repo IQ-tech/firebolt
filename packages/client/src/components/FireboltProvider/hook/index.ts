@@ -15,7 +15,7 @@ function useFireboltProvider({
   withHistory,
   stepQueryParam = "step",
   addons = {}
-} : IFireboltProvider) {
+}: any) {
   const formEngine = useRef(
     createFireboltForm(formAccess, { requestsMetadata, debug, addons })
   );
@@ -99,13 +99,13 @@ function useFireboltProvider({
         if (isLastStep) {
           setFormEndPayload({
             webhookResult: data?.step?.webhookResult,
-            capturedData: data?.step?.capturedData,
+            capturedData: data?.capturedData,
           });
           setFormFlowHasBeenFinished(true);
           clearSession();
         } else {
           setCapturedData(data.capturedData);
-          setStagedStep(data.step);
+          setStagedStep(data?.step);
           setFormFlowMetadata(data.meta);
         }
       })
@@ -124,7 +124,7 @@ function useFireboltProvider({
       .catch(_handleTransitionError);
   }
 
-  function commitStepChange() {
+  function commitStepChange(): void {
     setLastVisitedStep(currentStep);
     setCurrentStep(stagedStep);
     setStagedStep(null);
@@ -132,10 +132,10 @@ function useFireboltProvider({
     setRemoteErrors([]);
   }
 
-  function addRequestsMetadata(key, data = {}) {
+  function addRequestsMetadata(key: string, data: any = {}): void {
     formEngine.current.addRequestMetadataItem(key, data);
   }
-  function removeRequestsMetadata(key) {
+  function removeRequestsMetadata(key: string) {
     formEngine.current.removeRequestMetadataItem(key);
   }
 
