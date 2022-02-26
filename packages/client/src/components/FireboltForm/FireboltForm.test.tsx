@@ -1,4 +1,5 @@
-import { render, fireEvent } from "@testing-library/react"
+import { render, fireEvent, screen } from "@testing-library/react"
+import "@testing-library/jest-dom"
 import axios from "axios"
 
 import { createFireboltForm } from "@iq-firebolt/client-core"
@@ -275,43 +276,44 @@ describe("firebolt form test", () => {
   })
 })
 
-// describe("autofilled fields test", () => {
-//   const autoFillBase64 =
-//     "autofill=JTdCJTI3bmFtZSUyNyUzQSU3QiUyN3ZhbHVlJTI3JTNBJTI3UnVhbiUyMEJlcnQlQzMlQTklMjclMkMlMjdtYXNrJTI3JTNBJTI3JTI3JTdEJTJDJTI3Y3BmJTI3JTNBJTdCJTI3dmFsdWUlMjclM0ElMjc0NTAuNTkyLjczOC01NyUyNyUyQyUyN21hc2slMjclM0ElMjdjcGYlMjclN0QlMkMlMjdlbWFpbCUyNyUzQSU3QiUyN3ZhbHVlJTI3JTNBJTI3YmVydGUucnVhbiU0MGdtYWlsLmNvbSUyNyUyQyUyN21hc2slMjclM0ElMjclMjclN0QlMkMlMjdpbmNvbWUlMjclM0ElN0IlMjd2YWx1ZSUyNyUzQSUyNzYwMDAlMjclMkMlMjdtYXNrJTI3JTNBJTI3bW9uZXklMjclN0QlMkMlMjdwaG9uZSUyNyUzQSU3QiUyN3ZhbHVlJTI3JTNBJTI3NDI5OTk4ODM3NjglMjclMkMlMjdtYXNrJTI3JTNBJTI3cGhvbmVfbnVtYmVyJTI3JTdEJTdE"
+describe("autofilled fields test", () => {
+  const autoFillBase64 =
+    "autofill=JTdCJTI3bmFtZSUyNyUzQSU3QiUyN3ZhbHVlJTI3JTNBJTI3UnVhbiUyMEJlcnQlQzMlQTklMjclMkMlMjdtYXNrJTI3JTNBJTI3JTI3JTdEJTJDJTI3Y3BmJTI3JTNBJTdCJTI3dmFsdWUlMjclM0ElMjc0NTAuNTkyLjczOC01NyUyNyUyQyUyN21hc2slMjclM0ElMjdjcGYlMjclN0QlMkMlMjdlbWFpbCUyNyUzQSU3QiUyN3ZhbHVlJTI3JTNBJTI3YmVydGUucnVhbiU0MGdtYWlsLmNvbSUyNyUyQyUyN21hc2slMjclM0ElMjclMjclN0QlMkMlMjdpbmNvbWUlMjclM0ElN0IlMjd2YWx1ZSUyNyUzQSUyNzYwMDAlMjclMkMlMjdtYXNrJTI3JTNBJTI3bW9uZXklMjclN0QlMkMlMjdwaG9uZSUyNyUzQSU3QiUyN3ZhbHVlJTI3JTNBJTI3NDI5OTk4ODM3NjglMjclMkMlMjdtYXNrJTI3JTNBJTI3cGhvbmVfbnVtYmVyJTI3JTdEJTdE"
 
-//   const formName = "partnerFormPotato"
+  const formName = "partnerFormPotato"
 
-//   const form = createFireboltForm({
-//     root: "https://my-firebolt-api/",
-//     formName,
-//   })
+  const form = createFireboltForm({
+    root: "https://my-firebolt-api/",
+    formName,
+  })
 
-//   beforeEach(() => {
-//     // clearAllFormSessions()
+  beforeEach(() => {
+    // clearAllFormSessions()
 
-//     ;(axios.get as jest.Mock).mockResolvedValue({ data: startFormResponse })
+    (axios.get as jest.Mock).mockResolvedValue({ data: startFormResponse })
 
-//     Object.defineProperty(window, "location", {
-//       writable: true,
-//       value: {
-//         search: autoFillBase64,
-//         href: autoFillBase64,
-//       },
-//     })
-//   })
+    Object.defineProperty(window, "location", {
+      writable: true,
+      value: {
+        search: autoFillBase64,
+        href: autoFillBase64,
+      },
+    })
+  })
 
-//   test("Should render the email field with the value already filled", async () => {
-//     // get first step
-//     const formStartResult = await form.start()
+  test("Should render the email field with the value already filled", async () => {
+    // get first step
+    const formStartResult = await form.start()
 
-//     const { container } = render(
-//       <FireboltForm
-//         theme={materialTheme}
-//         schema={formStartResult.step.data.fields}
-//       />
-//     )
-//     const emailField = container.querySelector(`input[name='email']`)
+    const { container } = render(
+      <FireboltForm
+        theme={materialTheme}
+        schema={formStartResult.step.data.fields}
+      />
+    )
 
-//     expect(emailField.value).toBe("berte.ruan@gmail.com")
-//   })
-// })
+    const emailField = container.querySelector(`input[name='email']`)
+
+    expect(emailField).toHaveValue("berte.ruan@gmail.com")
+  })
+})

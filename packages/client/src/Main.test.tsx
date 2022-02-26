@@ -35,7 +35,7 @@ describe("testing props-presets render", () => {
   })
 
   it("should render field with props:preset without collection", async () => {
-    ;(axios.get as jest.Mock).mockResolvedValue({
+    (axios.get as jest.Mock).mockResolvedValue({
       data: propsPresetsMock.getRequestMock("cod"),
     })
 
@@ -47,7 +47,7 @@ describe("testing props-presets render", () => {
   })
 
   it("should render field with props:preset with collection", async () => {
-    ;(axios.get as jest.Mock).mockResolvedValue({
+    (axios.get as jest.Mock).mockResolvedValue({
       data: propsPresetsMock.getRequestMock("cod:second-preset-collection"),
     })
 
@@ -63,7 +63,7 @@ describe("testing props-presets render", () => {
   })
 
   it("should render field with overwritten props:preset", async () => {
-    ;(axios.get as jest.Mock).mockResolvedValue({
+    (axios.get as jest.Mock).mockResolvedValue({
       data: propsPresetsMock.getRequestMock("bat", true),
     })
 
