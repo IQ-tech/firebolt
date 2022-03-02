@@ -7,15 +7,15 @@ import getDebugStepName from "../../../helpers/getDebugStepName";
  * (this logic is only used if FireboltProvider is provided with `withHistory` prop)
  */
 
-// interface IBrowserNavigation {
-//   withHistory?: boolean
-//   currentStep?: IFormStep
-//   formflowMetadata?: IFormMetadata
-//   goPreviousStep?(): void
-//   goNextStep?(): void
-//   debug?: boolean
-//   stepQueryParam?: string
-// }
+interface IBrowserNavigation {
+  withHistory?: boolean
+  currentStep?: any // TODO: ANY
+  formflowMetadata?: IFormMetadata
+  goPreviousStep?(): void
+  goNextStep?: any // TODO: ANY
+  debug?: boolean
+  stepQueryParam?: string
+}
 
 export default function useBrowserNavigation({
   withHistory,
@@ -25,7 +25,7 @@ export default function useBrowserNavigation({
   goNextStep,
   debug,
   stepQueryParam,
-}: any) {
+}: IBrowserNavigation) {
   useEffect(() => {
     if (withHistory && !!currentStep.data.slug) {
       setPopStateEvent();

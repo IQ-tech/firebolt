@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useFirebolt } from "../../hooks/useFirebolt";
 
-interface test {
+interface IUseWizard {  // TODO: any
   onChangeStep?: any
   onConnectionError?: any
   onFinishForm?: any
@@ -13,7 +13,7 @@ export default function useWizard({
   onConnectionError,
   onFinishForm,
   onBeforeChangeStep,
-}: test) {
+}: IUseWizard) { // TODO: any
   const {
     isFormLoading,
     currentStep,
@@ -24,7 +24,7 @@ export default function useWizard({
     commitStepChange,
 
     connectionError,
-  }: any = useFirebolt();
+  }: any = useFirebolt(); // TODO: any
 
   useEffect(onStepChangeHandler, [currentStep]);
 

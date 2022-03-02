@@ -1,58 +1,65 @@
 import React from "react"
-import PropTypes from "prop-types"
+// import PropTypes from "prop-types"
 
 import Insert from "./Insert"
 import useFireboltForm from "./hook"
 // @ts-ignore
 import classes from "./style.module.css"
+import { IStepConfigField } from "@iq-firebolt/client-core"
+import { IActionsChildData, IFieldsObject } from "../../types"
 
-interface outroTest {
-  submitBtnText?: any
-  previousBtnText?: any
-  className?: any
-  customActionsChild?: any
-  children?: any
-  autoFill?: any
-
-  theme?: any
-  schema?: any
-  remoteErrors?: any
-  onSubmit?: any
-  onGoBack?: any
-  onChange?: any
-  onFocusField?: any
+interface IFormActionsProps {
+  formData: IActionsChildData
 }
+
+interface IFireboltForm { 
+  submitBtnText?: string
+  previousBtnText?: string
+  customActionsChild?: React.FC<IFormActionsProps>; 
+  className?: string
+  
+  schema: Array<IStepConfigField>
+  children?: object[]
+  onChange?: React.ChangeEvent<HTMLInputElement>
+  onSubmit?(): void
+  theme?: object 
+  autoFill?: IFieldsObject
+  remoteErrors?: Array<IFieldsObject>
+  onGoBack?(): void
+  onFocusField?: Event
+}
+
 
 const FireboltForm = ({
   submitBtnText = "Next Step",
   previousBtnText = "Previous Step",
   className,
   customActionsChild,
-  children = [],
-  autoFill,
-
-  theme,
+  
   schema,
-  remoteErrors,
-  onSubmit,
-  onGoBack,
+  children = [],
   onChange,
+  onSubmit,
+  theme,
+  autoFill,
+  remoteErrors,
+  onGoBack,
   onFocusField,
-}: outroTest) => {
+}: IFireboltForm) => { 
   const { handleSubmit, formChildren, actionsChildData, handleGoBack } =
     useFireboltForm({
-      autoFill,
-      remoteErrors,
-
-      theme,
       schema,
-      onSubmit,
       children,
       onChange,
+      onSubmit,
+      theme,
+      autoFill,
+      remoteErrors,
       onGoBack,
       classes,
       onFocusField,
     })
+
 
   const ActionsChild = customActionsChild
 
@@ -83,13 +90,13 @@ const FireboltForm = ({
 
 FireboltForm.Insert = Insert
 
-FireboltForm.propTypes = {
-  /** Children to be rendered instead of default submit button */
-  submitText: PropTypes.string,
-  /** Object to autofill form payload */
-  autoFill: PropTypes.object,
-  /** fields adapter - allow firebolt to use custom components to firebolt base fields */
-  theme: PropTypes.object,
-}
+// FireboltForm.propTypes = {
+//   /** Children to be rendered instead of default submit button */
+//   submitText: PropTypes.string,
+//   /** Object to autofill form payload */
+//   autoFill: PropTypes.object,
+//   /** fields adapter - allow firebolt to use custom components to firebolt base fields */
+//   theme: PropTypes.object,
+// }
 
 export default FireboltForm

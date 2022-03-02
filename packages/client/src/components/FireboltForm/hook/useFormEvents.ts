@@ -21,7 +21,7 @@ export default function useFieldsEvents({
     }
   }, [formPayload, onChange]);
 
-  function validateField(field, value) {
+  function validateField(field: { slug: string; }, value: string) {
     return validateFBTField({
       value,
       field,
@@ -30,9 +30,9 @@ export default function useFieldsEvents({
     });
   }
 
-  function getOnFieldBlur(field) {
+  function getOnFieldBlur(field: { slug: string; }): Function {
     const fieldSlug = field?.slug;
-    return (value) => {
+    return (value: string) => {
       const fieldValidation = validateField(field, value);
       const isValueValid = fieldValidation.isValid;
 
@@ -45,9 +45,9 @@ export default function useFieldsEvents({
     };
   }
 
-  function getOnFieldChange(field) {
+  function getOnFieldChange(field: { slug: string; }): Function {
     const fieldSlug = field?.slug;
-    return (value) => {
+    return (value: string) => {
       const isValueValid = validateField(field, value).isValid;
       if (!hasFormChanged) setHasFormChanged(true);
       modifyPayloadKeys({ [fieldSlug]: value });
@@ -57,11 +57,11 @@ export default function useFieldsEvents({
     };
   }
 
-  function getOnFieldFocus(field) {
+  function getOnFieldFocus(field: { slug: string; }) {
     return () => !!onFocusField && onFocusField(field);
   }
 
-  function handleSubmit(e) {
+  function handleSubmit(e: { preventDefault: () => void; }) {
     if (e && e?.preventDefault) e?.preventDefault();
     if (!!onSubmit && isFormValid) {
       onSubmit(formPayload);
@@ -72,7 +72,7 @@ export default function useFieldsEvents({
     }
   }
 
-  function handleGoBack(e) {
+  function handleGoBack(e: { preventDefault: () => void; }) {
     e?.preventDefault();
     if (!!onGoBack) {
       onGoBack(formPayload);

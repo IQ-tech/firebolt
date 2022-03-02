@@ -1,6 +1,21 @@
-import useFormState from "./useFormState";
-import useFormEvents from "./useFormEvents";
-import useFormRendering from "./useFormRendering";
+import useFormState from "./useFormState"
+import useFormEvents from "./useFormEvents"
+import useFormRendering from "./useFormRendering"
+import { IStepConfigField } from "@iq-firebolt/client-core"
+import { IFieldsObject, IActionsChildData } from "../../../types"
+
+interface IUseFireboltForm {
+  schema: Array<IStepConfigField>
+  children?: object[]
+  onChange?: React.ChangeEvent<HTMLInputElement>
+  onSubmit?(): void
+  theme?: object
+  autoFill?: IFieldsObject
+  remoteErrors?: Array<IFieldsObject> // TODO: any
+  onGoBack?(): void
+  classes: object
+  onFocusField?: Event
+}
 
 export default function useFireboltForm({
   schema,
@@ -12,8 +27,8 @@ export default function useFireboltForm({
   remoteErrors,
   onGoBack,
   classes,
-  onFocusField
-}) {
+  onFocusField,
+}: IUseFireboltForm) {
   const {
     isFormValid,
     formPayload,
@@ -29,7 +44,7 @@ export default function useFireboltForm({
     schema,
     autoFill,
     remoteErrors,
-  });
+  })
 
   const { getFieldEvent, handleSubmit, handleGoBack } = useFormEvents({
     onChange,
@@ -43,8 +58,8 @@ export default function useFireboltForm({
     clearFieldWarning,
     markAllInvalidFields,
     onGoBack,
-    onFocusField
-  });
+    onFocusField,
+  })
 
   const { formChildren } = useFormRendering({
     schema,
@@ -57,19 +72,21 @@ export default function useFireboltForm({
     theme,
     setFieldWarning,
     clearFieldWarning,
-    classes
-  });
+    classes,
+  })
+
+  const actionsChildData: IActionsChildData = {
+    isFormValid,
+    handleSubmit,
+    payload: formPayload, // #TODO
+    currentStep: 1, //#TODO
+  }
 
   return {
     isFormValid,
     handleSubmit,
     handleGoBack,
     formChildren,
-    actionsChildData: {
-      isFormValid,
-      handleSubmit,
-      payload: formPayload, // #TODO
-      currentStep: 1, //#TODO
-    },
-  };
+    actionsChildData,
+  }
 }

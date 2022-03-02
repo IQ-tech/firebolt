@@ -1,14 +1,24 @@
 import { useState, useEffect } from "react"
 import { validateFBTStep } from "@iq-firebolt/validators"
+import { IStepConfigField } from "@iq-firebolt/client-core"
+import { IFieldsObject } from "../../../types"
+export interface IFormState {
+  schema: Array<IStepConfigField>
+  autoFill?: object
+  remoteErrors?: Array<any> // TODO: ANY
+}
 
-export default function useFormState({ schema, autoFill, remoteErrors }) {
+export default function useFormState({ schema, autoFill, remoteErrors }: IFormState) {
   const [isFormValid, setIsFormValid] = useState(false)
-  const [formPayload, setFormPayload] = useState({})
+  const [formPayload, setFormPayload] = useState<IFieldsObject>({})
   const [hasFormChanged, setHasFormChanged] = useState(false)
   const [isHavingInternaLoading, setIsHavingInternalLoading] = useState(false)
-  // field errors
-  const [fieldValidationErrors, setFieldValidationErrors] = useState({})
-  const [fieldManuallySetErrors, setFieldManuallySetErrors] = useState({})
+  const [fieldValidationErrors, setFieldValidationErrors] = useState<IFieldsObject>(
+    {}
+  )
+  const [fieldManuallySetErrors, setFieldManuallySetErrors] = useState<IFieldsObject>(
+    {}
+  )
 
   useEffect(validateForm, [formPayload, fieldManuallySetErrors])
   useEffect(autoFillFromProp, [autoFill])
@@ -51,7 +61,7 @@ export default function useFormState({ schema, autoFill, remoteErrors }) {
     setFormPayload(autoFilledPayload)
   }
 
-  function setFieldWarning(fieldSlug, message, manualSetError = false) {
+  function setFieldWarning(fieldSlug: string, message: string, manualSetError = false) {
     const usedState = manualSetError
       ? fieldManuallySetErrors
       : fieldValidationErrors
@@ -65,7 +75,7 @@ export default function useFormState({ schema, autoFill, remoteErrors }) {
     })
   }
 
-  function clearFieldWarning(fieldSlug, manualSetError = false) {
+  function clearFieldWarning(fieldSlug: string, manualSetError = false) {
     const { invalidFields } = getFormValidation()
     const usedState = manualSetError
       ? fieldManuallySetErrors
@@ -122,7 +132,7 @@ export default function useFormState({ schema, autoFill, remoteErrors }) {
     setFieldValidationErrors(errorsObject)
   }
 
-  function modifyPayloadKeys(newData = {}) {
+  function modifyPayloadKeys(newData: IFieldsObject = {}) {
     setFormPayload({
       ...formPayload,
       ...newData,

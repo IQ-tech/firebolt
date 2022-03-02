@@ -16,12 +16,12 @@ export default function useFilesUpload({
   onUploadError,
   exceedFileLimitMessage = "Upload file limit exceeded",
   fileUploadErrorMessage = "File upload failed",
-} = {}) {
+}: any = {}) { // TODO: any
   const inputElRef = useRef(null);
   const multiple = maxFiles > 1;
   const [accept, setAccept] = useState();
   const [fileList, setFileList] = useState([]);
-  const { uploadFile } = useFirebolt();
+  const { uploadFile }: any = useFirebolt(); // TODO: any
 
   const [sentFiles, setSentFiles] = useState(false);
   const [updatedForm, setUpdatedForm] = useState(false);
@@ -48,19 +48,17 @@ export default function useFilesUpload({
     }
   }
 
-  function onChangeFileInput(e = {}) {
-    /** @type {HTMLInputElement} */
-    const target = e?.target;
-    const files = target?.files || [];
+  function onChangeFileInput(e: React.ChangeEvent<HTMLInputElement>) {
+    const target = e?.target
+    const files = target?.files || []
 
-    const file = files[0];
+    const file = files[0]
 
     if (!!file) {
-      _sendFiles(file);
+      _sendFiles(file)
     }
   }
 
-  /** @returns {{isValid: boolean, message: string, file: any}} */
   function _checkInputFile(file) {
     const { name, size } = file;
     const extension = name.split(".")[1];

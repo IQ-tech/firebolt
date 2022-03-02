@@ -20,7 +20,7 @@ export default function useFormRendering({
   classes,
 }) {
   // get correct widgets components
-  const fieldsChildren = schema.map((field: any = {}, index) => {
+  const fieldsChildren = schema.map((field: any = {}, index: number) => {
     const {
       slug,
       meta = {},
@@ -44,7 +44,7 @@ export default function useFormRendering({
     const fieldId = `firebolt-form-field-${slug}`
     const fieldValidators = field?.validators || []
     const isRequiredField = !!fieldValidators.find(
-      (validator) => validator?.type === "required"
+      (validator: { type: string }) => validator?.type === "required"
     )
     const isOptionalField = !isRequiredField
     const value = formPayload[slug] || ""

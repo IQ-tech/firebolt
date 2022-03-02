@@ -10,3 +10,14 @@ export interface IFireboltProvider {
   theme?: Object
   addons?: IAddonsConfig
 }
+
+export interface IFieldsObject {
+  [key: string]: string
+}
+
+export interface IActionsChildData {
+  isFormValid: boolean
+  handleSubmit: (e: { preventDefault: () => void }) => void
+  payload: IFieldsObject
+  currentStep: number
+}
