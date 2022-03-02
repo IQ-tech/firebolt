@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { getUrlParams, IFormMetadata, IFormStep, IStepData, IUrlParams } from "@iq-firebolt/client-core";
+import { getUrlParams, IFormMetadata, IFormStep, IStepData, IUrlParams, IDefaultStep } from "@iq-firebolt/client-core";
 import getDebugStepName from "../../../helpers/getDebugStepName";
 
 /**
@@ -9,10 +9,10 @@ import getDebugStepName from "../../../helpers/getDebugStepName";
 
 interface IBrowserNavigation {
   withHistory?: boolean
-  currentStep?: any // TODO: ANY
+  currentStep?: IDefaultStep 
   formflowMetadata?: IFormMetadata
   goPreviousStep?(): void
-  goNextStep?: any // TODO: ANY
+  goNextStep?: any // TODO: any | { errors: any } - FireboltProvider
   debug?: boolean
   stepQueryParam?: string
 }

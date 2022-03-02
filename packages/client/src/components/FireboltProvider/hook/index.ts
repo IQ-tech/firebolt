@@ -177,8 +177,8 @@ function useFireboltProvider({
     remoteErrors,
     theme, //todo
     // methods
-    goNextStep,
-    goPreviousStep,
+    goNextStep,     // TODO: FIX
+    goPreviousStep, // TODO: FIX
     commitStepChange,
     addRequestsMetadata,
     removeRequestsMetadata,
