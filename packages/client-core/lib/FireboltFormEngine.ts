@@ -7,10 +7,8 @@ import getUrlParams from "./helpers/getUrlParams"
 import formatFormOutput from "./formatters"
 import { IFormAccess, IAddonsConfig, IFormEngineOptions } from "./types"
 
-// TODO: requestMataData Type.
-
 class FireboltFormEngine {
-  requestsMetadata?: {}
+  requestsMetadata?: {} // TODO: requestMataData Type.
   formName: string
   debug?: boolean
   addons?: IAddonsConfig
@@ -85,7 +83,7 @@ class FireboltFormEngine {
     return formatFormOutput(previousData, { addons: this.addons })
   }
 
-  uploadFile(file: any) { // TODO: type any
+  uploadFile(file: any) { // TODO: UPLOAD TYPE
     const formSessionKey = getFormSession(this.formName)
     return this.APIService.upload(formSessionKey, file)
   }

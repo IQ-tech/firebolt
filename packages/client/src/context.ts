@@ -1,6 +1,10 @@
-import { createContext } from "react";
-import { IDefaultStep, IFormStep, IFormMetadata } from "@iq-firebolt/client-core";
-import { IFieldsObject } from ".";
+import { createContext } from "react"
+import {
+  IDefaultStep,
+  IFormStep,
+  IFormMetadata,
+} from "@iq-firebolt/client-core"
+import { IFieldsObject, INextStepFunction } from "./types"
 
 export interface IFireboltContext {
   //states
@@ -10,24 +14,24 @@ export interface IFireboltContext {
   currentStep?: IDefaultStep
   stagedStep?: IFormStep
   formflowMetadata?: IFormMetadata
-  capturedData?: any // TODO: any
+  capturedData?: { [key:string]: any }
   formEndPayload?: object
-  lastVisitedStep?: IDefaultStep 
+  lastVisitedStep?: IDefaultStep
   remoteErrors?: Array<IFieldsObject>
-  theme?: object 
+  theme?: object
   // methods
-  goNextStep?: any // TODO: any
-  goPreviousStep?: any // TODO: any
+  goNextStep?: INextStepFunction
+  goPreviousStep?(): Promise<void | object>
   commitStepChange?(): void
   addRequestsMetadata?: (key: string, data?: any) => void
-  removeRequestsMetadata?: (key: string ) => void
+  removeRequestsMetadata?: (key: string) => void
   getRequestsMetadata?: object
-  uploadFile?: any // TODO: any
+  uploadFile?: any
   clearSession?(): void
 
-  connectionError?: any // TODO: any
+  connectionError?: any
 }
 
-const FireboltContext = createContext<IFireboltContext>({} as IFireboltContext);
+const FireboltContext = createContext<IFireboltContext>({} as IFireboltContext)
 
-export default FireboltContext;
+export default FireboltContext

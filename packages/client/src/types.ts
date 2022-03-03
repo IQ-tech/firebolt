@@ -22,3 +22,15 @@ export interface IActionsChildData {
   payload: IFieldsObject
   currentStep: number
 }
+
+export interface IRequestMetadata {
+  extraRequestsMetaData?: Object
+  [key: string]: any
+}
+
+export interface INextStepFunction {
+  (
+    stepFieldsPayload?: IFieldsObject,
+    extraMetadata?: IRequestMetadata
+  ): Promise<void | object>
+}

@@ -1,6 +1,6 @@
 import throwAPIConnectionError from "./throwAPIConnectionError"
 
-export default function handleApiConnectionError(err: object | any = {}) {
+export default function handleApiConnectionError(err: Object | any = {}) {
   const errorResponse = err?.response
   const errorStatus = errorResponse.status
   const url = errorResponse?.config?.url

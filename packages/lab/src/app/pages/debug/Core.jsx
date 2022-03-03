@@ -43,7 +43,7 @@ const CoreTest = () => {
   }, [])
 
   function proceedNext() {
-    formEngine.current.nextStep("documents").then((data) => {
+    formEngine.current.goNextStep({dsd:"dsds"}).then((data) => {
       console.log("nextStep", data)
     })
   }

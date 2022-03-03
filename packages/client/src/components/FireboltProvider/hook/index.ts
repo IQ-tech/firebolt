@@ -1,11 +1,11 @@
-import { useRef, useEffect } from "react";
-import { createFireboltForm } from "@iq-firebolt/client-core";
-import getDebugStepName from "../../../helpers/getDebugStepName";
+import { useRef, useEffect } from "react"
+import { createFireboltForm } from "@iq-firebolt/client-core"
+import getDebugStepName from "../../../helpers/getDebugStepName"
 
-import useStates from "./useStates";
-import useData from "./useData";
-import useBrowserNavigation from "./useBrowserNavigation";
-import { IFireboltProvider } from '../../../types'
+import useStates from "./useStates"
+import useData from "./useData"
+import useBrowserNavigation from "./useBrowserNavigation"
+import { IFireboltProvider, IFieldsObject, IRequestMetadata } from "../../../types"
 
 function useFireboltProvider({
   formAccess,
@@ -14,18 +14,18 @@ function useFireboltProvider({
   theme,
   withHistory,
   stepQueryParam = "step",
-  addons = {}
+  addons = {},
 }: IFireboltProvider) {
   const formEngine = useRef(
     createFireboltForm(formAccess, { requestsMetadata, debug, addons })
-  );
+  )
 
   const {
     isFormLoading,
     setIsFormLoading,
     formFlowHasBeenFinished,
     setFormFlowHasBeenFinished,
-  } = useStates();
+  } = useStates()
 
   const {
     capturedData,
@@ -42,7 +42,7 @@ function useFireboltProvider({
     setStagedStep,
     lastVisitedStep,
     setLastVisitedStep,
-  } = useData();
+  } = useData()
 
   useBrowserNavigation({
     withHistory,
@@ -52,115 +52,122 @@ function useFireboltProvider({
     goNextStep,
     stepQueryParam,
     debug,
-  });
+  })
 
   useEffect(() => {
-    const debugStep = getDebugStepName();
+    const debugStep = getDebugStepName()
     if (!!debugStep) {
       if (!debug)
         throw new Error(
           `Debug step is only allowed on debug mode: debug ${debugStep}`
-        );
-      _startDebugStep(debugStep);
+        )
+      _startDebugStep(debugStep)
     } else {
-      _startForm();
+      _startForm()
     }
-  }, []);
+  }, [])
 
   function _startForm() {
-    setIsFormLoading(true);
+    setIsFormLoading(true)
     formEngine.current
       .start()
       .then((data) => {
-        setIsFormLoading(false);
-        setCurrentStep(data.step);
-        setCapturedData(data.capturedData);
-        setFormFlowMetadata(data.meta);
+        setIsFormLoading(false)
+        setCurrentStep(data.step)
+        setCapturedData(data.capturedData)
+        setFormFlowMetadata(data.meta)
       })
-      .catch(_handleTransitionError);
+      .catch(_handleTransitionError)
   }
 
-  function _startDebugStep(stepSlug) {
-    setIsFormLoading(true);
+  function _startDebugStep(stepSlug: string) {
+    setIsFormLoading(true)
     return formEngine.current.debugStep(stepSlug).then((data) => {
-      setIsFormLoading(false);
-      setCurrentStep(data.step);
-      setCapturedData(data.capturedData);
-      setFormFlowMetadata(data.meta);
-    });
+      setIsFormLoading(false)
+      setCurrentStep(data.step)
+      setCapturedData(data.capturedData)
+      setFormFlowMetadata(data.meta)
+    })
   }
-
-  function goNextStep(stepFieldsPayload, {extraRequestsMetaData = {}} = {}) {
-    setIsFormLoading(true);
-    const isLastStep = currentStep?.data?.slug === formflowMetadata?.lastStep;
+  
+  function goNextStep(
+    stepFieldsPayload?: IFieldsObject,
+    { extraRequestsMetaData = {} }: IRequestMetadata = {}
+  ): Promise<void | Object> {
+    setIsFormLoading(true)
+    const isLastStep = currentStep?.data?.slug === formflowMetadata?.lastStep
     return formEngine.current
-      .nextStep(currentStep.data.slug, stepFieldsPayload, {extraRequestsMetaData})
+      .nextStep(currentStep.data.slug, stepFieldsPayload, {
+        extraRequestsMetaData,
+      })
       .then((data) => {
         if (isLastStep) {
           setFormEndPayload({
             webhookResult: data?.step?.webhookResult,
             capturedData: data?.capturedData,
-          });
-          setFormFlowHasBeenFinished(true);
-          clearSession();
+          })
+          setFormFlowHasBeenFinished(true)
+          clearSession()
         } else {
-          setCapturedData(data.capturedData);
-          setStagedStep(data?.step);
-          setFormFlowMetadata(data.meta);
+          setCapturedData(data.capturedData)
+          setStagedStep(data?.step)
+          setFormFlowMetadata(data.meta)
         }
       })
-      .catch(_handleTransitionError);
+      .catch(_handleTransitionError)
   }
 
-  function goPreviousStep() {
-    setIsFormLoading(true);
+  function goPreviousStep(): Promise<void | Object> {
+    setIsFormLoading(true)
     return formEngine.current
       .previousStep(currentStep.data.slug)
       .then((data) => {
-        setCapturedData(data.capturedData);
-        setStagedStep(data.step);
-        setFormFlowMetadata(data.meta);
+        setCapturedData(data.capturedData)
+        setStagedStep(data.step)
+        setFormFlowMetadata(data.meta)
       })
-      .catch(_handleTransitionError);
+      .catch(_handleTransitionError)
   }
 
   function commitStepChange(): void {
-    setLastVisitedStep(currentStep);
-    setCurrentStep(stagedStep);
-    setStagedStep(null);
-    setIsFormLoading(false);
-    setRemoteErrors([]);
+    setLastVisitedStep(currentStep)
+    setCurrentStep(stagedStep)
+    setStagedStep(null)
+    setIsFormLoading(false)
+    setRemoteErrors([])
   }
 
-  function addRequestsMetadata(key: string, data: any = {}): void {
-    formEngine.current.addRequestMetadataItem(key, data);
+  function addRequestsMetadata(key: string, data: Object = {}): void {
+    formEngine.current.addRequestMetadataItem(key, data)
   }
-  function removeRequestsMetadata(key: string) {
-    formEngine.current.removeRequestMetadataItem(key);
-  }
-
-  function getRequestsMetadata() {
-    return formEngine.current.requestsMetadata;
+  function removeRequestsMetadata(key: string): void {
+    formEngine.current.removeRequestMetadataItem(key)
   }
 
-  function clearSession() {
-    formEngine.current.clearSession();
+  function getRequestsMetadata(): Object {
+    return formEngine.current.requestsMetadata
   }
 
-  function _handleTransitionError(err) {
-    const invalidFields = err?.response?.data?.errorData?.invalidFields || [];
+  function clearSession(): void {
+    formEngine.current.clearSession()
+  }
+
+  function _handleTransitionError(err: {
+    response: { data: { errorData: { invalidFields: Object[] } }; status: number }
+  }) {
+    const invalidFields = err?.response?.data?.errorData?.invalidFields || []
     const isValidationError =
-      err?.response?.status === 400 && !!invalidFields.length;
+      err?.response?.status === 400 && !!invalidFields.length
     if (isValidationError) {
-      setRemoteErrors(invalidFields);
-      setIsFormLoading(false);
+      setRemoteErrors(invalidFields)
+      setIsFormLoading(false)
 
-      return { errors: invalidFields };
+      return { errors: invalidFields }
     }
   }
 
   function uploadFile(file) {
-    return formEngine.current.uploadFile(file);
+    return formEngine.current.uploadFile(file)
   }
 
   return {
@@ -177,15 +184,15 @@ function useFireboltProvider({
     remoteErrors,
     theme, //todo
     // methods
-    goNextStep,     // TODO: FIX
-    goPreviousStep, // TODO: FIX
+    goNextStep,
+    goPreviousStep,
     commitStepChange,
     addRequestsMetadata,
     removeRequestsMetadata,
     getRequestsMetadata,
     uploadFile,
     clearSession,
-  };
+  }
 }
 
-export default useFireboltProvider;
+export default useFireboltProvider

@@ -5,7 +5,7 @@ export function clearAllFormSessions(){
  localStorage?.removeItem(LOCALSTORE_KEY);
 }
 
-export function clearFormSession(formName) { // TODO: runs out of types so it doesn't break the CLIENT
+export function clearFormSession(formName: string) { 
   const fireboltLocalStorage = getFireboltLocalStorage();
   const sessions = fireboltLocalStorage?.sessionKeys || {};
   const filteredSessionsKeys = Object.keys(sessions)

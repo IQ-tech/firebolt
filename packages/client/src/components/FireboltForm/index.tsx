@@ -19,10 +19,10 @@ interface IFireboltForm {
   className?: string
   
   schema: Array<IStepConfigField>
-  children?: object[]
+  children?: Object[]
   onChange?: React.ChangeEvent<HTMLInputElement>
   onSubmit?(): void
-  theme?: object 
+  theme?: Object 
   autoFill?: IFieldsObject
   remoteErrors?: Array<IFieldsObject>
   onGoBack?(): void

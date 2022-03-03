@@ -16,12 +16,12 @@ export default function useFilesUpload({
   onUploadError,
   exceedFileLimitMessage = "Upload file limit exceeded",
   fileUploadErrorMessage = "File upload failed",
-}: any = {}) { // TODO: any
+}: any = {}) { // TODO: UPLOAD
   const inputElRef = useRef(null);
   const multiple = maxFiles > 1;
   const [accept, setAccept] = useState();
   const [fileList, setFileList] = useState([]);
-  const { uploadFile }: any = useFirebolt(); // TODO: any
+  const { uploadFile } = useFirebolt(); 
 
   const [sentFiles, setSentFiles] = useState(false);
   const [updatedForm, setUpdatedForm] = useState(false);

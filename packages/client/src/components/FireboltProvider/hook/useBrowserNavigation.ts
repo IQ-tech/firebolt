@@ -1,7 +1,11 @@
 import { useEffect } from "react";
 import { getUrlParams, IFormMetadata, IFormStep, IStepData, IUrlParams, IDefaultStep } from "@iq-firebolt/client-core";
 import getDebugStepName from "../../../helpers/getDebugStepName";
-
+import {
+  IFieldsObject,
+  IRequestMetadata,
+  INextStepFunction,
+} from "../../../types"
 /**
  * This hook should contain browser history logic
  * (this logic is only used if FireboltProvider is provided with `withHistory` prop)
@@ -9,13 +13,14 @@ import getDebugStepName from "../../../helpers/getDebugStepName";
 
 interface IBrowserNavigation {
   withHistory?: boolean
-  currentStep?: IDefaultStep 
+  currentStep?: IDefaultStep
   formflowMetadata?: IFormMetadata
   goPreviousStep?(): void
-  goNextStep?: any // TODO: any | { errors: any } - FireboltProvider
+  goNextStep?: INextStepFunction
   debug?: boolean
   stepQueryParam?: string
 }
+
 
 export default function useBrowserNavigation({
   withHistory,

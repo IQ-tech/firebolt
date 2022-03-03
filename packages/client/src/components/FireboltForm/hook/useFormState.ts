@@ -5,7 +5,7 @@ import { IFieldsObject } from "../../../types"
 export interface IFormState {
   schema: Array<IStepConfigField>
   autoFill?: object
-  remoteErrors?: Array<any> // TODO: ANY
+  remoteErrors?: Array<IFieldsObject> 
 }
 
 export default function useFormState({ schema, autoFill, remoteErrors }: IFormState) {

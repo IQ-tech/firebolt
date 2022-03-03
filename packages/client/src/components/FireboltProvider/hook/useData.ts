@@ -1,5 +1,5 @@
 import { IDefaultStep, IFormMetadata, IFormStep } from "@iq-firebolt/client-core";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
 const defaultStep: IDefaultStep = {
   data: {
@@ -12,20 +12,32 @@ const defaultStep: IDefaultStep = {
   webhookResult: {},
 };
 
+export interface IFormEndPayload {
+  webhookResult?: object
+  metadata?: IFormMetadata
+  capturedData?: {
+    [key: string]: any
+  }
+}
+
 export default function useData() {
-  const [currentStep, setCurrentStep] = useState<IDefaultStep>(defaultStep);
+  const [currentStep, setCurrentStep] = useState<IDefaultStep>(defaultStep)
 
   // holds the form data before updating state, this is used by the wizard in the beforeChangeStep callback
-  const [stagedStep, setStagedStep] = useState<IFormStep>();
+  const [stagedStep, setStagedStep] = useState<IFormStep>()
   const [formflowMetadata, setFormFlowMetadata] = useState<IFormMetadata>({
     steps: [],
     lastStep: null,
-  });
-  const [capturedData, setCapturedData] = useState({});
+  })
+  const [capturedData, setCapturedData] = useState({})
   // validation errors that come from firebolt api
-  const [remoteErrors, setRemoteErrors] = useState([]); // TODO: IFieldsObject
-  const [lastVisitedStep, setLastVisitedStep] = useState<IDefaultStep>({} as IDefaultStep)
-  const [formEndPayload, setFormEndPayload] = useState({}); //step, meta, capturedData
+  const [remoteErrors, setRemoteErrors] = useState([])
+  const [lastVisitedStep, setLastVisitedStep] = useState<IDefaultStep>(
+    {} as IDefaultStep
+  )
+  const [formEndPayload, setFormEndPayload] = useState<IFormEndPayload>(
+    {} as IFormEndPayload
+  ) //step, meta, capturedData
 
   return {
     capturedData,
@@ -42,5 +54,5 @@ export default function useData() {
     setStagedStep,
     lastVisitedStep,
     setLastVisitedStep,
-  };
+  }
 }
