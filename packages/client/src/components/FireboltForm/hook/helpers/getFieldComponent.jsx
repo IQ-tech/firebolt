@@ -1,3 +1,5 @@
+import React from "react"
+
 const RequestThemePlaceholder = ({ fieldName }) => {
   return (
     <div style={{ "backgroundColor": "gray", padding: "20px" }}>
