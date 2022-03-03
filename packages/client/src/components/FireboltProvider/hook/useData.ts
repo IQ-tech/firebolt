@@ -24,7 +24,7 @@ export default function useData() {
   const [capturedData, setCapturedData] = useState({});
   // validation errors that come from firebolt api
   const [remoteErrors, setRemoteErrors] = useState([]); // TODO: IFieldsObject
-  const [lastVisitedStep, setLastVisitedStep] = useState({});
+  const [lastVisitedStep, setLastVisitedStep] = useState<IDefaultStep>({} as IDefaultStep)
   const [formEndPayload, setFormEndPayload] = useState({}); //step, meta, capturedData
 
   return {

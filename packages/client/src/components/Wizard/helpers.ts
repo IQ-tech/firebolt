@@ -1,17 +1,22 @@
-import React from "react";
+import React from "react"
 
-export function filterChildren(children, currentStepSlug) {
-  if (!children) return null;
+export function filterChildren(
+  children: React.ReactElement[],
+  currentStepSlug: string
+) {
+  if (!children) return null
 
-  const childrenArray = React.Children.toArray(children);
-  const exactMatch = childrenArray.find((child: any) => {
-    return child?.props?.match?.slug === currentStepSlug;
-  });
+  const childrenArray = React.Children.toArray(children)
+
+  const exactMatch = childrenArray.find((child: React.ReactElement) => {
+    return child?.props?.match?.slug === currentStepSlug
+  })
+
   const getFirstGeneralCaseItem = () =>
-    childrenArray.find((child: any) => {
-      const childMatch = child?.props?.match;
-      return !childMatch || childMatch === "*";
-    });
+    childrenArray.find((child: React.ReactElement) => {
+      const childMatch = child?.props?.match
+      return !childMatch || childMatch === "*"
+    })
 
-  return exactMatch ? exactMatch : getFirstGeneralCaseItem();
+  return exactMatch ? exactMatch : getFirstGeneralCaseItem()
 }
