@@ -27,17 +27,17 @@ const FormDemo = () => {
           </p>
         }
         onFinishForm={(payload) => {
-          // console.log("finish form:", payload);
+          console.log("finish form:", payload);
         }}
         onConnectionError={(err) => {
           // console.log("connection error:", err);
         }}
         onBeforeChangeStep={(proceed, { leavingStep, enteringStep }) => {
-          // console.log("before change:", { leavingStep, enteringStep });
+          console.log("before change:", { leavingStep, enteringStep });
           proceed()
         }}
         onChangeStep={({ sentStep, currentStep }) => {
-          // console.log("changed step:", { sentStep, currentStep });
+           console.log("changed step:", { sentStep, currentStep });
         }}
       >
         <Wizard.Step match="*" component={DefaultTemplate} />
