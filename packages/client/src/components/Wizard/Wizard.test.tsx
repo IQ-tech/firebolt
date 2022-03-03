@@ -8,12 +8,13 @@ jest.mock("axios")
 
 describe("Wizard component", () => {
   const fallback = <div>Fallback</div>
+  
+  (axios.get as jest.Mock).mockResolvedValue({ data: {} })
+
   const formInfo = {
     root: "http://api.com.br/",
     formName: "testing",
   }
-
-  ;(axios.get as jest.Mock).mockResolvedValue({ data: {} })
 
   it("Should render fallback when go to the next step - call goNextStep function", async () => {
     const { getByText } = render(

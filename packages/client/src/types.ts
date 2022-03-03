@@ -1,11 +1,12 @@
 import { IFormAccess, IAddonsConfig } from "@iq-firebolt/client-core"
+import React from "react";
 
 export interface IFireboltProvider {
   formAccess: IFormAccess
   debug?: boolean
   requestsMetadata?: Object
   stepQueryParam?: string
-  children?: any
+  children?: React.ReactElement
   withHistory?: boolean
   theme?: Object
   addons?: IAddonsConfig

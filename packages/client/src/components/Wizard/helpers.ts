@@ -1,7 +1,7 @@
 import React from "react"
 
 export function filterChildren(
-  children: React.ReactElement[],
+  children: React.ReactElement,
   currentStepSlug: string
 ) {
   if (!children) return null
