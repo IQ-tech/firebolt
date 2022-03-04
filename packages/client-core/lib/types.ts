@@ -119,3 +119,8 @@ export interface IStepConfigField {
   component: string
   value?: any
 }
+
+export interface IRequestMetadata {
+  extraRequestsMetaData?: Object
+  [key: string]: any
+}

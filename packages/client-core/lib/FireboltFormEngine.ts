@@ -5,11 +5,10 @@ import { clearFormSession } from "./helpers/session/clearFormSession"
 import getAutofillParam from "./helpers/getAutofillParam"
 import getUrlParams from "./helpers/getUrlParams"
 import formatFormOutput from "./formatters"
-import { IFormAccess, IAddonsConfig, IFormEngineOptions } from "./types"
-// import { IRequestMetadata } from "@iq-firebolt/client" TODO: error build github
+import { IFormAccess, IAddonsConfig, IFormEngineOptions, IRequestMetadata } from "./types"
 
 class FireboltFormEngine {
-  requestsMetadata?: Object
+  requestsMetadata?: IRequestMetadata
   formName: string
   debug?: boolean
   addons?: IAddonsConfig
