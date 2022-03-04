@@ -5,7 +5,8 @@ import getDebugStepName from "../../../helpers/getDebugStepName"
 import useStates from "./useStates"
 import useData from "./useData"
 import useBrowserNavigation from "./useBrowserNavigation"
-import { IFireboltProvider, IFieldsObject, IRequestMetadata } from "../../../types"
+import { IFireboltProvider, IFieldsObject } from "../../../types"
+import { IRequestMetadata } from "@iq-firebolt/client-core"
 
 function useFireboltProvider({
   formAccess,

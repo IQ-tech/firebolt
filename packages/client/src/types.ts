@@ -4,6 +4,7 @@ import {
   IDefaultStep,
   IStepConfigField,
   IFormMetadata,
+  IRequestMetadata
 } from "@iq-firebolt/client-core"
 import React from "react"
 
@@ -27,11 +28,6 @@ export interface IActionsChildData {
   handleSubmit: (e: { preventDefault: () => void }) => void
   payload: IFieldsObject
   currentStep: number
-}
-
-export interface IRequestMetadata {
-  extraRequestsMetaData?: Object
-  [key: string]: any
 }
 
 export interface INextStepFunction {
