@@ -2,17 +2,9 @@ import React, { Fragment } from "react";
 
 import useWizard from "./hook";
 import { filterChildren } from "./helpers";
-import { IStepProps } from "./hook"
-import Step from "./Step";
 
-interface IWizardComponent {
-  children: React.ReactElement
-  fallback?: React.ReactElement
-  onChangeStep?(arg0: IStepProps): void
-  onConnectionError?(arg0?: object): void
-  onFinishForm?(arg0?: object): void
-  onBeforeChangeStep?(arg0?: Function, arg1?: IStepProps): void
-}
+import Step from "./Step";
+import { IWizardComponent } from "../../types"
 
 const Wizard = ({
   children,

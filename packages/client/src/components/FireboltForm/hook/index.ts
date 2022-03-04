@@ -1,21 +1,8 @@
 import useFormState from "./useFormState"
 import useFormEvents from "./useFormEvents"
 import useFormRendering from "./useFormRendering"
-import { IStepConfigField } from "@iq-firebolt/client-core"
-import { IFieldsObject, IActionsChildData } from "../../../types"
+import {  IActionsChildData , IUseFireboltForm} from "../../../types"
 
-interface IUseFireboltForm {
-  schema: Array<IStepConfigField>
-  children?: Object[]
-  onChange?: React.ChangeEvent<HTMLInputElement>
-  onSubmit?(): void
-  theme?: Object
-  autoFill?: IFieldsObject
-  remoteErrors?: Array<IFieldsObject>
-  onGoBack?(): void
-  classes: Object
-  onFocusField?: Event
-}
 
 export default function useFireboltForm({
   schema,

@@ -20,6 +20,11 @@ export interface LocalFormConfig {
 
 // --------- end v2
 
+export interface IApiService {
+  formAccess: IFormAccess
+  debug?: boolean
+}
+
 
 export type GetPreviousStepRoute = (currentStep: string | number) => string;
 

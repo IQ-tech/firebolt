@@ -5,29 +5,9 @@ import Insert from "./Insert"
 import useFireboltForm from "./hook"
 // @ts-ignore
 import classes from "./style.module.css"
-import { IStepConfigField } from "@iq-firebolt/client-core"
-import { IActionsChildData, IFieldsObject } from "../../types"
+import { IFireboltForm } from "../../types"
 
-interface IFormActionsProps {
-  formData: IActionsChildData
-}
 
-interface IFireboltForm { 
-  submitBtnText?: string
-  previousBtnText?: string
-  customActionsChild?: React.FC<IFormActionsProps>; 
-  className?: string
-  
-  schema: Array<IStepConfigField>
-  children?: Object[]
-  onChange?: React.ChangeEvent<HTMLInputElement>
-  onSubmit?(): void
-  theme?: Object 
-  autoFill?: IFieldsObject
-  remoteErrors?: Array<IFieldsObject>
-  onGoBack?(): void
-  onFocusField?: Event
-}
 
 
 const FireboltForm = ({

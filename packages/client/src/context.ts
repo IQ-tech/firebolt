@@ -14,7 +14,7 @@ export interface IFireboltContext {
   currentStep?: IDefaultStep
   stagedStep?: IFormStep
   formflowMetadata?: IFormMetadata
-  capturedData?: { [key:string]: any }
+  capturedData?: { [key: string]: any }
   formEndPayload?: object
   lastVisitedStep?: IDefaultStep
   remoteErrors?: Array<IFieldsObject>

@@ -1,12 +1,7 @@
 import { useState, useEffect } from "react"
 import { validateFBTStep } from "@iq-firebolt/validators"
-import { IStepConfigField } from "@iq-firebolt/client-core"
-import { IFieldsObject } from "../../../types"
-export interface IFormState {
-  schema: Array<IStepConfigField>
-  autoFill?: object
-  remoteErrors?: Array<IFieldsObject> 
-}
+import { IFieldsObject, IFormState } from "../../../types"
+
 
 export default function useFormState({ schema, autoFill, remoteErrors }: IFormState) {
   const [isFormValid, setIsFormValid] = useState(false)

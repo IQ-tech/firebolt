@@ -6,9 +6,10 @@ import getAutofillParam from "./helpers/getAutofillParam"
 import getUrlParams from "./helpers/getUrlParams"
 import formatFormOutput from "./formatters"
 import { IFormAccess, IAddonsConfig, IFormEngineOptions } from "./types"
+import { IRequestMetadata } from "@iq-firebolt/client"
 
 class FireboltFormEngine {
-  requestsMetadata?: {} // TODO: requestMataData Type.
+  requestsMetadata?: IRequestMetadata
   formName: string
   debug?: boolean
   addons?: IAddonsConfig
@@ -16,7 +17,11 @@ class FireboltFormEngine {
 
   constructor(
     formAccess: IFormAccess,
-    { requestsMetadata = {}, debug = false, addons = {} }: IFormEngineOptions = {}
+    {
+      requestsMetadata = {},
+      debug = false,
+      addons = {},
+    }: IFormEngineOptions = {}
   ) {
     this.requestsMetadata = requestsMetadata
     this.formName = formAccess?.formName
@@ -83,7 +88,8 @@ class FireboltFormEngine {
     return formatFormOutput(previousData, { addons: this.addons })
   }
 
-  uploadFile(file: any) { // TODO: UPLOAD TYPE
+  uploadFile(file: any) {
+    // TODO: UPLOAD TYPE
     const formSessionKey = getFormSession(this.formName)
     return this.APIService.upload(formSessionKey, file)
   }

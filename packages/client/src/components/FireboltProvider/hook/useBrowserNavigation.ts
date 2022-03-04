@@ -5,21 +5,12 @@ import {
   IFieldsObject,
   IRequestMetadata,
   INextStepFunction,
+  IBrowserNavigation,
 } from "../../../types"
 /**
  * This hook should contain browser history logic
  * (this logic is only used if FireboltProvider is provided with `withHistory` prop)
  */
-
-interface IBrowserNavigation {
-  withHistory?: boolean
-  currentStep?: IDefaultStep
-  formflowMetadata?: IFormMetadata
-  goPreviousStep?(): void
-  goNextStep?: INextStepFunction
-  debug?: boolean
-  stepQueryParam?: string
-}
 
 
 export default function useBrowserNavigation({
