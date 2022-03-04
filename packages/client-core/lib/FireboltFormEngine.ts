@@ -6,10 +6,10 @@ import getAutofillParam from "./helpers/getAutofillParam"
 import getUrlParams from "./helpers/getUrlParams"
 import formatFormOutput from "./formatters"
 import { IFormAccess, IAddonsConfig, IFormEngineOptions } from "./types"
-import { IRequestMetadata } from "@iq-firebolt/client"
+// import { IRequestMetadata } from "@iq-firebolt/client" TODO: error build github
 
 class FireboltFormEngine {
-  requestsMetadata?: IRequestMetadata
+  requestsMetadata?: Object
   formName: string
   debug?: boolean
   addons?: IAddonsConfig
