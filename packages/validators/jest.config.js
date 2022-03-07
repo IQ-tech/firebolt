@@ -1,5 +1,8 @@
+const jestBaseConfig = require("../../jest.base.config");
+const packageJson = require('./package');
+
 module.exports = {
-  transform: {
-    "^.+\\.ts$": "ts-jest",
-  },
-};
+  ...jestBaseConfig,
+  name: packageJson.name,
+  displayName: packageJson.name,
+}

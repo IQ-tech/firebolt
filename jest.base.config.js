@@ -23,5 +23,5 @@ module.exports = {
       lines: MINIMUM_PERCENTAGE_OF_COVERAGE,
     },
   },
-  testEnvironment: "jsdom",
+
 }
