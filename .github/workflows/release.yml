@@ -19,6 +19,9 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.IQ_ADM_TIM_TOKEN }}
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v2
         with:
