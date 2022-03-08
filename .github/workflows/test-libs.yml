@@ -37,16 +37,34 @@ jobs:
 
       - name: test client Core
         if: steps.changes.outputs.clientCore == 'true'
-        run: |
-          yarn test:client-core
-          yarn test:client
+        uses: mattallty/jest-github-action@v1.0.3
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          test-command: "yarn test:client-core"
+
+      - name: test client core (with client)
+        if: steps.changes.outputs.clientCore == 'true'
+        uses: mattallty/jest-github-action@v1.0.3
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          test-command: "yarn test:client"
+
       - name: test client
         if: steps.changes.outputs.client == 'true' 
-        run: |
-          yarn test:client
+        uses: mattallty/jest-github-action@v1.0.3
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          test-command: "yarn test:client"
+
       - name: test validators
         if: steps.changes.outputs.validators == 'true'
-        run: |
-          yarn test:validators
+        uses: mattallty/jest-github-action@v1.0.3
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          test-command: "yarn test:validators"
 
 
