@@ -1,0 +1,48 @@
+
+name: Jest test validators
+
+on:
+  pull_request:
+    branches: [ main, latest ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [14.x]
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'yarn'
+      - name: build libs
+        run: yarn build:libs
+      - name: Check changed packages
+        uses: dorny/paths-filter@v2
+        with: 
+          filters: |
+            client:
+              - 'packages/client/src/**'
+            validators: 
+              - 'packages/validators/src/**'
+            clientCore:
+              - 'packages/client-core/lib/**'
+
+      - name: test client Core
+        if: steps.changes.outputs.clientCore == 'true'
+        run: |
+          yarn test:client-core
+          yarn test:client
+      - name: test client
+        if: steps.changes.outputs.client == 'true' 
+        run: |
+          yarn test:client
+      - name: test validators
+        if: steps.changes.outputs.validators == 'true'
+        run: |
+          yarn test:validators
+
+
