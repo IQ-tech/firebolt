@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.4.1](https://github.com/IQ-tech/firebolt/compare/v0.4.0...v0.4.1) (2022-03-08)
+
+
+### Bug Fixes
+
+* 🐛 simple fix ([6302c2e](https://github.com/IQ-tech/firebolt/commit/6302c2e95af3088d21cd4d9633d615d4711209a7))
+* 🐛 simple fix ([d58ebaf](https://github.com/IQ-tech/firebolt/commit/d58ebaf79c7d6a0aecb8806a0896f8e0f81ffb87))
+
+
+
+
+
 # [0.4.0](https://github.com/IQ-tech/firebolt/compare/v0.3.5...v0.4.0) (2022-03-08)
 
 
