@@ -10,5 +10,6 @@
     "material-theme",
     "json-schema"
   ],
-  "conventionalCommits.promptFooter": false
+  "conventionalCommits.promptFooter": false,
+  "conventionalCommits.promptBody": false
 }
