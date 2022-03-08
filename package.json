@@ -17,7 +17,7 @@
     "build:libs": "lerna run build --scope @iq-firebolt/client-core --scope @iq-firebolt/validators --scope @iq-firebolt/client",
     "versionup": "lerna version --conventional-commits --create-release github --yes",
     "publish:libs": "yarn lerna publish from-package --yes --no-verify-access",
-    "publish:canary": "lerna publish --canary --exact --preid next --dist-tag next --force-publish='*' --yes --no-verify-access --no-push"
+    "publish:canary": "lerna publish --canary patch --exact --preid next --dist-tag next --force-publish='*' --yes --no-verify-access --no-git-tag-version"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^5.14.1",
