@@ -70,3 +70,9 @@ jobs:
               repo: context.repo.repo,
               body: 'https://github.com/${{ github.repository }}/releases/tag/v${{ env.CURRENT_VERSION }} is released 🎉'
             })
+      - name: Update main branch 
+        run: |
+          git checkout main
+          git merge latest -m "chore: updated main branch (merged latest into main)"
+          git push origin main
+
