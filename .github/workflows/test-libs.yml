@@ -18,6 +18,8 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
           cache: 'yarn'
+      - name: install deps
+        run: yarn install
       - name: build libs
         run: yarn build:libs
       - name: Check changed packages
