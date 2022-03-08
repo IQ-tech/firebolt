@@ -15,7 +15,7 @@
     "test:client": "cd packages/client && yarn test",
     "build:validators": "cd packages/validators && yarn build",
     "build:libs": "lerna run build --scope @iq-firebolt/client-core --scope @iq-firebolt/validators --scope @iq-firebolt/client",
-    "versionup": "lerna version  --no-git-tag-version --force-publish",
+    "versionup": "lerna version --conventional-commits --create-release github --yes",
     "publish:libs": "yarn lerna publish from-package --yes --no-verify-access",
     "publish:canary": "lerna publish --canary --exact --preid next --dist-tag next --force-publish='*' --yes --no-verify-access"
   },
