@@ -1,7 +1,7 @@
-module.exports = {
-  projects: ["<rootDir>/packages/*/jest.config.js"],
-  moduleFileExtensions: ["ts", "tsx", "js", "jsx", "json"],
-};
+// // // module.exports = {
+// // //   projects: ["<rootDir>/packages/*/jest.config.js"],
+// // //   moduleFileExtensions: ["ts", "tsx", "js", "jsx", "json"],
+// // // };
 
 
 // const base = require('./jest.base.config.js');

@@ -1,6 +1,7 @@
 const MINIMUM_PERCENTAGE_OF_COVERAGE = 35
 
 module.exports = {
+  verbose: true,
   transform: {
     "^.+\\.(ts|tsx)?$": "ts-jest",
     "^.+\\.(js|jsx)$": "babel-jest",
