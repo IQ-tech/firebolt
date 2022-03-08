@@ -11,7 +11,8 @@
       "**/*.md",
       "**/*.yml",
       "**/*.test.{js,jsx,ts,tsx}",
-      "**/__mocks__/**"
+      "**/__mocks__/**",
+      "**/lab/**"
     ],
     "message": "chore(release): publish",
     "conventionalCommits": true
