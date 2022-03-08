@@ -4,7 +4,7 @@
   "description": "> TODO: description",
   "author": "iq team",
   "homepage": "https://github.com/IQ-tech/firebolt#readme",
-  "license": "ISC",
+  "license": "Apache-2.0",
   "main": "./index.js",
   "sideEffects": false,
   "publishConfig": {

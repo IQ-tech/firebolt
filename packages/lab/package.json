@@ -2,6 +2,7 @@
   "name": "@iq-firebolt/lab",
   "version": "0.3.3",
   "private": true,
+  "license": "Apache-2.0",
   "dependencies": {
     "@iq-firebolt/blueberry-theme": "^0.3.3",
     "@iq-firebolt/br-addons": "^0.3.3",

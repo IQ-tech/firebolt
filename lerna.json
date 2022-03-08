@@ -4,5 +4,16 @@
   ],
   "version": "0.3.3",
   "useWorkspaces": true,
-  "npmClient": "yarn"
+  "npmClient": "yarn",
+  "publish": {
+    "ignoreChanges": [
+      "**/LICENSE",
+      "**/*.md",
+      "**/*.yml",
+      "**/*.test.{js,jsx,ts,tsx}",
+      "**/__mocks__/**"
+    ],
+    "message": "chore(release): publish",
+    "conventionalCommits": true
+  }
 }
