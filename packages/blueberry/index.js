@@ -10,7 +10,6 @@ import CheckWidget from "./Widgets/CheckWidget"
 import BRCityWidget from "./Widgets/BRCityWidget"
 import TextareaWidget from './Widgets/TextareaWidget'
 
-// fields
 const blueberryTheme = {
   // Bluberry theme exclusive widgets
   "CEP": CEPWidget,
