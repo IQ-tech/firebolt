@@ -1,10 +1,10 @@
 {
   "name": "@iq-firebolt/client-core",
-  "version": "0.3.3",
+  "version": "0.5.0",
   "description": "> TODO: description",
   "author": "iq team",
   "homepage": "https://github.com/IQ-tech/firebolt#readme",
-  "license": "ISC",
+  "license": "Apache-2.0",
   "main": "es/index.js",
   "module": "es/index.js",
   "types": "types/index.d.ts",
