@@ -13,7 +13,8 @@ function useFireboltProvider({
   theme,
   withHistory,
   stepQueryParam = "step",
-  addons = {}
+  addons = {},
+  firstStepPreRender
 }) {
   const formEngine = useRef(
     createFireboltForm(formAccess, { requestsMetadata, debug, addons })
@@ -61,10 +62,28 @@ function useFireboltProvider({
           `Debug step is only allowed on debug mode: debug ${debugStep}`
         );
       _startDebugStep(debugStep);
+    } else if (firstStepPreRender) {
+      _preRenderFirstStep()
+
     } else {
       _startForm();
     }
   }, []);
+
+  function _preRenderFirstStep() {
+    setIsFormLoading(false);
+    const formattedFirstStep = formEngine.current.formatStepData(firstStepPreRender);
+    setCurrentStep(formattedFirstStep.step);
+    setCapturedData(formattedFirstStep.capturedData);
+    setFormFlowMetadata(formattedFirstStep.meta);
+
+    formEngine.current
+      .start().then((data) => {
+        setCapturedData(data.capturedData);
+        setFormFlowMetadata(data.meta);
+
+      });
+  }
 
   function _startForm() {
     setIsFormLoading(true);
