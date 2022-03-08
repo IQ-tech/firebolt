@@ -1,0 +1,33 @@
+{
+  // Change this to match your project
+  "include": ["lib/index.js"],
+  "exclude": ["/bin", "/obj"],
+  "compilerOptions": {
+    "baseUrl": "./",
+    "rootDir": "./lib",
+    "target": "es6",
+    "lib": ["DOM"],
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "sourceMap": false,
+    "checkJs": true,
+    "module": "ES2015",
+    "moduleResolution": "node",
+    "jsx": "react-jsx",
+    // Tells TypeScript to read JS files, as
+    // normally they are ignored as source files
+    "allowJs": true,
+    // Generate d.ts files
+    "declaration": true,
+    // This compiler run should
+    // only output d.ts files
+    "emitDeclarationOnly": true,
+    "declarationMap": false,
+    // Types should go into this directory.
+    // Removing this would place the .d.ts files
+    // next to the .js files
+    "outDir": "dist/types",
+    "skipLibCheck": true,
+    "downlevelIteration": true
+  }
+}

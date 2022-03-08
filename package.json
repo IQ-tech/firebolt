@@ -5,18 +5,19 @@
     "packages/*"
   ],
   "scripts": {
+    "setup":"yarn && yarn build:libs",
+    "clean": "lerna clean",
+    "bootstrap": "lerna bootstrap --use-workspaces",
     "start": "lerna run dev --scope @iq-firebolt/lab --stream",
     "test:all": "lerna run test",
     "test:validators": "cd packages/validators && yarn test",
     "test:client-core": "cd packages/client-core && yarn test",
     "test:client": "cd packages/client && yarn test",
     "build:validators": "cd packages/validators && yarn build",
-    "build:libs": "lerna run build --scope @iq-firebolt/validators --scope @iq-firebolt/client",
-    "bootstrap": "lerna bootstrap --use-workspaces",
-    "versionup": "lerna version  --no-git-tag-version --force-publish",
-    "publish:libs": "yarn lerna publish from-package --yes --no-verify-access",
-    "clean": "lerna clean",
-    "publish:canary": "lerna publish --canary --preid next --dist-tag next --force-publish='*' --no-push --no-git-tag-version --yes --no-verify-access",
+    "build:libs": "lerna run build --scope @iq-firebolt/client-core --scope @iq-firebolt/validators --scope @iq-firebolt/client",
+    "versionup": "lerna version --conventional-commits --exact --create-release github --yes",
+    "publish:libs": "lerna publish from-package --yes --no-verify-access",
+    "publish:canary": "lerna publish --canary patch --exact --preid next --dist-tag next --force-publish='*' --yes --no-verify-access --no-git-tag-version",
     "prepare": "husky install"
   },
   "devDependencies": {

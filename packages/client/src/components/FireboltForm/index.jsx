@@ -1,10 +1,10 @@
-import PropTypes from "prop-types";
-import Button from "@material-ui/core/Button";
+import React from "react"
+import PropTypes from "prop-types"
 
-import Insert from "./Insert";
-import useFireboltForm from "./hook";
+import Insert from "./Insert"
+import useFireboltForm from "./hook"
 // @ts-ignore
-import classes from "./style.module.css";
+import classes from "./style.module.css"
 
 const FireboltForm = ({
   submitBtnText = "Next Step",
@@ -20,7 +20,7 @@ const FireboltForm = ({
   onSubmit,
   onGoBack,
   onChange,
-  onFocusField
+  onFocusField,
 }) => {
   const { handleSubmit, formChildren, actionsChildData, handleGoBack } =
     useFireboltForm({
@@ -34,10 +34,10 @@ const FireboltForm = ({
       onChange,
       onGoBack,
       classes,
-      onFocusField
-    });
+      onFocusField,
+    })
 
-  const ActionsChild = customActionsChild;
+  const ActionsChild = customActionsChild
 
   return (
     <form className={className} onSubmit={handleSubmit} autoComplete="off">
@@ -47,24 +47,24 @@ const FireboltForm = ({
         <ActionsChild formData={actionsChildData} />
       ) : (
         <>
-          <Button
-            variant="contained"
+          <button
             color="secondary"
             style={{ marginRight: "5px" }}
+            data-testid="fbt-submit-button"
             onClick={handleGoBack}
           >
             {previousBtnText}
-          </Button>
-          <Button variant="contained" color="primary" type="submit">
+          </button>
+          <button color="primary" onClick={handleSubmit}>
             {submitBtnText}
-          </Button>
+          </button>
         </>
       )}
     </form>
-  );
-};
+  )
+}
 
-FireboltForm.Insert = Insert;
+FireboltForm.Insert = Insert
 
 FireboltForm.propTypes = {
   /** Children to be rendered instead of default submit button */
@@ -73,6 +73,6 @@ FireboltForm.propTypes = {
   autoFill: PropTypes.object,
   /** fields adapter - allow firebolt to use custom components to firebolt base fields */
   theme: PropTypes.object,
-};
+}
 
-export default FireboltForm;
+export default FireboltForm
