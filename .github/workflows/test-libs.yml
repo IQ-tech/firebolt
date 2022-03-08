@@ -25,6 +25,7 @@ jobs:
         run: yarn build:libs
       - name: Check changed packages
         uses: dorny/paths-filter@v2
+        id: changes
         with: 
           filters: |
             client:
