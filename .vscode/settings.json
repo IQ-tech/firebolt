@@ -1,0 +1,14 @@
+{
+  "conventionalCommits.scopes": [
+    "all",
+    "client", 
+    "client-core",
+    "validators",
+    "lab",
+    "entities",
+    "blueberry-theme",
+    "material-theme",
+    "json-schema"
+  ],
+  "conventionalCommits.promptFooter": false
+}
