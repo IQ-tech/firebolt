@@ -1,7 +1,7 @@
 import { LOCALSTORE_KEY } from "../../constants";
 import getFireboltLocalStorage from "./getFireboltLocalStorage";
 
-export default function createFormSession(formName, authKey) {
+export default function createFormSession(formName: string, authKey: string) {
   
   const fireboltLocalStorage = getFireboltLocalStorage();
 

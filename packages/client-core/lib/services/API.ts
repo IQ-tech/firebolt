@@ -1,8 +1,5 @@
-import axios from "axios";
-import {
-  formatStepResponseData,
-  formatReqPayload,
-} from "../helpers/formatData";
+import axios, { AxiosRequestConfig } from "axios"
+import { formatStepResponseData, formatReqPayload } from "../helpers/formatData"
 import { IApiService, IFormResponseData } from "../types"
 
 class APIService {
@@ -78,7 +75,7 @@ class APIService {
     formData.append("file", file)
     const endpoint = `${this.endpoints.root}/upload`
 
-    const config = {
+    const config: AxiosRequestConfig = {
       method: "post",
       url: endpoint,
       headers: {
@@ -88,7 +85,6 @@ class APIService {
       data: formData,
     }
 
-    // @ts-ignore
     return await axios(config)
   }
 
@@ -98,4 +94,4 @@ class APIService {
   }
 }
 
-export default APIService;
+export default APIService

@@ -1,4 +1,3 @@
-import { object } from "prop-types";
 import { useEffect } from "react";
 import { useFirebolt } from "../../hooks/useFirebolt";
 import { IWizardHook } from "../../types"

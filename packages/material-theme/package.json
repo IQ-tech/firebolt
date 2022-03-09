@@ -1,10 +1,10 @@
 {
   "name": "@iq-firebolt/material-theme",
-  "version": "0.3.3",
+  "version": "0.5.0",
   "description": "> TODO: description",
   "author": "iq team",
   "homepage": "https://github.com/IQ-tech/firebolt#readme",
-  "license": "ISC",
+  "license": "Apache-2.0",
   "sideEffects": false,
   "main": "./index.js",
   "publishConfig": {

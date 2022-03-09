@@ -1,7 +1,9 @@
+import { IFormAccess } from "../types"
 
- export default function validateFormSource(formSource: { root: string; formName: string }) {
+export default function validateFormSource(formSource: IFormAccess) {
   const { root, formName } = formSource
-  const validateConfig = (config: string) => !!config && typeof config === "string"
+  const validateConfig = (config: string) =>
+    !!config && typeof config === "string"
 
   if (!validateConfig(root) || !validateConfig(formName)) {
     throw new TypeError(

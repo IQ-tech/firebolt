@@ -1,8 +1,10 @@
-name: publish dev (canary)
+name: Pre-release
+
 on:
-  push:
+  pull_request:
+    types: [closed]
     branches:
-      - development
+      - main
 
 permissions:
   contents: write # for checkout and tag
@@ -11,18 +13,20 @@ permissions:
 
 jobs:
   publish:
-    name: Publish
-    runs-on: ubuntu-18.04
+    if: github.event.pull_request.merged == true
+    name: Pre-release
+    runs-on: ubuntu-latest
     steps:
-      - name: Checkout
+      - name: "Checkout"
         uses: actions/checkout@v2
         with:
           fetch-depth: 0
-      - name: Use Node.js ${{ matrix.node-version }}
+      - name: "Setup do nodejs"
         uses: actions/setup-node@v2
         with:
-          node-version: ${{ matrix.node-version }}
+          node-version: 14
           cache: "yarn"
+
       - name: Git Identity
         run: |
           git config --global user.name 'github-actions[bot]'
@@ -40,9 +44,11 @@ jobs:
 
       - name: Install
         run: yarn install
-      - name: Setup lerna
-        run: yarn bootstrap
       - name: Build libs
         run: yarn build:libs
-      - name: Publish canary
-        run: yarn publish:canary
+      - name: Bump versions and publish packages
+        run: |
+          yarn publish:canary
+        env: 
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
