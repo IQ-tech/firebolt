@@ -1,13 +1,10 @@
 import React from "react"
-// import PropTypes from "prop-types"
 
 import Insert from "./Insert"
 import useFireboltForm from "./hook"
 // @ts-ignore
 import classes from "./style.module.css"
 import { IFireboltForm } from "../../types"
-
-
 
 
 const FireboltForm = ({
@@ -69,14 +66,5 @@ const FireboltForm = ({
 }
 
 FireboltForm.Insert = Insert
-
-// FireboltForm.propTypes = {
-//   /** Children to be rendered instead of default submit button */
-//   submitText: PropTypes.string,
-//   /** Object to autofill form payload */
-//   autoFill: PropTypes.object,
-//   /** fields adapter - allow firebolt to use custom components to firebolt base fields */
-//   theme: PropTypes.object,
-// }
 
 export default FireboltForm

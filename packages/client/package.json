@@ -40,7 +40,6 @@
     "@iq-firebolt/validators": "0.5.0",
     "classnames": "^2.3.1",
     "fast-levenshtein": "^3.0.0",
-    "prop-types": "^15.7.2",
     "simple-evaluate": "^1.4.3"
   },
   "devDependencies": {
