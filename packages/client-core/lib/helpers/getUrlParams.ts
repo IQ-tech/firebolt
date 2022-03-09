@@ -13,4 +13,4 @@ export default function getUrlParams(): IUrlParams {
           return params
         }, {})
     : {}
-}
+} // Test
