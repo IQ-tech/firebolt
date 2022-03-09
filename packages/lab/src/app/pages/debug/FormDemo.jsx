@@ -27,7 +27,7 @@ const FormDemo = () => {
           </p>
         }
         onFinishForm={(payload) => {
-          // console.log("finish form:", payload);
+         // console.log("finish form:", payload);
         }}
         onConnectionError={(err) => {
           // console.log("connection error:", err);
@@ -37,7 +37,7 @@ const FormDemo = () => {
           proceed()
         }}
         onChangeStep={({ sentStep, currentStep }) => {
-          // console.log("changed step:", { sentStep, currentStep });
+           // console.log("changed step:", { sentStep, currentStep });
         }}
       >
         <Wizard.Step match="*" component={DefaultTemplate} />

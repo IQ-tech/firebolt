@@ -43,12 +43,14 @@ const CoreTest = () => {
   }, [])
 
   function proceedNext() {
-    formEngine.current.next("documents").then((data) => {
+    formEngine.current.goNextStep({dsd:"dsds"}).then((data) => {
+     // console.log("nextStep", data)
     })
   }
   
   function proceedPrevious() {
     formEngine.current.previousStep("addres").then((data) => {
+     // console.log("previousStep", data)
     })
   }
 

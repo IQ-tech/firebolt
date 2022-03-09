@@ -10,7 +10,6 @@
     "@iq-firebolt/client-core": "0.5.0",
     "@iq-firebolt/material-theme": "0.5.0",
     "iq-blueberry": "^0.0.18",
-    "prop-types": "^15.7.2",
     "react": "^17.0.0",
     "react-dom": "^17.0.0",
     "react-router-dom": "^5.3.0"

@@ -1,7 +1,7 @@
 import esbuild from "rollup-plugin-esbuild"
 import dts from "rollup-plugin-dts"
 
-const input = "lib/index.js"
+const input = "lib/index.ts"
 
 const esBundle = {
   input,
