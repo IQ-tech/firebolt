@@ -1,10 +1,10 @@
 {
   "name": "@iq-firebolt/validators",
-  "version": "0.2.4",
+  "version": "0.5.0",
   "description": "> TODO: description",
   "author": "iq team",
   "homepage": "https://github.com/IQ-tech/firebolt#readme",
-  "license": "ISC",
+  "license": "Apache-2.0",
   "publishConfig": {
     "access": "public"
   },
@@ -20,6 +20,7 @@
   "scripts": {
     "clear-dist": "rimraf dist",
     "test": "jest",
+    "test:coverage": "jest --collect-coverage",
     "test:watch": "NODE_ENV=test jest --watchAll",
     "build": "yarn clear-dist && tsc",
     "clear-jest": "jest --clearCache"

@@ -1,11 +1,11 @@
 {
   "name": "@iq-firebolt/entities",
-  "version": "0.2.4",
+  "version": "0.5.0",
   "description": "> TODO: description",
   "author": "iq team",
   "private": true,
   "homepage": "https://github.com/IQ-tech/firebolt#readme",
-  "license": "ISC",
+  "license": "Apache-2.0",
   "main": "lib/entities.js",
   "directories": {
     "lib": "lib",

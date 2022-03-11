@@ -1,17 +1,17 @@
 {
   // Change this to match your project
-  "include": ["src/index.js"],
+  "include": ["src/index.ts"],
   "exclude": ["/bin", "/obj"],
   "compilerOptions": {
     "baseUrl": "./",
     "rootDir": "./src",
-    "target": "es5",
+    "target": "es6",
     "lib": ["DOM"],
     "resolveJsonModule": true,
     "esModuleInterop": true,
     "sourceMap": false,
     "checkJs": true,
-    "module": "commonjs",
+    "module": "ES2015",
     "moduleResolution": "node",
     "jsx": "react-jsx",
     // Tells TypeScript to read JS files, as
@@ -32,6 +32,7 @@
       "firebolt-client/*": ["src/*"],
       "core/*": ["src/core/*"],
     },
-    "downlevelIteration": true
+    "downlevelIteration": true,
+    "isolatedModules": true
   }
 }
