@@ -1,0 +1,542 @@
+{
+  "$id": "https://github.com/IQ-tech/firebolt",
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "description": "This schema should be used to the creation and validation of Firebolt Forms JSON files",
+  "required": ["$schema-version", "category", "tracks", "steps"],
+  "title": "The Firebolt form schema",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "$schema-version": {
+      "$id": "#/properties/%24schema-version",
+      "default": "",
+      "description": "This version should match with the used Firebolt version",
+      "examples": ["1.0.0", "0.0.1"],
+      "title": "schema version",
+      "type": "string"
+    },
+    "category": {
+      "$id": "#/properties/category",
+      "description": "This field requires a keyword to categorize the form",
+      "examples": ["sample", "loans", "auth"],
+      "title": "The category schema",
+      "type": "string"
+    },
+    "business": {
+      "$id": "#/properties/business",
+      "description": "(deprecate) old way to categorize the form",
+      "examples": ["sample", "loans", "auth"],
+      "title": "The category schema",
+      "type": "string"
+    },
+    "webhook": {
+      "$id": "#/properties/webhook",
+      "description": "While transitioning steps on a form, the Firebolt api can make webhook calls to third party api's. This property can be used to define which steps these calls should be made. it can also define the third party api url that should be used.",
+      "examples": [
+        {
+          "triggers": ["personal_data"],
+          "url": "https://my-api.com/v2/"
+        }
+      ],
+      "required": ["url"],
+      "title": "The webhook schema",
+      "additionalProperties": false,
+      "type": "object",
+      "properties": {
+        "triggers": {
+          "$id": "#/properties/webhook/properties/triggers",
+          "default": [],
+          "description": "This property should receive an array of step slugs, then, the webhook calls will happen on transitioning from these steps.",
+          "examples": [["personal_data", "address_step"]],
+          "title": "The triggers schema",
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$id": "#/properties/webhook/properties/triggers/items",
+            "type": "string"
+          }
+        },
+        "url": {
+          "$id": "#/properties/webhook/properties/url",
+          "default": "",
+          "description": "url to be used on webhook calls (between step transitions)",
+          "examples": ["http://my-api-url.com/endpoint/"],
+          "title": "Webhook url",
+          "type": "string"
+        },
+        "headers": {
+          "$id": "#/properties/webhook/properties/headers",
+          "type": "object",
+          "additionalProperties": true,
+          "title": "form headers",
+          "description": "headers to be used with webhook calls"
+        }
+      }
+    },
+    "tracks": {
+      "$id": "#/properties/tracks",
+      "description": "Tracks are the possible flows that can be performed during a form completion experience. the form process will use only one track at time, but the firebolt api can change the track of a form on the process.",
+      "examples": [
+        [
+          {
+            "slug": "default",
+            "steps": ["personal_data", "documents", "address", "bills"]
+          },
+          {
+            "slug": "medium",
+            "steps": ["personal_data", "documents", "token"]
+          }
+        ]
+      ],
+      "title": "Form Tracks",
+      "minItems": 1,
+      "additionalItems": true,
+      "type": "array",
+      "items": {
+        "$id": "#/properties/tracks/items",
+        "anyOf": [
+          {
+            "$id": "#/properties/tracks/items/anyOf/trackItem",
+            "description": "At least a default track is required",
+            "examples": [
+              {
+                "slug": "default",
+                "steps": ["personal_data", "documents", "address", "bills"]
+              }
+            ],
+            "required": ["slug", "steps"],
+            "title": "any track",
+            "type": "object",
+            "properties": {
+              "slug": {
+                "$id": "#/properties/tracks/items/anyOf/trackItem/properties/slug",
+                "description": "An identifier to the track, every form should have a default track",
+                "examples": ["default", "alternative-track"],
+                "title": "Slug of the track",
+                "type": "string"
+              },
+              "steps": {
+                "$id": "#/properties/tracks/items/anyOf/trackItem/properties/steps",
+                "description": "The list of steps that this track should have, this array contains a list of steps slugs",
+                "examples": [["personal_data", "documents"]],
+                "title": "Track steps list",
+                "type": "array",
+                "additionalItems": true,
+                "items": {
+                  "$id": "#/properties/tracks/items/anyOf/trackItem/properties/steps/items",
+                  "anyOf": [
+                    {
+                      "$id": "#/properties/tracks/items/anyOf/trackItem/properties/steps/items/anyOf/0",
+                      "type": "string",
+                      "title": "The first anyOf schema",
+                      "description": "An explanation about the purpose of this instance.",
+                      "default": "",
+                      "examples": ["personal_data", "documents"]
+                    }
+                  ]
+                }
+              }
+            },
+            "additionalProperties": false
+          }
+        ]
+      }
+    },
+    "steps": {
+      "$id": "#/properties/steps",
+      "description": "Here we can define the possible steps that the form can have",
+      "title": "The steps list of the form",
+      "type": "array",
+      "minItems": 1,
+      "additionalItems": true,
+      "items": {
+        "$id": "#/properties/steps/items",
+        "anyOf": [
+          {
+            "$id": "#/properties/steps/items/anyOf/0",
+            "default": {},
+            "description": "An explanation about the purpose of this instance.",
+            "examples": [
+              {
+                "step": {
+                  "slug": "personal_data",
+                  "type": "form",
+                  "friendlyname": "Let's begin",
+                  "fields": [
+                    {
+                      "slug": "full_name",
+                      "ui:widget": "Text",
+                      "ui:props": {
+                        "label": "Full Name",
+                        "placeholder": "Type your full name"
+                      },
+                      "validators": [
+                        {
+                          "type": "required"
+                        },
+                        {
+                          "type": "name"
+                        }
+                      ]
+                    },
+                    {
+                      "slug": "email",
+                      "ui:widget": "Email",
+                      "ui:props": {
+                        "label": "Email",
+                        "placeholder": "contact@email.com"
+                      },
+                      "validators": [
+                        {
+                          "type": "required"
+                        },
+                        {
+                          "type": "email"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              }
+            ],
+            "required": ["step"],
+            "title": "The first anyOf schema",
+            "type": "object",
+            "properties": {
+              "step": {
+                "$id": "#/properties/steps/items/anyOf/0/properties/step",
+                "default": {},
+                "description": "An explanation about the purpose of this instance.",
+                "examples": [
+                  {
+                    "slug": "personal_data",
+                    "type": "form",
+                    "friendlyname": "Let's begin",
+                    "fields": [
+                      {
+                        "slug": "full_name",
+                        "ui:widget": "Text",
+                        "ui:props": {
+                          "label": "Full Name",
+                          "placeholder": "John doe"
+                        },
+                        "validators": [
+                          {
+                            "type": "required"
+                          },
+                          {
+                            "type": "name"
+                          }
+                        ]
+                      },
+                      {
+                        "slug": "email",
+                        "ui:widget": "Email",
+                        "ui:props": {
+                          "label": "Email",
+                          "placeholder": "contato@email.com"
+                        },
+                        "validators": [
+                          {
+                            "type": "required"
+                          },
+                          {
+                            "type": "email"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ],
+                "required": ["slug", "type", "friendlyname"],
+                "title": "The Step schema",
+                "type": "object",
+                "properties": {
+                  "slug": {
+                    "$id": "#/properties/steps/items/anyOf/0/properties/step/properties/slug",
+                    "description": "An unique identifier to this step",
+                    "examples": ["personal_data", "address_data"],
+                    "title": "Step slug",
+                    "type": "string"
+                  },
+                  "type": {
+                    "$id": "#/properties/steps/items/anyOf/0/properties/step/properties/type",
+                    "description": "Should be 'form' or 'custom', is used to distiguish between a regular form step or a custom step that should not have field validations",
+                    "examples": ["form"],
+                    "title": "Form step title",
+                    "type": "string"
+                  },
+                  "friendlyname": {
+                    "$id": "#/properties/steps/items/anyOf/0/properties/step/properties/friendlyname",
+                    "description": "this property is used to define a friendly display name to the step",
+                    "examples": ["Lets Begin", "Type yout address..."],
+                    "title": "The friendlyname schema",
+                    "type": "string"
+                  },
+                  "fields": {
+                    "$id": "#/properties/steps/items/anyOf/0/properties/step/properties/fields",
+                    "description": "Used to define the list of fields inside a step, is not required in custom steps",
+                    "examples": [
+                      [
+                        {
+                          "slug": "full_name",
+                          "ui:widget": "Text",
+                          "ui:props": {
+                            "label": "Nome completo",
+                            "placeholder": "Nome completo"
+                          },
+                          "validators": [
+                            {
+                              "type": "required"
+                            },
+                            {
+                              "type": "name"
+                            }
+                          ]
+                        },
+                        {
+                          "slug": "email",
+                          "ui:widget": "Email",
+                          "ui:props": {
+                            "label": "Email",
+                            "placeholder": "contato@email.com"
+                          },
+                          "validators": [
+                            {
+                              "type": "required"
+                            },
+                            {
+                              "type": "email"
+                            }
+                          ]
+                        }
+                      ]
+                    ],
+                    "title": "The fields schema",
+                    "type": "array",
+                    "additionalItems": true,
+                    "minItems": 1,
+                    "items": {
+                      "$id": "#/properties/steps/items/anyOf/0/properties/step/properties/fields/items",
+                      "anyOf": [
+                        {
+                          "$id": "#/properties/steps/items/anyOf/0/properties/step/properties/fields/items/anyOf/0",
+                          "default": {},
+                          "description": "An explanation about the purpose of this instance.",
+                          "examples": [
+                            {
+                              "slug": "full_name",
+                              "ui:widget": "Text",
+                              "ui:props": {
+                                "label": "Nome completo",
+                                "placeholder": "Nome completo"
+                              },
+                              "validators": [
+                                {
+                                  "type": "required"
+                                },
+                                {
+                                  "type": "name"
+                                }
+                              ],
+                              "meta": {}
+                            }
+                          ],
+                          "required": ["slug", "ui:widget", "ui:props"],
+                          "title": "The first anyOf schema",
+                          "type": "object",
+                          "properties": {
+                            "slug": {
+                              "$id": "#/properties/steps/items/anyOf/0/properties/step/properties/fields/items/anyOf/0/properties/slug",
+                              "description": "An unique identifier to the field",
+                              "examples": [
+                                "full_name",
+                                "zipcode",
+                                "street_address"
+                              ],
+                              "title": "Field slug",
+                              "type": "string"
+                            },
+                            "ui:widget": {
+                              "$id": "#/properties/steps/items/anyOf/0/properties/step/properties/fields/items/anyOf/0/properties/ui%3Awidget",
+                              "default": "Text",
+                              "description": "The Widget (firebolt-client component) that should be used on render the form. check the firebolt client to see the available widgets. custom widgets can be used with custom firebolt-client themes",
+                              "examples": ["Text", "Select", "Check"],
+                              "title": "UI Widget",
+                              "type": "string"
+                            },
+                            "ui:props": {
+                              "$id": "#/properties/steps/items/anyOf/0/properties/step/properties/fields/items/anyOf/0/properties/ui%3Aprops",
+                              "default": {},
+                              "description": "Any value that can be passed right to the UI Widgets (components), values like label, placeholde, options, etc. these options are defined by the theme used by the front-end app",
+                              "examples": [
+                                {
+                                  "label": "Nome completo",
+                                  "placeholder": "Nome completo"
+                                }
+                              ],
+                              "title": "Field UI props",
+                              "type": "object",
+                              "additionalProperties": true
+                            },
+                            "ui:props-preset": {
+                              "$id": "#/properties/steps/items/anyOf/0/properties/step/properties/fields/items/anyOf/0/properties/ui%3Aprops-preset",
+                              "type": "string",
+                              "title": "UI props preset",
+                              "description": "Used to apply a preset of props to a field Widget",
+                              "examples": ["br-cep", "month-year"]
+                            },
+                            "ui:props-conditional": {
+                              "$id": "#/properties/steps/items/anyOf/0/properties/step/properties/fields/items/anyOf/0/properties/ui%3Aprops-conditional",
+                              "type": "array",
+                              "minItems": 1,
+                              "title": "UI props conditional",
+                              "additionalItems": true,
+                              "description": "Conditionally add properties to a widget",
+                              "examples": [
+                                {
+                                  "conditional": "step.document_issuer === '31'",
+                                  "props": {
+                                    "options": [
+                                      {
+                                        "value": "DETRAN",
+                                        "label": "DEPARTAMENTO ESTADUAL DE TRANSITO"
+                                      },
+                                      {
+                                        "value": "DNT",
+                                        "label": "DEPARTAMENTO NACIONAL DE TRANSITO"
+                                      }
+                                    ]
+                                  }
+                                }
+                              ],
+                              "items": {
+                                "$id": "#/properties/steps/items/anyOf/0/properties/step/properties/fields/items/anyOf/0/properties/ui%3Aprops-conditional/items",
+                                "anyOf": [
+                                  {
+                                    "$id": "#/properties/steps/items/anyOf/0/properties/step/properties/fields/items/anyOf/0/properties/ui%3Aprops-conditional/items/anyOf/0",
+                                    "type": "object",
+                                    "additionalProperties": false,
+                                    "required": ["conditional", "props"],
+                                    "title": "UI prop conditional item",
+                                    "properties": {
+                                      "conditional": {
+                                        "$id": "#/properties/steps/items/anyOf/0/properties/step/properties/fields/items/anyOf/0/properties/ui%3Aprops-conditional/items/anyOf/0/properties/conditional",
+                                        "title": "UI prop conditional",
+                                        "description": "receive a conditional expression, if evaluated truthy on the fron-end, then the props will be passed to the field widget",
+                                        "type": "string",
+                                        "example": [
+                                          "step.full_name === 'carlos alberto'"
+                                        ]
+                                      },
+                                      "props": {
+                                        "$id": "#/properties/steps/items/anyOf/0/properties/step/properties/fields/items/anyOf/0/properties/ui%3Aprops-conditional/items/anyOf/0/properties/props",
+                                        "title": "UI props conditional props",
+                                        "type": "object",
+                                        "additionalProperties": true,
+                                        "description": "can have any properties inside"
+                                      }
+                                    }
+                                  }
+                                ]
+                              }
+                            },
+                            "ui:styles": {
+                              "$id": "#/properties/steps/items/anyOf/0/properties/step/properties/fields/items/anyOf/0/properties/ui%3Astyles",
+                              "title": "UI styles key",
+                              "description": "used to modify certain aspects of the fields presentation, such as size",
+                              "type": "object",
+                              "additionalProperties": true,
+                              "properties": {
+                                "size": {
+                                  "$id": "#/properties/steps/items/anyOf/0/properties/step/properties/fields/items/anyOf/0/properties/ui%3Astyles/size",
+                                  "description": "Set field horizontal size on UI",
+                                  "title": "field size",
+                                  "enum": ["half", "full"],
+                                  "type": "string"
+                                }
+                              }
+                            },
+                            "conditional": {
+                              "$id": "#/properties/steps/items/anyOf/0/properties/step/properties/fields/items/anyOf/0/properties/conditional",
+                              "type": "string",
+                              "title": "Conditional field",
+                              "description": "receives a logical expression, if false the field won't be rendered or validated",
+                              "examples": [
+                                "step.marital_status === '07' || step.marital_status === '06'"
+                              ]
+                            },
+                            "validators": {
+                              "$id": "#/properties/steps/items/anyOf/0/properties/step/properties/fields/items/anyOf/0/properties/validators",
+                              "description": "Used to defined wich validators should be applied to the field, these validators can run on the client app or in the server",
+                              "examples": [
+                                [
+                                  {
+                                    "type": "required"
+                                  },
+                                  {
+                                    "type": "name"
+                                  }
+                                ]
+                              ],
+                              "title": "Fields validators configuration",
+                              "type": "array",
+                              "additionalItems": true,
+                              "items": {
+                                "$id": "#/properties/steps/items/anyOf/0/properties/step/properties/fields/items/anyOf/0/properties/validators/items",
+                                "anyOf": [
+                                  {
+                                    "$id": "#/properties/steps/items/anyOf/0/properties/step/properties/fields/items/anyOf/0/properties/validators/items/anyOf/0",
+                                    "type": "object",
+                                    "title": "The first anyOf schema",
+                                    "description": "An explanation about the purpose of this instance.",
+                                    "default": {},
+                                    "examples": [
+                                      {
+                                        "type": "required"
+                                      }
+                                    ],
+                                    "required": ["type"],
+                                    "properties": {
+                                      "type": {
+                                        "$id": "#/properties/steps/items/anyOf/0/properties/step/properties/fields/items/anyOf/0/properties/validators/items/anyOf/0/properties/type",
+                                        "description": "here we can pass the validator name, check firebolt validators lib to se the supported validators",
+                                        "examples": ["required"],
+                                        "title": "Validator name",
+                                        "type": "string"
+                                      },
+                                      "properties": {
+                                        "$id": "#/properties/steps/items/anyOf/0/properties/step/properties/fields/items/anyOf/0/properties/validators/items/anyOf/0/properties/properties",
+                                        "description": "Any property that should be passed to the validator",
+                                        "title": "Validator properties",
+                                        "type": "object",
+                                        "additionalProperties": true
+                                      },
+                                      "context": {
+                                        "$id": "#/properties/steps/items/anyOf/0/properties/step/properties/fields/items/anyOf/0/properties/validators/items/anyOf/0/properties/context",
+                                        "description": "Specify the context when the validator should be used",
+                                        "type": "string",
+                                        "enum": ["client", "server"]
+                                      }
+                                    }
+                                  }
+                                ]
+                              }
+                            }
+                          },
+                          "additionalProperties": false
+                        }
+                      ]
+                    }
+                  }
+                },
+                "additionalProperties": false
+              }
+            },
+            "additionalProperties": true
+          }
+        ]
+      }
+    }
+  }
+}

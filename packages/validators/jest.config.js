@@ -1,5 +1,5 @@
+const jestBaseConfig = require("../../jest.base.config");
+
 module.exports = {
-  transform: {
-    "^.+\\.ts$": "ts-jest",
-  },
-};
+  ...jestBaseConfig,
+}
