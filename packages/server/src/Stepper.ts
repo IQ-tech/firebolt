@@ -1,8 +1,8 @@
 /**
- * objetivos
+ * 
  */
 
-class Engine {
+class Stepper {
   private preDefinedJSONSchema?: Object
   private resolvers?: IEngineResolvers
 
@@ -19,17 +19,13 @@ class Engine {
     }
   }
 
-  proceedHandler(callbackFunction?: () => void) {
-    if (callbackFunction) {
-        const decisionPayload = callbackFunction()
-    } else {
-    }
+  startHandler(){
 
-    // function that will run when income next request
-    return (dataFromFrontEnd: Object) => {
-        
-    }
   }
+
+  proceedHandler(callbackFunction?: () => void) {
+  }
+
   goBackHandler() {
     return () => {}
   }
@@ -43,4 +39,4 @@ class Engine {
   }
 }
 
-export default Engine
+export default Stepper

@@ -1,4 +1,4 @@
-import Engine from "./engine"
+import StepperEngine from "./engine"
 
 /**
  * funcionamento:
@@ -8,28 +8,37 @@ import Engine from "./engine"
  * em seguida retorna o proximo passo;
  */
 
+/**
+ * duvidas:
+ * 
+ * - como lidar com a chamada de webhook, o fetch deve ficar dentro do pacote ou não?
+ * 
+ * - podemos unificar a next e a start como uma rota só?
+ */
+
+
+/**
+ * certezas:
+ * 
+ *  - a engine deve ter um slug para cada tipo de erro, o conector deve identificar qual é
+ * esse erro e como ele deve ser tratado
+ * 
+ */
+
 
 
 
 function createEngine(engineOptions: ICreateEngineOptions) {
-  return new Engine(engineOptions)
+  return new StepperEngine(engineOptions)
 }
 
 // ----------------------------------
 
-/* const fireboltEngine = createEngine()
+// uso com express
 
-// se não passar nada no parametro, ele roda o answer.proceed automaticamente
-fireboltEngine.proceedHandler((answer) => {
-  answer.proceed()
-  answer.fieldError()
-  answer.preventProceed()
-  answer.changeTrack()
-}) */
+// uso com serverless
 
-
-
-/* import {createEngine} from "firebolt-server" */
+// uso com browser
 
 
 

@@ -33,3 +33,7 @@ describe("Props presets apply", () => {
     "props presets should be applied on Engine.debug return value"
   )
 })
+
+describe("Stepper hooks working", () => {
+  
+})
