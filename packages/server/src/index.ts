@@ -1,46 +1,18 @@
-class FireboltEngine {
-  private preDefinedJSONSchema?: Object
-  private resolvers?: IEngineResolvers
+import Engine from "./engine"
 
-  constructor({ formJSONSchema, resolvers }: ICreateEngineOptions) {
-    this.preDefinedJSONSchema = formJSONSchema
-    this.resolvers = resolvers
-  }
+/**
+ * funcionamento:
+ * 
+ * tem que validar o passo quando os dados chegarem no motor
+ * salvar o progresso de um passo em um storage (localstorage, api, banco)
+ * em seguida retorna o proximo passo;
+ */
 
-  private async getCorrectFormJSONSchema(experienceSlug: string) {
-    if (this.preDefinedJSONSchema) {
-      return this.preDefinedJSONSchema
-    } else {
-      return await this?.resolvers?.getFormJSONSchema(experienceSlug)
-    }
-  }
 
-  proceedHandler(callbackFunction?: () => void) {
-    if (callbackFunction) {
-        const decisionPayload = callbackFunction()
-    } else {
-    }
 
-    // function that will run when income next request
-    return (dataFromFrontEnd: Object) => {
-        
-    }
-  }
-  goBackHandler() {
-    return () => {}
-  }
-
-  debugHandler() {
-    return () => {}
-  }
-
-  uploadHandler() {
-    return () => {}
-  }
-}
 
 function createEngine(engineOptions: ICreateEngineOptions) {
-  return new FireboltEngine(engineOptions)
+  return new Engine(engineOptions)
 }
 
 // ----------------------------------
