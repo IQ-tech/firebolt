@@ -16,14 +16,12 @@ interface IEngineHooks {
 }
 
 interface IEngineResolvers {
-  getFormJSONSchema: (experienceSlug: string) => Object; // or formJSONSchema
-  
-
+  // local json, resover function or remote json (used on client)
+  getFormJSONSchema: (experienceSlug: string) => Object | Object | 'remote';
 }
 
 interface ICreateEngineOptions {
   resolvers: IEngineResolvers;
-  formJSONSchema?: Object; // or dynamic find handler
   hooks?: IEngineHooks;
   addons?: any;
 }
