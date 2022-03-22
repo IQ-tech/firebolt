@@ -1,49 +1,50 @@
-interface IPropsPresetCollection {
+export interface IPropsPresetCollection {
   name: string
   presets: {
     [key: string]: any
   }
-};
-interface IAddonsConfig {
-  uiPropsPresets?: IPropsPresetCollection[] 
 }
 
-interface IEngineHooks {
-  onBeforeCallWebhook?: () => void;
-  onGetWebHookResponse?: () => void;
-  onProceedStep?: () => void;
-  onGoBackStep?: () => void;
+export interface IAddonsConfig {
+  uiPropsPresets?: IPropsPresetCollection[]
 }
 
-interface IEngineResolvers {
+export interface IEngineHooks {
+  onBeforeCallWebhook?: () => void
+  onGetWebHookResponse?: () => void
+  onProceedStep?: () => void
+  onGoBackStep?: () => void
+}
+
+export interface IEngineResolvers {
   // local json, resover function or remote json (used on client)
   getFormJSONSchema: (experienceSlug: string) => Promise<IStepConfig>
-  getSession: (sessionId: string) => Promise<IFireboltStepData | undefined>
+  getSession: (sessionId?: string) => Promise<IFireboltStepData | undefined>
   setSession: (fireboltStepData: IFireboltStepData) => Promise<void>
 }
 
-interface ICreateEngineOptions {
+export interface ICreateEngineOptions {
   slug: string
-  formJSONSchema?: IStepConfig
+  formJSONSchema?: any
   resolvers: IEngineResolvers
   hooks?: IEngineHooks
   addons?: any
 }
 
 // -------------------------
-// API interface import
+// API export interface import
 // TODO: Check if already exists
 
-interface IStepTracks {
+export interface IStepTracks {
   slug: string
   steps: string[]
 }
 
-interface ISteps {
+export interface ISteps {
   step: IStep
 }
 
-interface IStep {
+export interface IStep {
   id: number
   slug: string
   type: string
@@ -51,7 +52,7 @@ interface IStep {
   fields?: IStepConfigField[]
 }
 
-interface IStepConfigField {
+export interface IStepConfigField {
   slug: string
   "ui:widget": string
   "ui:props": IStepConfigFieldUiProps
@@ -61,7 +62,18 @@ interface IStepConfigField {
   value?: any
 }
 
-interface IStepConfig {
+export interface IStepConfigFieldUiProps {
+  label: string
+  placeholder: string
+}
+
+export interface IStepConfigFieldValidator {
+  type: string
+}
+
+export interface IStepConfigFieldMeta {}
+
+export interface IStepConfig {
   "$schema-version"?: string
   "$form-version"?: string
   business: string
@@ -70,7 +82,7 @@ interface IStepConfig {
   steps: ISteps[]
 }
 
-interface IFireboltStepData {
+export interface IFireboltStepData {
   step: {
     data: IStep
     position: number
@@ -81,21 +93,31 @@ interface IFireboltStepData {
   sessionId: string
 }
 
-interface IFireboltStepMeta {
+export interface IFireboltStepMeta {
   lastStep: string
   forms: IFireboltStepMetaForm[]
 }
 
-interface IFireboltStepMetaForm {
+export interface IFireboltStepMetaForm {
   position: number
   slug: string
   friendlyname: string
 }
 
-interface IFireboltWebhookResponse {
+export interface IFireboltWebhookResponse {
   preventContinue: boolean
   errorSlugField?: string
   errorMessage?: string
   newTrackSlug?: string
   processedData?: any
+}
+
+export interface IStepConfigWebhook {
+  triggers: string[]
+  url: string
+  headers: IStepConfigWebhookHeader
+}
+
+export interface IStepConfigWebhookHeader {
+  [prop: string]: any
 }

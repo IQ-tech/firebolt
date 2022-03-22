@@ -1,4 +1,14 @@
-import { v4 } from 'uuid'
+import { v4 } from "uuid"
+
+import {
+  ICreateEngineOptions,
+  IEngineResolvers,
+  IFireboltStepData,
+  IFireboltStepMeta,
+  IFireboltStepMetaForm,
+  IStep,
+  IStepConfig,
+} from "./types"
 
 class Stepper {
   public slug: string
@@ -36,20 +46,17 @@ class Stepper {
     return firstStep.step
   }
 
-  async startHandler(sessionId: string): Promise<IFireboltStepData> {
+  async startHandler(sessionId?: string): Promise<IFireboltStepData> {
     const schema = await this.getCorrectFormJSONSchema(this.slug)
     const session = await this.resolvers.getSession(sessionId)
-    // verificar se existe uma sessão com esse sessionId no storage (chamar resolver de get session)
+
     if (session) {
-      // se sim vai retornar o proximo passo a ser completado pelo usuário
       return session
     } else {
-      // se não, vai criar um novo
-      // retornar o primeiro passo do form + novo sessionId
-      const sessionId =  v4()
+      const sessionId = v4()
       const data = this.createFirstStep(schema)
       const meta = await this.metadata(schema)
-      const stepData = {
+      return {
         sessionId,
         meta,
         capturedData: {},
@@ -58,8 +65,6 @@ class Stepper {
           position: 1,
         },
       } as IFireboltStepData
-
-      return stepData
     }
   }
 
@@ -75,15 +80,11 @@ class Stepper {
     //   currentTrackSlug = dynamoItem.track ?? "default"
     // }
 
-    const currentTrack = schema.tracks.find(
-      (x) => x.slug == currentTrackSlug
-    )
+    const currentTrack = schema.tracks.find((x) => x.slug == currentTrackSlug)
 
     const forms: IFireboltStepMetaForm[] = currentTrack!.steps.map(
       (item, i) => {
-        const stepConfig = schema.steps.find(
-          (x) => x.step.slug === item
-        )
+        const stepConfig = schema.steps.find((x) => x.step.slug === item)
         return {
           position: i + 1,
           slug: item,
