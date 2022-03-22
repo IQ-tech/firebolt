@@ -33,9 +33,64 @@ describe("start stepper engine", () => {
     expect(form.step.data.slug).toBe("personal_data")
   })
 
-  test.todo(
-    "Engine.start should use an existing token and retrieve the last uncompleted step"
-  )
+  test("Engine.start should use an existing token and retrieve the last uncompleted step", async () => {
+    const sessionId = faker.datatype.uuid()
+    const mockedFirstStep = {
+      sessionId,
+      step: {
+        position: 2,
+        data: {
+          id: 2,
+          slug: "documents",
+          type: "form",
+          friendlyname: "Documentos",
+          fields: [
+            {
+              slug: "brazil_id_number",
+              "ui:widget": "Text",
+              "ui:props": {
+                label: "Número do documento",
+              },
+              validators: [{ "type": "required" }],
+              meta: {},
+            },
+          ],
+        },
+        webhookResult: {
+          preventContinue: false,
+          errorSlugField: "",
+          errorMessage: "",
+        },
+      },
+      meta: {
+        lastStep: "bills",
+        forms: [
+          {
+            position: 1,
+            slug: "personal_data",
+            friendlyname: "Vamos começar",
+          },
+          {
+            position: 2,
+            slug: "documents",
+            friendlyname: "Documentos",
+          },
+          {
+            position: 3,
+            slug: "address",
+            friendlyname: "Endereço",
+          },
+          {
+            position: 4,
+            slug: "bills",
+            friendlyname: "Adicionar Contas",
+          },
+        ],
+      },
+    } as IFireboltStepData
+
+    localStorage.setItem(sessionId, JSON.stringify(mockedFirstStep))
+  })
 })
 
 describe("next step handling", () => {
