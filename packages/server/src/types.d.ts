@@ -23,7 +23,7 @@ interface IEngineResolvers {
 }
 
 interface ICreateEngineOptions {
-  slug: srting
+  slug: string
   formJSONSchema?: IStepConfig
   resolvers: IEngineResolvers
   hooks?: IEngineHooks

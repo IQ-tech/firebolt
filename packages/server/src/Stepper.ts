@@ -1,6 +1,4 @@
-/**
- * 
- */
+import { v4 } from 'uuid'
 
 class Stepper {
   public slug: string
@@ -24,7 +22,7 @@ class Stepper {
   }
 
   private createFirstStep(schema: IStepConfig): IStep {
-    // Sempre será a track defautlt???
+    // Sempre será a track default???
     const defaultTrack = schema.tracks.find((x) => x.slug === "default")
 
     const firstStep = schema.steps.find(
@@ -41,14 +39,14 @@ class Stepper {
   async startHandler(sessionId: string): Promise<IFireboltStepData> {
     const schema = await this.getCorrectFormJSONSchema(this.slug)
     const session = await this.resolvers.getSession(sessionId)
-    // verificar se existe uma sessão com esse sessionid no storage (chamar resolver de get session)
+    // verificar se existe uma sessão com esse sessionId no storage (chamar resolver de get session)
     if (session) {
       // se sim vai retornar o proximo passo a ser completado pelo usuário
       return session
     } else {
       // se não, vai criar um novo
       // retornar o primeiro passo do form + novo sessionId
-      const sessionId = "sessionId" // FIX: create random id
+      const sessionId =  v4()
       const data = this.createFirstStep(schema)
       const meta = await this.metadata(schema)
       const stepData = {
@@ -61,7 +59,6 @@ class Stepper {
         },
       } as IFireboltStepData
 
-      await this.resolvers.setSession(stepData)
       return stepData
     }
   }

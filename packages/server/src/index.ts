@@ -1,4 +1,4 @@
-import StepperEngine from "./engine"
+import StepperEngine from "./Stepper"
 
 /**
  * funcionamento:
