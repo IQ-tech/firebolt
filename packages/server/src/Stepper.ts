@@ -31,11 +31,9 @@ class Stepper {
   private async getCorrectFormJSONSchema(
     experienceSlug: string
   ): Promise<IStepConfig> {
-    if (this.preDefinedJSONSchema) {
-      return this.preDefinedJSONSchema
-    } else {
-      return await this.resolvers.getFormJSONSchema(experienceSlug)
-    }
+    if (this.preDefinedJSONSchema) return this.preDefinedJSONSchema
+
+    return await this.resolvers.getFormJSONSchema(experienceSlug)
   }
 
   private createFirstStep(schema: IStepConfig): IStep {
@@ -57,23 +55,21 @@ class Stepper {
     const schema = await this.getCorrectFormJSONSchema(this.slug)
     const session = await this.resolvers.getSession(this.sessionId)
 
-    if (session) {
-      return session
-    } else {
-      const sessionId = v4()
-      const data = this.createFirstStep(schema)
-      const meta = await this.metadata(schema)
-      return {
-        sessionId,
-        currentTrack: "default",
-        meta,
-        capturedData: {},
-        step: {
-          data,
-          position: 1,
-        },
-      } as IFireboltStepData
-    }
+    if (session) return session
+
+    const sessionId = v4()
+    const data = this.createFirstStep(schema)
+    const meta = await this.metadata(schema)
+    return {
+      sessionId,
+      currentTrack: "default",
+      meta,
+      capturedData: {},
+      step: {
+        data,
+        position: 1,
+      },
+    } as IFireboltStepData
   }
 
   async metadata(schema: IStepConfig): Promise<IFireboltStepMeta> {
