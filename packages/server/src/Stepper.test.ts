@@ -56,6 +56,7 @@ describe("start stepper engine", () => {
 
     const mockedFirstStep = {
       sessionId,
+      currentTrack: "default",
       step: {
         position: 2,
         data: {
@@ -120,9 +121,6 @@ describe("start stepper engine", () => {
 
     const form = await engine.startHandler()
     expect(form).toEqual(mockedFirstStep)
-    // expect(form.sessionId).toBe(sessionId)
-    // expect(form.step.position).toBe(2)
-    // expect(form.step.data.slug).toBe("documents")
   })
 })
 

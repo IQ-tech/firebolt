@@ -92,6 +92,7 @@ export interface IFireboltStepData {
   capturedData: any
   meta: IFireboltStepMeta
   sessionId: string
+  currentTrack: string
 }
 
 export interface IFireboltStepMeta {

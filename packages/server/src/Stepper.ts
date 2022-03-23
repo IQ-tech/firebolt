@@ -65,6 +65,7 @@ class Stepper {
       const meta = await this.metadata(schema)
       return {
         sessionId,
+        currentTrack: "default",
         meta,
         capturedData: {},
         step: {
