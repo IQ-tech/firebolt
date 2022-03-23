@@ -11,12 +11,19 @@ import {
 } from "./types"
 
 class Stepper {
-  public slug: string
+  private slug: string
+  private sessionId?: string
   private preDefinedJSONSchema?: IStepConfig
   private resolvers: IEngineResolvers
 
-  constructor({ slug, formJSONSchema, resolvers }: ICreateEngineOptions) {
+  constructor({
+    slug,
+    sessionId,
+    formJSONSchema,
+    resolvers,
+  }: ICreateEngineOptions) {
     this.slug = slug
+    this.sessionId = sessionId
     this.preDefinedJSONSchema = formJSONSchema
     this.resolvers = resolvers
   }
@@ -46,9 +53,9 @@ class Stepper {
     return firstStep.step
   }
 
-  async startHandler(sessionId?: string): Promise<IFireboltStepData> {
+  async startHandler(): Promise<IFireboltStepData> {
     const schema = await this.getCorrectFormJSONSchema(this.slug)
-    const session = await this.resolvers.getSession(sessionId)
+    const session = await this.resolvers.getSession(this.sessionId)
 
     if (session) {
       return session

@@ -25,6 +25,7 @@ export interface IEngineResolvers {
 
 export interface ICreateEngineOptions {
   slug: string
+  sessionId?: string
   formJSONSchema?: any
   resolvers: IEngineResolvers
   hooks?: IEngineHooks
