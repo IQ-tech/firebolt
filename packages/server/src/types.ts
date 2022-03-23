@@ -123,3 +123,18 @@ export interface IStepConfigWebhook {
 export interface IStepConfigWebhookHeader {
   [prop: string]: any
 }
+
+export interface IFireboltStepRequestField {
+  slug: string
+  value: string
+}
+
+export interface IFireboltStepRequest {
+  slug: string
+  fields: IFireboltStepRequestField[]
+}
+
+export interface IFireboltRequest {
+  step: IFireboltStepRequest
+  metadata: any
+}
