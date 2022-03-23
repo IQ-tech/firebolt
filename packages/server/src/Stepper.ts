@@ -8,6 +8,8 @@ import {
   IFireboltStepMetaForm,
   IStep,
   IStepConfig,
+  IFireboltRequest,
+  ISteps,
 } from "./types"
 
 class Stepper {
@@ -28,12 +30,10 @@ class Stepper {
     this.resolvers = resolvers
   }
 
-  private async getCorrectFormJSONSchema(
-    experienceSlug: string
-  ): Promise<IStepConfig> {
+  private async getCorrectFormJSONSchema(): Promise<IStepConfig> {
     if (this.preDefinedJSONSchema) return this.preDefinedJSONSchema
 
-    return await this.resolvers.getFormJSONSchema(experienceSlug)
+    return await this.resolvers.getFormJSONSchema(this.slug)
   }
 
   private createFirstStep(schema: IStepConfig): IStep {
@@ -52,7 +52,7 @@ class Stepper {
   }
 
   async startHandler(): Promise<IFireboltStepData> {
-    const schema = await this.getCorrectFormJSONSchema(this.slug)
+    const schema = await this.getCorrectFormJSONSchema()
     const session = await this.resolvers.getSession(this.sessionId)
 
     if (session) return session
@@ -62,7 +62,7 @@ class Stepper {
     const meta = await this.metadata(schema)
     return {
       sessionId,
-      currentTrack: "default",
+      currentTrack: "default", // FIXME: ver onde o vai ser resolvido o track
       meta,
       capturedData: {},
       step: {
@@ -105,7 +105,40 @@ class Stepper {
     return meta
   }
 
-  proceedHandler(callbackFunction?: () => void) {
+  private getCurrentStep(
+    session: IFireboltStepData | undefined,
+    schema: IStepConfig
+  ): ISteps {
+    const currentTrack = session?.currentTrack ?? "default"
+    const stepPosition = session?.step.position ?? 1
+    const currentStepSlug: string =
+      schema.tracks[currentTrack][stepPosition - 1]
+
+    const currentStep = schema.steps.find(
+      (x) => x.step.slug === currentStepSlug
+    )
+
+    if (!currentStep) throw new Error("Step not found") // TODO: Ver como tratar erros
+
+    return currentStep
+  }
+
+  async proceedHandler(formPayload: IFireboltRequest) {
+    const session = await this.resolvers.getSession(this.sessionId)
+    const schema = await this.getCorrectFormJSONSchema()
+
+    const currentStep = this.getCurrentStep(session, schema)
+
+    const payloadExample = {
+      "step": {
+        "fields": [
+          { "full_name": "teste teste" },
+          { "email": "teste@teste.com" },
+        ],
+      },
+      "metadata": {},
+    }
+
     // recebe o payload do passo atual
     // valida o passo atual
     // descobre a config do proximo passo
