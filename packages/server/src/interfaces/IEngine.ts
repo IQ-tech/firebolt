@@ -1,8 +1,8 @@
-import {} from "./types"
+import { IExperienceJSONSchema, IStepFormPayload, IStepJSON } from "../types"
 
 // objeto que representa as opções para criar uma instância da engine
 export interface ICreateEngineOptions {
-  formJSONSchema?: IFormJSONSchema
+  experienceJSONSchema?: IExperienceJSONSchema
   experienceId: string // legacy business replacement
   resolvers: IEngineResolvers
   hooks?: IEngineHooks
@@ -25,7 +25,7 @@ export interface IPropsPresetCollection {
 // objeto que representa a configuração dos resolvers, ou seja os pontos de acesso a dados
 export interface IEngineResolvers {
   // local json, resover function or remote json (used on client)
-  getFormJSONSchema: (experienceSlug: string) => Promise<IFormJSONSchema>
+  getFormJSONSchema: (experienceSlug: string) => Promise<IExperienceJSONSchema>
   getSession: (sessionId?: string) => Promise<IFireboltSession | undefined>
   setSession: (fireboltStepData: IFireboltSession) => Promise<void>
 }
@@ -39,31 +39,44 @@ export interface IEngineHooks {
 }
 
 /**
- * representa o objeto com os dados de construção do passo, processado pela engine
- * (com props presets, resultado de webhook e posição na track atual)
- * */
-export interface IProcessedStep extends IStepJSON {
-  position: number
-  webhookResult?: IFireboltWebhookResponse // check
-}
-
-/**
- * representa o objeto que é retornado ao consumer apos uma transição de passo do firebolt
+ * representa o objeto que é retornado ao consumer após uma transição de passo do firebolt
  * */
 export interface IStepTransitionReturn {
-  step: IProcessedStep
-  webhookResult: any // TODO
+  step: IStepJSON
+  webhookResult: any /* IFireboltWebhookResponse // TODO */
   capturedData: any // TODO
-  formMetadata: IStepConfigFieldMeta
+  experienceMetadata: IExperienceMetadata
+  errors: any
 }
 
-export interface IFireboltStepMeta {
-  lastStep: string
-  forms: IFireboltStepMetaForm[]
+// representa os metadados da experincia atual (guardada no storage) do usuário,
+interface IExperienceMetadata {
+  name: string
+  currentFlow: string | "default"
+  currentPosition: number
+  lastStepSlug: string
+  stepsList: IFlowStepsListItem[]
 }
 
-export interface IFireboltStepMetaForm {
+export interface IFlowStepsListItem {
   position: number
   slug: string
   friendlyName: string
+}
+
+// Representa um passo visitado por um determinado usuário e guardado no storage
+export interface IStepSession {
+  slug: string
+  fields?: IStepFormPayload
+}
+
+// Representa o mapa de steps visitados pelo usuário que vai dentro da sessão
+export interface IFireboltSessionSteps {
+  [stepSlug: string]: IStepSession
+}
+// Representa a sessão que é guardada no storage
+export interface IFireboltSession {
+  sessionId: string
+  experienceMetadata: IExperienceMetadata
+  steps: IFireboltSessionSteps
 }
