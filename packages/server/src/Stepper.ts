@@ -1,67 +1,72 @@
 import { v4 } from "uuid"
 
+import { validateFBTStep, ValidateFBTStepResult } from "@iq-firebolt/validators"
 import {
   ICreateEngineOptions,
   IEngineResolvers,
-  IFireboltStepData,
   IFireboltStepMeta,
   IFireboltStepMetaForm,
-  IStep,
-  IStepConfig,
   IFireboltRequest,
-  ISteps,
+  IFormJSONSchema,
+  IStepJSON,
+  IFireboltSession,
 } from "./types"
 
 class Stepper {
-  private slug: string
-  private sessionId?: string
-  private preDefinedJSONSchema?: IStepConfig
+  private experienceId: string
+  private preDefinedJSONSchema?: IFormJSONSchema
   private resolvers: IEngineResolvers
 
   constructor({
-    slug,
-    sessionId,
+    experienceId,
     formJSONSchema,
     resolvers,
   }: ICreateEngineOptions) {
-    this.slug = slug
-    this.sessionId = sessionId
+    this.experienceId = experienceId
     this.preDefinedJSONSchema = formJSONSchema
     this.resolvers = resolvers
   }
 
-  private async getCorrectFormJSONSchema(): Promise<IStepConfig> {
+  private async getCorrectFormJSONSchema(): Promise<IFormJSONSchema> {
     if (this.preDefinedJSONSchema) return this.preDefinedJSONSchema
 
-    return await this.resolvers.getFormJSONSchema(this.slug)
+    return await this.resolvers.getFormJSONSchema(this.experienceId)
   }
 
-  private createFirstStep(schema: IStepConfig): IStep {
+  private createFirstStep(schema: IFormJSONSchema): IStepJSON {
     // Sempre será a track default???
     const defaultTrack = schema.tracks.find((x) => x.slug === "default")
 
     const firstStep = schema.steps.find(
-      (x) => x.step.slug === defaultTrack!.steps[0]
+      (x) => x.slug === defaultTrack!.steps[0]
     )
 
-    if (!firstStep?.step) {
-      return {} as IStep
+    if (!firstStep) {
+      return {} as IStepJSON
     }
 
-    return firstStep.step
+    return firstStep
   }
 
-  async startHandler(): Promise<IFireboltStepData> {
+  async startHandler(sessionId?: string): Promise<IStepJSON> {
+    // se não tiver session id
+    // retornar o primeiro passo da track default
+
+    // se tiver
+    // retorna o passo seguinte ao completado da track atual
+
+    // independente de qual json de passo for retornado, a gente precisa aplicar os props-presets
+
     const schema = await this.getCorrectFormJSONSchema()
-    const session = await this.resolvers.getSession(this.sessionId)
+    const session = await this.resolvers.getSession(sessionId)
 
     if (session) return session
 
-    const sessionId = v4()
+    const newSessionId = v4()
     const data = this.createFirstStep(schema)
     const meta = await this.metadata(schema)
     return {
-      sessionId,
+      sessionId: newSessionId,
       currentTrack: "default", // FIXME: ver onde o vai ser resolvido o track
       meta,
       capturedData: {},
@@ -69,10 +74,10 @@ class Stepper {
         data,
         position: 1,
       },
-    } as IFireboltStepData
+    } as IStepJSON
   }
 
-  async metadata(schema: IStepConfig): Promise<IFireboltStepMeta> {
+  async metadata(schema: IFormJSONSchema): Promise<IFireboltStepMeta> {
     if (schema.business === "") {
       return {} as IFireboltStepMeta
     }
@@ -106,50 +111,69 @@ class Stepper {
   }
 
   private getCurrentStep(
-    session: IFireboltStepData | undefined,
-    schema: IStepConfig
-  ): ISteps {
-    const currentTrack = session?.currentTrack ?? "default"
+    session: IFireboltSession | undefined,
+    schema: IFormJSONSchema
+  ): IStepJSON {
+    const currentTrackSlug = session?.currentTrack ?? "default"
     const stepPosition = session?.step.position ?? 1
-    const currentStepSlug: string =
-      schema.tracks[currentTrack][stepPosition - 1]
-
-    const currentStep = schema.steps.find(
-      (x) => x.step.slug === currentStepSlug
-    )
+    const track = schema.tracks.find((x) => x.slug === currentTrackSlug)
+    const stepSlug = track!.steps[stepPosition - 1]
+    const currentStep = schema.steps.find((x) => x.step.slug === stepSlug)
 
     if (!currentStep) throw new Error("Step not found") // TODO: Ver como tratar erros
 
-    return currentStep
+    return { ...currentStep.step }
   }
 
   async proceedHandler(formPayload: IFireboltRequest) {
     const session = await this.resolvers.getSession(this.sessionId)
     const schema = await this.getCorrectFormJSONSchema()
 
+    // recebe o payload do passo atual
+    // valida o passo atual
     const currentStep = this.getCurrentStep(session, schema)
+    const validationResult = this.validate(formPayload, currentStep)
+    console.log("validationResult: ", JSON.stringify(validationResult))
+
+    if (!validationResult.isValid) throw new Error("Validation Error") //FIXME: Como devolver erros de validação.
+
+    // API salva no banco
+    // Roda webhook
+    // salva no banco de novo
 
     const payloadExample = {
-      "step": {
-        "fields": [
-          { "full_name": "teste teste" },
-          { "email": "teste@teste.com" },
-        ],
-      },
+      "fields": [
+        { "full_name": "teste teste" },
+        { "email": "teste@teste.com" },
+      ],
       "metadata": {},
     }
 
-    // recebe o payload do passo atual
-    // valida o passo atual
     // descobre a config do proximo passo
     // vai ter o json completo local ou para ser resolvido (ex filesystem)
     // descobrir qual é o proximo passo
     // ou receberá diretamente o json do próximo passo (remote)
   }
 
-  goBackHandler() {
-    return () => {}
+  private validate(
+    formPayload = {},
+    currentStepConfig: IStepJSON
+  ): ValidateFBTStepResult {
+    if (!currentStepConfig) {
+      return { isValid: false, invalidFields: [] }
+    }
+
+    if (currentStepConfig.type !== "form") {
+      formPayload[currentStepConfig.type] = "completed"
+    }
+
+    return validateFBTStep({
+      stepFields: currentStepConfig.fields!,
+      formPayload,
+    })
   }
+
+  async goBackHandler() {}
 
   debugHandler() {
     return () => {}

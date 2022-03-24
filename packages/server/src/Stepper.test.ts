@@ -1,9 +1,14 @@
-import { IEngineResolvers, IStepConfig, IFireboltStepData } from "./types"
+import {
+  IEngineResolvers,
+  IStepConfig,
+  IFireboltStepData,
+  IFireboltRequest,
+} from "./types"
 
 import faker from "faker"
 
 import JSONSample from "./json-sample.json"
-import stepper from "./Stepper"
+import Stepper from "./Stepper"
 const localStorage = global.localStorage
 
 describe("start stepper engine", () => {
@@ -16,7 +21,7 @@ describe("start stepper engine", () => {
     const mockedGetFormJSONSchema = jest.fn(() => ({} as Promise<IStepConfig>))
     const mockedSetSession = jest.fn(async () => {})
 
-    const engine = new stepper({
+    const engine = new Stepper({
       slug: "sample",
       formJSONSchema: JSONSample,
       resolvers: {
@@ -43,7 +48,7 @@ describe("start stepper engine", () => {
     const mockedSetSession = jest.fn(async () => {})
     const sessionId = faker.datatype.uuid()
 
-    const engine = new stepper({
+    const engine = new Stepper({
       slug: "sample",
       sessionId,
       formJSONSchema: JSONSample,
@@ -125,7 +130,28 @@ describe("start stepper engine", () => {
 })
 
 describe("next step handling", () => {
-  test.todo("Engine.proceed should succesfully validate the step fields")
+  test("Engine.proceed should successfully validate the step fields", async () => {
+    const mockedGetSession = jest.fn(async () => undefined)
+    const mockedGetFormJSONSchema = jest.fn(() => ({} as Promise<IStepConfig>))
+    const mockedSetSession = jest.fn(async () => {})
+
+    const engine = new Stepper({
+      slug: "sample",
+      formJSONSchema: JSONSample,
+      resolvers: {
+        getFormJSONSchema: mockedGetFormJSONSchema,
+        getSession: mockedGetSession,
+        setSession: mockedSetSession,
+      },
+    })
+
+    const payloadExample: IFireboltRequest = {
+      fields: [{ full_name: "test" }, { email: "teste@teste.com" }],
+      metadata: {},
+    }
+
+    const form = await engine.proceedHandler(payloadExample)
+  })
 
   test.todo(
     "Engine.proceed should validate the step fields and return an error"

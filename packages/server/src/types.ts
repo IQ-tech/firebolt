@@ -1,35 +1,16 @@
-export interface IPropsPresetCollection {
-  name: string
-  presets: {
-    [key: string]: any
-  }
-}
-
-export interface IAddonsConfig {
-  uiPropsPresets?: IPropsPresetCollection[]
-}
-
-export interface IEngineHooks {
-  onBeforeCallWebhook?: () => void
-  onGetWebHookResponse?: () => void
-  onProceedStep?: () => void
-  onGoBackStep?: () => void
-}
+/**
+ * Pontos para ver:
+ * webhook
+ * tracks
+ * erros
+ * capturedData request
+ */
 
 export interface IEngineResolvers {
   // local json, resover function or remote json (used on client)
-  getFormJSONSchema: (experienceSlug: string) => Promise<IStepConfig>
-  getSession: (sessionId?: string) => Promise<IFireboltStepData | undefined>
-  setSession: (fireboltStepData: IFireboltStepData) => Promise<void>
-}
-
-export interface ICreateEngineOptions {
-  slug: string
-  sessionId?: string
-  formJSONSchema?: any
-  resolvers: IEngineResolvers
-  hooks?: IEngineHooks
-  addons?: any
+  getFormJSONSchema: (experienceSlug: string) => Promise<IFormJSONSchema>
+  getSession: (sessionId?: string) => Promise<IFireboltSession | undefined>
+  setSession: (fireboltStepData: IFireboltSession) => Promise<void>
 }
 
 // -------------------------
@@ -41,27 +22,10 @@ export interface IStepTracks {
   steps: string[]
 }
 
-export interface ISteps {
-  step: IStep
-}
-
-export interface IStep {
-  id: number
-  slug: string
-  type: string
-  friendlyname: string
-  fields?: IStepConfigField[]
-}
-
-export interface IStepConfigField {
-  slug: string
-  "ui:widget": string
-  "ui:props": IStepConfigFieldUiProps
-  validators: IStepConfigFieldValidator[]
-  meta: IStepConfigFieldMeta
-  component: string
-  value?: any
-}
+// API VERSION
+// export interface ISteps {
+//   step: IStep
+// }
 
 export interface IStepConfigFieldUiProps {
   label: string
@@ -74,26 +38,18 @@ export interface IStepConfigFieldValidator {
 
 export interface IStepConfigFieldMeta {}
 
-export interface IStepConfig {
-  "$schema-version"?: string
-  "$form-version"?: string
-  business: string
-  webhook: IStepConfigWebhook
-  tracks: IStepTracks[]
-  steps: ISteps[]
-}
-
-export interface IFireboltStepData {
-  step: {
-    data: IStep
-    position: number
-    webhookResult?: IFireboltWebhookResponse
-  }
-  capturedData: any
-  meta: IFireboltStepMeta
-  sessionId: string
-  currentTrack: string
-}
+// API VERSION
+// export interface IFireboltStepData {
+//   step: {
+//     data: IStep
+//     position: number
+//     webhookResult?: IFireboltWebhookResponse
+//   }
+//   capturedData: any
+//   meta: IFireboltStepMeta
+//   sessionId: string
+//   currentTrack: string
+// }
 
 export interface IFireboltStepMeta {
   lastStep: string
@@ -124,10 +80,21 @@ export interface IStepConfigWebhookHeader {
   [prop: string]: any
 }
 
+// API VERSION
+// export interface IFireboltStepRequestField {
+//   slug: string
+//   value: string
+// }
+
 export interface IFireboltStepRequestField {
-  slug: string
-  value: string
+  [key: string]: string
 }
+
+// API VERSION
+// export interface IFireboltRequest {
+//   step: IFireboltStepRequest
+//   metadata: any
+// }
 
 export interface IFireboltStepRequest {
   slug: string
@@ -135,6 +102,63 @@ export interface IFireboltStepRequest {
 }
 
 export interface IFireboltRequest {
-  step: IFireboltStepRequest
+  fields: IFireboltStepRequestField[]
   metadata: any
+}
+
+// --------
+
+// representa o estado da sessão do usuário, campos concluidos, validade dos passos e etc
+
+export interface IFormPayload {
+  [key: string]: string
+}
+
+//Representa a especificação do formulário geral dada pelo JSON
+export interface IFormJSONSchema {
+  "$schema-version"?: string
+  "$form-version"?: string
+  name: string //todo - add to schema
+  description: string //todo - add to schema
+  business: string // todo - to deprecate
+  webhook: IStepConfigWebhook
+  tracks: IStepTracks[]
+  steps: IStepJSON[]
+}
+// Representa a especificação do campo dada pelo JSON do form
+// Value preenchido no goBack e autofill
+export interface IStepConfigField {
+  slug: string
+  "ui:widget": string
+  "ui:props": IStepConfigFieldUiProps
+  validators: IStepConfigFieldValidator[]
+  meta: IStepConfigFieldMeta
+  component: string
+  value?: any
+}
+
+// Representa a especificação do passo dada pelo json do form
+export interface IStepJSON {
+  slug: string
+  type: string
+  friendlyName: string
+  fields?: IStepConfigField[]
+}
+
+// Representa o estado de um passo visitado por um usuário, se ele está completo ou
+export interface IStepSession {
+  slug: string
+  fields?: IFormPayload
+}
+
+// Representa o mapa de steps visitados pelo usuário que vai dentro da sessão
+export interface IFireboltSessionSteps {
+  [stepSlug: string]: IStepSession
+}
+// Representa a sessão que é guardada no storage
+export interface IFireboltSession {
+  sessionId: string
+  currentTrack: "default" | string
+  formMetadata: IStepConfigFieldMeta
+  steps: IFireboltSessionSteps
 }
