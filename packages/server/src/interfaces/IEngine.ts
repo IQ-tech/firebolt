@@ -53,6 +53,7 @@ export interface IStepTransitionReturn {
 interface IExperienceMetadata {
   name: string
   currentFlow: string | "default"
+  currentStepSlug: string
   currentPosition: number
   lastStepSlug: string
   stepsList: IFlowStepsListItem[]

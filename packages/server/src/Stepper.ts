@@ -4,36 +4,32 @@ import { validateFBTStep, ValidateFBTStepResult } from "@iq-firebolt/validators"
 import {
   ICreateEngineOptions,
   IEngineResolvers,
-  IFireboltStepMeta,
-  IFireboltStepMetaForm,
-  IFireboltRequest,
-  IFormJSONSchema,
-  IStepJSON,
-  IFireboltSession,
-} from "./types"
+  IStepTransitionReturn,
+} from "./interfaces/IEngine"
+import { IExperienceJSONSchema } from "./types"
 
 class Stepper {
   private experienceId: string
-  private preDefinedJSONSchema?: IFormJSONSchema
+  private preDefinedJSONSchema?: IExperienceJSONSchema
   private resolvers: IEngineResolvers
 
   constructor({
     experienceId,
-    formJSONSchema,
+    experienceJSONSchema,
     resolvers,
   }: ICreateEngineOptions) {
     this.experienceId = experienceId
-    this.preDefinedJSONSchema = formJSONSchema
+    this.preDefinedJSONSchema = experienceJSONSchema
     this.resolvers = resolvers
   }
 
-  private async getCorrectFormJSONSchema(): Promise<IFormJSONSchema> {
+  private async getCorrectFormJSONSchema(): Promise<IExperienceJSONSchema> {
     if (this.preDefinedJSONSchema) return this.preDefinedJSONSchema
 
     return await this.resolvers.getFormJSONSchema(this.experienceId)
   }
 
-  private createFirstStep(schema: IFormJSONSchema): IStepJSON {
+  private createFirstStep(schema: IExperienceJSONSchema): IStepJSON {
     // Sempre será a track default???
     const defaultTrack = schema.tracks.find((x) => x.slug === "default")
 
@@ -46,6 +42,12 @@ class Stepper {
     }
 
     return firstStep
+  }
+
+  async proceed(sessionId?: string): Promise<IStepTransitionReturn> {
+    // descobrir se tem sessão no storage
+    const session = await this.resolvers.getSession(sessionId)
+    // se não tiver sessão vamos começar do zero e criar um token novo
   }
 
   async startHandler(sessionId?: string): Promise<IStepJSON> {
@@ -77,7 +79,7 @@ class Stepper {
     } as IStepJSON
   }
 
-  async metadata(schema: IFormJSONSchema): Promise<IFireboltStepMeta> {
+  async metadata(schema: IExperienceJSONSchema): Promise<IFireboltStepMeta> {
     if (schema.business === "") {
       return {} as IFireboltStepMeta
     }
@@ -112,7 +114,7 @@ class Stepper {
 
   private getCurrentStep(
     session: IFireboltSession | undefined,
-    schema: IFormJSONSchema
+    schema: IExperienceJSONSchema
   ): IStepJSON {
     const currentTrackSlug = session?.currentTrack ?? "default"
     const stepPosition = session?.step.position ?? 1

@@ -1,14 +1,16 @@
 /**
  * Pontos para ver:
- * atualizar json schema
+ * atualizar json schema com alterações de interfaces
+ * unificar start e next - proceed
+ *  fazer update corretamente quando a pessoa passar um passo ja preenchido anteriormente (usar estado do currentStepSlug)
  * webhook
- * tracks
+ * tracks (flows)
  * erros
  * capturedData request
  * devemos salvar os dados de webhook em um  passo especifico no storage??
  *
  * definir namespaces
- * matar meta do field
+ * matar meta do field - breaking change
  */
 
 // --------
@@ -22,6 +24,14 @@ export interface IStepFormPayload {
 export interface IFlow {
   slug: string
   stepsSlugs: string[]
+}
+
+export interface IStepConfigWebhook {
+  triggers: string[]
+  url: string
+  headers: {
+    [prop: string]: any
+  }
 }
 
 //Representa a especificação do formulário geral dada pelo JSON
