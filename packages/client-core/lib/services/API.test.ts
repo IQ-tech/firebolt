@@ -53,7 +53,7 @@ describe("Navigation requests receive correct data", () => {
       { stepFieldsPayload: "test cenoura", requestsMetadata: "paranaue" }
       );
       // { name: "teste cenoura", email: "batata@teste.com" }
-    expect(response).toEqual(expectedNewStep);
+    expect(response).toEqual("qualquerCoisa");
   });
 
   test("previous step must return correct data", async () => {
