@@ -18,7 +18,7 @@
     "esModuleInterop": true /* Enables emit interoperability between CommonJS and ES Modules via creation of namespace objects for all imports. Implies 'allowSyntheticDefaultImports'. */,
     "declaration": true /* Generates corresponding '.d.ts' file. */,
     // "incremental": true,                   /* Enable incremental compilation */
-    // "checkJs": true,                       /* Report errors in .js files. */
+    "checkJs": true /* Report errors in .js files. */,
     // "jsx": "preserve",                     /* Specify JSX code generation: 'preserve', 'react-native', or 'react'. */
     // "declarationMap": true,                /* Generates a sourcemap for each corresponding '.d.ts' file. */
     // "sourceMap": true,                     /* Generates corresponding '.map' file. */

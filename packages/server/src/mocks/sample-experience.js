@@ -1,26 +1,37 @@
-{
+/**
+ * This mock represents a simple firebolt experience with:
+ *  - 3 different flows
+ *  - 4 possible steps
+ */
+
+/**
+ * @typedef {import("../types").IExperienceJSONSchema} IExperienceJSONSchema
+ */
+
+/** @type {IExperienceJSONSchema} */
+const mock = {
   "$schema-version": "1.0.0",
-  "$form-version": "0.0.1",
+  "$experience-version": "0.0.1",
   "name": "sample",
   "description": "sample json for tests",
   "business": "sample",
   "webhookConfig": {
     "triggers": ["personal_data"],
-    "url": "{WEBHOOK_URL}"
+    "url": "{WEBHOOK_URL}",
   },
   "flows": [
     {
       "slug": "default",
-      "stepsSlugs": ["personal_data", "documents", "address", "bills"]
+      "stepsSlugs": ["personal_data", "documents", "address", "bills"],
     },
     {
       "slug": "medium",
-      "stepsSlugs": ["personal_data", "documents", "token"]
+      "stepsSlugs": ["personal_data", "documents", "token"],
     },
     {
       "slug": "short",
-      "stepsSlugs": ["personal_data", "token"]
-    }
+      "stepsSlugs": ["personal_data", "token"],
+    },
   ],
   "steps": [
     {
@@ -33,20 +44,20 @@
           "ui:widget": "Text",
           "ui:props": {
             "label": "Nome completo",
-            "placeholder": "Nome completo"
+            "placeholder": "Nome completo",
           },
-          "validators": [{ "type": "required" }, { "type": "name" }]
+          "validators": [{ "type": "required" }, { "type": "name" }],
         },
         {
           "slug": "email",
           "ui:widget": "Email",
           "ui:props": {
             "label": "Email",
-            "placeholder": "contato@email.com"
+            "placeholder": "contato@email.com",
           },
-          "validators": [{ "type": "required" }]
-        }
-      ]
+          "validators": [{ "type": "required" }],
+        },
+      ],
     },
     {
       "slug": "documents",
@@ -57,11 +68,11 @@
           "slug": "brazil_id_number",
           "ui:widget": "Text",
           "ui:props": {
-            "label": "Número do documento"
+            "label": "Número do documento",
           },
-          "validators": [{ "type": "required" }]
-        }
-      ]
+          "validators": [{ "type": "required" }],
+        },
+      ],
     },
     {
       "slug": "address",
@@ -78,69 +89,69 @@
               "stateFieldSlug": "state",
               "streetFieldSlug": "street_address",
               "additionalAddressFieldSlug": "additional_info",
-              "neighborhoodFieldSlug": "neighborhood"
-            }
+              "neighborhoodFieldSlug": "neighborhood",
+            },
           },
-          "validators": [{ "type": "required" }, { "type": "cep" }]
+          "validators": [{ "type": "required" }, { "type": "cep" }],
         },
         {
           "slug": "street_address",
           "ui:widget": "Text",
           "ui:props": {
             "label": "Endereço",
-            "placeholder": "Ex.: Av Paulista"
+            "placeholder": "Ex.: Av Paulista",
           },
-          "validators": [{ "type": "required" }]
+          "validators": [{ "type": "required" }],
         },
         {
           "slug": "street_number",
           "ui:widget": "Number",
           "ui:props": {
-            "label": "Número"
+            "label": "Número",
           },
-          "validators": [{ "type": "required" }]
+          "validators": [{ "type": "required" }],
         },
         {
           "slug": "additional_info",
           "ui:widget": "Text",
           "ui:props": {
             "label": "Complemento",
-            "placeholder": "Ex.: Apto 25 bl C"
-          }
+            "placeholder": "Ex.: Apto 25 bl C",
+          },
         },
         {
           "slug": "neighborhood",
           "ui:widget": "Text",
           "ui:props": {
             "label": "Bairro",
-            "placeholder": "Ex.: Centro"
+            "placeholder": "Ex.: Centro",
           },
-          "validators": [{ "type": "required" }, { "type": "nonNumeric" }]
+          "validators": [{ "type": "required" }, { "type": "nonNumeric" }],
         },
         {
           "slug": "city",
           "ui:widget": "Text",
           "ui:props": {
-            "label": "Cidade"
+            "label": "Cidade",
           },
-          "validators": [{ "type": "required" }, { "type": "nonNumeric" }]
+          "validators": [{ "type": "required" }, { "type": "nonNumeric" }],
         },
         {
           "slug": "state",
           "ui:widget": "Select",
           "ui:props-preset": "br-states",
           "ui:props": {
-            "label": "Estado"
+            "label": "Estado",
           },
-          "validators": [{ "type": "required" }]
-        }
-      ]
+          "validators": [{ "type": "required" }],
+        },
+      ],
     },
     {
       "slug": "bills",
       "type": "custom",
       "friendlyName": "Adicionar Contas",
-      "fields": []
+      "fields": [],
     },
     {
       "slug": "token",
@@ -151,11 +162,13 @@
           "slug": "received_token",
           "ui:widget": "Text",
           "ui:props": {
-            "label": "Token recebido"
+            "label": "Token recebido",
           },
-          "validators": [{ "type": "required" }]
-        }
-      ]
-    }
-  ]
+          "validators": [{ "type": "required" }],
+        },
+      ],
+    },
+  ],
 }
+
+module.exports = mock

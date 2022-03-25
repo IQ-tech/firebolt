@@ -6,6 +6,7 @@ import {
   IStepTransitionReturn,
   IFireboltSession,
   IExperienceProceedPayload,
+  IExperienceMetadata,
 } from "./interfaces/IEngine"
 import { IExperienceJSONSchema, IStepJSON } from "./types"
 import { validateFBTStep, ValidateFBTStepResult } from "@iq-firebolt/validators"
@@ -23,6 +24,17 @@ class Stepper {
     this.experienceId = experienceId
     this.preDefinedJSONSchema = experienceJSONSchema
     this.resolvers = resolvers
+  }
+
+  async proceed(
+    payload?: IExperienceProceedPayload
+  ): Promise<IStepTransitionReturn> {
+    const session = await this.resolvers.getSession(payload?.sessionId)
+    const schema = await this.getCorrectFormJSONSchema()
+
+    if (!session) return this.createFirstStep(schema)
+
+    return {} as IStepTransitionReturn
   }
 
   private async getCorrectFormJSONSchema(): Promise<IExperienceJSONSchema> {
@@ -54,15 +66,29 @@ class Stepper {
     } as IStepTransitionReturn
   }
 
-  async proceed(
-    payload?: IExperienceProceedPayload
-  ): Promise<IStepTransitionReturn> {
-    const session = await this.resolvers.getSession(payload?.sessionId)
-    const schema = await this.getCorrectFormJSONSchema()
+  private async handleExperienceMetadata(
+    schema: IExperienceJSONSchema,
+    sessionId?: string
+  ): Promise<IExperienceMetadata> {
+    return {} as IExperienceMetadata
 
-    if (!session) return this.createFirstStep(schema)
+    const session = await this.resolvers.getSession(sessionId)
+    const currentFlow = session?.experienceMetadata.currentFlow ?? "default"
 
-    return {} as IStepTransitionReturn
+    const newMetadata = {
+      name: schema.name,
+      currentFlow,
+    }
+
+    // export interface IExperienceMetadata {
+    //   name: string
+    //   currentFlow: string | "default"
+    //   currentStepSlug: string
+    //   lastCompletedStepSlug: string
+    //   currentPosition: number
+    //   lastStepSlug: string
+    //   stepsList?: IFlowStepsListItem[]
+    // }
   }
 
   // async metadata(schema: IExperienceJSONSchema): Promise<IFireboltStepMeta> {

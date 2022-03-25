@@ -3,7 +3,7 @@ import Stepper from "./Stepper"
 import { IExperienceJSONSchema } from "./types"
 import { IEngineResolvers, IFireboltSession } from "./interfaces/IEngine"
 
-import JSONSample from "./json-new-sample.json"
+import JSONSample from "./mocks/sample-experience"
 const localStorage = global.localStorage
 const mockedGetFormJSONSchema = jest.fn(
   async () => ({} as IExperienceJSONSchema)
@@ -49,10 +49,7 @@ describe("Stepper.Proceed handling", () => {
     expect(firstStep.capturedData).toEqual({})
   })
 
-  test.todo(
-    "should identify an started experience and return the correct step",
-    async () => {}
-  )
+  test.todo("should identify an started experience and return the correct step")
   test.todo("should validate the step fields and return an error")
   test.todo("should validate the step fields and return the next step info")
   test.todo("should be able update previous steps without data loss")

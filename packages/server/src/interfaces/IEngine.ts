@@ -51,13 +51,14 @@ export interface IStepTransitionReturn {
 }
 
 // representa os metadados da experincia atual (guardada no storage) do usuário,
-interface IExperienceMetadata {
+export interface IExperienceMetadata {
   name: string
   currentFlow: string | "default"
   currentStepSlug: string
+  lastCompletedStepSlug: string
   currentPosition: number
   lastStepSlug: string
-  stepsList: IFlowStepsListItem[]
+  stepsList?: IFlowStepsListItem[]
 }
 
 export interface IFlowStepsListItem {
@@ -68,7 +69,6 @@ export interface IFlowStepsListItem {
 
 // Representa um passo visitado por um determinado usuário e guardado no storage
 export interface IStepSession {
-  slug: string
   fields?: IStepFormPayload
 }
 
