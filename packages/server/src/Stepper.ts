@@ -4,6 +4,8 @@ import {
   ICreateEngineOptions,
   IEngineResolvers,
   IStepTransitionReturn,
+  IFireboltSession,
+  IExperienceProceedPayload,
 } from "./interfaces/IEngine"
 import { IExperienceJSONSchema, IStepJSON } from "./types"
 import { validateFBTStep, ValidateFBTStepResult } from "@iq-firebolt/validators"
@@ -29,106 +31,117 @@ class Stepper {
     return await this.resolvers.getFormJSONSchema(this.experienceId)
   }
 
-  private createFirstStep(schema: IExperienceJSONSchema): IStepJSON {
-    // Sempre será a track default???
+  private createFirstStep(
+    schema: IExperienceJSONSchema
+  ): IStepTransitionReturn {
     const defaultTrack = schema.flows.find((x) => x.slug === "default")
-
-    const firstStep = schema.steps.find(
-      (x) => x.slug === defaultTrack!.steps[0]
-    )
+    const firstStepSlug = defaultTrack?.stepsSlugs[0]
+    if (!defaultTrack) {
+      // retornar erro de que não tem a track default
+    }
+    const firstStep = schema.steps.find((x) => x.slug === firstStepSlug)
 
     if (!firstStep) {
-      return {} as IStepJSON
+      // retornar erro de passo não encontrado no json
+      return {} as IStepTransitionReturn
     }
-
-    return firstStep
+    return {
+      sessionId: v4(),
+      step: firstStep,
+      capturedData: {},
+      errors: {},
+      webhookResult: {},
+    } as IStepTransitionReturn
   }
 
-  async proceed(sessionId?: string): Promise<IStepTransitionReturn> {
-    // descobrir se tem sessão no storage
-    const session = await this.resolvers.getSession(sessionId)
-    // se não tiver sessão vamos começar do zero e criar um token novo
+  async proceed(
+    payload?: IExperienceProceedPayload
+  ): Promise<IStepTransitionReturn> {
+    const session = await this.resolvers.getSession(payload?.sessionId)
+    const schema = await this.getCorrectFormJSONSchema()
+
+    if (!session) return this.createFirstStep(schema)
 
     return {} as IStepTransitionReturn
   }
 
-  async metadata(schema: IExperienceJSONSchema): Promise<IFireboltStepMeta> {
-    if (schema.business === "") {
-      return {} as IFireboltStepMeta
-    }
+  // async metadata(schema: IExperienceJSONSchema): Promise<IFireboltStepMeta> {
+  //   if (schema.business === "") {
+  //     return {} as IFireboltStepMeta
+  //   }
 
-    let currentTrackSlug = "default"
-    // Obter do banco não implementado
-    // if (this.contextUuid) {
-    //   const dynamoItem = await getFromDynamo(this.contextUuid)
-    //   currentTrackSlug = dynamoItem.track ?? "default"
-    // }
+  //   let currentTrackSlug = "default"
+  //   // Obter do banco não implementado
+  //   // if (this.contextUuid) {
+  //   //   const dynamoItem = await getFromDynamo(this.contextUuid)
+  //   //   currentTrackSlug = dynamoItem.track ?? "default"
+  //   // }
 
-    const currentTrack = schema.tracks.find((x) => x.slug == currentTrackSlug)
+  //   const currentTrack = schema.tracks.find((x) => x.slug == currentTrackSlug)
 
-    const forms: IFireboltStepMetaForm[] = currentTrack!.steps.map(
-      (item, i) => {
-        const stepConfig = schema.steps.find((x) => x.step.slug === item)
-        return {
-          position: i + 1,
-          slug: item,
-          friendlyname: stepConfig!.step.friendlyname,
-        }
-      }
-    )
+  //   const forms: IFireboltStepMetaForm[] = currentTrack!.steps.map(
+  //     (item, i) => {
+  //       const stepConfig = schema.steps.find((x) => x.step.slug === item)
+  //       return {
+  //         position: i + 1,
+  //         slug: item,
+  //         friendlyname: stepConfig!.step.friendlyname,
+  //       }
+  //     }
+  //   )
 
-    const meta = {
-      lastStep: currentTrack!.steps[currentTrack!.steps.length - 1],
-      forms: forms,
-    }
+  //   const meta = {
+  //     lastStep: currentTrack!.steps[currentTrack!.steps.length - 1],
+  //     forms: forms,
+  //   }
 
-    return meta
-  }
+  //   return meta
+  // }
 
-  private getCurrentStep(
-    session: IFireboltSession | undefined,
-    schema: IExperienceJSONSchema
-  ): IStepJSON {
-    const currentTrackSlug = session?.currentTrack ?? "default"
-    const stepPosition = session?.step.position ?? 1
-    const track = schema.tracks.find((x) => x.slug === currentTrackSlug)
-    const stepSlug = track!.steps[stepPosition - 1]
-    const currentStep = schema.steps.find((x) => x.step.slug === stepSlug)
+  // private getCurrentStep(
+  //   session: IFireboltSession | undefined,
+  //   schema: IExperienceJSONSchema
+  // ): IStepJSON {
+  //   const currentTrackSlug = session?.currentTrack ?? "default"
+  //   const stepPosition = session?.step.position ?? 1
+  //   const track = schema.tracks.find((x) => x.slug === currentTrackSlug)
+  //   const stepSlug = track!.steps[stepPosition - 1]
+  //   const currentStep = schema.steps.find((x) => x.step.slug === stepSlug)
 
-    if (!currentStep) throw new Error("Step not found") // TODO: Ver como tratar erros
+  //   if (!currentStep) throw new Error("Step not found") // TODO: Ver como tratar erros
 
-    return { ...currentStep.step }
-  }
+  //   return { ...currentStep.step }
+  // }
 
-  async proceedHandler(formPayload: IFireboltRequest) {
-    const session = await this.resolvers.getSession(this.sessionId)
-    const schema = await this.getCorrectFormJSONSchema()
+  // async proceedHandler(formPayload: IExperiencePayload) {
+  //   const session = await this.resolvers.getSession()
+  //   const schema = await this.getCorrectFormJSONSchema()
 
-    // recebe o payload do passo atual
-    // valida o passo atual
-    const currentStep = this.getCurrentStep(session, schema)
-    const validationResult = this.validate(formPayload, currentStep)
-    console.log("validationResult: ", JSON.stringify(validationResult))
+  //   // recebe o payload do passo atual
+  //   // valida o passo atual
+  //   const currentStep = this.getCurrentStep(session, schema)
+  //   const validationResult = this.validate(formPayload, currentStep)
+  //   console.log("validationResult: ", JSON.stringify(validationResult))
 
-    if (!validationResult.isValid) throw new Error("Validation Error") //FIXME: Como devolver erros de validação.
+  //   if (!validationResult.isValid) throw new Error("Validation Error") //FIXME: Como devolver erros de validação.
 
-    // API salva no banco
-    // Roda webhook
-    // salva no banco de novo
+  //   // API salva no banco
+  //   // Roda webhook
+  //   // salva no banco de novo
 
-    const payloadExample = {
-      "fields": [
-        { "full_name": "teste teste" },
-        { "email": "teste@teste.com" },
-      ],
-      "metadata": {},
-    }
+  //   const payloadExample = {
+  //     "fields": [
+  //       { "full_name": "teste teste" },
+  //       { "email": "teste@teste.com" },
+  //     ],
+  //     "metadata": {},
+  //   }
 
-    // descobre a config do proximo passo
-    // vai ter o json completo local ou para ser resolvido (ex filesystem)
-    // descobrir qual é o proximo passo
-    // ou receberá diretamente o json do próximo passo (remote)
-  }
+  //   // descobre a config do proximo passo
+  //   // vai ter o json completo local ou para ser resolvido (ex filesystem)
+  //   // descobrir qual é o proximo passo
+  //   // ou receberá diretamente o json do próximo passo (remote)
+  // }
 
   private validate(
     formPayload = {},

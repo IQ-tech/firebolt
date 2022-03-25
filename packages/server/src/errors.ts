@@ -8,6 +8,8 @@
 /**
  * Se não passar o experienceId jogar erro
  * Se não passar resolvers jogar erro
+ * json não tem default flow
+ *  passo não encontrado no json (slug no flow não corresponde a nenhum passo definido no json)
  */
 
 /**
