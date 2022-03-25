@@ -11,7 +11,7 @@
  * @type {IFireboltSession}
  */
 const mock = {
-  "sessionId": "",
+  "sessionId": "mockSessionId1234",
   "experienceMetadata": {
     "name": "sample",
     "currentFlow": "default",
