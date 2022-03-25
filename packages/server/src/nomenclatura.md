@@ -7,3 +7,6 @@
   atualmente (antigo formMetadata)
 - additionalData - dados extras que podem ser enviados durante a transição de passos (token de Recaptcha, fbp, fbc, ids e etc) (antigo requestMetadata/metadata)
 - storage - local onde uma session de firebolt deve ser guardada, como a engine não se baseia em nenhum ambiente em especifico, o storage pode ser um banco de dados, localStorage, sessionStorage e etc
+
+- experienceId - parametro utilizado para buscar um json em alguma fonte remota
+- a numeração dos passos não é zero indexada

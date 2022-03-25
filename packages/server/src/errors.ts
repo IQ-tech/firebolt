@@ -6,7 +6,7 @@
  */
 
 /**
- * Se não passar o experienceId jogar erro
+ * o consumer deve passar ou somente o experienceJSONSchema ou passar o experienceId em conjunto com o resolver de json
  * Se não passar resolvers jogar erro
  * json não tem default flow
  *  passo não encontrado no json (slug no flow não corresponde a nenhum passo definido no json)

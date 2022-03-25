@@ -87,4 +87,5 @@ export interface IFireboltSession {
 export interface IExperienceProceedPayload {
   sessionId?: string
   fields?: IStepFormPayload
+  additionalData?: any // todo, improve later
 }
