@@ -1,12 +1,12 @@
 import { v4 } from "uuid"
 
-import { validateFBTStep, ValidateFBTStepResult } from "@iq-firebolt/validators"
 import {
   ICreateEngineOptions,
   IEngineResolvers,
   IStepTransitionReturn,
 } from "./interfaces/IEngine"
-import { IExperienceJSONSchema } from "./types"
+import { IExperienceJSONSchema, IStepJSON } from "./types"
+import { validateFBTStep, ValidateFBTStepResult } from "@iq-firebolt/validators"
 
 class Stepper {
   private experienceId: string
@@ -31,7 +31,7 @@ class Stepper {
 
   private createFirstStep(schema: IExperienceJSONSchema): IStepJSON {
     // Sempre será a track default???
-    const defaultTrack = schema.tracks.find((x) => x.slug === "default")
+    const defaultTrack = schema.flows.find((x) => x.slug === "default")
 
     const firstStep = schema.steps.find(
       (x) => x.slug === defaultTrack!.steps[0]
@@ -48,35 +48,8 @@ class Stepper {
     // descobrir se tem sessão no storage
     const session = await this.resolvers.getSession(sessionId)
     // se não tiver sessão vamos começar do zero e criar um token novo
-  }
 
-  async startHandler(sessionId?: string): Promise<IStepJSON> {
-    // se não tiver session id
-    // retornar o primeiro passo da track default
-
-    // se tiver
-    // retorna o passo seguinte ao completado da track atual
-
-    // independente de qual json de passo for retornado, a gente precisa aplicar os props-presets
-
-    const schema = await this.getCorrectFormJSONSchema()
-    const session = await this.resolvers.getSession(sessionId)
-
-    if (session) return session
-
-    const newSessionId = v4()
-    const data = this.createFirstStep(schema)
-    const meta = await this.metadata(schema)
-    return {
-      sessionId: newSessionId,
-      currentTrack: "default", // FIXME: ver onde o vai ser resolvido o track
-      meta,
-      capturedData: {},
-      step: {
-        data,
-        position: 1,
-      },
-    } as IStepJSON
+    return {} as IStepTransitionReturn
   }
 
   async metadata(schema: IExperienceJSONSchema): Promise<IFireboltStepMeta> {
