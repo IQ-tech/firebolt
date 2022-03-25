@@ -4,6 +4,8 @@ import { IExperienceJSONSchema } from "./types"
 import { IEngineResolvers, IFireboltSession } from "./interfaces/IEngine"
 
 import JSONSample from "./mocks/sample-experience"
+import StorageSession3Steps from "./mocks/storage-session-3-steps"
+
 const localStorage = global.localStorage
 const mockedGetFormJSONSchema = jest.fn(
   async () => ({} as IExperienceJSONSchema)
@@ -49,7 +51,27 @@ describe("Stepper.Proceed handling", () => {
     expect(firstStep.capturedData).toEqual({})
   })
 
-  test.todo("should identify an started experience and return the correct step")
+  test("should identify an started experience and return the correct step", async () => {
+    const resolvers: IEngineResolvers = {
+      getFormJSONSchema: mockedGetFormJSONSchema,
+      getSession: mockedGetSession,
+      setSession: mockedSetSession,
+    }
+
+    mockedSetSession(StorageSession3Steps)
+    const fireboltStepper = new Stepper({
+      experienceId: "sample",
+      experienceJSONSchema: JSONSample,
+      resolvers,
+    })
+
+    const nextStep = await fireboltStepper.proceed({
+      sessionId: "mockSessionId1234",
+    })
+
+    expect(nextStep.step.slug).toBe("address")
+    expect(nextStep.experienceMetadata.currentPosition).toBe(3)
+  })
   test.todo("should validate the step fields and return an error")
   test.todo("should validate the step fields and return the next step info")
   test.todo("should be able update previous steps without data loss")
