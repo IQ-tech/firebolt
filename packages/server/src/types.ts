@@ -14,9 +14,7 @@
  */
 
 // --------
-
 // representa o estado da sessão do usuário, campos concluidos, validade dos passos e etc
-
 export interface IStepFormPayload {
   [key: string]: string
 }
@@ -67,14 +65,14 @@ interface IFieldValidator {
 export interface IStepConfigField {
   slug: string
   "ui:widget": string
-  "ui:props": {
+  "ui:props"?: {
     [propKey: string]: any
   }
-  "ui:props-preset": string | [] // todo add multiple props presets
-  "ui:props-conditional": IFieldPropsConditional[]
-  "ui:styles": IFieldStyles
-  conditional: string
-  validators: IFieldValidator[]
+  "ui:props-preset"?: string | [] // todo add multiple props presets
+  "ui:props-conditional"?: IFieldPropsConditional[]
+  "ui:styles"?: IFieldStyles
+  conditional?: string
+  validators?: IFieldValidator[]
   value?: any
 }
 

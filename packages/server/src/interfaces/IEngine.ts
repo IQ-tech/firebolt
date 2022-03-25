@@ -42,6 +42,7 @@ export interface IEngineHooks {
  * representa o objeto que é retornado ao consumer após uma transição de passo do firebolt
  * */
 export interface IStepTransitionReturn {
+  sessionId: string // FIXME: DUVIDA - SessionId deve estar nessa interface
   step: IStepJSON
   webhookResult: any /* IFireboltWebhookResponse // TODO */
   capturedData: any // TODO
@@ -80,4 +81,10 @@ export interface IFireboltSession {
   sessionId: string
   experienceMetadata: IExperienceMetadata
   steps: IFireboltSessionSteps
+}
+
+// Representa a requisição do consumer para o firebolt transicionar um passo
+export interface IExperienceProceedPayload {
+  sessionId?: string
+  fields?: IStepFormPayload
 }
