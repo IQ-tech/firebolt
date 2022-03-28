@@ -2,6 +2,7 @@
 
 /**
  * Errors
+ *  payload vir sem sessionId em um step que não seja o primeiro
  *
  */
 
