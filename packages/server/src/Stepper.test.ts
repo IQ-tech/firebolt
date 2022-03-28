@@ -71,7 +71,10 @@ describe("Stepper.Proceed handling", () => {
 
     expect(nextStep.step.slug).toBe("address")
     expect(nextStep.experienceMetadata.currentPosition).toBe(3)
+    expect(nextStep.experienceMetadata.lastCompletedStepSlug).toBe("documents")
+    expect(nextStep.capturedData).toEqual(StorageSession3Steps.steps)
   })
+
   test.todo("should validate the step fields and return an error")
   test.todo("should validate the step fields and return the next step info")
   test.todo("should be able update previous steps without data loss")
