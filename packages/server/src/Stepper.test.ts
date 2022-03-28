@@ -1,10 +1,14 @@
 import faker from "faker"
 import Stepper from "./Stepper"
 import { IExperienceJSONSchema } from "./types"
-import { IEngineResolvers, IFireboltSession } from "./interfaces/IEngine"
+import {
+  IEngineResolvers,
+  IExperienceProceedPayload,
+  IFireboltSession,
+} from "./interfaces/IEngine"
 
 import JSONSample from "./mocks/sample-experience"
-import StorageSession3Steps from "./mocks/storage-session-3-steps"
+import { twoStepsCompleted } from "./mocks/sample-experience-session"
 
 const localStorage = global.localStorage
 const mockedGetFormJSONSchema = jest.fn(
@@ -31,7 +35,7 @@ describe("Stepper.Proceed handling", () => {
   test.todo("should return a error when schema dont have default flow")
 
   test("should start a new experience", async () => {
-    const sample = JSONSample as IExperienceJSONSchema
+    const sample = JSONSample
     const resolvers: IEngineResolvers = {
       getFormJSONSchema: mockedGetFormJSONSchema,
       getSession: mockedGetSession,
@@ -58,7 +62,7 @@ describe("Stepper.Proceed handling", () => {
       setSession: mockedSetSession,
     }
 
-    mockedSetSession(StorageSession3Steps)
+    mockedSetSession(twoStepsCompleted)
     const fireboltStepper = new Stepper({
       experienceId: "sample",
       experienceJSONSchema: JSONSample,
@@ -66,17 +70,81 @@ describe("Stepper.Proceed handling", () => {
     })
 
     const nextStep = await fireboltStepper.proceed({
-      sessionId: "mockSessionId1234",
+      sessionId: twoStepsCompleted.sessionId,
     })
 
     expect(nextStep.step.slug).toBe("address")
     expect(nextStep.experienceMetadata.currentPosition).toBe(3)
     expect(nextStep.experienceMetadata.lastCompletedStepSlug).toBe("documents")
-    expect(nextStep.capturedData).toEqual(StorageSession3Steps.steps)
+    expect(nextStep.capturedData).toEqual(twoStepsCompleted.steps)
   })
 
-  test.todo("should validate the step fields and return an error")
-  test.todo("should validate the step fields and return the next step info")
+  test("should validate the step fields and return an error", async () => {
+    const sample = JSONSample
+    const resolvers: IEngineResolvers = {
+      getFormJSONSchema: mockedGetFormJSONSchema,
+      getSession: mockedGetSession,
+      setSession: mockedSetSession,
+    }
+
+    const fireboltStepper = new Stepper({
+      experienceId: "sample",
+      experienceJSONSchema: sample,
+      resolvers,
+    })
+
+    const firstStepField = {
+      full_name: "Teste",
+      email: "teste@",
+    }
+
+    const sessionId = faker.datatype.uuid()
+
+    const payload: IExperienceProceedPayload = {
+      sessionId,
+      fields: firstStepField,
+    }
+
+    const proceed = await fireboltStepper.proceed(payload)
+    expect(proceed.errors?.isValid).toBe(false)
+    expect(proceed.errors?.invalidFields.length).not.toBe(0)
+  })
+
+  test("should validate the step fields and return the next step info", async () => {
+    const sample = JSONSample
+    const resolvers: IEngineResolvers = {
+      getFormJSONSchema: mockedGetFormJSONSchema,
+      getSession: mockedGetSession,
+      setSession: mockedSetSession,
+    }
+
+    const fireboltStepper = new Stepper({
+      experienceId: "sample",
+      experienceJSONSchema: sample,
+      resolvers,
+    })
+
+    const sessionId = faker.datatype.uuid()
+    const name = `${faker.name.firstName()} ${faker.name.lastName()}`
+    const email = faker.internet.email()
+
+    const firstStepField = {
+      full_name: name,
+      email: email,
+    }
+
+    const payload: IExperienceProceedPayload = {
+      sessionId,
+      fields: firstStepField,
+    }
+
+    const proceed = await fireboltStepper.proceed(payload)
+
+    expect(proceed.errors).toEqual({})
+    expect(proceed.capturedData.personal_data).toEqual(firstStepField)
+    expect(proceed.step.slug).toBe("documents")
+  })
+
   test.todo("should be able update previous steps without data loss")
 })
 
