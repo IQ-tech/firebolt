@@ -1,5 +1,5 @@
+import { validateFBTStep, ValidateFBTStepResult } from "@iq-firebolt/validators"
 import { v4 } from "uuid"
-
 import {
   ICreateEngineOptions,
   IEngineResolvers,
@@ -10,7 +10,7 @@ import {
   IFlowStepsListItem,
 } from "./interfaces/IEngine"
 import { IExperienceJSONSchema, IStepJSON } from "./types"
-import { validateFBTStep, ValidateFBTStepResult } from "@iq-firebolt/validators"
+import computeExperienceMetadata from "./helpers/computeExperienceMetadata"
 
 class Stepper {
   private experienceId: string
@@ -32,11 +32,14 @@ class Stepper {
   ): Promise<IStepTransitionReturn> {
     const session = await this.resolvers.getSession(payload?.sessionId)
     const schema = await this.getCorrectFormJSONSchema()
+    if (!session) return this.getFirstStep(schema)
 
-    if (!session) return this.createFirstStep(schema)
-    console.log("session: ", session)
+    const hasFilledFields = this.hasFilledFields(payload)
+    if (hasFilledFields) {
+      // TODO: TRATAR O PAYLOAD
+    }
 
-    return {} as IStepTransitionReturn
+    return this.getCorrectStep(schema, session)
   }
 
   private async getCorrectFormJSONSchema(): Promise<IExperienceJSONSchema> {
@@ -45,7 +48,7 @@ class Stepper {
     return await this.resolvers.getFormJSONSchema(this.experienceId)
   }
 
-  private async createFirstStep(
+  private async getFirstStep(
     schema: IExperienceJSONSchema
   ): Promise<IStepTransitionReturn> {
     const defaultTrack = schema.flows.find((x) => x.slug === "default")
@@ -60,7 +63,7 @@ class Stepper {
       return {} as IStepTransitionReturn
     }
 
-    const experienceMetadata = await this.handleExperienceMetadata(schema)
+    const experienceMetadata = computeExperienceMetadata(schema)
     return {
       sessionId: v4(),
       step: firstStep,
@@ -71,61 +74,27 @@ class Stepper {
     } as IStepTransitionReturn
   }
 
-  private async handleExperienceMetadata(
+  private getCorrectStep(
     schema: IExperienceJSONSchema,
-    sessionId?: string
-  ): Promise<IExperienceMetadata> {
-    const session = await this.resolvers.getSession(sessionId)
-    const currentFlow = session?.experienceMetadata?.currentFlow ?? "default"
-
-    const flowSteps = schema.flows.find(
-      (x) => x.slug === currentFlow
-    )?.stepsSlugs
-
-    if (!flowSteps) throw new Error("Flow not found") // TODO: ERRO - retornar erro flow não encontrado
-
-    const lastStepPosition = flowSteps?.length
-    const lastStepSlug = flowSteps![lastStepPosition - 1]
-
-    const currentStepSlug = session
-      ? flowSteps![session.experienceMetadata.currentPosition - 1]
-      : flowSteps![0]
-
-    const currentPosition = session
-      ? session.experienceMetadata.currentPosition + 1
-      : 1
-
-    let lastCompletedStepSlug = ""
-
-    const stepsList: IFlowStepsListItem[] = flowSteps!.map((item, index) => {
-      const schemaStep = schema!.steps.find((x) => x.slug === item)
-
-      if (session && currentStepSlug === item) {
-        const filledFieldsKeys = Object.keys(session.steps)
-        schemaStep?.fields?.forEach((field) => {
-          if (filledFieldsKeys.includes(field.slug))
-            lastCompletedStepSlug = item
-        })
-      }
-
-      return {
-        position: index + 1,
-        slug: item,
-        friendlyName: schemaStep!.friendlyName,
-      }
-    })
-
-    const metadata: IExperienceMetadata = {
-      name: schema.name,
-      currentFlow,
-      lastStepSlug,
-      currentStepSlug,
-      currentPosition,
-      lastCompletedStepSlug,
-      stepsList,
+    session: IFireboltSession
+  ): IStepTransitionReturn {
+    const previousStepIndex = schema.steps.findIndex(
+      (x) => x.slug === session.experienceMetadata.lastCompletedStepSlug
+    )
+    if (previousStepIndex === -1) {
+      // TODO: tratar erro de step não encontrado
     }
 
-    return metadata
+    const currentStep = schema.steps[previousStepIndex + 1]
+    const metadata = computeExperienceMetadata(schema, session)
+    return {
+      sessionId: session.sessionId,
+      experienceMetadata: metadata,
+      step: currentStep,
+      capturedData: session.steps,
+      errors: [],
+      webhookResult: [],
+    }
   }
 
   private validate(
@@ -144,6 +113,12 @@ class Stepper {
       stepFields: currentStepConfig.fields!,
       formPayload,
     })
+  }
+
+  private hasFilledFields(payload?: IExperienceProceedPayload): boolean {
+    return (
+      !!payload && !!payload?.fields && Object.keys(payload.fields).length > 0
+    )
   }
 
   async goBackHandler() {}

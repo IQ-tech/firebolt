@@ -16,8 +16,9 @@ const mock = {
     "name": "sample",
     "currentFlow": "default",
     "currentStepSlug": "address",
-    "currentPosition": "3",
+    "currentPosition": 3,
     "lastStepSlug": "bills",
+    "lastCompletedStepSlug": "documents",
   },
   "steps": {
     "personal_data": {
