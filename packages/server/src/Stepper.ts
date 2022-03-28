@@ -6,8 +6,6 @@ import {
   IStepTransitionReturn,
   IFireboltSession,
   IExperienceProceedPayload,
-  IExperienceMetadata,
-  IFlowStepsListItem,
 } from "./interfaces/IEngine"
 import { IExperienceJSONSchema, IStepJSON } from "./types"
 import computeExperienceMetadata from "./helpers/computeExperienceMetadata"
@@ -31,15 +29,15 @@ class Stepper {
     payload?: IExperienceProceedPayload
   ): Promise<IStepTransitionReturn> {
     const session = await this.resolvers.getSession(payload?.sessionId)
-    const schema = await this.getCorrectFormJSONSchema()
-    if (!session) return this.getFirstStep(schema)
-
     const hasFilledFields = this.hasFilledFields(payload)
-    if (hasFilledFields) {
-      // TODO: TRATAR O PAYLOAD
-    }
+    const schema = await this.getCorrectFormJSONSchema()
+    if (!session && !hasFilledFields) return this.createExperience(schema)
+    if (session && !hasFilledFields)
+      return this.continueExperience(schema, session)
 
-    return this.getCorrectStep(schema, session)
+    return await this.saveExperience(schema, payload, session)
+
+    return {} as IStepTransitionReturn
   }
 
   private async getCorrectFormJSONSchema(): Promise<IExperienceJSONSchema> {
@@ -48,7 +46,7 @@ class Stepper {
     return await this.resolvers.getFormJSONSchema(this.experienceId)
   }
 
-  private async getFirstStep(
+  private async createExperience(
     schema: IExperienceJSONSchema
   ): Promise<IStepTransitionReturn> {
     const defaultTrack = schema.flows.find((x) => x.slug === "default")
@@ -74,7 +72,7 @@ class Stepper {
     } as IStepTransitionReturn
   }
 
-  private getCorrectStep(
+  private continueExperience(
     schema: IExperienceJSONSchema,
     session: IFireboltSession
   ): IStepTransitionReturn {
@@ -94,6 +92,66 @@ class Stepper {
       capturedData: session.steps,
       errors: [],
       webhookResult: [],
+    }
+  }
+
+  private async saveExperience(
+    schema: IExperienceJSONSchema,
+    payload?: IExperienceProceedPayload,
+    session?: IFireboltSession
+  ): Promise<IStepTransitionReturn> {
+    if (!payload?.sessionId) throw new Error("SessionId not found") // TODO: TRATAR ERRO
+
+    const metadata = computeExperienceMetadata(schema, session)
+    const currentStepJSON = schema.steps.find(
+      (x) => x.slug === metadata.currentStepSlug
+    )
+    if (!currentStepJSON) throw new Error("Step not found")
+
+    const validation = this.validate(payload?.fields, currentStepJSON)
+    if (!validation.isValid) {
+      const errors = !validation.isValid ? validation : []
+      return {
+        sessionId: payload?.sessionId,
+        experienceMetadata: metadata,
+        capturedData: session?.steps ?? {},
+        step: currentStepJSON,
+        webhookResult: [],
+        errors,
+      }
+    }
+
+    // TODO: IMPLEMENTAR WEBHOOKS AQUI OU FORA????
+
+    const newSession: IFireboltSession = {
+      sessionId: payload?.sessionId ?? session!.sessionId,
+      experienceMetadata: metadata,
+      steps: {
+        ...session?.steps,
+        [metadata.currentStepSlug]: { ...payload?.fields },
+      },
+    }
+
+    await this.resolvers.setSession(newSession)
+    const newMetadata = computeExperienceMetadata(schema, newSession)
+    const stepIndex = schema.steps.findIndex(
+      (x) => x.slug === newMetadata.currentStepSlug
+    )
+
+    if (!!stepIndex) throw new Error("Step not found")
+
+    const step =
+      newMetadata.lastStepSlug === newMetadata.currentStepSlug
+        ? schema.steps[stepIndex]
+        : schema.steps[stepIndex + 1]
+
+    return {
+      sessionId: payload!.sessionId,
+      errors: {},
+      experienceMetadata: newMetadata,
+      webhookResult: {},
+      step,
+      capturedData: newSession.steps,
     }
   }
 
