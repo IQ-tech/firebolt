@@ -1,4 +1,4 @@
-import { IExperienceJSONSchema } from "../types"
+import { IExperienceJSONSchema, IStepJSON } from "../types"
 import {
   IFlowStepsListItem,
   IExperienceMetadata,
@@ -13,7 +13,7 @@ export default function computeExperienceMetadata(
   const flowSteps = schema.flows.find((x) => x.slug === currentFlow)?.stepsSlugs
   if (!flowSteps) throw new Error("Flow not found") // TODO: ERRO - retornar erro flow não encontrado
   const lastStepPosition = flowSteps?.length
-  const lastStepSlug = flowSteps![lastStepPosition - 1]
+  const lastStepSlug = flowSteps?.[lastStepPosition - 1]
 
   const currentStepSlug = session
     ? flowSteps![session.experienceMetadata.currentPosition - 1]
@@ -27,21 +27,14 @@ export default function computeExperienceMetadata(
     ? flowSteps![session.experienceMetadata.currentPosition - 2]
     : ""
 
-  const stepsList: IFlowStepsListItem[] = flowSteps!.map((item, index) => {
-    const schemaStep = schema!.steps.find((x) => x.slug === item)
-
-    // if (session && currentStepSlug === item) {
-    //   console.log("item")
-    //   const filledFieldsKeys = Object.keys(session.steps)
-    //   schemaStep?.fields?.forEach((field) => {
-    //     if (filledFieldsKeys.includes(field.slug)) lastCompletedStepSlug = item
-    //   })
-    // }
-
+  const stepsList: IFlowStepsListItem[] = flowSteps.map((item, index) => {
+    const schemaStep: IStepJSON | undefined = schema.steps.find(
+      (x) => x.slug === item
+    )
     return {
       position: index + 1,
       slug: item,
-      friendlyName: schemaStep!.friendlyName,
+      friendlyName: schemaStep?.friendlyName || "",
     }
   })
 
