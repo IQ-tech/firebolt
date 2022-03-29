@@ -106,6 +106,7 @@ class Stepper {
     metadata: IExperienceMetadata,
     action: "previous" | "current" | "next"
   ): IStepJSON {
+    // combine the step definition with step on session
     const actions = {
       previous: -1,
       current: 0,
@@ -156,8 +157,22 @@ class Stepper {
     }
   }
 
-  debugHandler() {
-    return () => {}
+  async debugHandler(
+    stepSlug: string
+  ): Promise<void> /* Promise<IStepTransitionReturn>  */ {
+    const JSONSchema = await this.getCorrectFormJSONSchema()
+    const stepDefinition = JSONSchema.steps.find(
+      (step) => step.slug === stepSlug
+    )
+    const metadata = computeExperienceMetadata(JSONSchema)
+    /* const step = this.getStep(JSONSchema, metadata) */
+
+    /*     return {
+      sessionId: "",
+      webhookResult: {},
+      errors: {},
+      step
+    } */
   }
 
   uploadHandler() {

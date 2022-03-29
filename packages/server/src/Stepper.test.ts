@@ -145,7 +145,46 @@ describe("Stepper.proceed handling", () => {
     expect(proceed.step.slug).toBe("documents")
   })
 
-  test.todo("should be able to update previous steps without data loss")
+  test("should be able to update previous steps without data loss", async () => {
+    const resolvers: IEngineResolvers = {
+      getFormJSONSchema: mockedGetFormJSONSchema,
+      getSession: mockedGetSession,
+      setSession: mockedSetSession,
+    }
+
+    mockedSetSession(twoStepsCompletedFlowDefault)
+    const fireboltStepper = new Stepper({
+      experienceId: "sample",
+      experienceJSONSchema: JSONSample,
+      resolvers,
+    })
+
+    await fireboltStepper.goBackHandler({
+      sessionId: twoStepsCompletedFlowDefault.sessionId,
+    })
+
+    await fireboltStepper.goBackHandler({
+      sessionId: twoStepsCompletedFlowDefault.sessionId,
+    })
+
+    const firstStepField = {
+      full_name: `${faker.name.firstName()} ${faker.name.lastName()}`,
+      email: faker.internet.email(),
+    }
+
+    const firstStepUpdate = await fireboltStepper.proceed({
+      sessionId: twoStepsCompletedFlowDefault.sessionId,
+      fields: firstStepField,
+    })
+
+    // console.log("firstStepUpdate: ", firstStepUpdate.step)
+
+    expect(firstStepUpdate.capturedData.documents).toEqual(
+      twoStepsCompletedFlowDefault.steps.documents
+    )
+    expect(firstStepUpdate.capturedData.personal_data).toEqual(firstStepField)
+    expect(firstStepUpdate.experienceMetadata.currentPosition).toBe(2)
+  })
 })
 
 describe("Stepper.goBack handling", () => {
