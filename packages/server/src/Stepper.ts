@@ -1,14 +1,19 @@
-import { validateFBTStep, ValidateFBTStepResult } from "@iq-firebolt/validators"
-import { v4 } from "uuid"
 import {
   ICreateEngineOptions,
   IEngineResolvers,
   IStepTransitionReturn,
   IFireboltSession,
   IExperienceProceedPayload,
+  IExperienceMetadata,
 } from "./interfaces/IEngine"
 import { IExperienceJSONSchema, IStepJSON } from "./types"
+
+// helpers
 import computeExperienceMetadata from "./helpers/computeExperienceMetadata"
+import getHasFilledFields from "./helpers/getHasFilledFields"
+import validateStep from "./helpers/validateStep"
+import createExperience from "./helpers/createExperience"
+import continueExperience from "./helpers/continueExperience"
 
 class Stepper {
   private experienceId: string
@@ -29,11 +34,11 @@ class Stepper {
     payload?: IExperienceProceedPayload
   ): Promise<IStepTransitionReturn> {
     const session = await this.resolvers.getSession(payload?.sessionId)
-    const hasFilledFields = this.hasFilledFields(payload)
+    const hasFilledFields = getHasFilledFields(payload)
     const schema = await this.getCorrectFormJSONSchema()
-    if (!session && !hasFilledFields) return this.createExperience(schema)
-    if (session && !hasFilledFields)
-      return this.continueExperience(schema, session)
+
+    if (!session && !hasFilledFields) return createExperience(schema)
+    if (session && !hasFilledFields) return continueExperience(schema, session)
 
     return await this.saveExperience(schema, payload, session)
   }
@@ -42,61 +47,6 @@ class Stepper {
     if (this.preDefinedJSONSchema) return this.preDefinedJSONSchema
 
     return await this.resolvers.getFormJSONSchema(this.experienceId)
-  }
-
-  private async createExperience(
-    schema: IExperienceJSONSchema
-  ): Promise<IStepTransitionReturn> {
-    const defaultTrack = schema.flows.find((x) => x.slug === "default")
-    const firstStepSlug = defaultTrack?.stepsSlugs[0]
-    if (!defaultTrack) {
-      // TODO: ERRO - retornar erro de que não tem a track default
-    }
-    const firstStep = schema.steps.find((x) => x.slug === firstStepSlug)
-
-    if (!firstStep) {
-      // TODO: ERRO - retornar erro de passo não encontrado no json
-      return {} as IStepTransitionReturn
-    }
-
-    const experienceMetadata = computeExperienceMetadata(schema)
-    return {
-      sessionId: v4(),
-      step: firstStep,
-      capturedData: {},
-      errors: {},
-      webhookResult: {},
-      experienceMetadata,
-    } as IStepTransitionReturn
-  }
-
-  private continueExperience(
-    schema: IExperienceJSONSchema,
-    session: IFireboltSession
-  ): IStepTransitionReturn {
-    const currentFlowSlug = session.experienceMetadata.currentFlow ?? "default"
-    const currentFlow = schema.flows.find((x) => x.slug === currentFlowSlug)
-    if (!currentFlow) throw new Error("Flow Not found") // TODO: Tratar erro de flow nao encontrado
-
-    const lastCompletedStepIndex = currentFlow.stepsSlugs.indexOf(
-      session.experienceMetadata.lastCompletedStepSlug
-    )
-
-    const currentStep = schema.steps.find(
-      (x) => x.slug === currentFlow.stepsSlugs[lastCompletedStepIndex + 1]
-    )
-
-    if (!currentStep) throw new Error("Step not found") // TODO: Tratar erro de step nao encontrado
-
-    const metadata = computeExperienceMetadata(schema, session)
-    return {
-      sessionId: session.sessionId,
-      experienceMetadata: metadata,
-      step: currentStep,
-      capturedData: session.steps,
-      errors: [],
-      webhookResult: [],
-    }
   }
 
   private async saveExperience(
@@ -110,10 +60,11 @@ class Stepper {
     const currentStepJSON = schema.steps.find(
       (x) => x.slug === metadata.currentStepSlug
     )
+    const stepType = currentStepJSON?.type
     if (!currentStepJSON) throw new Error("Step not found") // TODO: TRATAR ERRO
 
-    const validation = this.validate(payload?.fields, currentStepJSON)
-    if (!validation.isValid) {
+    const validation = validateStep(payload?.fields, currentStepJSON)
+    if (!validation.isValid && stepType !== "custom") {
       const errors = !validation.isValid ? validation : []
       return {
         sessionId: payload?.sessionId,
@@ -138,58 +89,71 @@ class Stepper {
 
     await this.resolvers.setSession(newSession)
     const newMetadata = computeExperienceMetadata(schema, newSession)
-
-    const currentFlowSlug = newMetadata?.currentFlow ?? "default"
-    const currentFlow = schema.flows.find((x) => x.slug === currentFlowSlug)
-    if (!currentFlow) throw new Error("Flow Not found") // TODO: Tratar erro de flow nao encontrado
-
-    const stepIndex = currentFlow.stepsSlugs.indexOf(
-      newMetadata.currentStepSlug
-    )
-    if (!!stepIndex) throw new Error("Step not found") // TODO: TRATAR ERRO
-
-    const currentStep = schema.steps.find(
-      (x) => x.slug === currentFlow.stepsSlugs[stepIndex + 1]
-    )
-
-    if (!currentStep) throw new Error("Step not found") // TODO: Tratar erro de step nao encontrado
+    const step = this.getStep(schema, newMetadata, "next")
 
     return {
       sessionId: payload!.sessionId,
       errors: {},
       experienceMetadata: newMetadata,
       webhookResult: {},
-      step: currentStep,
+      step,
       capturedData: newSession.steps,
     }
   }
 
-  private validate(
-    formPayload = {},
-    currentStepConfig: IStepJSON
-  ): ValidateFBTStepResult {
-    if (!currentStepConfig) {
-      return { isValid: false, invalidFields: [] }
+  private getStep(
+    schema: IExperienceJSONSchema,
+    metadata: IExperienceMetadata,
+    action: "previous" | "current" | "next"
+  ): IStepJSON {
+    const actions = {
+      previous: -1,
+      current: 0,
+      next: 1,
     }
 
-    if (currentStepConfig.type !== "form") {
-      formPayload[currentStepConfig.type] = "completed"
-    }
+    const position = actions[action]
 
-    return validateFBTStep({
-      stepFields: currentStepConfig.fields!,
-      formPayload,
-    })
-  }
+    const currentFlowSlug = metadata?.currentFlow ?? "default"
+    const currentFlow = schema.flows.find((x) => x.slug === currentFlowSlug)
+    if (!currentFlow) throw new Error("Flow Not found") // TODO: TRATAR ERRO
 
-  private hasFilledFields(payload?: IExperienceProceedPayload): boolean {
-    return (
-      !!payload && !!payload?.fields && Object.keys(payload.fields).length > 0
+    const stepIndex = currentFlow.stepsSlugs.indexOf(metadata.currentStepSlug)
+    if (stepIndex === -1) throw new Error("Step not found") // TODO: TRATAR ERRO
+
+    const step = schema.steps.find(
+      (x) => x.slug === currentFlow.stepsSlugs[stepIndex + position]
     )
+
+    if (!step) throw new Error("Step not found") // TODO: TRATAR ERRO
+
+    return step
   }
 
-  async goBackHandler(sessionId: string) {
-    return `goBackHandler runs with ${sessionId}`
+  async goBackHandler(
+    payload: IExperienceProceedPayload
+  ): Promise<IStepTransitionReturn> {
+    const schema = await this.getCorrectFormJSONSchema()
+    const session = await this.resolvers.getSession(payload?.sessionId)
+    if (!session)
+      throw new Error("Não pode voltar se estiver no primeiro passo") // TODO: TRATAR ERRO
+
+    const metadata = computeExperienceMetadata(schema, session, true)
+    const step = this.getStep(schema, metadata, "current")
+    await this.resolvers.setSession({
+      sessionId: session.sessionId,
+      experienceMetadata: metadata,
+      steps: session.steps,
+    })
+
+    return {
+      sessionId: session.sessionId,
+      experienceMetadata: metadata,
+      capturedData: session.steps,
+      webhookResult: {},
+      errors: {},
+      step,
+    }
   }
 
   debugHandler() {

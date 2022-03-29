@@ -8,7 +8,7 @@ import {
 } from "./interfaces/IEngine"
 
 import JSONSample from "./mocks/sample-experience"
-import { twoStepsCompleted } from "./mocks/sample-experience-session"
+import { twoStepsCompletedFlowDefault } from "./mocks/sample-experience-session"
 
 const localStorage = global.localStorage
 const mockedGetFormJSONSchema = jest.fn(
@@ -25,7 +25,7 @@ const mockedSetSession = jest.fn(async (stepData: IFireboltSession) => {
   localStorage.setItem(stepData.sessionId, JSON.stringify(stepData))
 })
 
-describe("Stepper.Proceed handling", () => {
+describe("Stepper.proceed handling", () => {
   beforeEach(() => {
     localStorage.clear()
     jest.clearAllMocks()
@@ -62,7 +62,7 @@ describe("Stepper.Proceed handling", () => {
       setSession: mockedSetSession,
     }
 
-    mockedSetSession(twoStepsCompleted)
+    mockedSetSession(twoStepsCompletedFlowDefault)
     const fireboltStepper = new Stepper({
       experienceId: "sample",
       experienceJSONSchema: JSONSample,
@@ -70,13 +70,13 @@ describe("Stepper.Proceed handling", () => {
     })
 
     const nextStep = await fireboltStepper.proceed({
-      sessionId: twoStepsCompleted.sessionId,
+      sessionId: twoStepsCompletedFlowDefault.sessionId,
     })
 
     expect(nextStep.step.slug).toBe("address")
     expect(nextStep.experienceMetadata.currentPosition).toBe(3)
     expect(nextStep.experienceMetadata.lastCompletedStepSlug).toBe("documents")
-    expect(nextStep.capturedData).toEqual(twoStepsCompleted.steps)
+    expect(nextStep.capturedData).toEqual(twoStepsCompletedFlowDefault.steps)
   })
 
   test("should validate the step fields and return an error", async () => {
@@ -145,7 +145,42 @@ describe("Stepper.Proceed handling", () => {
     expect(proceed.step.slug).toBe("documents")
   })
 
-  test.todo("should be able update previous steps without data loss")
+  test.todo("should be able to update previous steps without data loss")
+})
+
+describe("Stepper.goBack handling", () => {
+  beforeEach(() => {
+    localStorage.clear()
+    jest.clearAllMocks()
+  })
+
+  test("should go back to previous step", async () => {
+    const resolvers: IEngineResolvers = {
+      getFormJSONSchema: mockedGetFormJSONSchema,
+      getSession: mockedGetSession,
+      setSession: mockedSetSession,
+    }
+
+    mockedSetSession(twoStepsCompletedFlowDefault)
+    const fireboltStepper = new Stepper({
+      experienceId: "sample",
+      experienceJSONSchema: JSONSample,
+      resolvers,
+    })
+
+    const previousStep = await fireboltStepper.goBackHandler({
+      sessionId: twoStepsCompletedFlowDefault.sessionId,
+    })
+
+    expect(previousStep.step.slug).toBe("documents")
+    expect(previousStep.experienceMetadata.currentPosition).toBe(2)
+    expect(previousStep.experienceMetadata.lastCompletedStepSlug).toBe(
+      "documents"
+    )
+    expect(previousStep.capturedData).toEqual(
+      twoStepsCompletedFlowDefault.steps
+    )
+  })
 })
 
 describe("Props presets apply", () => {

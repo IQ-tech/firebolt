@@ -11,8 +11,15 @@ exports.defaultFlowMetadataStepsList = [
   { position: 4, slug: "bills", friendlyName: "Adicionar Contas" },
 ]
 
+/** @type {IFlowStepsListItem[]} */
+exports.mediumFlowMetadataStepsList = [
+  { position: 1, slug: "personal_data", friendlyName: "Vamos começar" },
+  { position: 2, slug: "documents", friendlyName: "Documentos" },
+  { position: 3, slug: "token", friendlyName: "Token" },
+]
+
 /** @type {IFireboltSession} */
-exports.oneStepCompleted = {
+exports.oneStepCompletedFlowDefault = {
   "sessionId": "mockSessionId1234-1",
   "experienceMetadata": {
     "name": "sample",
@@ -33,7 +40,7 @@ exports.oneStepCompleted = {
 }
 
 /** @type {IFireboltSession} */
-exports.twoStepsCompleted = {
+exports.twoStepsCompletedFlowDefault = {
   "sessionId": "mockSessionId1234-2",
   "experienceMetadata": {
     "name": "sample",
@@ -61,7 +68,7 @@ exports.twoStepsCompleted = {
 /**
  * @type {IFireboltSession}
  */
-exports.threeStepsCompleted = {
+exports.threeStepsCompletedFlowDefault = {
   "sessionId": "mockSessionId1234-3",
   "experienceMetadata": {
     "name": "sample",
@@ -92,6 +99,53 @@ exports.threeStepsCompleted = {
         "neighborhood": "bairro das batatas",
         "city": "Tangamandapio",
         "state": "SP",
+      },
+    },
+  },
+}
+
+/** @type {IFireboltSession} */
+exports.oneStepCompletedFlowMedium = {
+  "sessionId": "mockSessionId1234-b1",
+  "experienceMetadata": {
+    "name": "sample",
+    "currentFlow": "medium",
+    "currentStepSlug": "documents",
+    "currentPosition": 2,
+    "lastStepSlug": "token",
+    "lastCompletedStepSlug": "personal_data",
+  },
+  "steps": {
+    "personal_data": {
+      "fields": {
+        "full_name": "Teste Cenoura",
+        "email": "teste@cenoura.com",
+      },
+    },
+  },
+}
+
+/** @type {IFireboltSession} */
+exports.twoStepsCompletedFlowMedium = {
+  "sessionId": "mockSessionId1234-2",
+  "experienceMetadata": {
+    "name": "sample",
+    "currentFlow": "medium",
+    "currentStepSlug": "token",
+    "currentPosition": 3,
+    "lastStepSlug": "token",
+    "lastCompletedStepSlug": "documents",
+  },
+  "steps": {
+    "personal_data": {
+      "fields": {
+        "full_name": "Teste Cenoura",
+        "email": "teste@cenoura.com",
+      },
+    },
+    "documents": {
+      "fields": {
+        "brazil_id_number": "asdsf23s",
       },
     },
   },
