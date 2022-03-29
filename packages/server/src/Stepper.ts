@@ -36,8 +36,6 @@ class Stepper {
       return this.continueExperience(schema, session)
 
     return await this.saveExperience(schema, payload, session)
-
-    return {} as IStepTransitionReturn
   }
 
   private async getCorrectFormJSONSchema(): Promise<IExperienceJSONSchema> {
@@ -76,14 +74,20 @@ class Stepper {
     schema: IExperienceJSONSchema,
     session: IFireboltSession
   ): IStepTransitionReturn {
-    const previousStepIndex = schema.steps.findIndex(
-      (x) => x.slug === session.experienceMetadata.lastCompletedStepSlug
-    )
-    if (previousStepIndex === -1) {
-      // TODO: tratar erro de step não encontrado
-    }
+    const currentFlowSlug = session.experienceMetadata.currentFlow ?? "default"
+    const currentFlow = schema.flows.find((x) => x.slug === currentFlowSlug)
+    if (!currentFlow) throw new Error("Flow Not found") // TODO: Tratar erro de flow nao encontrado
 
-    const currentStep = schema.steps[previousStepIndex + 1]
+    const lastCompletedStepIndex = currentFlow.stepsSlugs.indexOf(
+      session.experienceMetadata.lastCompletedStepSlug
+    )
+
+    const currentStep = schema.steps.find(
+      (x) => x.slug === currentFlow.stepsSlugs[lastCompletedStepIndex + 1]
+    )
+
+    if (!currentStep) throw new Error("Step not found") // TODO: Tratar erro de step nao encontrado
+
     const metadata = computeExperienceMetadata(schema, session)
     return {
       sessionId: session.sessionId,
@@ -106,7 +110,7 @@ class Stepper {
     const currentStepJSON = schema.steps.find(
       (x) => x.slug === metadata.currentStepSlug
     )
-    if (!currentStepJSON) throw new Error("Step not found")
+    if (!currentStepJSON) throw new Error("Step not found") // TODO: TRATAR ERRO
 
     const validation = this.validate(payload?.fields, currentStepJSON)
     if (!validation.isValid) {
@@ -134,23 +138,28 @@ class Stepper {
 
     await this.resolvers.setSession(newSession)
     const newMetadata = computeExperienceMetadata(schema, newSession)
-    const stepIndex = schema.steps.findIndex(
-      (x) => x.slug === newMetadata.currentStepSlug
+
+    const currentFlowSlug = newMetadata?.currentFlow ?? "default"
+    const currentFlow = schema.flows.find((x) => x.slug === currentFlowSlug)
+    if (!currentFlow) throw new Error("Flow Not found") // TODO: Tratar erro de flow nao encontrado
+
+    const stepIndex = currentFlow.stepsSlugs.indexOf(
+      newMetadata.currentStepSlug
+    )
+    if (!!stepIndex) throw new Error("Step not found") // TODO: TRATAR ERRO
+
+    const currentStep = schema.steps.find(
+      (x) => x.slug === currentFlow.stepsSlugs[stepIndex + 1]
     )
 
-    if (!!stepIndex) throw new Error("Step not found")
-
-    const step =
-      newMetadata.lastStepSlug === newMetadata.currentStepSlug
-        ? schema.steps[stepIndex]
-        : schema.steps[stepIndex + 1]
+    if (!currentStep) throw new Error("Step not found") // TODO: Tratar erro de step nao encontrado
 
     return {
       sessionId: payload!.sessionId,
       errors: {},
       experienceMetadata: newMetadata,
       webhookResult: {},
-      step,
+      step: currentStep,
       capturedData: newSession.steps,
     }
   }
@@ -179,7 +188,9 @@ class Stepper {
     )
   }
 
-  async goBackHandler() {}
+  async goBackHandler(sessionId: string) {
+    return `goBackHandler runs with ${sessionId}`
+  }
 
   debugHandler() {
     return () => {}
