@@ -46,7 +46,7 @@ export interface IStepTransitionReturn {
   step: IStepJSON
   webhookResult: any /* IFireboltWebhookResponse // TODO */
   capturedData: any // TODO
-  experienceMetadata: IExperienceMetadata 
+  experienceMetadata: IExperienceMetadata
   errors: any
 }
 

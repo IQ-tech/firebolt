@@ -5,6 +5,7 @@ import {
   IFireboltSession,
   IExperienceProceedPayload,
   IExperienceMetadata,
+  IExperienceState,
 } from "./interfaces/IEngine"
 import { IExperienceJSONSchema, IStepJSON } from "./types"
 
@@ -40,14 +41,14 @@ class Stepper {
     if (!session && !hasFilledFields) return createExperience(schema)
     if (session && !hasFilledFields) return continueExperience(schema, session)
 
-   // identify Y
-   // get nextStep
-   // if proceed 
+    // identify Y
+    // get nextStep
+    // if proceed
     // validate payload
     //modify state
-   // modify return
+    // modify return
     // apply metadata
-    // apply props presets 
+    // apply props presets
 
     return await this.saveExperience(schema, payload, session)
   }
@@ -154,6 +155,7 @@ class Stepper {
       sessionId: session.sessionId,
       experienceMetadata: metadata,
       steps: session.steps,
+      experienceState: {} as IExperienceState,
     })
 
     return {

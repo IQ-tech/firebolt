@@ -10,7 +10,6 @@ import {
  * this metadata includes:
  * - the current step position
  * - all possible steps of the current flow
-
  */
 
 export default function computeExperienceMetadata(
@@ -34,7 +33,6 @@ export default function computeExperienceMetadata(
     ? flowSteps![currentPosition - 1]
     : flowSteps![0]
 
-  // let lastCompletedStepSlug = session ? flowSteps![currentPosition - 2] : ""
   let lastCompletedStepSlug = ""
   if (session) {
     const completedSteps = session ? Object.keys(session?.steps) : []
