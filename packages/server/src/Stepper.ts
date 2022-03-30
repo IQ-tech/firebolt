@@ -40,6 +40,15 @@ class Stepper {
     if (!session && !hasFilledFields) return createExperience(schema)
     if (session && !hasFilledFields) return continueExperience(schema, session)
 
+   // identify Y
+   // get nextStep
+   // if proceed 
+    // validate payload
+    //modify state
+   // modify return
+    // apply metadata
+    // apply props presets 
+
     return await this.saveExperience(schema, payload, session)
   }
 

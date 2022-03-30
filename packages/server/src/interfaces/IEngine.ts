@@ -46,11 +46,12 @@ export interface IStepTransitionReturn {
   step: IStepJSON
   webhookResult: any /* IFireboltWebhookResponse // TODO */
   capturedData: any // TODO
-  experienceMetadata: IExperienceMetadata
+  experienceMetadata: IExperienceMetadata 
   errors: any
 }
 
 // representa os metadados da experincia atual (guardada no storage) do usuário,
+// mudar experience metadata para ser computado a partir do JSON SCHEMA + session state
 export interface IExperienceMetadata {
   name: string
   currentFlow: string | "default"
@@ -59,6 +60,13 @@ export interface IExperienceMetadata {
   currentPosition: number
   lastStepSlug: string
   stepsList?: IFlowStepsListItem[]
+}
+
+export interface IExperienceState {
+  currentStepSlug: string
+  currentPosition: number
+  lastCompletedStepSlug: string
+  currentFlow: string | "default"
 }
 
 export interface IFlowStepsListItem {
@@ -79,7 +87,8 @@ export interface IFireboltSessionSteps {
 // Representa a sessão que é guardada no storage
 export interface IFireboltSession {
   sessionId: string
-  experienceMetadata: IExperienceMetadata
+  experienceMetadata: IExperienceMetadata // TODO - remove experience metadata from  IFireboltSession to be computed
+  experienceState: IExperienceState
   steps: IFireboltSessionSteps
 }
 
