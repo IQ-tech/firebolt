@@ -23,9 +23,6 @@ const sessionTestCasesDefaultFlow: ISessionTestCase[] = [
     item: oneStepCompletedFlowDefault,
     expectedResult: {
       name: "sample",
-      currentFlow: "default",
-      currentStepSlug: "documents",
-      lastCompletedStepSlug: "personal_data",
       currentPosition: 2,
       lastStepSlug: "bills",
       stepsList: defaultFlowMetadataStepsList,
@@ -36,9 +33,6 @@ const sessionTestCasesDefaultFlow: ISessionTestCase[] = [
     item: twoStepsCompletedFlowDefault,
     expectedResult: {
       name: "sample",
-      currentFlow: "default",
-      currentStepSlug: "address",
-      lastCompletedStepSlug: "documents",
       currentPosition: 3,
       lastStepSlug: "bills",
       stepsList: defaultFlowMetadataStepsList,
@@ -49,9 +43,6 @@ const sessionTestCasesDefaultFlow: ISessionTestCase[] = [
     item: threeStepsCompletedFlowDefault,
     expectedResult: {
       name: "sample",
-      currentFlow: "default",
-      currentStepSlug: "bills",
-      lastCompletedStepSlug: "address",
       currentPosition: 4,
       lastStepSlug: "bills",
       stepsList: defaultFlowMetadataStepsList,
@@ -65,9 +56,6 @@ const sessionTestCasesMediumFlow: ISessionTestCase[] = [
     item: oneStepCompletedFlowMedium,
     expectedResult: {
       name: "sample",
-      currentFlow: "medium",
-      currentStepSlug: "documents",
-      lastCompletedStepSlug: "personal_data",
       currentPosition: 2,
       lastStepSlug: "token",
       stepsList: mediumFlowMetadataStepsList,
@@ -78,9 +66,6 @@ const sessionTestCasesMediumFlow: ISessionTestCase[] = [
     item: twoStepsCompletedFlowMedium,
     expectedResult: {
       name: "sample",
-      currentFlow: "medium",
-      currentStepSlug: "token",
-      lastCompletedStepSlug: "documents",
       currentPosition: 3,
       lastStepSlug: "token",
       stepsList: mediumFlowMetadataStepsList,
@@ -92,22 +77,22 @@ describe("function compute experience metadata correctly", () => {
   test.each(sessionTestCasesDefaultFlow)(
     "return correctly formatted metadata (default experience flow) - $label",
     ({ label, item, expectedResult }) => {
-      const computedMedatada = computeExperienceMetadata(
+      const computedMetadata = computeExperienceMetadata(
         sampleExperienceSchemaMock,
         item
       )
-      expect(computedMedatada).toEqual(expectedResult)
+      expect(computedMetadata).toEqual(expectedResult)
     }
   )
 
   test.each(sessionTestCasesMediumFlow)(
     "return correctly formatted metadata (medium experience flow) - $label",
     ({ label, item, expectedResult }) => {
-      const computedMedatada = computeExperienceMetadata(
+      const computedMetadata = computeExperienceMetadata(
         sampleExperienceSchemaMock,
         item
       )
-      expect(computedMedatada).toEqual(expectedResult)
+      expect(computedMetadata).toEqual(expectedResult)
     }
   )
 })
