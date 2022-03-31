@@ -1,0 +1,2 @@
+- conditional steps on flow
+- set globals (através do decision callback), define as globals no json e pode alterar elas no decision callback

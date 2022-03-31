@@ -10,3 +10,8 @@
 
 - experienceId - parametro utilizado para buscar um json em alguma fonte remota
 - a numeração dos passos não é zero indexada
+
+* currentStep - passo que esta sendo tratado no handler (start, proceed, goback e debug)
+
+* lastStepCompleted - state guardado no storage do ultimo passo salvo
+* nextStep - passo a ser devolvido apos modificação do storage

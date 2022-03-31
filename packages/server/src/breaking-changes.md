@@ -1,0 +1,1 @@
+- agora o session id é gerado a partir da primeira transição (usuário oficializa uma seção)
