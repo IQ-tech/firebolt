@@ -25,7 +25,7 @@ const mockedSetSession = jest.fn(async (stepData: IFireboltSession) => {
   localStorage.setItem(stepData.sessionId, JSON.stringify(stepData))
 })
 
-describe("Stepper.proceed handling", () => {
+describe("Stepper.start handling", () => {
   beforeEach(() => {
     localStorage.clear()
     jest.clearAllMocks()
@@ -75,10 +75,15 @@ describe("Stepper.proceed handling", () => {
 
     expect(nextStep.step.slug).toBe("address")
     expect(nextStep.experienceMetadata.currentPosition).toBe(3)
-    // expect(nextStep.experienceMetadata.lastCompletedStepSlug).toBe("documents")
     expect(nextStep.capturedData).toEqual(twoStepsCompletedFlowDefault.steps)
   })
+})
 
+describe("Stepper.proceed handling", () => {
+  // beforeEach(() => {
+  //   localStorage.clear()
+  //   jest.clearAllMocks()
+  // })
   // test("should validate the step fields and return an error", async () => {
   //   const sample = JSONSample
   //   const resolvers: IEngineResolvers = {
@@ -86,30 +91,24 @@ describe("Stepper.proceed handling", () => {
   //     getSession: mockedGetSession,
   //     setSession: mockedSetSession,
   //   }
-
   //   const fireboltStepper = new Stepper({
   //     experienceId: "sample",
   //     experienceJSONSchema: sample,
   //     resolvers,
   //   })
-
   //   const firstStepField = {
   //     full_name: "Teste",
   //     email: "teste@",
   //   }
-
   //   const sessionId = faker.datatype.uuid()
-
   //   const payload: IExperienceProceedPayload = {
   //     sessionId,
   //     fields: firstStepField,
   //   }
-
   //   const proceed = await fireboltStepper.proceed(payload)
   //   expect(proceed.errors?.isValid).toBe(false)
   //   expect(proceed.errors?.invalidFields.length).not.toBe(0)
   // })
-
   // test("should validate the step fields and return the next step info", async () => {
   //   const sample = JSONSample
   //   const resolvers: IEngineResolvers = {
@@ -117,68 +116,54 @@ describe("Stepper.proceed handling", () => {
   //     getSession: mockedGetSession,
   //     setSession: mockedSetSession,
   //   }
-
   //   const fireboltStepper = new Stepper({
   //     experienceId: "sample",
   //     experienceJSONSchema: sample,
   //     resolvers,
   //   })
-
   //   const sessionId = faker.datatype.uuid()
   //   const name = `${faker.name.firstName()} ${faker.name.lastName()}`
   //   const email = faker.internet.email()
-
   //   const firstStepField = {
   //     full_name: name,
   //     email: email,
   //   }
-
   //   const payload: IExperienceProceedPayload = {
   //     sessionId,
   //     fields: firstStepField,
   //   }
-
   //   const proceed = await fireboltStepper.proceed(payload)
-
   //   expect(proceed.errors).toEqual({})
   //   expect(proceed.capturedData.personal_data).toEqual(firstStepField)
   //   expect(proceed.step.slug).toBe("documents")
   // })
-
   // test("should be able to update previous steps without data loss", async () => {
   //   const resolvers: IEngineResolvers = {
   //     getFormJSONSchema: mockedGetFormJSONSchema,
   //     getSession: mockedGetSession,
   //     setSession: mockedSetSession,
   //   }
-
   //   mockedSetSession(twoStepsCompletedFlowDefault)
   //   const fireboltStepper = new Stepper({
   //     experienceId: "sample",
   //     experienceJSONSchema: JSONSample,
   //     resolvers,
   //   })
-
   //   await fireboltStepper.goBackHandler({
   //     sessionId: twoStepsCompletedFlowDefault.sessionId,
   //   })
-
   //   await fireboltStepper.goBackHandler({
   //     sessionId: twoStepsCompletedFlowDefault.sessionId,
   //   })
-
   //   const firstStepField = {
   //     full_name: `${faker.name.firstName()} ${faker.name.lastName()}`,
   //     email: faker.internet.email(),
   //   }
-
   //   const firstStepUpdate = await fireboltStepper.proceed({
   //     sessionId: twoStepsCompletedFlowDefault.sessionId,
   //     fields: firstStepField,
   //   })
-
   //   // console.log("firstStepUpdate: ", firstStepUpdate.step)
-
   //   expect(firstStepUpdate.capturedData.documents).toEqual(
   //     twoStepsCompletedFlowDefault.steps.documents
   //   )
