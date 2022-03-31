@@ -14,34 +14,16 @@ import {
 
 export default function computeExperienceMetadata(
   schema: IExperienceJSONSchema,
-  session?: IFireboltSession,
-  previous = false
+  session?: IFireboltSession
 ) {
-  const currentFlow = session?.experienceMetadata?.currentFlow ?? "default"
+  const currentFlow = session?.experienceState.currentFlow ?? "default"
   const flowSteps = schema.flows.find((x) => x.slug === currentFlow)?.stepsSlugs
   if (!flowSteps) throw new Error("Flow not found") // TODO: ERRO - retornar erro flow não encontrado
-  const lastStepPosition = flowSteps?.length
-  const lastStepSlug = flowSteps?.[lastStepPosition - 1]
-
-  const currentPosition = session
-    ? previous
-      ? session.experienceMetadata.currentPosition - 1
-      : session.experienceMetadata.currentPosition
-    : 1
-
-  const currentStepSlug = session
-    ? flowSteps![currentPosition - 1]
-    : flowSteps![0]
-
-  let lastCompletedStepSlug = ""
-  if (session) {
-    const completedSteps = session ? Object.keys(session?.steps) : []
-    lastCompletedStepSlug = completedSteps.reduce((a, b) => {
-      const indexA = flowSteps.indexOf(a)
-      const indexB = flowSteps.indexOf(b)
-      return indexA > indexB ? a : b
-    })
-  }
+  const lastStepSlug = flowSteps?.[flowSteps?.length - 1]
+  const currentStepIndex = session
+    ? flowSteps.indexOf(session?.experienceState.currentStepSlug)
+    : 0
+  const currentPosition = currentStepIndex + 1
 
   const stepsList: IFlowStepsListItem[] = flowSteps.map((item, index) => {
     const schemaStep: IStepJSON | undefined = schema.steps.find(
@@ -56,11 +38,8 @@ export default function computeExperienceMetadata(
 
   const metadata: IExperienceMetadata = {
     name: schema.name,
-    currentFlow,
     lastStepSlug,
-    currentStepSlug,
     currentPosition,
-    lastCompletedStepSlug,
     stepsList,
   }
 

@@ -54,9 +54,6 @@ export interface IStepTransitionReturn {
 // mudar experience metadata para ser computado a partir do JSON SCHEMA + session state
 export interface IExperienceMetadata {
   name: string
-  currentFlow: string | "default" // remove
-  currentStepSlug: string // remove
-  lastCompletedStepSlug: string // remove
   currentPosition: number
   lastStepSlug: string
   stepsList?: IFlowStepsListItem[]

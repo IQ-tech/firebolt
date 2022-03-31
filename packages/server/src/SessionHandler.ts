@@ -89,9 +89,11 @@ class SessionHandler implements ISessionHandler {
     this.resolvers.setSession(newSession)
   }
 
+  // atualiza o last completed state
   async addCompletedStep(stepSlug: string, stepSession: IStepSession) {
     const currentSession = await this.getCurrentSession()
     if (!currentSession) return // TODO: add error
+    const currentState = currentSession?.experienceState
 
     const newStepsCompleted = {
       ...currentSession.steps,
@@ -99,6 +101,10 @@ class SessionHandler implements ISessionHandler {
     }
     const newSession: IFireboltSession = {
       ...currentSession,
+      experienceState: {
+        ...currentState,
+        lastCompletedStepSlug: stepSlug,
+      },
       steps: newStepsCompleted,
     }
 

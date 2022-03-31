@@ -23,11 +23,14 @@ exports.oneStepCompletedFlowDefault = {
   "sessionId": "mockSessionId1234-1",
   "experienceMetadata": {
     "name": "sample",
-    "currentFlow": "default",
-    "currentStepSlug": "documents",
     "currentPosition": 2,
     "lastStepSlug": "bills",
+  },
+  "experienceState": {
+    "currentFlow": "default",
+    "currentStepSlug": "documents",
     "lastCompletedStepSlug": "personal_data",
+    "completedExperience": false,
   },
   "steps": {
     "personal_data": {
@@ -44,11 +47,14 @@ exports.twoStepsCompletedFlowDefault = {
   "sessionId": "mockSessionId1234-2",
   "experienceMetadata": {
     "name": "sample",
-    "currentFlow": "default",
-    "currentStepSlug": "address",
     "currentPosition": 3,
     "lastStepSlug": "bills",
+  },
+  "experienceState": {
+    "currentFlow": "default",
+    "currentStepSlug": "address",
     "lastCompletedStepSlug": "documents",
+    "completedExperience": false,
   },
   "steps": {
     "personal_data": {
@@ -72,11 +78,14 @@ exports.threeStepsCompletedFlowDefault = {
   "sessionId": "mockSessionId1234-3",
   "experienceMetadata": {
     "name": "sample",
-    "currentFlow": "default",
-    "currentStepSlug": "bills",
     "currentPosition": 4,
     "lastStepSlug": "bills",
+  },
+  "experienceState": {
+    "currentFlow": "default",
+    "currentStepSlug": "bills",
     "lastCompletedStepSlug": "documents",
+    "completedExperience": false,
   },
   "steps": {
     "personal_data": {
@@ -109,11 +118,14 @@ exports.oneStepCompletedFlowMedium = {
   "sessionId": "mockSessionId1234-b1",
   "experienceMetadata": {
     "name": "sample",
-    "currentFlow": "medium",
-    "currentStepSlug": "documents",
     "currentPosition": 2,
     "lastStepSlug": "token",
+  },
+  "experienceState": {
+    "currentFlow": "medium",
+    "currentStepSlug": "documents",
     "lastCompletedStepSlug": "personal_data",
+    "completedExperience": false,
   },
   "steps": {
     "personal_data": {
@@ -130,11 +142,14 @@ exports.twoStepsCompletedFlowMedium = {
   "sessionId": "mockSessionId1234-2",
   "experienceMetadata": {
     "name": "sample",
-    "currentFlow": "medium",
-    "currentStepSlug": "token",
     "currentPosition": 3,
     "lastStepSlug": "token",
+  },
+  "experienceState": {
+    "currentFlow": "medium",
+    "currentStepSlug": "token",
     "lastCompletedStepSlug": "documents",
+    "completedExperience": false,
   },
   "steps": {
     "personal_data": {
@@ -152,9 +167,9 @@ exports.twoStepsCompletedFlowMedium = {
 }
 
 exports.threeStepsCompletedVisualizingSecond = {
-  //todo
+  // TODO: create mock threeStepsCompletedVisualizingSecond
 }
 
 exports.twoStepsCompletedVisualizingFirst = {
-  //todo
+  // TODO: create mock twoStepsCompletedVisualizingFirst
 }
