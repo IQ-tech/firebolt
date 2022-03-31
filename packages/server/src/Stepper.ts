@@ -9,6 +9,8 @@ import {
 } from "./interfaces/IEngine"
 import { IExperienceJSONSchema, IStepJSON } from "./types"
 
+import SessionHandler from "./SessionHandler"
+
 // helpers
 import computeExperienceMetadata from "./helpers/computeExperienceMetadata"
 import getHasFilledFields from "./helpers/getHasFilledFields"
@@ -20,6 +22,7 @@ class Stepper {
   private experienceId: string
   private preDefinedJSONSchema?: IExperienceJSONSchema
   private resolvers: IEngineResolvers
+  private session: SessionHandler
 
   constructor({
     experienceId,
@@ -29,12 +32,54 @@ class Stepper {
     this.experienceId = experienceId
     this.preDefinedJSONSchema = experienceJSONSchema
     this.resolvers = resolvers
+    this.session = new SessionHandler(this.resolvers)
+  }
+
+  /**
+   * lida com dois casos de transição de experiencia:
+   * Iniciando uma experiencia do zero (request sem session id)
+   * resumindo uma sessão (somente sessionId)
+   *  no caso de resumindo, retornamos o passo de acordo com o estado salvo
+   */
+  async start(
+    payload?: IExperienceProceedPayload
+  ): Promise<IStepTransitionReturn> {
+    const session = await this.session.getSessionFromStorage(payload?.sessionId)
+    const schema = await this.getCorrectFormJSONSchema()
+
+    const getStepFromSchema = (stepSlug: string) => {
+      return schema.steps.find((step) => step.slug === stepSlug)
+    }
+
+    const getFirstStepDefaultFlow = () => {
+      const defaultFlow = schema.flows.find((f) => f.slug === "default")
+      const firstStep = defaultFlow?.stepsSlugs[0]
+      return schema.steps.find((step) => step.slug === firstStep)
+    }
+
+    const stepToReturn = session
+      ? getStepFromSchema(session.experienceState.currentStepSlug)
+      : getFirstStepDefaultFlow()
+
+    const processedStepToReturn = stepToReturn // add plugins
+    const computedMetadata = {}
+
+    // processar o step to return (add metadata + plugins)
+    const stepWithMetadata = {
+      step: processedStepToReturn,
+      capturedData: {},
+      errors: {},
+      webhookResult: {},
+      experienceMetadata: computedMetadata,
+    }
+
+    return stepWithMetadata
   }
 
   async proceed(
     payload?: IExperienceProceedPayload
   ): Promise<IStepTransitionReturn> {
-    const session = await this.resolvers.getSession(payload?.sessionId)
+    const session = await this.session.getSessionFromStorage(payload?.sessionId)
     const hasFilledFields = getHasFilledFields(payload)
     const schema = await this.getCorrectFormJSONSchema()
 
@@ -145,7 +190,7 @@ class Stepper {
     payload: IExperienceProceedPayload
   ): Promise<IStepTransitionReturn> {
     const schema = await this.getCorrectFormJSONSchema()
-    const session = await this.resolvers.getSession(payload?.sessionId)
+    const session = await this.session.getSessionFromStorage(payload?.sessionId)
     if (!session)
       throw new Error("Não pode voltar se estiver no primeiro passo") // TODO: TRATAR ERRO
 

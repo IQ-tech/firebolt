@@ -54,9 +54,9 @@ export interface IStepTransitionReturn {
 // mudar experience metadata para ser computado a partir do JSON SCHEMA + session state
 export interface IExperienceMetadata {
   name: string
-  currentFlow: string | "default"
-  currentStepSlug: string
-  lastCompletedStepSlug: string
+  currentFlow: string | "default" // remove
+  currentStepSlug: string // remove
+  lastCompletedStepSlug: string // remove
   currentPosition: number
   lastStepSlug: string
   stepsList?: IFlowStepsListItem[]
@@ -64,9 +64,9 @@ export interface IExperienceMetadata {
 
 export interface IExperienceState {
   currentStepSlug: string
-  currentPosition: number
   lastCompletedStepSlug: string
   currentFlow: string | "default"
+  completedExperience: boolean
 }
 
 export interface IFlowStepsListItem {
@@ -94,6 +94,7 @@ export interface IFireboltSession {
 
 // Representa a requisição do consumer para o firebolt transicionar um passo
 export interface IExperienceProceedPayload {
+  //todo - rename
   sessionId?: string
   fields?: IStepFormPayload
   additionalData?: any // todo, improve later
