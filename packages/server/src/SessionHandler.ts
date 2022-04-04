@@ -38,6 +38,12 @@ class SessionHandler implements ISessionHandler {
     this._current = session
   }
 
+  private async updateSession(newSession: IFireboltSession) {
+    await this.resolvers.setSession(newSession)
+    // add error handling
+    this.current = newSession
+  }
+
   // return session id on create session
   async createSession(
     schema: IExperienceJSONSchema,
@@ -64,15 +70,12 @@ class SessionHandler implements ISessionHandler {
       steps: {},
     }
 
-    try {
-      await this.resolvers.setSession(initialSession)
-      this.current = initialSession
-    } catch {
-      // do something
-    }
+    await this.updateSession(initialSession)
+
     return newSessionId
   }
 
+  // update visualizing step
   async updateCurrentStep(stepSlug: string) {
     const currentSession = await this.getCurrentSession()
     if (!currentSession) return // TODO: add erro
@@ -88,7 +91,7 @@ class SessionHandler implements ISessionHandler {
       experienceState: newState,
     }
 
-    this.resolvers.setSession(newSession)
+    await this.updateSession(newSession)
   }
 
   async changeCurrentFlow(flowSlug: string) {
@@ -104,7 +107,7 @@ class SessionHandler implements ISessionHandler {
       experienceState: newState,
     }
 
-    this.resolvers.setSession(newSession)
+    await this.updateSession(newSession)
   }
 
   // atualiza o last completed state
@@ -126,7 +129,10 @@ class SessionHandler implements ISessionHandler {
       steps: newStepsCompleted,
     }
 
-    this.resolvers.setSession(newSession)
+    console.log("newSessionCompletedStep: ", newSession) // TODO: REMOVE LOG
+
+    await this.updateSession(newSession)
+    console.log("sessionHandling - this.current: ", this._current)
   }
 
   async completeExperience() {
@@ -136,8 +142,7 @@ class SessionHandler implements ISessionHandler {
       ...currentSession.experienceState,
       completedExperience: true,
     }
-
-    this.resolvers.setSession({ ...currentSession, experienceState: newState })
+    await this.updateSession({ ...currentSession, experienceState: newState })
   }
 }
 

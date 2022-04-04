@@ -8,8 +8,11 @@ import {
   IExperienceState,
 } from "./interfaces/IEngine"
 import { IExperienceJSONSchema, IStepJSON } from "./types"
+import { ValidateFBTStepResult } from "@iq-firebolt/validators"
 
 import SessionHandler from "./SessionHandler"
+
+import equals from "ramda/es/equals"
 
 // helpers
 import computeExperienceMetadata from "./helpers/computeExperienceMetadata"
@@ -79,30 +82,56 @@ class Stepper {
     return stepWithMetadata
   }
 
-  async proceed(
-    payload?: IExperienceProceedPayload,
-    decisionCB?: () => void
-  ): Promise<IStepTransitionReturn> {
-    const session = await this.session.getSessionFromStorage(payload?.sessionId)
-    const schema = await this.getCorrectFormJSONSchema()
-
-    const getFirstStepDefaultFlow = () => {
+  private getReceivingStepSlug({
+    session,
+    schema,
+  }: {
+    session: IFireboltSession | undefined
+    schema: IExperienceJSONSchema
+  }) {
+    const firstStepDefaultFlow = (() => {
       const defaultFlow = schema.flows.find((f) => f.slug === "default")
       const firstStep = defaultFlow?.stepsSlugs[0]
       return schema.steps.find((step) => step.slug === firstStep)
-    }
+    })()
 
-    // olha na session qual o ultimo passo preenchido (precisa do slug) e retorna o proximo
-    const getNextStepFromSession = (): IStepJSON | undefined => {
-      const lastCompletedStepSlug =
-        session!.experienceState!.lastCompletedStepSlug
+    return session
+      ? session.experienceState.visualizingStepSlug
+      : firstStepDefaultFlow!.slug
+  }
 
-      return this.getNextStep(lastCompletedStepSlug, schema, session)
-    }
+  async proceed(
+    payload: IExperienceProceedPayload = {},
+    decisionCB?: () => void
+  ): Promise<IStepTransitionReturn> {
+    // validate payload format
+    const session = await this.session.getSessionFromStorage(payload?.sessionId)
+    const schema = await this.getCorrectFormJSONSchema()
 
-    const nextStepDefinition = session
-      ? getNextStepFromSession()
-      : getFirstStepDefaultFlow()
+    // descobrir o slug do receving
+    const receivingStepSlug = this.getReceivingStepSlug({ session, schema })
+    const receivingStepDefinition = schema.steps.find(
+      (step) => step.slug === receivingStepSlug
+    ) as IStepJSON
+    const isCustomStep = receivingStepDefinition?.type !== "form"
+    const isAnAlreadyVisitedStep = Object.keys(session?.steps || []).includes(
+      receivingStepSlug
+    )
+    const isFieldsValidationNeeded = (() => {
+      if (isCustomStep) return false
+      if (isAnAlreadyVisitedStep) {
+        const storedReceivedStepPayload = session?.steps?.[receivingStepSlug]
+        const paramReceivedStepPayload = payload.fields
+        return !equals(storedReceivedStepPayload, paramReceivedStepPayload)
+      }
+      return true
+    })()
+
+    // alterar forma de guardar erros que ocorreram
+    const isStepFieldsValid =
+      (isFieldsValidationNeeded &&
+        validateStep(payload?.fields, receivingStepDefinition).isValid) ||
+      !isFieldsValidationNeeded
 
     if (!nextStepDefinition) throw new Error("Step not found") // TODO: add error
 
@@ -130,7 +159,7 @@ class Stepper {
       const errors = !validation.isValid ? validation : []
       return {
         sessionId: sessionId,
-        experienceMetadata: computeExperienceMetadata(schema, session),
+        experienceMetadata: computeExperienceMetadata(schema, updatedSession),
         capturedData: session?.steps ?? {},
         step: nextStepDefinition,
         webhookResult: [],
@@ -138,6 +167,32 @@ class Stepper {
       }
     } else {
       // fazer transição
+      this.session.addCompletedStep(nextStepDefinition.slug, {
+        ...(payload?.fields || {}),
+      })
+      const stepToReturn = this.getNextStep(
+        nextStepDefinition.slug,
+        schema,
+        session
+      )
+
+      if (!stepToReturn) throw new Error("step not found") // TODO: add error
+
+      await this.session.updateCurrentStep(stepToReturn.slug)
+      const newSession = this.session.current
+      console.log("newSessionProceed: ", newSession) // TODO: REMOVE LOG
+      const returnValue = {
+        sessionId: sessionId,
+        experienceMetadata: computeExperienceMetadata(schema, newSession),
+        capturedData: newSession?.steps ?? {},
+        step: stepToReturn,
+        webhookResult: [],
+        errors: {},
+      }
+
+      console.log("returnValue: ", returnValue) // TODO: REMOVE LOG
+
+      return returnValue
     }
 
     const currentFlow = schema.flows.find((x) => x.slug === currentFlowSlug)
@@ -203,7 +258,8 @@ class Stepper {
     const currentFlow = schema.flows.find(
       (flow) => flow.slug === currentFlowSlug
     )
-    const nextStepSlug = currentFlow?.stepsSlugs[stepSlug + 1]
+    const currentStepIndex = currentFlow!.stepsSlugs.indexOf(stepSlug)
+    const nextStepSlug = currentFlow?.stepsSlugs[currentStepIndex + 1]
     const nextStepDefinition = schema.steps.find(
       (step) => step.slug === nextStepSlug
     )

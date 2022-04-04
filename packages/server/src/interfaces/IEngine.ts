@@ -60,8 +60,8 @@ export interface IExperienceMetadata {
 }
 
 export interface IExperienceState {
-  currentStepSlug: string
-  lastCompletedStepSlug: string
+  lastCompletedStepSlug: string // setado como o receiving no final da operação
+  visualizingStepSlug: string // setado como o returning no final da operação
   currentFlow: string | "default"
   completedExperience: boolean
 }
@@ -84,7 +84,6 @@ export interface IFireboltSessionSteps {
 // Representa a sessão que é guardada no storage
 export interface IFireboltSession {
   sessionId: string
-  experienceMetadata: IExperienceMetadata // TODO - remove experience metadata from  IFireboltSession to be computed
   experienceState: IExperienceState
   steps: IFireboltSessionSteps
 }

@@ -109,34 +109,38 @@ describe("Stepper.proceed handling", () => {
     expect(proceed.errors?.isValid).toBe(false)
     expect(proceed.errors?.invalidFields.length).not.toBe(0)
   })
-  // test("should validate the step fields and return the next step info", async () => {
-  //   const sample = JSONSample
-  //   const resolvers: IEngineResolvers = {
-  //     getFormJSONSchema: mockedGetFormJSONSchema,
-  //     getSession: mockedGetSession,
-  //     setSession: mockedSetSession,
-  //   }
-  //   const fireboltStepper = new Stepper({
-  //     experienceId: "sample",
-  //     experienceJSONSchema: sample,
-  //     resolvers,
-  //   })
-  //   const sessionId = faker.datatype.uuid()
-  //   const name = `${faker.name.firstName()} ${faker.name.lastName()}`
-  //   const email = faker.internet.email()
-  //   const firstStepField = {
-  //     full_name: name,
-  //     email: email,
-  //   }
-  //   const payload: IExperienceProceedPayload = {
-  //     sessionId,
-  //     fields: firstStepField,
-  //   }
-  //   const proceed = await fireboltStepper.proceed(payload)
-  //   expect(proceed.errors).toEqual({})
-  //   expect(proceed.capturedData.personal_data).toEqual(firstStepField)
-  //   expect(proceed.step.slug).toBe("documents")
-  // })
+
+  test("should validate the first step fields and return the second step info", async () => {
+    const sample = JSONSample
+    const resolvers: IEngineResolvers = {
+      getFormJSONSchema: mockedGetFormJSONSchema,
+      getSession: mockedGetSession,
+      setSession: mockedSetSession,
+    }
+    const fireboltStepper = new Stepper({
+      experienceId: "sample",
+      experienceJSONSchema: sample,
+      resolvers,
+    })
+
+    const name = `${faker.name.firstName()} ${faker.name.lastName()}`
+    const email = faker.internet.email()
+    const firstStepField = {
+      full_name: name,
+      email: email,
+    }
+
+    const payload: IExperienceProceedPayload = {
+      fields: firstStepField,
+    }
+    const proceed = await fireboltStepper.proceed(payload)
+    expect(proceed.errors).toEqual({})
+    expect(proceed.step.slug).toBe("documents")
+    expect(proceed.capturedData.personal_data).toEqual(firstStepField)
+  })
+  test.todo(
+    "should be able to identify the current step, validate and return the next step info"
+  )
   // test("should be able to update previous steps without data loss", async () => {
   //   const resolvers: IEngineResolvers = {
   //     getFormJSONSchema: mockedGetFormJSONSchema,
