@@ -12,6 +12,7 @@ import { IExperienceJSONSchema } from "./types"
 class SessionHandler implements ISessionHandler {
   private resolvers: IEngineResolvers
   private sessionId?: string
+  private _current?: IFireboltSession
 
   constructor(resolvers: IEngineResolvers) {
     this.resolvers = resolvers
@@ -29,10 +30,19 @@ class SessionHandler implements ISessionHandler {
     return await this.resolvers.getSession(this.sessionId)
   }
 
+  get current() {
+    return this._current as IFireboltSession
+  }
+
+  set current(session: IFireboltSession) {
+    this._current = session
+  }
+
+  // return session id on create session
   async createSession(
     schema: IExperienceJSONSchema,
     flow = "default"
-  ): Promise<void> {
+  ): Promise<string> {
     const defaultFlow = schema.flows.find((x) => x.slug === flow)
     if (!defaultFlow) throw new Error("Flow not found") // TODO: Handle Error
 
@@ -47,12 +57,20 @@ class SessionHandler implements ISessionHandler {
       completedExperience: false,
     }
 
-    this.resolvers.setSession({
+    const initialSession = {
       sessionId: newSessionId,
       experienceState: initialState,
       experienceMetadata: {} as IExperienceMetadata,
       steps: {},
-    })
+    }
+
+    try {
+      await this.resolvers.setSession(initialSession)
+      this.current = initialSession
+    } catch {
+      // do something
+    }
+    return newSessionId
   }
 
   async updateCurrentStep(stepSlug: string) {

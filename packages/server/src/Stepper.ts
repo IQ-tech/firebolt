@@ -79,6 +79,96 @@ class Stepper {
     return stepWithMetadata
   }
 
+  async proceed(
+    payload?: IExperienceProceedPayload,
+    decisionCB?: () => void
+  ): Promise<IStepTransitionReturn> {
+    const session = await this.session.getSessionFromStorage(payload?.sessionId)
+    const schema = await this.getCorrectFormJSONSchema()
+
+    const getFirstStepDefaultFlow = () => {
+      const defaultFlow = schema.flows.find((f) => f.slug === "default")
+      const firstStep = defaultFlow?.stepsSlugs[0]
+      return schema.steps.find((step) => step.slug === firstStep)
+    }
+
+    // olha na session qual o ultimo passo preenchido (precisa do slug) e retorna o proximo
+    const getNextStepFromSession = (): IStepJSON | undefined => {
+      const lastCompletedStepSlug =
+        session!.experienceState!.lastCompletedStepSlug
+
+      return this.getNextStep(lastCompletedStepSlug, schema, session)
+    }
+
+    const nextStepDefinition = session
+      ? getNextStepFromSession()
+      : getFirstStepDefaultFlow()
+
+    if (!nextStepDefinition) throw new Error("Step not found") // TODO: add error
+
+    const currentFlowSlug = session?.experienceState.currentFlow ?? "default"
+
+    const isLastStep = this.isStepLast(
+      schema,
+      nextStepDefinition!.slug,
+      currentFlowSlug
+    )
+
+    // verificar validação do step
+
+    const sessionId = session
+      ? session?.sessionId
+      : await this.session.createSession(schema)
+
+    const updatedSession = await this.session.getSessionFromStorage(sessionId)
+    const validation = validateStep(payload?.fields, nextStepDefinition)
+    const stepType = nextStepDefinition?.type
+    const isStepValid =
+      (stepType === "form" && validation.isValid) || stepType !== "form"
+
+    if (!isStepValid) {
+      const errors = !validation.isValid ? validation : []
+      return {
+        sessionId: sessionId,
+        experienceMetadata: computeExperienceMetadata(schema, session),
+        capturedData: session?.steps ?? {},
+        step: nextStepDefinition,
+        webhookResult: [],
+        errors,
+      }
+    } else {
+      // fazer transição
+    }
+
+    const currentFlow = schema.flows.find((x) => x.slug === currentFlowSlug)
+    // const session = await this.session.getSessionFromStorage(payload?.sessionId)
+    // const hasFilledFields = getHasFilledFields(payload)
+    // const schema = await this.getCorrectFormJSONSchema()
+
+    // if (!session && !hasFilledFields) return createExperience(schema)
+    // if (session && !hasFilledFields) return continueExperience(schema, session)
+
+    // // identify Y
+    // validate payload
+    // if not session, create
+    // decision callback
+    // modify state
+    // if lastStep, atualizar o completed
+    // get nextStep
+    // // modify return
+    // apply metadata
+    // apply props presets
+
+    // return await this.saveExperience(schema, payload, session)
+    return {} as IStepTransitionReturn
+  }
+
+  private async getCorrectFormJSONSchema(): Promise<IExperienceJSONSchema> {
+    if (this.preDefinedJSONSchema) return this.preDefinedJSONSchema
+
+    return await this.resolvers.getFormJSONSchema(this.experienceId)
+  }
+
   // dado um step x + session + schema, essa função retorna um bool se o passo e o ultimo
   private isStepLast(
     schema: IExperienceJSONSchema,
@@ -118,72 +208,6 @@ class Stepper {
       (step) => step.slug === nextStepSlug
     )
     return nextStepDefinition
-  }
-
-  async proceed(
-    payload?: IExperienceProceedPayload,
-    decisionCB?: () => void
-  ): Promise<IStepTransitionReturn> {
-    const session = await this.session.getSessionFromStorage(payload?.sessionId)
-    const schema = await this.getCorrectFormJSONSchema()
-
-    const getFirstStepDefaultFlow = () => {
-      const defaultFlow = schema.flows.find((f) => f.slug === "default")
-      const firstStep = defaultFlow?.stepsSlugs[0]
-      return schema.steps.find((step) => step.slug === firstStep)
-    }
-
-    // olha na session qual o ultimo passo preenchido (precisa do slug) e retorna o proximo
-    const getNextStepFromSession = (): IStepJSON | undefined => {
-      const lastCompletedStepSlug =
-        session!.experienceState!.lastCompletedStepSlug
-
-      return this.getNextStep(lastCompletedStepSlug, schema, session)
-    }
-
-    const nextStepDefinition = session
-      ? getNextStepFromSession()
-      : getFirstStepDefaultFlow()
-
-    const currentFlowSlug = session?.experienceState.currentFlow ?? "default"
-    const isLastStep = this.isStepLast(
-      schema,
-      nextStepDefinition!.slug,
-      currentFlowSlug
-    )
-
-    if (!session) {
-      this.session.createSession(schema)
-    }
-
-    const currentFlow = schema.flows.find((x) => x.slug === currentFlowSlug)
-
-    // const session = await this.session.getSessionFromStorage(payload?.sessionId)
-    // const hasFilledFields = getHasFilledFields(payload)
-    // const schema = await this.getCorrectFormJSONSchema()
-
-    // if (!session && !hasFilledFields) return createExperience(schema)
-    // if (session && !hasFilledFields) return continueExperience(schema, session)
-
-    // // identify Y
-    // validate payload
-    // if not session, create
-    // decision callback
-    // modify state
-    // if lastStep, atualizar o completed
-    // get nextStep
-    // // modify return
-    // apply metadata
-    // apply props presets
-
-    // return await this.saveExperience(schema, payload, session)
-    return {} as IStepTransitionReturn
-  }
-
-  private async getCorrectFormJSONSchema(): Promise<IExperienceJSONSchema> {
-    if (this.preDefinedJSONSchema) return this.preDefinedJSONSchema
-
-    return await this.resolvers.getFormJSONSchema(this.experienceId)
   }
 
   private async saveExperience(
@@ -239,36 +263,6 @@ class Stepper {
 
     return {} as IStepTransitionReturn
   }
-
-  // private getStep(
-  //   schema: IExperienceJSONSchema,
-  //   metadata: IExperienceMetadata,
-  //   action: "previous" | "current" | "next"
-  // ): IStepJSON {
-  //   // combine the step definition with step on session
-  //   const actions = {
-  //     previous: -1,
-  //     current: 0,
-  //     next: 1,
-  //   }
-
-  //   const position = actions[action]
-
-  //   const currentFlowSlug = metadata?.currentFlow ?? "default"
-  //   const currentFlow = schema.flows.find((x) => x.slug === currentFlowSlug)
-  //   if (!currentFlow) throw new Error("Flow Not found") // TODO: TRATAR ERRO
-
-  //   const stepIndex = currentFlow.stepsSlugs.indexOf(metadata.currentStepSlug)
-  //   if (stepIndex === -1) throw new Error("Step not found") // TODO: TRATAR ERRO
-
-  //   const step = schema.steps.find(
-  //     (x) => x.slug === currentFlow.stepsSlugs[stepIndex + position]
-  //   )
-
-  //   if (!step) throw new Error("Step not found") // TODO: TRATAR ERRO
-
-  //   return step
-  // }
 
   async goBackHandler(
     payload: IExperienceProceedPayload

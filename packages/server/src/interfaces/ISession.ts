@@ -2,7 +2,8 @@ import { IExperienceJSONSchema } from "../types"
 import { IFireboltSession, IStepSession } from "./IEngine"
 
 export interface ISessionHandler {
-  createSession: (schema: IExperienceJSONSchema) => Promise<void>
+  current?: IFireboltSession
+  createSession: (schema: IExperienceJSONSchema) => Promise<string>
   updateCurrentStep: (stepSlug: string) => void
   changeCurrentFlow: (flowSlug: string) => void
   getSessionFromStorage: (

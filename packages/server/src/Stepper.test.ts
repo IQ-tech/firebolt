@@ -80,35 +80,35 @@ describe("Stepper.start handling", () => {
 })
 
 describe("Stepper.proceed handling", () => {
-  // beforeEach(() => {
-  //   localStorage.clear()
-  //   jest.clearAllMocks()
-  // })
-  // test("should validate the step fields and return an error", async () => {
-  //   const sample = JSONSample
-  //   const resolvers: IEngineResolvers = {
-  //     getFormJSONSchema: mockedGetFormJSONSchema,
-  //     getSession: mockedGetSession,
-  //     setSession: mockedSetSession,
-  //   }
-  //   const fireboltStepper = new Stepper({
-  //     experienceId: "sample",
-  //     experienceJSONSchema: sample,
-  //     resolvers,
-  //   })
-  //   const firstStepField = {
-  //     full_name: "Teste",
-  //     email: "teste@",
-  //   }
-  //   const sessionId = faker.datatype.uuid()
-  //   const payload: IExperienceProceedPayload = {
-  //     sessionId,
-  //     fields: firstStepField,
-  //   }
-  //   const proceed = await fireboltStepper.proceed(payload)
-  //   expect(proceed.errors?.isValid).toBe(false)
-  //   expect(proceed.errors?.invalidFields.length).not.toBe(0)
-  // })
+  beforeEach(() => {
+    localStorage.clear()
+    jest.clearAllMocks()
+  })
+  test("should validate the step fields and return an error", async () => {
+    const sample = JSONSample
+    const resolvers: IEngineResolvers = {
+      getFormJSONSchema: mockedGetFormJSONSchema,
+      getSession: mockedGetSession,
+      setSession: mockedSetSession,
+    }
+    const fireboltStepper = new Stepper({
+      experienceId: "sample",
+      experienceJSONSchema: sample,
+      resolvers,
+    })
+    const firstStepField = {
+      full_name: "Teste",
+      email: "teste@",
+    }
+    const sessionId = faker.datatype.uuid()
+    const payload: IExperienceProceedPayload = {
+      sessionId,
+      fields: firstStepField,
+    }
+    const proceed = await fireboltStepper.proceed(payload)
+    expect(proceed.errors?.isValid).toBe(false)
+    expect(proceed.errors?.invalidFields.length).not.toBe(0)
+  })
   // test("should validate the step fields and return the next step info", async () => {
   //   const sample = JSONSample
   //   const resolvers: IEngineResolvers = {

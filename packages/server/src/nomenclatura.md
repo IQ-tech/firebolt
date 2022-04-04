@@ -15,3 +15,9 @@
 
 * lastStepCompleted - state guardado no storage do ultimo passo salvo
 * nextStep - passo a ser devolvido apos modificação do storage
+
+// ideia de nomenclatura de transição
+
+- receivingStep - passo que o proceed está recebendo para salvar na storage
+- lastCompletedStep - ultimo passo completado e salvo pelo lead
+- returningStep - passo seguinte a ser completado pelo lead apos o envio do receinvingStep
