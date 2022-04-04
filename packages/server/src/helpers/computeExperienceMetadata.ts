@@ -21,7 +21,7 @@ export default function computeExperienceMetadata(
   if (!flowSteps) throw new Error("Flow not found") // TODO: ERRO - retornar erro flow não encontrado
   const lastStepSlug = flowSteps?.[flowSteps?.length - 1]
   const currentStepIndex = session
-    ? flowSteps.indexOf(session?.experienceState.currentStepSlug)
+    ? flowSteps.indexOf(session?.experienceState.visualizingStepSlug)
     : 0
   const currentPosition = currentStepIndex + 1
 
@@ -41,6 +41,7 @@ export default function computeExperienceMetadata(
     lastStepSlug,
     currentPosition,
     stepsList,
+    completedExperience: session?.experienceState.completedExperience || false,
   }
 
   return metadata

@@ -57,6 +57,7 @@ export interface IExperienceMetadata {
   currentPosition: number
   lastStepSlug: string
   stepsList?: IFlowStepsListItem[]
+  completedExperience: boolean
 }
 
 export interface IExperienceState {
@@ -75,6 +76,7 @@ export interface IFlowStepsListItem {
 // Representa um passo visitado por um determinado usuário e guardado no storage
 export interface IStepSession {
   fields?: IStepFormPayload
+  // possivelmente adicionar webhookResult
 }
 
 // Representa o mapa de steps visitados pelo usuário que vai dentro da sessão

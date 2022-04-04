@@ -6,10 +6,9 @@ import {
   IFireboltSession,
   IStepSession,
 } from "./interfaces/IEngine"
-import { ISessionHandler } from "./interfaces/ISession"
 import { IExperienceJSONSchema } from "./types"
 
-class SessionHandler implements ISessionHandler {
+class SessionHandler {
   private resolvers: IEngineResolvers
   private sessionId?: string
   private _current?: IFireboltSession
@@ -26,10 +25,6 @@ class SessionHandler implements ISessionHandler {
     this.sessionId = sessionId
   }
 
-  private async getCurrentSession() {
-    return await this.resolvers.getSession(this.sessionId)
-  }
-
   get current() {
     return this._current as IFireboltSession
   }
@@ -40,15 +35,15 @@ class SessionHandler implements ISessionHandler {
 
   private async updateSession(newSession: IFireboltSession) {
     await this.resolvers.setSession(newSession)
+    const currentSession = (await this.resolvers.getSession(
+      this.sessionId
+    )) as IFireboltSession
     // add error handling
-    this.current = newSession
+    this.current = currentSession
   }
 
   // return session id on create session
-  async createSession(
-    schema: IExperienceJSONSchema,
-    flow = "default"
-  ): Promise<string> {
+  async createSession(schema: IExperienceJSONSchema, flow = "default") {
     const defaultFlow = schema.flows.find((x) => x.slug === flow)
     if (!defaultFlow) throw new Error("Flow not found") // TODO: Handle Error
 
@@ -58,7 +53,7 @@ class SessionHandler implements ISessionHandler {
 
     const initialState: IExperienceState = {
       currentFlow: flow,
-      currentStepSlug: firstStepSlug,
+      visualizingStepSlug: firstStepSlug,
       lastCompletedStepSlug: firstStepSlug,
       completedExperience: false,
     }
@@ -71,39 +66,16 @@ class SessionHandler implements ISessionHandler {
     }
 
     await this.updateSession(initialSession)
-
-    return newSessionId
-  }
-
-  // update visualizing step
-  async updateCurrentStep(stepSlug: string) {
-    const currentSession = await this.getCurrentSession()
-    if (!currentSession) return // TODO: add erro
-
-    const currentState = currentSession?.experienceState
-    const newState: IExperienceState = {
-      ...currentState,
-      currentStepSlug: stepSlug,
-    }
-
-    const newSession: IFireboltSession = {
-      ...currentSession,
-      experienceState: newState,
-    }
-
-    await this.updateSession(newSession)
   }
 
   async changeCurrentFlow(flowSlug: string) {
-    const currentSession = await this.getCurrentSession()
-    if (!currentSession) return // TODO: add error
-    const currentState = currentSession.experienceState
+    const currentState = this.current.experienceState
     const newState: IExperienceState = {
       ...currentState,
       currentFlow: flowSlug,
     }
     const newSession: IFireboltSession = {
-      ...currentSession,
+      ...this.current,
       experienceState: newState,
     }
 
@@ -112,16 +84,14 @@ class SessionHandler implements ISessionHandler {
 
   // atualiza o last completed state
   async addCompletedStep(stepSlug: string, stepSession: IStepSession) {
-    const currentSession = await this.getCurrentSession()
-    if (!currentSession) return // TODO: add error
-    const currentState = currentSession?.experienceState
+    const currentState = this.current?.experienceState
 
     const newStepsCompleted = {
-      ...currentSession.steps,
+      ...this.current.steps,
       [stepSlug]: stepSession,
     }
     const newSession: IFireboltSession = {
-      ...currentSession,
+      ...this.current,
       experienceState: {
         ...currentState,
         lastCompletedStepSlug: stepSlug,
@@ -129,20 +99,31 @@ class SessionHandler implements ISessionHandler {
       steps: newStepsCompleted,
     }
 
-    console.log("newSessionCompletedStep: ", newSession) // TODO: REMOVE LOG
+    await this.updateSession(newSession)
+  }
+
+  async setVisualizingStepSlug(stepSlug: string) {
+    const newSession: IFireboltSession = {
+      ...this.current,
+      experienceState: {
+        ...this.current.experienceState,
+        visualizingStepSlug: stepSlug,
+      },
+    }
 
     await this.updateSession(newSession)
-    console.log("sessionHandling - this.current: ", this._current)
   }
 
   async completeExperience() {
-    const currentSession = await this.getCurrentSession()
-    if (!currentSession) return // todo add error
     const newState: IExperienceState = {
-      ...currentSession.experienceState,
+      ...this.current.experienceState,
       completedExperience: true,
     }
-    await this.updateSession({ ...currentSession, experienceState: newState })
+    const newSession: IFireboltSession = {
+      ...this.current,
+      experienceState: newState,
+    }
+    await this.updateSession(newSession)
   }
 }
 

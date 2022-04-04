@@ -26,6 +26,7 @@ const sessionTestCasesDefaultFlow: ISessionTestCase[] = [
       currentPosition: 2,
       lastStepSlug: "bills",
       stepsList: defaultFlowMetadataStepsList,
+      completedExperience: false,
     },
   },
   {
@@ -36,6 +37,7 @@ const sessionTestCasesDefaultFlow: ISessionTestCase[] = [
       currentPosition: 3,
       lastStepSlug: "bills",
       stepsList: defaultFlowMetadataStepsList,
+      completedExperience: false,
     },
   },
   {
@@ -46,6 +48,7 @@ const sessionTestCasesDefaultFlow: ISessionTestCase[] = [
       currentPosition: 4,
       lastStepSlug: "bills",
       stepsList: defaultFlowMetadataStepsList,
+      completedExperience: false,
     },
   },
 ]
@@ -59,6 +62,7 @@ const sessionTestCasesMediumFlow: ISessionTestCase[] = [
       currentPosition: 2,
       lastStepSlug: "token",
       stepsList: mediumFlowMetadataStepsList,
+      completedExperience: false,
     },
   },
   {
@@ -69,6 +73,7 @@ const sessionTestCasesMediumFlow: ISessionTestCase[] = [
       currentPosition: 3,
       lastStepSlug: "token",
       stepsList: mediumFlowMetadataStepsList,
+      completedExperience: false,
     },
   },
 ]
