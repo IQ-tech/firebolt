@@ -6,11 +6,11 @@ import {
   IFireboltSession,
   IStepSession,
 } from "./interfaces/IEngine"
-import { IExperienceJSONSchema } from "./types"
+import JSONConfig from "./JSONConfig"
 
 class SessionHandler {
   private resolvers: IEngineResolvers
-  private sessionId?: string
+  private sessionId?: string // TODO: check if we need it
   private _current?: IFireboltSession
 
   constructor(resolvers: IEngineResolvers) {
@@ -46,8 +46,8 @@ class SessionHandler {
   }
 
   // return session id on create session
-  async createSession(schema: IExperienceJSONSchema, flow = "default") {
-    const defaultFlow = schema.flows.find((x) => x.slug === flow)
+  async createSession(jsonConfig: JSONConfig, flow = "default") {
+    const defaultFlow = jsonConfig.getFlow("default")
     if (!defaultFlow) throw new Error("Flow not found") // TODO: Handle Error
 
     const firstStepSlug = defaultFlow?.stepsSlugs[0]

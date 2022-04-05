@@ -2,7 +2,7 @@ import { IExperienceJSONSchema, IStepFormPayload, IStepJSON } from "../types"
 
 // objeto que representa as opções para criar uma instância da engine
 export interface ICreateEngineOptions {
-  experienceJSONSchema?: IExperienceJSONSchema
+  experienceJSONConfig?: IExperienceJSONSchema
   experienceId: string // legacy business replacement
   resolvers: IEngineResolvers
   hooks?: IEngineHooks
@@ -24,8 +24,7 @@ export interface IPropsPresetCollection {
 
 // objeto que representa a configuração dos resolvers, ou seja os pontos de acesso a dados
 export interface IEngineResolvers {
-  // local json, resover function or remote json (used on client)
-  getFormJSONSchema: (experienceSlug: string) => Promise<IExperienceJSONSchema>
+  getExperienceJSON: (experienceSlug: string) => Promise<IExperienceJSONSchema>
   getSession: (sessionId?: string) => Promise<IFireboltSession | undefined>
   setSession: (fireboltStepData: IFireboltSession) => Promise<void>
 }

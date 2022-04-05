@@ -8,6 +8,7 @@ import {
 import { IExperienceJSONSchema, IStepJSON } from "./types"
 
 import SessionHandler from "./SessionHandler"
+import JSONConfig from "./JSONConfig"
 
 // helpers
 import computeExperienceMetadata from "./helpers/computeExperienceMetadata"
@@ -16,60 +17,61 @@ import { equals } from "ramda"
 
 class Stepper {
   private experienceId: string
-  private preDefinedJSONSchema?: IExperienceJSONSchema
+  private preDefinedJSONConfig: boolean
   private resolvers: IEngineResolvers
   private session: SessionHandler
+  private JSONConfig: JSONConfig
 
   constructor({
     experienceId,
-    experienceJSONSchema,
+    experienceJSONConfig,
     resolvers,
   }: ICreateEngineOptions) {
     this.experienceId = experienceId
-    this.preDefinedJSONSchema = experienceJSONSchema
     this.resolvers = resolvers
     this.session = new SessionHandler(this.resolvers)
+    this.preDefinedJSONConfig = !!experienceJSONConfig
+    this.JSONConfig = new JSONConfig(
+      experienceJSONConfig as IExperienceJSONSchema
+    )
   }
 
-  private async getCorrectFormJSONSchema(): Promise<IExperienceJSONSchema> {
-    if (this.preDefinedJSONSchema) return this.preDefinedJSONSchema
-    return await this.resolvers.getFormJSONSchema(this.experienceId)
+  private async loadJSONConfig() {
+    const hasPredefinedJSONConfig = !!this.JSONConfig
+    const hasJSONConfigResolver = !!this.resolvers.getExperienceJSON
+    if (!hasPredefinedJSONConfig && !hasJSONConfigResolver) {
+      throw new Error("must provide a way to access the config json")
+    }
+    if (!this.preDefinedJSONConfig) {
+      const newJSON = await this.resolvers.getExperienceJSON(this.experienceId)
+      this.JSONConfig = new JSONConfig(newJSON)
+    }
   }
 
   private getReceivingStepSlug({
     session,
-    schema,
   }: {
     session: IFireboltSession | undefined
-    schema: IExperienceJSONSchema
   }) {
-    const firstStepDefaultFlow = (() => {
-      const defaultFlow = schema.flows.find((f) => f.slug === "default")
-      const firstStep = defaultFlow?.stepsSlugs[0]
-      return schema.steps.find((step) => step.slug === firstStep)
-    })()
-
-    return session
+    const receivingStepSlug = session
       ? session.experienceState.visualizingStepSlug
-      : firstStepDefaultFlow!.slug
+      : this.JSONConfig?.getFirstStepFromFlow("default").slug
+
+    return receivingStepSlug as string
   }
 
   // dado um slug de step, a função deve retornar o próximo
   private getReturningStepDefinition(
     stepSlug: string,
-    schema: IExperienceJSONSchema,
     session?: IFireboltSession
   ) {
     const receivingFlowSlug = session?.experienceState.currentFlow || "default"
-    const receivingFlow = schema.flows.find(
-      (flow) => flow.slug === receivingFlowSlug
-    )
+    const receivingFlow = this.JSONConfig?.getFlow(receivingFlowSlug)
     const receivingStepIndex = receivingFlow!.stepsSlugs.indexOf(stepSlug)
     const returningStepSlug = receivingFlow?.stepsSlugs[receivingStepIndex + 1]
-    const returningStepDefinition = schema.steps.find(
-      (step) => step.slug === returningStepSlug
-    )
-    return returningStepDefinition
+    if (returningStepSlug) {
+      return this.JSONConfig?.getStepDefinition(returningStepSlug)
+    }
   }
 
   private async createTransitionReturn({
@@ -77,9 +79,8 @@ class Stepper {
     webhookResult = {},
     returningStep,
   }): Promise<IStepTransitionReturn> {
-    const schema = await this.getCorrectFormJSONSchema()
     const session = this.session.current
-    const computedMetadata = computeExperienceMetadata(schema, session)
+    const computedMetadata = computeExperienceMetadata(this.JSONConfig, session)
     // apply plugins
 
     return {
@@ -102,22 +103,13 @@ class Stepper {
     payload?: IExperienceProceedPayload
   ): Promise<IStepTransitionReturn> {
     await this.session.loadSessionFromStorage(payload?.sessionId)
+    await this.loadJSONConfig()
     const session = this.session.current
-    const schema = await this.getCorrectFormJSONSchema()
-
-    const getStepFromSchema = (stepSlug: string) => {
-      return schema.steps.find((step) => step.slug === stepSlug)
-    }
-
-    const getFirstStepDefaultFlow = () => {
-      const defaultFlow = schema.flows.find((f) => f.slug === "default")
-      const firstStep = defaultFlow?.stepsSlugs[0]
-      return schema.steps.find((step) => step.slug === firstStep)
-    }
-
     const stepToReturn = session
-      ? getStepFromSchema(session.experienceState.visualizingStepSlug)
-      : getFirstStepDefaultFlow()
+      ? this.JSONConfig?.getStepDefinition(
+          session.experienceState.visualizingStepSlug
+        )
+      : this.JSONConfig?.getFirstStepFromFlow("default")
 
     if (!stepToReturn) throw new Error("Step not found") // TODO: handle error
     return await this.createTransitionReturn({ returningStep: stepToReturn })
@@ -140,14 +132,14 @@ class Stepper {
 
     // todo - validate payload format
     await this.session.loadSessionFromStorage(payload?.sessionId)
+    await this.loadJSONConfig()
+
     const session = this.session.current
-    const schema = await this.getCorrectFormJSONSchema()
 
     // descobrir o slug do receiving
-    const receivingStepSlug = this.getReceivingStepSlug({ session, schema })
-    const receivingStepDefinition = schema.steps.find(
-      (step) => step.slug === receivingStepSlug
-    ) as IStepJSON
+    const receivingStepSlug = this.getReceivingStepSlug({ session })
+    const receivingStepDefinition =
+      this.JSONConfig!.getStepDefinition(receivingStepSlug)
     const isCustomStep = receivingStepDefinition?.type !== "form"
     const isFirstStep = !session
     const isAnAlreadyVisitedStep = Object.keys(session?.steps || []).includes(
@@ -180,7 +172,7 @@ class Stepper {
     }
 
     if (isFirstStep && isStepFieldsValid) {
-      await this.session.createSession(schema, "default")
+      await this.session.createSession(this.JSONConfig, "default")
     }
 
     await this.session.addCompletedStep(receivingStepSlug, {
@@ -189,7 +181,6 @@ class Stepper {
 
     const returningStepDefinition = this.getReturningStepDefinition(
       receivingStepSlug,
-      schema,
       session
     )
     const isLastStepOfFlow = !returningStepDefinition
@@ -208,41 +199,18 @@ class Stepper {
   async goBackHandler(
     payload: IExperienceProceedPayload
   ): Promise<IStepTransitionReturn> {
-    // const schema = await this.getCorrectFormJSONSchema()
-    // const session = await this.session.getSessionFromStorage(payload?.sessionId)
-    // if (!session)
-    //   throw new Error("Não pode voltar se estiver no primeiro passo") // TODO: TRATAR ERRO
-
-    // const metadata = computeExperienceMetadata(schema, session)
-    // const step = this.getStep(schema, metadata, "current")
-    // await this.resolvers.setSession({
-    //   sessionId: session.sessionId,
-    //   experienceMetadata: metadata,
-    //   steps: session.steps,
-    //   experienceState: {} as IExperienceState,
-    // })
-
-    // return {
-    //   sessionId: session.sessionId,
-    //   experienceMetadata: metadata,
-    //   capturedData: session.steps,
-    //   webhookResult: {},
-    //   errors: {},
-    //   step,
-    // }
     return {} as IStepTransitionReturn
   }
 
   async debugHandler(
     stepSlug: string
   ): Promise<void> /* Promise<IStepTransitionReturn>  */ {
-    const JSONSchema = await this.getCorrectFormJSONSchema()
-    const stepDefinition = JSONSchema.steps.find(
-      (step) => step.slug === stepSlug
-    )
-    const metadata = computeExperienceMetadata(JSONSchema)
+    // const JSONSchema = await this.getCorrectFormJSONSchema()
+    // const stepDefinition = JSONSchema.steps.find(
+    //   (step) => step.slug === stepSlug
+    // )
+    // const metadata = computeExperienceMetadata(JSONSchema)
     /* const step = this.getStep(JSONSchema, metadata) */
-
     /*     return {
       sessionId: "",
       webhookResult: {},

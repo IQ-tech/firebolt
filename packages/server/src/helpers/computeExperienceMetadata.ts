@@ -5,6 +5,8 @@ import {
   IFireboltSession,
 } from "../interfaces/IEngine"
 
+import JSONConfig from "../JSONConfig"
+
 /**
  * Each step transition, this function computes the experience metadata sent to the consumer,
  * this metadata includes:
@@ -13,11 +15,12 @@ import {
  */
 
 export default function computeExperienceMetadata(
-  schema: IExperienceJSONSchema,
+  jsonConfig: JSONConfig,
   session?: IFireboltSession
 ) {
   const currentFlow = session?.experienceState.currentFlow ?? "default"
-  const flowSteps = schema.flows.find((x) => x.slug === currentFlow)?.stepsSlugs
+  const flowSteps = jsonConfig.getFlow(currentFlow).stepsSlugs
+
   if (!flowSteps) throw new Error("Flow not found") // TODO: ERRO - retornar erro flow não encontrado
   const lastStepSlug = flowSteps?.[flowSteps?.length - 1]
   const currentStepIndex = session
@@ -26,9 +29,7 @@ export default function computeExperienceMetadata(
   const currentPosition = currentStepIndex + 1
 
   const stepsList: IFlowStepsListItem[] = flowSteps.map((item, index) => {
-    const schemaStep: IStepJSON | undefined = schema.steps.find(
-      (x) => x.slug === item
-    )
+    const schemaStep: IStepJSON | undefined = jsonConfig.getStepDefinition(item)
     return {
       position: index + 1,
       slug: item,
@@ -37,7 +38,7 @@ export default function computeExperienceMetadata(
   })
 
   const metadata: IExperienceMetadata = {
-    name: schema.name,
+    name: jsonConfig.name,
     lastStepSlug,
     currentPosition,
     stepsList,
