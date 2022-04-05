@@ -1,3 +1,4 @@
+// types
 import {
   ICreateEngineOptions,
   IEngineResolvers,
@@ -7,13 +8,14 @@ import {
 } from "./interfaces/IEngine"
 import { IExperienceJSONSchema, IStepJSON } from "./types"
 
+// handlers
 import SessionHandler from "./SessionHandler"
 import JSONConfig from "./JSONConfig"
 
 // helpers
 import computeExperienceMetadata from "./helpers/computeExperienceMetadata"
 import validateStep from "./helpers/validateStep"
-import { equals } from "ramda"
+import getIsFieldsValidationNeeded from "./helpers/getIsFieldsValidationNeeded"
 
 class Stepper {
   private experienceId: string
@@ -82,7 +84,7 @@ class Stepper {
     const session = this.session.current
     const computedMetadata = computeExperienceMetadata(this.JSONConfig, session)
     // apply plugins
-
+    // apply autofill
     return {
       sessionId: session?.sessionId || "",
       step: returningStep,
@@ -123,7 +125,6 @@ class Stepper {
      * Todo
      * - process returning definition
      * - errors + validation
-     * - group return formatting
      * - validate payload format
      * - decision callback
      * - experience hooks
@@ -133,7 +134,6 @@ class Stepper {
     // todo - validate payload format
     await this.session.loadSessionFromStorage(payload?.sessionId)
     await this.loadJSONConfig()
-
     const session = this.session.current
 
     // descobrir o slug do receiving
@@ -145,15 +145,13 @@ class Stepper {
     const isAnAlreadyVisitedStep = Object.keys(session?.steps || []).includes(
       receivingStepSlug
     )
-    const isFieldsValidationNeeded = (() => {
-      if (isCustomStep) return false
-      if (isAnAlreadyVisitedStep) {
-        const storedReceivedStepPayload = session?.steps?.[receivingStepSlug]
-        const paramReceivedStepPayload = payload.fields
-        return !equals(storedReceivedStepPayload, paramReceivedStepPayload)
-      }
-      return true
-    })()
+    const isFieldsValidationNeeded = getIsFieldsValidationNeeded({
+      session,
+      payload,
+      receivingStepSlug,
+      isCustomStep,
+      isAnAlreadyVisitedStep,
+    })
 
     // TODO: alterar forma de guardar erros que ocorreram?????
     const validation = isFieldsValidationNeeded
@@ -199,24 +197,33 @@ class Stepper {
   async goBackHandler(
     payload: IExperienceProceedPayload
   ): Promise<IStepTransitionReturn> {
-    return {} as IStepTransitionReturn
+    await this.session.loadSessionFromStorage(payload?.sessionId)
+    await this.loadJSONConfig()
+
+    const currentState = this.session.current.experienceState
+    const visualizingStepSlug = currentState.visualizingStepSlug
+    const currentFlow = this.JSONConfig.getFlow(currentState.currentFlow)
+    const visualizingStepIndex =
+      currentFlow.stepsSlugs.indexOf(visualizingStepSlug)
+    const previousStepSlug = currentFlow.stepsSlugs[visualizingStepIndex - 1]
+    const hasPreviousStep = !!previousStepSlug
+
+    if (hasPreviousStep) {
+      const returningStep = this.JSONConfig.getStepDefinition(previousStepSlug)
+      await this.session.setVisualizingStepSlug(previousStepSlug)
+      return this.createTransitionReturn({ returningStep })
+    } else {
+      const returningStep =
+        this.JSONConfig.getStepDefinition(visualizingStepSlug)
+      return this.createTransitionReturn({
+        returningStep,
+      })
+    }
   }
 
-  async debugHandler(
-    stepSlug: string
-  ): Promise<void> /* Promise<IStepTransitionReturn>  */ {
-    // const JSONSchema = await this.getCorrectFormJSONSchema()
-    // const stepDefinition = JSONSchema.steps.find(
-    //   (step) => step.slug === stepSlug
-    // )
-    // const metadata = computeExperienceMetadata(JSONSchema)
-    /* const step = this.getStep(JSONSchema, metadata) */
-    /*     return {
-      sessionId: "",
-      webhookResult: {},
-      errors: {},
-      step
-    } */
+  async debugHandler(stepSlug: string): Promise<IStepTransitionReturn> {
+    const returningStep = this.JSONConfig.getStepDefinition(stepSlug)
+    return this.createTransitionReturn({ returningStep })
   }
 
   uploadHandler() {

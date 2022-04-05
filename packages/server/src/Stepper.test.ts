@@ -180,7 +180,7 @@ describe("Stepper.proceed handling", () => {
     expect(proceed.step.slug).toBe("address")
   })
 
-  test("should revalidate a previously filled step (changes made on fields)", async () => {
+  test("should revalidate a previously filled step and return a error (changes made on fields)", async () => {
     const resolvers: IEngineResolvers = {
       getExperienceJSON: mockedGetFormJSONSchema,
       getSession: mockedGetSession,
@@ -225,80 +225,91 @@ describe("Stepper.proceed handling", () => {
     expect(proceed.step.slug).toBe("personal_data")
   })
 
+  test("should revalidate a previously filled step (changes made on fields)", async () => {
+    const resolvers: IEngineResolvers = {
+      getExperienceJSON: mockedGetFormJSONSchema,
+      getSession: mockedGetSession,
+      setSession: mockedSetSession,
+    }
+
+    mockedSetSession(twoStepsCompletedFlowDefault)
+    const fireboltStepper = new Stepper({
+      experienceId: "sample",
+      experienceJSONConfig: JSONSample,
+      resolvers,
+    })
+
+    const name = `John Doe`
+    const email = faker.internet.email()
+
+    const firstStepField = {
+      full_name: name,
+      email,
+    }
+    const payload: IExperienceProceedPayload = {
+      sessionId: twoStepsCompletedFlowDefault.sessionId,
+      fields: firstStepField,
+    }
+
+    // goBack simulate
+    const currentSession = (await mockedGetSession(
+      twoStepsCompletedFlowDefault.sessionId
+    )) as IFireboltSession
+
+    const goBackTwoStepsSession: IFireboltSession = {
+      ...currentSession,
+      experienceState: {
+        ...currentSession.experienceState,
+        visualizingStepSlug: "personal_data",
+      },
+    }
+
+    mockedSetSession(goBackTwoStepsSession)
+
+    const proceed = await fireboltStepper.proceed(payload)
+
+    expect(proceed.errors).toEqual({})
+    expect(proceed.step.slug).toBe("documents")
+    expect(proceed.capturedData.personal_data.fields).toEqual(firstStepField)
+    expect(proceed.experienceMetadata.currentPosition).toBe(2)
+  })
+
   test.todo(
     "shouldn't validate a previously filled step (no changes made on fields)"
   )
   test.todo("shouldn't validate custom step progression")
   test.todo("first transition should return a brand new session id")
-  // test("should be able to update previous steps without data loss", async () => {
-  //   const resolvers: IEngineResolvers = {
-  //     getFormJSONSchema: mockedGetFormJSONSchema,
-  //     getSession: mockedGetSession,
-  //     setSession: mockedSetSession,
-  //   }
-  //   mockedSetSession(twoStepsCompletedFlowDefault)
-  //   const fireboltStepper = new Stepper({
-  //     experienceId: "sample",
-  //     experienceJSONSchema: JSONSample,
-  //     resolvers,
-  //   })
-  //   await fireboltStepper.goBackHandler({
-  //     sessionId: twoStepsCompletedFlowDefault.sessionId,
-  //   })
-  //   await fireboltStepper.goBackHandler({
-  //     sessionId: twoStepsCompletedFlowDefault.sessionId,
-  //   })
-  //   const firstStepField = {
-  //     full_name: `${faker.name.firstName()} ${faker.name.lastName()}`,
-  //     email: faker.internet.email(),
-  //   }
-  //   const firstStepUpdate = await fireboltStepper.proceed({
-  //     sessionId: twoStepsCompletedFlowDefault.sessionId,
-  //     fields: firstStepField,
-  //   })
-  //   // console.log("firstStepUpdate: ", firstStepUpdate.step)
-  //   expect(firstStepUpdate.capturedData.documents).toEqual(
-  //     twoStepsCompletedFlowDefault.steps.documents
-  //   )
-  //   expect(firstStepUpdate.capturedData.personal_data).toEqual(firstStepField)
-  //   expect(firstStepUpdate.experienceMetadata.currentPosition).toBe(2)
-  // })
 })
 
-// describe("Stepper.goBack handling", () => {
-//   beforeEach(() => {
-//     localStorage.clear()
-//     jest.clearAllMocks()
-//   })
+describe("Stepper.goBack handling", () => {
+  beforeEach(() => {
+    localStorage.clear()
+    jest.clearAllMocks()
+  })
 
-//   test("should go back to previous step", async () => {
-//     const resolvers: IEngineResolvers = {
-//       getFormJSONSchema: mockedGetFormJSONSchema,
-//       getSession: mockedGetSession,
-//       setSession: mockedSetSession,
-//     }
+  test("should go back to previous step", async () => {
+    const resolvers: IEngineResolvers = {
+      getExperienceJSON: mockedGetFormJSONSchema,
+      getSession: mockedGetSession,
+      setSession: mockedSetSession,
+    }
 
-//     mockedSetSession(twoStepsCompletedFlowDefault)
-//     const fireboltStepper = new Stepper({
-//       experienceId: "sample",
-//       experienceJSONSchema: JSONSample,
-//       resolvers,
-//     })
+    mockedSetSession(twoStepsCompletedFlowDefault)
+    const fireboltStepper = new Stepper({
+      experienceId: "sample",
+      experienceJSONConfig: JSONSample,
+      resolvers,
+    })
 
-//     const previousStep = await fireboltStepper.goBackHandler({
-//       sessionId: twoStepsCompletedFlowDefault.sessionId,
-//     })
+    const previousStep = await fireboltStepper.goBackHandler({
+      sessionId: twoStepsCompletedFlowDefault.sessionId,
+    })
 
-//     expect(previousStep.step.slug).toBe("documents")
-//     expect(previousStep.experienceMetadata.currentPosition).toBe(2)
-//     expect(previousStep.experienceMetadata.lastCompletedStepSlug).toBe(
-//       "documents"
-//     )
-//     expect(previousStep.capturedData).toEqual(
-//       twoStepsCompletedFlowDefault.steps
-//     )
-//   })
-// })
+    expect(previousStep.step.slug).toBe("documents")
+    expect(previousStep.experienceMetadata.currentPosition).toBe(2)
+    expect(previousStep.errors).toEqual({})
+  })
+})
 
 describe("Props presets apply", () => {
   test.todo("props presets should be applied on Engine.start return value")

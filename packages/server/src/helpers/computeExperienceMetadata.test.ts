@@ -9,6 +9,7 @@ import {
   twoStepsCompletedFlowMedium,
 } from "../mocks/sample-experience-session"
 import computeExperienceMetadata from "./computeExperienceMetadata"
+import JSONConfig from "../JSONConfig"
 import { IFireboltSession, IExperienceMetadata } from "../interfaces/IEngine"
 
 interface ISessionTestCase {
@@ -83,7 +84,7 @@ describe("function compute experience metadata correctly", () => {
     "return correctly formatted metadata (default experience flow) - $label",
     ({ label, item, expectedResult }) => {
       const computedMetadata = computeExperienceMetadata(
-        sampleExperienceSchemaMock,
+        new JSONConfig(sampleExperienceSchemaMock),
         item
       )
       expect(computedMetadata).toEqual(expectedResult)
@@ -94,7 +95,7 @@ describe("function compute experience metadata correctly", () => {
     "return correctly formatted metadata (medium experience flow) - $label",
     ({ label, item, expectedResult }) => {
       const computedMetadata = computeExperienceMetadata(
-        sampleExperienceSchemaMock,
+        new JSONConfig(sampleExperienceSchemaMock),
         item
       )
       expect(computedMetadata).toEqual(expectedResult)

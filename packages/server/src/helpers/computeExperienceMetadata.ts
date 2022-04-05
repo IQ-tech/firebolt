@@ -1,4 +1,4 @@
-import { IExperienceJSONSchema, IStepJSON } from "../types"
+import { IStepJSON } from "../types"
 import {
   IFlowStepsListItem,
   IExperienceMetadata,
@@ -20,7 +20,6 @@ export default function computeExperienceMetadata(
 ) {
   const currentFlow = session?.experienceState.currentFlow ?? "default"
   const flowSteps = jsonConfig.getFlow(currentFlow).stepsSlugs
-
   if (!flowSteps) throw new Error("Flow not found") // TODO: ERRO - retornar erro flow não encontrado
   const lastStepSlug = flowSteps?.[flowSteps?.length - 1]
   const currentStepIndex = session

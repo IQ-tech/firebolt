@@ -7,6 +7,7 @@ import {
   IStepSession,
 } from "./interfaces/IEngine"
 import JSONSample from "./mocks/sample-experience"
+import JSONConfig from "./JSONConfig"
 import * as uuid from "uuid"
 import { oneStepCompletedFlowDefault } from "./mocks/sample-experience-session"
 jest.mock("uuid")
@@ -30,7 +31,7 @@ describe("SessionHandler. Class to handle with experience state", () => {
   const sample = JSONSample
   const mockedSessionId = oneStepCompletedFlowDefault.sessionId
   const resolvers: IEngineResolvers = {
-    getFormJSONSchema: mockedGetFormJSONSchema,
+    getExperienceJSON: mockedGetFormJSONSchema,
     getSession: mockedGetSession,
     setSession: mockedSetSession,
   }
@@ -45,7 +46,8 @@ describe("SessionHandler. Class to handle with experience state", () => {
     const sessionId = faker.datatype.uuid()
     jest.spyOn(uuid, "v4").mockReturnValue(sessionId)
     const session = new SessionHandler(resolvers)
-    await session.createSession(sample)
+    const instanceSampleConfig = new JSONConfig(sample)
+    await session.createSession(instanceSampleConfig)
 
     await session.loadSessionFromStorage(sessionId)
     if (!session.current) throw new Error("Test failed, session not found")
