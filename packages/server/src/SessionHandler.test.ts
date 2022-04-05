@@ -75,6 +75,16 @@ describe("SessionHandler. Class to handle with experience state", () => {
     expect(session.current.experienceState.currentFlow).toBe(flowSlug)
   })
 
+  test("SessionHandler.completeExperience", async () => {
+    mockedSetSession(oneStepCompletedFlowDefault)
+    const session = new SessionHandler(resolvers)
+    await session.loadSessionFromStorage(sessionId)
+
+    const flowSlug = faker.lorem.word()
+    await session.completeExperience()
+
+    expect(session.current.experienceState.completedExperience).toBe(true)
+  })
+
   test.todo("SessionHandler.addCompletedStep")
-  test.todo("SessionHandler.completeExperience")
 })
