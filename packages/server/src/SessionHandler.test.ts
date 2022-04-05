@@ -1,7 +1,11 @@
 import faker from "faker"
 import SessionHandler from "./SessionHandler"
 import { IExperienceJSONSchema } from "./types"
-import { IEngineResolvers, IFireboltSession } from "./interfaces/IEngine"
+import {
+  IEngineResolvers,
+  IFireboltSession,
+  IStepSession,
+} from "./interfaces/IEngine"
 import JSONSample from "./mocks/sample-experience"
 import * as uuid from "uuid"
 import { oneStepCompletedFlowDefault } from "./mocks/sample-experience-session"
@@ -22,11 +26,9 @@ const mockedSetSession = jest.fn(async (stepData: IFireboltSession) => {
   localStorage.setItem(stepData.sessionId, JSON.stringify(stepData))
 })
 
-const sessionId = faker.datatype.uuid()
-jest.spyOn(uuid, "v4").mockReturnValue(sessionId)
-
 describe("SessionHandler. Class to handle with experience state", () => {
   const sample = JSONSample
+  const mockedSessionId = oneStepCompletedFlowDefault.sessionId
   const resolvers: IEngineResolvers = {
     getFormJSONSchema: mockedGetFormJSONSchema,
     getSession: mockedGetSession,
@@ -35,10 +37,13 @@ describe("SessionHandler. Class to handle with experience state", () => {
 
   beforeEach(() => {
     localStorage.clear()
-    jest.clearAllMocks()
+    mockedSetSession(oneStepCompletedFlowDefault)
   })
 
   test("SessionHandler.createSession and SessionHandler.loadSessionFromStorage", async () => {
+    localStorage.clear()
+    const sessionId = faker.datatype.uuid()
+    jest.spyOn(uuid, "v4").mockReturnValue(sessionId)
     const session = new SessionHandler(resolvers)
     await session.createSession(sample)
 
@@ -54,10 +59,9 @@ describe("SessionHandler. Class to handle with experience state", () => {
   })
 
   test("SessionHandler.setVisualizingStepSlug", async () => {
-    mockedSetSession(oneStepCompletedFlowDefault)
     const session = new SessionHandler(resolvers)
 
-    await session.loadSessionFromStorage(sessionId)
+    await session.loadSessionFromStorage(mockedSessionId)
     const stepSlug = faker.lorem.word()
 
     await session.setVisualizingStepSlug(stepSlug)
@@ -65,9 +69,8 @@ describe("SessionHandler. Class to handle with experience state", () => {
   })
 
   test("SessionHandler.changeCurrentFlow", async () => {
-    mockedSetSession(oneStepCompletedFlowDefault)
     const session = new SessionHandler(resolvers)
-    await session.loadSessionFromStorage(sessionId)
+    await session.loadSessionFromStorage(mockedSessionId)
 
     const flowSlug = faker.lorem.word()
     await session.changeCurrentFlow(flowSlug)
@@ -76,15 +79,34 @@ describe("SessionHandler. Class to handle with experience state", () => {
   })
 
   test("SessionHandler.completeExperience", async () => {
-    mockedSetSession(oneStepCompletedFlowDefault)
     const session = new SessionHandler(resolvers)
-    await session.loadSessionFromStorage(sessionId)
+    await session.loadSessionFromStorage(mockedSessionId)
 
     const flowSlug = faker.lorem.word()
     await session.completeExperience()
 
+    expect(session.current.sessionId).toBe(mockedSessionId)
     expect(session.current.experienceState.completedExperience).toBe(true)
   })
 
-  test.todo("SessionHandler.addCompletedStep")
+  test("SessionHandler.addCompletedStep", async () => {
+    const session = new SessionHandler(resolvers)
+    await session.loadSessionFromStorage(mockedSessionId)
+
+    const stepSlug = "documents"
+    const stepSession: IStepSession = {
+      fields: {
+        brazil_id_number: "1234567890",
+      },
+    }
+
+    await session.addCompletedStep(stepSlug, stepSession)
+
+    expect(session.current.sessionId).toBe(mockedSessionId)
+    expect(session.current.steps).toHaveProperty("personal_data")
+    expect(session.current.steps).toHaveProperty("documents")
+    expect(session.current.experienceState.lastCompletedStepSlug).toBe(
+      "documents"
+    )
+  })
 })
