@@ -47,7 +47,7 @@ describe("Class to handle with experience state", () => {
     expect(firstStepSession).toHaveProperty("sessionId")
     expect(firstStepSession.experienceState.completedExperience).toBe(false)
     expect(firstStepSession.experienceState.currentFlow).toBe("default")
-    expect(firstStepSession.experienceState.currentStepSlug).toBe(
+    expect(firstStepSession.experienceState.visualizingStepSlug).toBe(
       "personal_data"
     )
   })
