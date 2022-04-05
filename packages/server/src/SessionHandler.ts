@@ -72,7 +72,7 @@ class SessionHandler {
   }
 
   async changeCurrentFlow(flowSlug: string) {
-    const currentState = this.current.experienceState
+    const currentState = this.current?.experienceState
     const newState: IExperienceState = {
       ...currentState,
       currentFlow: flowSlug,
