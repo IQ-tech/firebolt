@@ -56,13 +56,25 @@ describe("SessionHandler. Class to handle with experience state", () => {
   test("SessionHandler.setVisualizingStepSlug", async () => {
     mockedSetSession(oneStepCompletedFlowDefault)
     const session = new SessionHandler(resolvers)
+
     await session.loadSessionFromStorage(sessionId)
     const stepSlug = faker.lorem.word()
+
     await session.setVisualizingStepSlug(stepSlug)
     expect(session.current.experienceState.visualizingStepSlug).toBe(stepSlug)
   })
 
-  test.todo("SessionHandler.changeCurrentFlow")
+  test("SessionHandler.changeCurrentFlow", async () => {
+    mockedSetSession(oneStepCompletedFlowDefault)
+    const session = new SessionHandler(resolvers)
+    await session.loadSessionFromStorage(sessionId)
+
+    const flowSlug = faker.lorem.word()
+    await session.changeCurrentFlow(flowSlug)
+
+    expect(session.current.experienceState.currentFlow).toBe(flowSlug)
+  })
+
   test.todo("SessionHandler.addCompletedStep")
   test.todo("SessionHandler.completeExperience")
 })
