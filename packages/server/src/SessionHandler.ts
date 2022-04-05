@@ -17,8 +17,11 @@ class SessionHandler {
     this.resolvers = resolvers
   }
 
-  async getSessionFromStorage(sessionId: string | undefined) {
-    return await this.resolvers.getSession(sessionId)
+  async loadSessionFromStorage(sessionId: string | undefined) {
+    const session = (await this.resolvers.getSession(
+      sessionId
+    )) as IFireboltSession
+    this.current = session
   }
 
   private setSessionId(sessionId: string) {
@@ -36,7 +39,7 @@ class SessionHandler {
   private async updateSession(newSession: IFireboltSession) {
     await this.resolvers.setSession(newSession)
     const currentSession = (await this.resolvers.getSession(
-      this.sessionId
+      this.current?.sessionId
     )) as IFireboltSession
     // add error handling
     this.current = currentSession
@@ -87,7 +90,7 @@ class SessionHandler {
     const currentState = this.current?.experienceState
 
     const newStepsCompleted = {
-      ...this.current.steps,
+      ...this.current?.steps,
       [stepSlug]: stepSession,
     }
     const newSession: IFireboltSession = {
@@ -106,7 +109,7 @@ class SessionHandler {
     const newSession: IFireboltSession = {
       ...this.current,
       experienceState: {
-        ...this.current.experienceState,
+        ...this.current?.experienceState,
         visualizingStepSlug: stepSlug,
       },
     }
@@ -116,7 +119,7 @@ class SessionHandler {
 
   async completeExperience() {
     const newState: IExperienceState = {
-      ...this.current.experienceState,
+      ...this.current?.experienceState,
       completedExperience: true,
     }
     const newSession: IFireboltSession = {

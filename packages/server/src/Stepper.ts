@@ -72,6 +72,26 @@ class Stepper {
     return returningStepDefinition
   }
 
+  private async createTransitionReturn({
+    errors = {},
+    webhookResult = {},
+    returningStep,
+  }): Promise<IStepTransitionReturn> {
+    const schema = await this.getCorrectFormJSONSchema()
+    const session = this.session.current
+    const computedMetadata = computeExperienceMetadata(schema, session)
+    // apply plugins
+
+    return {
+      sessionId: session?.sessionId || "",
+      step: returningStep,
+      capturedData: session?.steps || {},
+      errors: errors,
+      webhookResult: webhookResult,
+      experienceMetadata: computedMetadata,
+    }
+  }
+
   /**
    * lida com dois casos de transição de experiencia:
    * Iniciando uma experiencia do zero (request sem session id)
@@ -81,7 +101,8 @@ class Stepper {
   async start(
     payload?: IExperienceProceedPayload
   ): Promise<IStepTransitionReturn> {
-    const session = await this.session.getSessionFromStorage(payload?.sessionId)
+    await this.session.loadSessionFromStorage(payload?.sessionId)
+    const session = this.session.current
     const schema = await this.getCorrectFormJSONSchema()
 
     const getStepFromSchema = (stepSlug: string) => {
@@ -99,21 +120,7 @@ class Stepper {
       : getFirstStepDefaultFlow()
 
     if (!stepToReturn) throw new Error("Step not found") // TODO: handle error
-
-    const processedStepToReturn = stepToReturn // add plugins
-    const computedMetadata = computeExperienceMetadata(schema, session)
-
-    // processar o step to return (add metadata + plugins)
-    const stepWithMetadata: IStepTransitionReturn = {
-      sessionId: session?.sessionId || "",
-      step: processedStepToReturn,
-      capturedData: session?.steps || {},
-      errors: {},
-      webhookResult: {},
-      experienceMetadata: computedMetadata,
-    }
-
-    return stepWithMetadata
+    return await this.createTransitionReturn({ returningStep: stepToReturn })
   }
 
   async proceed(
@@ -131,10 +138,10 @@ class Stepper {
      * - webhook call
      */
 
-    // validate payload format
-    const session = await this.session.getSessionFromStorage(payload?.sessionId)
+    // todo - validate payload format
+    await this.session.loadSessionFromStorage(payload?.sessionId)
+    const session = this.session.current
     const schema = await this.getCorrectFormJSONSchema()
-    const currentFlowSlug = session?.experienceState.currentFlow ?? "default"
 
     // descobrir o slug do receiving
     const receivingStepSlug = this.getReceivingStepSlug({ session, schema })
@@ -166,17 +173,10 @@ class Stepper {
       !isFieldsValidationNeeded
 
     if (!isStepFieldsValid) {
-      return {
-        sessionId: "",
-        experienceMetadata: computeExperienceMetadata(
-          schema,
-          this.session.current
-        ),
-        capturedData: this.session.current?.steps ?? {},
-        step: receivingStepDefinition, // todo - add addons
-        webhookResult: [],
+      return await this.createTransitionReturn({
+        returningStep: receivingStepDefinition,
         errors: validation,
-      }
+      })
     }
 
     if (isFirstStep && isStepFieldsValid) {
@@ -196,33 +196,13 @@ class Stepper {
 
     if (isLastStepOfFlow) {
       await this.session.completeExperience()
-      return {
-        sessionId: this.session.current.sessionId,
-        experienceMetadata: computeExperienceMetadata(
-          schema,
-          this.session.current
-        ),
-        capturedData: this.session.current?.steps ?? {},
-        step: {} as IStepJSON,
-        webhookResult: [],
-        errors: "",
-      }
+      return this.createTransitionReturn({ returningStep: {} as IStepJSON })
     }
-
-    const processedReturningStepDefinition = returningStepDefinition
 
     await this.session.setVisualizingStepSlug(returningStepDefinition.slug)
-    return {
-      sessionId: this.session.current.sessionId,
-      experienceMetadata: computeExperienceMetadata(
-        schema,
-        this.session.current
-      ),
-      capturedData: this.session.current?.steps ?? {},
-      step: processedReturningStepDefinition,
-      webhookResult: [],
-      errors: {},
-    }
+    return await this.createTransitionReturn({
+      returningStep: returningStepDefinition,
+    })
   }
 
   async goBackHandler(

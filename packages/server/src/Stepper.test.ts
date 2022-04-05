@@ -8,7 +8,10 @@ import {
 } from "./interfaces/IEngine"
 
 import JSONSample from "./mocks/sample-experience"
-import { twoStepsCompletedFlowDefault } from "./mocks/sample-experience-session"
+import {
+  oneStepCompletedFlowDefault,
+  twoStepsCompletedFlowDefault,
+} from "./mocks/sample-experience-session"
 
 const localStorage = global.localStorage
 const mockedGetFormJSONSchema = jest.fn(
@@ -53,6 +56,7 @@ describe("Stepper.start handling", () => {
     expect(firstStep.sessionId).toBe("")
     expect(firstStep.step.slug).toBe("personal_data")
     expect(firstStep.capturedData).toEqual({})
+    expect(firstStep.experienceMetadata.currentPosition).toBe(1)
   })
 
   test("should identify an started experience and return the correct step", async () => {
@@ -109,6 +113,7 @@ describe("Stepper.proceed handling", () => {
 
     expect(proceed.errors?.isValid).toBe(false)
     expect(proceed.errors?.invalidFields.length).not.toBe(0)
+    expect(proceed.step.slug).toBe("personal_data")
   })
 
   test("should validate the first step fields and return the second step info", async () => {
@@ -139,11 +144,50 @@ describe("Stepper.proceed handling", () => {
     expect(proceed.errors).toEqual({})
     expect(proceed.step.slug).toBe("documents")
     expect(proceed.capturedData.personal_data.fields).toEqual(firstStepField)
+    expect(proceed.experienceMetadata.currentPosition).toBe(2)
+  })
+
+  test("should identify the current step, validate and return the next step info", async () => {
+    const resolvers: IEngineResolvers = {
+      getFormJSONSchema: mockedGetFormJSONSchema,
+      getSession: mockedGetSession,
+      setSession: mockedSetSession,
+    }
+
+    mockedSetSession(oneStepCompletedFlowDefault)
+    const fireboltStepper = new Stepper({
+      experienceId: "sample",
+      experienceJSONSchema: JSONSample,
+      resolvers,
+    })
+
+    const payload = {
+      brazil_id_number: "1234567890",
+    }
+
+    const proceed = await fireboltStepper.proceed({
+      sessionId: oneStepCompletedFlowDefault.sessionId,
+      fields: payload,
+    })
+
+    const expectedCaptureData = {
+      ...oneStepCompletedFlowDefault.steps,
+      documents: { fields: { ...payload } },
+    }
+
+    expect(proceed.sessionId).toBe(oneStepCompletedFlowDefault.sessionId)
+    expect(proceed.capturedData).toEqual(expectedCaptureData)
+    expect(proceed.step.slug).toBe("address")
   })
 
   test.todo(
-    "should be able to identify the current step, validate and return the next step info"
+    "should revalidate a previously filled step (changes made on fields)"
   )
+  test.todo(
+    "shouldn't validate a previously filled step (no changes made on fields)"
+  )
+  test.todo("shouldn't validate custom step progression")
+  test.todo("first transition should return a brand new session id")
   // test("should be able to update previous steps without data loss", async () => {
   //   const resolvers: IEngineResolvers = {
   //     getFormJSONSchema: mockedGetFormJSONSchema,
