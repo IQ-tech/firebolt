@@ -21,14 +21,9 @@ exports.mediumFlowMetadataStepsList = [
 /** @type {IFireboltSession} */
 exports.oneStepCompletedFlowDefault = {
   "sessionId": "mockSessionId1234-1",
-  "experienceMetadata": {
-    "name": "sample",
-    "currentPosition": 2,
-    "lastStepSlug": "bills",
-  },
   "experienceState": {
     "currentFlow": "default",
-    "currentStepSlug": "documents",
+    "visualizingStepSlug": "documents",
     "lastCompletedStepSlug": "personal_data",
     "completedExperience": false,
   },
@@ -45,14 +40,9 @@ exports.oneStepCompletedFlowDefault = {
 /** @type {IFireboltSession} */
 exports.twoStepsCompletedFlowDefault = {
   "sessionId": "mockSessionId1234-2",
-  "experienceMetadata": {
-    "name": "sample",
-    "currentPosition": 3,
-    "lastStepSlug": "bills",
-  },
   "experienceState": {
     "currentFlow": "default",
-    "currentStepSlug": "address",
+    "visualizingStepSlug": "address",
     "lastCompletedStepSlug": "documents",
     "completedExperience": false,
   },
@@ -76,14 +66,9 @@ exports.twoStepsCompletedFlowDefault = {
  */
 exports.threeStepsCompletedFlowDefault = {
   "sessionId": "mockSessionId1234-3",
-  "experienceMetadata": {
-    "name": "sample",
-    "currentPosition": 4,
-    "lastStepSlug": "bills",
-  },
   "experienceState": {
     "currentFlow": "default",
-    "currentStepSlug": "bills",
+    "visualizingStepSlug": "bills",
     "lastCompletedStepSlug": "documents",
     "completedExperience": false,
   },
@@ -116,14 +101,9 @@ exports.threeStepsCompletedFlowDefault = {
 /** @type {IFireboltSession} */
 exports.oneStepCompletedFlowMedium = {
   "sessionId": "mockSessionId1234-b1",
-  "experienceMetadata": {
-    "name": "sample",
-    "currentPosition": 2,
-    "lastStepSlug": "token",
-  },
   "experienceState": {
     "currentFlow": "medium",
-    "currentStepSlug": "documents",
+    "visualizingStepSlug": "documents",
     "lastCompletedStepSlug": "personal_data",
     "completedExperience": false,
   },
@@ -140,14 +120,9 @@ exports.oneStepCompletedFlowMedium = {
 /** @type {IFireboltSession} */
 exports.twoStepsCompletedFlowMedium = {
   "sessionId": "mockSessionId1234-2",
-  "experienceMetadata": {
-    "name": "sample",
-    "currentPosition": 3,
-    "lastStepSlug": "token",
-  },
   "experienceState": {
     "currentFlow": "medium",
-    "currentStepSlug": "token",
+    "visualizingStepSlug": "token",
     "lastCompletedStepSlug": "documents",
     "completedExperience": false,
   },
