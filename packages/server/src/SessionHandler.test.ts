@@ -4,6 +4,7 @@ import { IExperienceJSONSchema } from "./types"
 import { IEngineResolvers, IFireboltSession } from "./interfaces/IEngine"
 import JSONSample from "./mocks/sample-experience"
 import * as uuid from "uuid"
+import { oneStepCompletedFlowDefault } from "./mocks/sample-experience-session"
 jest.mock("uuid")
 
 const localStorage = global.localStorage
@@ -24,35 +25,43 @@ const mockedSetSession = jest.fn(async (stepData: IFireboltSession) => {
 const sessionId = faker.datatype.uuid()
 jest.spyOn(uuid, "v4").mockReturnValue(sessionId)
 
-describe("Class to handle with experience state", () => {
+describe("SessionHandler. Class to handle with experience state", () => {
+  const sample = JSONSample
+  const resolvers: IEngineResolvers = {
+    getFormJSONSchema: mockedGetFormJSONSchema,
+    getSession: mockedGetSession,
+    setSession: mockedSetSession,
+  }
+
   beforeEach(() => {
     localStorage.clear()
     jest.clearAllMocks()
   })
 
-  test("SessionHandler.createSession", async () => {
-    const sample = JSONSample
-    const resolvers: IEngineResolvers = {
-      getFormJSONSchema: mockedGetFormJSONSchema,
-      getSession: mockedGetSession,
-      setSession: mockedSetSession,
-    }
+  test("SessionHandler.createSession and SessionHandler.loadSessionFromStorage", async () => {
+    const session = new SessionHandler(resolvers)
+    await session.createSession(sample)
 
-    const state = new SessionHandler(resolvers)
-    await state.createSession(sample)
+    await session.loadSessionFromStorage(sessionId)
+    if (!session.current) throw new Error("Test failed, session not found")
 
-    const firstStepSession = await resolvers.getSession(sessionId)
-    if (!firstStepSession) throw new Error("Test failed, session not found")
-
-    expect(firstStepSession).toHaveProperty("sessionId")
-    expect(firstStepSession.experienceState.completedExperience).toBe(false)
-    expect(firstStepSession.experienceState.currentFlow).toBe("default")
-    expect(firstStepSession.experienceState.visualizingStepSlug).toBe(
+    expect(session.current).toHaveProperty("sessionId")
+    expect(session.current.experienceState.completedExperience).toBe(false)
+    expect(session.current.experienceState.currentFlow).toBe("default")
+    expect(session.current.experienceState.visualizingStepSlug).toBe(
       "personal_data"
     )
   })
-  test.todo("SessionHandler.getSessionFromStorage")
-  test.todo("SessionHandler.updateCurrentStep")
+
+  test("SessionHandler.setVisualizingStepSlug", async () => {
+    mockedSetSession(oneStepCompletedFlowDefault)
+    const session = new SessionHandler(resolvers)
+    await session.loadSessionFromStorage(sessionId)
+    const stepSlug = faker.lorem.word()
+    await session.setVisualizingStepSlug(stepSlug)
+    expect(session.current.experienceState.visualizingStepSlug).toBe(stepSlug)
+  })
+
   test.todo("SessionHandler.changeCurrentFlow")
   test.todo("SessionHandler.addCompletedStep")
   test.todo("SessionHandler.completeExperience")
