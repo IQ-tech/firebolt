@@ -106,6 +106,7 @@ describe("Stepper.proceed handling", () => {
       fields: firstStepField,
     }
     const proceed = await fireboltStepper.proceed(payload)
+
     expect(proceed.errors?.isValid).toBe(false)
     expect(proceed.errors?.invalidFields.length).not.toBe(0)
   })
@@ -133,11 +134,13 @@ describe("Stepper.proceed handling", () => {
     const payload: IExperienceProceedPayload = {
       fields: firstStepField,
     }
+
     const proceed = await fireboltStepper.proceed(payload)
     expect(proceed.errors).toEqual({})
     expect(proceed.step.slug).toBe("documents")
-    expect(proceed.capturedData.personal_data).toEqual(firstStepField)
+    expect(proceed.capturedData.personal_data.fields).toEqual(firstStepField)
   })
+
   test.todo(
     "should be able to identify the current step, validate and return the next step info"
   )

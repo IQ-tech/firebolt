@@ -156,10 +156,13 @@ class Stepper {
       return true
     })()
 
-    // alterar forma de guardar erros que ocorreram
+    // TODO: alterar forma de guardar erros que ocorreram?????
+    const validation = isFieldsValidationNeeded
+      ? validateStep(payload?.fields, receivingStepDefinition)
+      : { isValid: true, invalidFields: [] }
+
     const isStepFieldsValid =
-      (isFieldsValidationNeeded &&
-        validateStep(payload?.fields, receivingStepDefinition).isValid) ||
+      (isFieldsValidationNeeded && validation.isValid) ||
       !isFieldsValidationNeeded
 
     if (!isStepFieldsValid) {
@@ -169,10 +172,10 @@ class Stepper {
           schema,
           this.session.current
         ),
-        capturedData: session?.steps ?? {},
+        capturedData: this.session.current?.steps ?? {},
         step: receivingStepDefinition, // todo - add addons
         webhookResult: [],
-        errors: {}, // todo - add errors
+        errors: validation,
       }
     }
 
@@ -199,7 +202,7 @@ class Stepper {
           schema,
           this.session.current
         ),
-        capturedData: session?.steps ?? {},
+        capturedData: this.session.current?.steps ?? {},
         step: {} as IStepJSON,
         webhookResult: [],
         errors: "",
@@ -215,7 +218,7 @@ class Stepper {
         schema,
         this.session.current
       ),
-      capturedData: session?.steps ?? {},
+      capturedData: this.session.current?.steps ?? {},
       step: processedReturningStepDefinition,
       webhookResult: [],
       errors: {},
