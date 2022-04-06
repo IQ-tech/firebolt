@@ -199,6 +199,13 @@ class Stepper {
     await this.session.loadSessionFromStorage(payload?.sessionId)
     await this.loadJSONConfig()
 
+    if (!this.session.current) {
+      const returningStep = this.JSONConfig.getFirstStepFromFlow()
+      return this.createTransitionReturn({
+        returningStep,
+      })
+    }
+
     const currentState = this.session.current.experienceState
     const visualizingStepSlug = currentState.visualizingStepSlug
     const currentFlow = this.JSONConfig.getFlow(currentState.currentFlow)
