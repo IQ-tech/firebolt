@@ -370,7 +370,36 @@ describe("Stepper.goBack handling", () => {
     expect(previousStep.experienceMetadata.currentPosition).toBe(2)
     expect(previousStep.errors).toEqual({})
   })
-  test.todo("should returns the same step if there is no previous one")
+
+  test("should returns the same step if there is no previous one", async () => {
+    const resolvers: IEngineResolvers = {
+      getExperienceJSON: mockedGetFormJSONSchema,
+      getSession: mockedGetSession,
+      setSession: mockedSetSession,
+    }
+
+    const fireboltStepper = new Stepper({
+      experienceId: "sample",
+      experienceJSONConfig: JSONSample,
+      resolvers,
+    })
+
+    const name = `${faker.name.firstName()} ${faker.name.lastName()}`
+    const email = faker.internet.email()
+    const firstStepField = {
+      full_name: name,
+      email: email,
+    }
+
+    const payload: IExperienceProceedPayload = {
+      fields: firstStepField,
+    }
+
+    const previousStep = await fireboltStepper.goBackHandler(payload)
+
+    expect(previousStep.step.slug).toBe("personal_data")
+    expect(previousStep.experienceMetadata.currentPosition).toBe(1)
+  })
 })
 
 describe("Props presets apply", () => {
