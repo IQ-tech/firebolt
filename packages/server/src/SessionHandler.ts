@@ -38,8 +38,9 @@ class SessionHandler {
 
   private async updateSession(newSession: IFireboltSession) {
     await this.resolvers.setSession(newSession)
+
     const currentSession = (await this.resolvers.getSession(
-      this.current?.sessionId
+      this.current?.sessionId ?? this.sessionId
     )) as IFireboltSession
     // add error handling
     this.current = currentSession
