@@ -121,7 +121,7 @@ describe("Stepper.proceed handling", () => {
     expect(validationStepSpy).toBeCalled()
   })
 
-  test("should validate the first step fields and return the second step info", async () => {
+  test("should validate the first transition fields and return the second step info", async () => {
     const validationStepSpy = jest.spyOn(validation, "default")
     const sample = JSONSample
     const resolvers: IEngineResolvers = {
@@ -147,6 +147,8 @@ describe("Stepper.proceed handling", () => {
     }
 
     const proceed = await fireboltStepper.proceed(payload)
+
+    expect(proceed.sessionId.length > 0).toBe(true)
     expect(proceed.errors).toEqual({})
     expect(proceed.step.slug).toBe("documents")
     expect(proceed.capturedData.personal_data.fields).toEqual(firstStepField)
@@ -338,7 +340,6 @@ describe("Stepper.proceed handling", () => {
     expect(proceed.experienceMetadata.currentPosition).toBe(2)
   })
   test.todo("shouldn't validate custom step progression")
-  test.todo("first transition should return a brand new session id")
 })
 
 describe("Stepper.goBack handling", () => {

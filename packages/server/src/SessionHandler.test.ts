@@ -53,6 +53,7 @@ describe("SessionHandler. Class to handle with experience state", () => {
     if (!session.current) throw new Error("Test failed, session not found")
 
     expect(session.current).toHaveProperty("sessionId")
+    expect(session.current.sessionId.length > 0).toBe(true)
     expect(session.current.experienceState.completedExperience).toBe(false)
     expect(session.current.experienceState.currentFlow).toBe("default")
     expect(session.current.experienceState.visualizingStepSlug).toBe(
