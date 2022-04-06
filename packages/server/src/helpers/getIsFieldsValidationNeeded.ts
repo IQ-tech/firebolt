@@ -21,7 +21,8 @@ export default function isFieldsValidationNeeded({
 }: IIsFieldsValidationNeeded): boolean {
   if (isCustomStep) return false
   if (isAnAlreadyVisitedStep) {
-    const storedReceivedStepPayload = session?.steps?.[receivingStepSlug]
+    const storedReceivedStepPayload =
+      session?.steps?.[receivingStepSlug]?.fields
     const paramReceivedStepPayload = payload.fields
     return !equals(storedReceivedStepPayload, paramReceivedStepPayload)
   }

@@ -153,7 +153,6 @@ class Stepper {
       isAnAlreadyVisitedStep,
     })
 
-    // TODO: alterar forma de guardar erros que ocorreram?????
     const validation = isFieldsValidationNeeded
       ? validateStep(payload?.fields, receivingStepDefinition)
       : { isValid: true, invalidFields: [] }
