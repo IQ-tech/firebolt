@@ -1,5 +1,7 @@
 import faker from "faker"
 import Stepper from "./Stepper"
+import * as validation from "./helpers/validateStep"
+
 import { IExperienceJSONSchema } from "./types"
 import {
   IEngineResolvers,
@@ -89,6 +91,8 @@ describe("Stepper.proceed handling", () => {
     jest.clearAllMocks()
   })
   test("should validate the step fields and return an error", async () => {
+    const validationStepSpy = jest.spyOn(validation, "default")
+
     const sample = JSONSample
     const resolvers: IEngineResolvers = {
       getExperienceJSON: mockedGetFormJSONSchema,
@@ -114,9 +118,11 @@ describe("Stepper.proceed handling", () => {
     expect(proceed.errors?.isValid).toBe(false)
     expect(proceed.errors?.invalidFields.length).not.toBe(0)
     expect(proceed.step.slug).toBe("personal_data")
+    expect(validationStepSpy).toBeCalled()
   })
 
   test("should validate the first step fields and return the second step info", async () => {
+    const validationStepSpy = jest.spyOn(validation, "default")
     const sample = JSONSample
     const resolvers: IEngineResolvers = {
       getExperienceJSON: mockedGetFormJSONSchema,
@@ -145,9 +151,12 @@ describe("Stepper.proceed handling", () => {
     expect(proceed.step.slug).toBe("documents")
     expect(proceed.capturedData.personal_data.fields).toEqual(firstStepField)
     expect(proceed.experienceMetadata.currentPosition).toBe(2)
+    expect(validationStepSpy).toBeCalled()
   })
 
   test("should identify the current step, validate and return the next step info", async () => {
+    const validationStepSpy = jest.spyOn(validation, "default")
+
     const resolvers: IEngineResolvers = {
       getExperienceJSON: mockedGetFormJSONSchema,
       getSession: mockedGetSession,
@@ -178,9 +187,13 @@ describe("Stepper.proceed handling", () => {
     expect(proceed.sessionId).toBe(oneStepCompletedFlowDefault.sessionId)
     expect(proceed.capturedData).toEqual(expectedCaptureData)
     expect(proceed.step.slug).toBe("address")
+    expect(proceed.errors).toEqual({})
+    expect(validationStepSpy).toBeCalled()
   })
 
   test("should revalidate a previously filled step and return a error (changes made on fields)", async () => {
+    const validationStepSpy = jest.spyOn(validation, "default")
+
     const resolvers: IEngineResolvers = {
       getExperienceJSON: mockedGetFormJSONSchema,
       getSession: mockedGetSession,
@@ -223,9 +236,12 @@ describe("Stepper.proceed handling", () => {
     expect(proceed.errors?.isValid).toBe(false)
     expect(proceed.errors?.invalidFields.length).not.toBe(0)
     expect(proceed.step.slug).toBe("personal_data")
+    expect(validationStepSpy).toBeCalled()
   })
 
   test("should revalidate a previously filled step (changes made on fields)", async () => {
+    const validationStepSpy = jest.spyOn(validation, "default")
+
     const resolvers: IEngineResolvers = {
       getExperienceJSON: mockedGetFormJSONSchema,
       getSession: mockedGetSession,
@@ -272,11 +288,55 @@ describe("Stepper.proceed handling", () => {
     expect(proceed.step.slug).toBe("documents")
     expect(proceed.capturedData.personal_data.fields).toEqual(firstStepField)
     expect(proceed.experienceMetadata.currentPosition).toBe(2)
+    expect(validationStepSpy).toBeCalled()
   })
 
-  test.todo(
-    "shouldn't validate a previously filled step (no changes made on fields)"
-  )
+  test("shouldn't validate a previously filled step (no changes made on fields)", async () => {
+    const validationStepSpy = jest.spyOn(validation, "default")
+
+    const resolvers: IEngineResolvers = {
+      getExperienceJSON: mockedGetFormJSONSchema,
+      getSession: mockedGetSession,
+      setSession: mockedSetSession,
+    }
+
+    mockedSetSession(twoStepsCompletedFlowDefault)
+    const fireboltStepper = new Stepper({
+      experienceId: "sample",
+      experienceJSONConfig: JSONSample,
+      resolvers,
+    })
+
+    const firstStepField = {
+      ...twoStepsCompletedFlowDefault.steps.personal_data.fields,
+    }
+    const payload: IExperienceProceedPayload = {
+      sessionId: twoStepsCompletedFlowDefault.sessionId,
+      fields: firstStepField,
+    }
+
+    // goBack simulate
+    const currentSession = (await mockedGetSession(
+      twoStepsCompletedFlowDefault.sessionId
+    )) as IFireboltSession
+
+    const goBackTwoStepsSession: IFireboltSession = {
+      ...currentSession,
+      experienceState: {
+        ...currentSession.experienceState,
+        visualizingStepSlug: "personal_data",
+      },
+    }
+
+    mockedSetSession(goBackTwoStepsSession)
+    const proceed = await fireboltStepper.proceed(payload)
+
+    expect(validationStepSpy).not.toBeCalled()
+    expect(proceed.errors).toEqual({})
+    expect(proceed.step.slug).toBe("documents")
+    expect(proceed.capturedData.personal_data.fields).toEqual(firstStepField)
+    expect(proceed.experienceMetadata.currentPosition).toBe(2)
+  })
   test.todo("shouldn't validate custom step progression")
   test.todo("first transition should return a brand new session id")
 })
@@ -309,6 +369,7 @@ describe("Stepper.goBack handling", () => {
     expect(previousStep.experienceMetadata.currentPosition).toBe(2)
     expect(previousStep.errors).toEqual({})
   })
+  test.todo("should returns the same step if there is no previous one")
 })
 
 describe("Props presets apply", () => {
