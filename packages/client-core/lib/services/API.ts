@@ -70,9 +70,10 @@ class APIService {
       .then((res) => formatStepResponseData(res?.data?.formData))
   }
 
-  async upload(sessionKey, file) {
+  async upload(sessionKey, file, fileName) {
     const formData = new FormData()
     formData.append("file", file)
+    formData.append("filename", fileName)
     const endpoint = `${this.endpoints.root}/upload`
 
     const config: AxiosRequestConfig = {

@@ -167,8 +167,8 @@ function useFireboltProvider({
     }
   }
 
-  function uploadFile(file) {
-    return formEngine.current.uploadFile(file)
+  function uploadFile(file, fileName: string) {
+    return formEngine.current.uploadFile(file, fileName)
   }
 
   return {
