@@ -1,4 +1,5 @@
 import DefaultTemplate from "../../components/templates/DefaultTemplate"
+import UploadFileTemplate from "../../components/templates/UploadFileTemplate"
 import CustomFormTemplate from "../../components/templates/CustomFormTemplate"
 import { createFireboltProvider, Wizard } from "@iq-firebolt/client/src"
 import transmorphersPropsPresets from "../../constants/transmorphers-props-presets"
@@ -40,7 +41,7 @@ const FormDemo = () => {
            // console.log("changed step:", { sentStep, currentStep });
         }}
       >
-        <Wizard.Step match="*" component={DefaultTemplate} />
+        <Wizard.Step match="*" component={UploadFileTemplate} />
         <Wizard.Step
           match={{ slug: "iqc" }}
           component={({ fireboltStep }) => (

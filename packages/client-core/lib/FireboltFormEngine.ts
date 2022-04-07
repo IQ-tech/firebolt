@@ -87,10 +87,10 @@ class FireboltFormEngine {
     return formatFormOutput(previousData, { addons: this.addons })
   }
 
-  uploadFile(file: any) {
+  uploadFile(file: any, fileName: string) {
     // TODO: UPLOAD TYPE
     const formSessionKey = getFormSession(this.formName)
-    return this.APIService.upload(formSessionKey, file)
+    return this.APIService.upload(formSessionKey, file, fileName)
   }
 
   async debugStep(stepSlug: string) {
