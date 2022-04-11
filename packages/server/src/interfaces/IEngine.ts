@@ -24,7 +24,7 @@ export interface IPropsPresetCollection {
 
 // objeto que representa a configuração dos resolvers, ou seja os pontos de acesso a dados
 export interface IEngineResolvers {
-  getExperienceJSON: (experienceSlug: string) => Promise<IExperienceJSONSchema>
+  getExperienceJSON?: (experienceSlug: string) => Promise<IExperienceJSONSchema>
   getSession: (sessionId?: string) => Promise<IFireboltSession | undefined>
   setSession: (fireboltStepData: IFireboltSession) => Promise<void>
 }
@@ -96,3 +96,39 @@ export interface IExperienceProceedPayload {
   fields?: IStepFormPayload
   additionalData?: any // todo, improve later
 }
+
+// decision handling
+export interface IExperienceDecisionPayload {
+  sessionData?: IFireboltSession
+  receivingStepData: IExperienceProceedPayload
+}
+export interface IExperienceDecision {
+  action: IExperienceDecisionAction
+  options?: IExperienceDecisionOptions
+}
+
+export type IExperienceDecisionAction =
+  | "changeFlow"
+  | "blockProgression"
+  | "proceed"
+
+export interface IExperienceDecisionOptions {
+  newFlow?: string
+  processedData?: {
+    [key: string]: any
+  }
+  errors?: any
+  autofill?: {
+    [key: string]: any
+  }
+}
+
+export type IDecisionCreator = (
+  action: IExperienceDecisionAction,
+  options?: IExperienceDecisionOptions
+) => IExperienceDecision
+
+export type IExperienceDecisionCallbackFunction = (
+  decisionPayload: IExperienceDecisionPayload,
+  decisionCreator: IDecisionCreator
+) => Promise<IExperienceDecision>

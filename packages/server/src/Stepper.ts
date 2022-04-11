@@ -5,6 +5,10 @@ import {
   IStepTransitionReturn,
   IFireboltSession,
   IExperienceProceedPayload,
+  IExperienceDecisionCallbackFunction,
+  IExperienceDecision,
+  IExperienceDecisionAction,
+  IExperienceDecisionOptions,
 } from "./interfaces/IEngine"
 import { IExperienceJSONSchema, IStepJSON } from "./types"
 
@@ -44,7 +48,7 @@ class Stepper {
     if (!hasPredefinedJSONConfig && !hasJSONConfigResolver) {
       throw new Error("must provide a way to access the config json")
     }
-    if (!this.preDefinedJSONConfig) {
+    if (!this.preDefinedJSONConfig && !!this.resolvers.getExperienceJSON) {
       const newJSON = await this.resolvers.getExperienceJSON(this.experienceId)
       this.JSONConfig = new JSONConfig(newJSON)
     }
@@ -95,6 +99,35 @@ class Stepper {
     }
   }
 
+  private decisionCreator(
+    action: IExperienceDecisionAction,
+    options?: IExperienceDecisionOptions
+  ): IExperienceDecision {
+    return {
+      action,
+      options,
+    }
+  }
+
+  private async decisionManager(
+    decision: IExperienceDecision,
+    payload: IExperienceProceedPayload
+  ) {
+    switch (decision.action) {
+      case "changeFlow":
+        await this.session.changeCurrentFlow(
+          decision.options?.newFlow ?? "default"
+        )
+        payload.additionalData = {
+          ...payload?.additionalData,
+          decisionAutofill: { ...decision.options?.autofill },
+        }
+        break
+      default:
+        break
+    }
+  }
+
   /**
    * lida com dois casos de transição de experiencia:
    * Iniciando uma experiencia do zero (request sem session id)
@@ -119,7 +152,7 @@ class Stepper {
 
   async proceed(
     payload: IExperienceProceedPayload = {},
-    decisionCB?: () => void
+    decisionCB?: IExperienceDecisionCallbackFunction
   ): Promise<IStepTransitionReturn> {
     /**
      * Todo
@@ -168,8 +201,27 @@ class Stepper {
       })
     }
 
+    //#region decision point
+    const decision = decisionCB
+      ? await decisionCB(
+          {
+            sessionData: this.session.current,
+            receivingStepData: payload,
+          },
+          this.decisionCreator
+        )
+      : this.decisionCreator("proceed")
+
+    // payload para testar a informação está chegando ok pelo callback
+    await this.decisionManager(decision, payload)
+
+    //#endregion
+
     if (isFirstStep && isStepFieldsValid) {
-      await this.session.createSession(this.JSONConfig, "default")
+      await this.session.createSession(
+        this.JSONConfig,
+        this.session.current?.experienceState.currentFlow ?? "default"
+      )
     }
 
     await this.session.addCompletedStep(receivingStepSlug, {

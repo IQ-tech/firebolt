@@ -1,3 +1,10 @@
+import {
+  IDecisionCreator,
+  IExperienceDecision,
+  IExperienceDecisionCallbackFunction,
+  IExperienceDecisionPayload,
+} from "./interfaces/IEngine"
+
 import StepperEngine from "./Stepper"
 
 /**
@@ -24,7 +31,32 @@ import StepperEngine from "./Stepper"
  *
  */
 
-const engine = new StepperEngine()
+const engine = new StepperEngine({
+  experienceId: "test",
+  resolvers: {
+    getSession: async () => undefined,
+    setSession: async () => undefined,
+  },
+})
+
+const decisionCallback: IExperienceDecisionCallbackFunction = async (
+  decisionPayload: IExperienceDecisionPayload,
+  decision: IDecisionCreator
+): Promise<IExperienceDecision> => {
+  const { receivingStepData } = decisionPayload
+
+  if (receivingStepData.fields?.hasUser) {
+    const userInfo = await fetch("teste/teste", receivingStepData.fields?.cpf)
+    return decision("changeFlow", {
+      autofill: { ...userInfo.personalData },
+    })
+  }
+
+  return decision("proceed")
+}
+
+// rodar entre validação de passo e alteração de estado
+engine.proceed({}, decisionCallback)
 
 // ----------------------------------
 

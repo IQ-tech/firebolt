@@ -4,7 +4,10 @@ import * as validation from "./helpers/validateStep"
 
 import { IExperienceJSONSchema } from "./types"
 import {
+  IDecisionCreator,
   IEngineResolvers,
+  IExperienceDecision,
+  IExperienceDecisionPayload,
   IExperienceProceedPayload,
   IFireboltSession,
 } from "./interfaces/IEngine"
@@ -339,7 +342,69 @@ describe("Stepper.proceed handling", () => {
     expect(proceed.capturedData.personal_data.fields).toEqual(firstStepField)
     expect(proceed.experienceMetadata.currentPosition).toBe(2)
   })
+
   test.todo("shouldn't validate custom step progression")
+
+  test("should handle with changeFlow decision", async () => {
+    const sample = JSONSample
+    const resolvers: IEngineResolvers = {
+      getExperienceJSON: mockedGetFormJSONSchema,
+      getSession: mockedGetSession,
+      setSession: mockedSetSession,
+    }
+    const fireboltStepper = new Stepper({
+      experienceId: "sample",
+      experienceJSONConfig: sample,
+      resolvers,
+    })
+
+    const name = `${faker.name.firstName()} ${faker.name.lastName()}`
+    const email = faker.internet.email()
+    const firstStepField = {
+      full_name: name,
+      email: email,
+    }
+
+    const payload: IExperienceProceedPayload = {
+      fields: firstStepField,
+    }
+
+    const mockedAutofill = {
+      streetName: faker.address.streetName(),
+      number: faker.datatype.number(),
+      city: faker.address.cityName(),
+      state: faker.address.state(),
+      country: faker.address.country(),
+    }
+
+    const decisionCB = async (
+      payload: IExperienceDecisionPayload,
+      creator: IDecisionCreator
+    ): Promise<IExperienceDecision> => {
+      if (payload.receivingStepData?.fields?.email) {
+        return creator("changeFlow", {
+          newFlow: "medium",
+          autofill: mockedAutofill,
+        })
+      }
+
+      return creator("proceed")
+    }
+
+    const proceed = await fireboltStepper.proceed(payload, decisionCB)
+
+    expect(proceed.sessionId.length > 0).toBe(true)
+    expect(proceed.errors).toEqual({})
+    expect(proceed.step.slug).toBe("documents")
+    expect(proceed.capturedData.personal_data.fields).toEqual(firstStepField)
+    expect(proceed?.experienceMetadata.currentPosition).toBe(2)
+    expect(proceed?.experienceMetadata?.stepsList?.length).toBe(3)
+    expect(proceed?.experienceMetadata?.lastStepSlug).toBe("token")
+  })
+
+  test.todo("should handle with blockProgression decision")
+
+  test.todo("should handle with proceed decision")
 })
 
 describe("Stepper.goBack handling", () => {
