@@ -82,7 +82,8 @@ class Stepper {
 
   private async createTransitionReturn({
     errors = {},
-    webhookResult = {},
+    webhookResult = {}, // replaced by processed data
+    processedData = {},
     returningStep,
   }): Promise<IStepTransitionReturn> {
     const session = this.session.current
@@ -94,38 +95,28 @@ class Stepper {
       step: returningStep,
       capturedData: session?.steps || {},
       errors: errors,
-      webhookResult: webhookResult,
       experienceMetadata: computedMetadata,
+      processedData,
     }
   }
 
-  private decisionCreator(
-    action: IExperienceDecisionAction,
-    options?: IExperienceDecisionOptions
-  ): IExperienceDecision {
-    return {
-      action,
-      options,
-    }
-  }
-
-  private async decisionManager(
-    decision: IExperienceDecision,
+  private useDecisionCallback(
+    decisionCB: IExperienceDecisionCallbackFunction,
     payload: IExperienceProceedPayload
-  ) {
-    switch (decision.action) {
-      case "changeFlow":
-        await this.session.changeCurrentFlow(
-          decision.options?.newFlow ?? "default"
-        )
-        payload.additionalData = {
-          ...payload?.additionalData,
-          decisionAutofill: { ...decision.options?.autofill },
-        }
-        break
-      default:
-        break
-    }
+  ): Promise<IExperienceDecision> {
+    return new Promise((res) => {
+      const decisionCreator = (
+        action: IExperienceDecisionAction,
+        options?: IExperienceDecisionOptions
+      ) => {
+        res({ action, options })
+      }
+
+      decisionCB(decisionCreator, {
+        sessionData: this.session.current,
+        receivingStepData: payload,
+      })
+    })
   }
 
   /**
@@ -201,27 +192,41 @@ class Stepper {
       })
     }
 
-    //#region decision point
+    // decision point
     const decision = decisionCB
-      ? await decisionCB(
-          {
-            sessionData: this.session.current,
-            receivingStepData: payload,
-          },
-          this.decisionCreator
-        )
-      : this.decisionCreator("proceed")
+      ? await this.useDecisionCallback(decisionCB, payload)
+      : ({} as IExperienceDecision)
 
-    // payload para testar a informação está chegando ok pelo callback
-    await this.decisionManager(decision, payload)
+    // const decision =
+    //   decisionCB &&
+    //   (await decisionCB(
+    //     {
+    //       sessionData: this.session.current,
+    //       receivingStepData: payload,
+    //     },
+    //     this.decisionCreator
+    //   ))
 
-    //#endregion
+    const processedData = decision?.options?.processedData || {}
+
+    if (decision?.action === "blockProgression") {
+      return await this.createTransitionReturn({
+        returningStep: receivingStepDefinition,
+        errors: decision?.options?.errors,
+      })
+    }
 
     if (isFirstStep && isStepFieldsValid) {
       await this.session.createSession(
         this.JSONConfig,
-        this.session.current?.experienceState.currentFlow ?? "default"
+        decision?.options?.newFlow || "default"
       )
+    }
+
+    if (decision?.action === "changeFlow") {
+      const newFlow = decision?.options?.newFlow || ""
+      if (!newFlow) throw new Error("flow not found") //retornar erro de flow inválido (ou se o flow não existe no json)
+      this.session.changeCurrentFlow(newFlow)
     }
 
     await this.session.addCompletedStep(receivingStepSlug, {

@@ -47,16 +47,16 @@ const decisionCallback: IExperienceDecisionCallbackFunction = async (
 
   if (receivingStepData.fields?.hasUser) {
     const userInfo = await fetch("teste/teste", receivingStepData.fields?.cpf)
-    return decision("changeFlow", {
+    decision("changeFlow", {
       autofill: { ...userInfo.personalData },
     })
   }
-
-  return decision("proceed")
 }
 
 // rodar entre validação de passo e alteração de estado
-engine.proceed({}, decisionCallback)
+engine.proceed({}, (decide, s) => {
+  decide("changeFlow", { errors: {} })
+})
 
 // ----------------------------------
 

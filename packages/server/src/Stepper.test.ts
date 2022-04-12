@@ -2,12 +2,10 @@ import faker from "faker"
 import Stepper from "./Stepper"
 import * as validation from "./helpers/validateStep"
 
-import { IExperienceJSONSchema } from "./types"
+import { IExperienceJSONSchema, IStepFormPayload } from "./types"
 import {
-  IDecisionCreator,
   IEngineResolvers,
-  IExperienceDecision,
-  IExperienceDecisionPayload,
+  IExperienceDecisionCallbackFunction,
   IExperienceProceedPayload,
   IFireboltSession,
 } from "./interfaces/IEngine"
@@ -33,6 +31,30 @@ const mockedSetSession = jest.fn(async (stepData: IFireboltSession) => {
   localStorage.setItem(stepData.sessionId, JSON.stringify(stepData))
 })
 
+const getFirstStepCorrectFields = (): IStepFormPayload => ({
+  full_name: `${faker.name.firstName()} ${faker.name.lastName()}`,
+  email: faker.internet.email(),
+})
+
+const getFirstStepWrongFields = (): IStepFormPayload => ({
+  full_name: "Teste",
+  email: "teste@",
+})
+
+const getResolvers = (): IEngineResolvers => ({
+  getExperienceJSON: mockedGetFormJSONSchema,
+  getSession: mockedGetSession,
+  setSession: mockedSetSession,
+})
+
+const getStepper = () => {
+  return new Stepper({
+    experienceId: "sample",
+    experienceJSONConfig: JSONSample,
+    resolvers: getResolvers(),
+  })
+}
+
 describe("Stepper.start handling", () => {
   beforeEach(() => {
     localStorage.clear()
@@ -43,19 +65,7 @@ describe("Stepper.start handling", () => {
   test.todo("should return a error when schema dont have default flow")
 
   test("should start a new experience", async () => {
-    const sample = JSONSample
-    const resolvers: IEngineResolvers = {
-      getExperienceJSON: mockedGetFormJSONSchema,
-      getSession: mockedGetSession,
-      setSession: mockedSetSession,
-    }
-
-    const fireboltStepper = new Stepper({
-      experienceId: "sample",
-      experienceJSONConfig: sample,
-      resolvers,
-    })
-
+    const fireboltStepper = getStepper()
     const firstStep = await fireboltStepper.start()
 
     expect(firstStep.sessionId).toBe("")
@@ -65,18 +75,8 @@ describe("Stepper.start handling", () => {
   })
 
   test("should identify an started experience and return the correct step", async () => {
-    const resolvers: IEngineResolvers = {
-      getExperienceJSON: mockedGetFormJSONSchema,
-      getSession: mockedGetSession,
-      setSession: mockedSetSession,
-    }
-
     mockedSetSession(twoStepsCompletedFlowDefault)
-    const fireboltStepper = new Stepper({
-      experienceId: "sample",
-      experienceJSONConfig: JSONSample,
-      resolvers,
-    })
+    const fireboltStepper = getStepper()
 
     const nextStep = await fireboltStepper.start({
       sessionId: twoStepsCompletedFlowDefault.sessionId,
@@ -95,22 +95,9 @@ describe("Stepper.proceed handling", () => {
   })
   test("should validate the step fields and return an error", async () => {
     const validationStepSpy = jest.spyOn(validation, "default")
+    const fireboltStepper = getStepper()
 
-    const sample = JSONSample
-    const resolvers: IEngineResolvers = {
-      getExperienceJSON: mockedGetFormJSONSchema,
-      getSession: mockedGetSession,
-      setSession: mockedSetSession,
-    }
-    const fireboltStepper = new Stepper({
-      experienceId: "sample",
-      experienceJSONConfig: sample,
-      resolvers,
-    })
-    const firstStepField = {
-      full_name: "Teste",
-      email: "teste@",
-    }
+    const firstStepField = getFirstStepWrongFields()
     const sessionId = faker.datatype.uuid()
     const payload: IExperienceProceedPayload = {
       sessionId,
@@ -126,25 +113,9 @@ describe("Stepper.proceed handling", () => {
 
   test("should validate the first transition fields and return the second step info", async () => {
     const validationStepSpy = jest.spyOn(validation, "default")
-    const sample = JSONSample
-    const resolvers: IEngineResolvers = {
-      getExperienceJSON: mockedGetFormJSONSchema,
-      getSession: mockedGetSession,
-      setSession: mockedSetSession,
-    }
-    const fireboltStepper = new Stepper({
-      experienceId: "sample",
-      experienceJSONConfig: sample,
-      resolvers,
-    })
+    const fireboltStepper = getStepper()
 
-    const name = `${faker.name.firstName()} ${faker.name.lastName()}`
-    const email = faker.internet.email()
-    const firstStepField = {
-      full_name: name,
-      email: email,
-    }
-
+    const firstStepField = getFirstStepCorrectFields()
     const payload: IExperienceProceedPayload = {
       fields: firstStepField,
     }
@@ -162,18 +133,8 @@ describe("Stepper.proceed handling", () => {
   test("should identify the current step, validate and return the next step info", async () => {
     const validationStepSpy = jest.spyOn(validation, "default")
 
-    const resolvers: IEngineResolvers = {
-      getExperienceJSON: mockedGetFormJSONSchema,
-      getSession: mockedGetSession,
-      setSession: mockedSetSession,
-    }
-
     mockedSetSession(oneStepCompletedFlowDefault)
-    const fireboltStepper = new Stepper({
-      experienceId: "sample",
-      experienceJSONConfig: JSONSample,
-      resolvers,
-    })
+    const fireboltStepper = getStepper()
 
     const payload = {
       brazil_id_number: "1234567890",
@@ -198,24 +159,10 @@ describe("Stepper.proceed handling", () => {
 
   test("should revalidate a previously filled step and return a error (changes made on fields)", async () => {
     const validationStepSpy = jest.spyOn(validation, "default")
-
-    const resolvers: IEngineResolvers = {
-      getExperienceJSON: mockedGetFormJSONSchema,
-      getSession: mockedGetSession,
-      setSession: mockedSetSession,
-    }
-
     mockedSetSession(twoStepsCompletedFlowDefault)
-    const fireboltStepper = new Stepper({
-      experienceId: "sample",
-      experienceJSONConfig: JSONSample,
-      resolvers,
-    })
+    const fireboltStepper = getStepper()
 
-    const firstStepField = {
-      full_name: "Teste",
-      email: "teste@",
-    }
+    const firstStepField = getFirstStepWrongFields()
     const payload: IExperienceProceedPayload = {
       sessionId: twoStepsCompletedFlowDefault.sessionId,
       fields: firstStepField,
@@ -246,27 +193,10 @@ describe("Stepper.proceed handling", () => {
 
   test("should revalidate a previously filled step (changes made on fields)", async () => {
     const validationStepSpy = jest.spyOn(validation, "default")
-
-    const resolvers: IEngineResolvers = {
-      getExperienceJSON: mockedGetFormJSONSchema,
-      getSession: mockedGetSession,
-      setSession: mockedSetSession,
-    }
-
     mockedSetSession(twoStepsCompletedFlowDefault)
-    const fireboltStepper = new Stepper({
-      experienceId: "sample",
-      experienceJSONConfig: JSONSample,
-      resolvers,
-    })
+    const fireboltStepper = getStepper()
 
-    const name = `John Doe`
-    const email = faker.internet.email()
-
-    const firstStepField = {
-      full_name: name,
-      email,
-    }
+    const firstStepField = getFirstStepCorrectFields()
     const payload: IExperienceProceedPayload = {
       sessionId: twoStepsCompletedFlowDefault.sessionId,
       fields: firstStepField,
@@ -298,19 +228,8 @@ describe("Stepper.proceed handling", () => {
 
   test("shouldn't validate a previously filled step (no changes made on fields)", async () => {
     const validationStepSpy = jest.spyOn(validation, "default")
-
-    const resolvers: IEngineResolvers = {
-      getExperienceJSON: mockedGetFormJSONSchema,
-      getSession: mockedGetSession,
-      setSession: mockedSetSession,
-    }
-
     mockedSetSession(twoStepsCompletedFlowDefault)
-    const fireboltStepper = new Stepper({
-      experienceId: "sample",
-      experienceJSONConfig: JSONSample,
-      resolvers,
-    })
+    const fireboltStepper = getStepper()
 
     const firstStepField = {
       ...twoStepsCompletedFlowDefault.steps.personal_data.fields,
@@ -346,52 +265,20 @@ describe("Stepper.proceed handling", () => {
   test.todo("shouldn't validate custom step progression")
 
   test("should handle with changeFlow decision", async () => {
-    const sample = JSONSample
-    const resolvers: IEngineResolvers = {
-      getExperienceJSON: mockedGetFormJSONSchema,
-      getSession: mockedGetSession,
-      setSession: mockedSetSession,
-    }
-    const fireboltStepper = new Stepper({
-      experienceId: "sample",
-      experienceJSONConfig: sample,
-      resolvers,
-    })
-
-    const name = `${faker.name.firstName()} ${faker.name.lastName()}`
-    const email = faker.internet.email()
-    const firstStepField = {
-      full_name: name,
-      email: email,
-    }
-
+    const fireboltStepper = getStepper()
+    const firstStepField = getFirstStepCorrectFields()
     const payload: IExperienceProceedPayload = {
       fields: firstStepField,
     }
-
-    const mockedAutofill = {
-      streetName: faker.address.streetName(),
-      number: faker.datatype.number(),
-      city: faker.address.cityName(),
-      state: faker.address.state(),
-      country: faker.address.country(),
-    }
-
-    const decisionCB = async (
-      payload: IExperienceDecisionPayload,
-      creator: IDecisionCreator
-    ): Promise<IExperienceDecision> => {
+    const callbackFunction: IExperienceDecisionCallbackFunction = (
+      decide,
+      payload
+    ) => {
       if (payload.receivingStepData?.fields?.email) {
-        return creator("changeFlow", {
-          newFlow: "medium",
-          autofill: mockedAutofill,
-        })
+        decide("changeFlow", { newFlow: "medium" })
       }
-
-      return creator("proceed")
     }
-
-    const proceed = await fireboltStepper.proceed(payload, decisionCB)
+    const proceed = await fireboltStepper.proceed(payload, callbackFunction)
 
     expect(proceed.sessionId.length > 0).toBe(true)
     expect(proceed.errors).toEqual({})
@@ -402,9 +289,50 @@ describe("Stepper.proceed handling", () => {
     expect(proceed?.experienceMetadata?.lastStepSlug).toBe("token")
   })
 
-  test.todo("should handle with blockProgression decision")
+  test("should handle with blockProgression decision", async () => {
+    const fireboltStepper = getStepper()
 
-  test.todo("should handle with proceed decision")
+    const firstStepField = getFirstStepCorrectFields()
+    const payload: IExperienceProceedPayload = {
+      fields: firstStepField,
+    }
+
+    const mockedErrors = {
+      email: "user already exists",
+    }
+
+    const callbackFunction: IExperienceDecisionCallbackFunction = (
+      decide,
+      payload
+    ) => {
+      if (payload.receivingStepData?.fields?.email) {
+        decide("blockProgression", { errors: mockedErrors })
+      }
+      decide("changeFlow", { newFlow: "medium" })
+    }
+
+    const proceed = await fireboltStepper.proceed(payload, callbackFunction)
+
+    expect(proceed.errors).toEqual(mockedErrors)
+    expect(proceed.step.slug).toBe("personal_data")
+    expect(proceed?.experienceMetadata.currentPosition).toBe(1)
+  })
+
+  test("should handle with proceed decision", async () => {
+    const fireboltStepper = getStepper()
+
+    const firstStepFields = getFirstStepCorrectFields()
+    const payload: IExperienceProceedPayload = {
+      fields: firstStepFields,
+    }
+
+    const proceed = await fireboltStepper.proceed(payload)
+
+    expect(proceed.sessionId.length > 0).toBe(true)
+    expect(proceed.errors).toEqual({})
+    expect(proceed.step.slug).toBe("documents")
+    expect(proceed.experienceMetadata.currentPosition).toBe(2)
+  })
 })
 
 describe("Stepper.goBack handling", () => {
@@ -414,18 +342,8 @@ describe("Stepper.goBack handling", () => {
   })
 
   test("should go back to previous step", async () => {
-    const resolvers: IEngineResolvers = {
-      getExperienceJSON: mockedGetFormJSONSchema,
-      getSession: mockedGetSession,
-      setSession: mockedSetSession,
-    }
-
     mockedSetSession(twoStepsCompletedFlowDefault)
-    const fireboltStepper = new Stepper({
-      experienceId: "sample",
-      experienceJSONConfig: JSONSample,
-      resolvers,
-    })
+    const fireboltStepper = getStepper()
 
     const previousStep = await fireboltStepper.goBackHandler({
       sessionId: twoStepsCompletedFlowDefault.sessionId,
@@ -437,25 +355,9 @@ describe("Stepper.goBack handling", () => {
   })
 
   test("should returns the same step if there is no previous one", async () => {
-    const resolvers: IEngineResolvers = {
-      getExperienceJSON: mockedGetFormJSONSchema,
-      getSession: mockedGetSession,
-      setSession: mockedSetSession,
-    }
+    const fireboltStepper = getStepper()
 
-    const fireboltStepper = new Stepper({
-      experienceId: "sample",
-      experienceJSONConfig: JSONSample,
-      resolvers,
-    })
-
-    const name = `${faker.name.firstName()} ${faker.name.lastName()}`
-    const email = faker.internet.email()
-    const firstStepField = {
-      full_name: name,
-      email: email,
-    }
-
+    const firstStepField = getFirstStepCorrectFields()
     const payload: IExperienceProceedPayload = {
       fields: firstStepField,
     }

@@ -43,10 +43,10 @@ export interface IEngineHooks {
 export interface IStepTransitionReturn {
   sessionId: string // FIXME: DUVIDA - SessionId deve estar nessa interface
   step: IStepJSON
-  webhookResult: any /* IFireboltWebhookResponse // TODO */
   capturedData: any // TODO
   experienceMetadata: IExperienceMetadata
   errors: any
+  processedData: any
 }
 
 // representa os metadados da experincia atual (guardada no storage) do usuário,
@@ -107,10 +107,7 @@ export interface IExperienceDecision {
   options?: IExperienceDecisionOptions
 }
 
-export type IExperienceDecisionAction =
-  | "changeFlow"
-  | "blockProgression"
-  | "proceed"
+export type IExperienceDecisionAction = "changeFlow" | "blockProgression"
 
 export interface IExperienceDecisionOptions {
   newFlow?: string
@@ -125,10 +122,10 @@ export interface IExperienceDecisionOptions {
 
 export type IDecisionCreator = (
   action: IExperienceDecisionAction,
-  options?: IExperienceDecisionOptions
-) => IExperienceDecision
+  options?: IExperienceDecisionOptions | undefined
+) => void
 
 export type IExperienceDecisionCallbackFunction = (
-  decisionPayload: IExperienceDecisionPayload,
-  decisionCreator: IDecisionCreator
-) => Promise<IExperienceDecision>
+  decide: IDecisionCreator,
+  decisionPayload: IExperienceDecisionPayload
+) => void
