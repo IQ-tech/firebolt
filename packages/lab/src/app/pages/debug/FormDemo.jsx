@@ -41,7 +41,7 @@ const FormDemo = () => {
            // console.log("changed step:", { sentStep, currentStep });
         }}
       >
-        <Wizard.Step match="*" component={UploadFileTemplate} />
+        <Wizard.Step match="*" component={DefaultTemplate} />
         <Wizard.Step
           match={{ slug: "iqc" }}
           component={({ fireboltStep }) => (
