@@ -3,9 +3,9 @@ import {
   IExperienceDecision,
   IExperienceDecisionCallbackFunction,
   IExperienceDecisionPayload,
-} from "./interfaces/IEngine"
+} from "../interfaces/IEngine"
 
-import StepperEngine from "./Stepper"
+import StepperEngine from "../Stepper"
 
 /**
  * funcionamento:

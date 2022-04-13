@@ -1,5 +1,5 @@
 import faker from "faker"
-import Stepper from "./Stepper"
+import Engine from "./Engine"
 import * as validation from "./helpers/validateStep"
 
 import { IExperienceJSONSchema, IStepFormPayload } from "./types"
@@ -48,7 +48,7 @@ const getResolvers = (): IEngineResolvers => ({
 })
 
 const getStepper = () => {
-  return new Stepper({
+  return new Engine({
     experienceId: "sample",
     experienceJSONConfig: JSONSample,
     resolvers: getResolvers(),

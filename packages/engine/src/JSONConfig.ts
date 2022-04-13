@@ -4,7 +4,7 @@ class Step {
   //get raw(){}
 }
 
-class Flow {}
+class Flow {} // TODO - improve subclasses
 
 export default class JSONConfig {
   private JSONConfig: IExperienceJSONSchema

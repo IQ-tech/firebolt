@@ -9,7 +9,7 @@
     "blueberry-theme",
     "material-theme",
     "json-schema",
-    "server"
+    "engine"
   ],
   "conventionalCommits.promptFooter": false,
   "conventionalCommits.promptBody": false

@@ -21,7 +21,7 @@ import computeExperienceMetadata from "./helpers/computeExperienceMetadata"
 import validateStep from "./helpers/validateStep"
 import getIsFieldsValidationNeeded from "./helpers/getIsFieldsValidationNeeded"
 
-class Stepper {
+class Engine {
   private experienceId: string
   private preDefinedJSONConfig: boolean
   private resolvers: IEngineResolvers
@@ -294,4 +294,4 @@ class Stepper {
   }
 }
 
-export default Stepper
+export default Engine
