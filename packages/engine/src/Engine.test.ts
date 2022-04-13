@@ -104,6 +104,7 @@ describe("Stepper.proceed handling", () => {
       fields: firstStepField,
     }
     const proceed = await fireboltStepper.proceed(payload)
+    console.log(proceed.errors)
 
     expect(proceed.errors?.isValid).toBe(false)
     expect(proceed.errors?.invalidFields.length).not.toBe(0)

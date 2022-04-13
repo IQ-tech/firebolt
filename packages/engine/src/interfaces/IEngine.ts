@@ -1,4 +1,5 @@
 import { IExperienceJSONSchema, IStepFormPayload, IStepJSON } from "../types"
+import { InvalidField } from "@iq-firebolt/validators"
 
 // objeto que representa as opções para criar uma instância da engine
 export interface ICreateEngineOptions {
@@ -40,13 +41,22 @@ export interface IEngineHooks {
 /**
  * representa o objeto que é retornado ao consumer após uma transição de passo do firebolt
  * */
-export interface IStepTransitionReturn {
-  sessionId: string // FIXME: DUVIDA - SessionId deve estar nessa interface
+
+type TransitionStatus = "success" | "error"
+export interface IStepTransitionReturn<Status> {
+  sessionId: string
+  status: TransitionStatus
   step: IStepJSON
   capturedData: any // TODO
   experienceMetadata: IExperienceMetadata
-  errors: any
+  error?: IStepTransitionError
   processedData: any
+}
+
+export interface IStepTransitionError {
+  slug: string
+  message: string
+  invalidFields: InvalidField[]
 }
 
 // representa os metadados da experincia atual (guardada no storage) do usuário,

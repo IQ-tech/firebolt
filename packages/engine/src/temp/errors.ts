@@ -22,3 +22,24 @@
  * jogar um alerta falando que o formJSONSchema vai tomar precedência para a resolução dos
  * passos seguintes.
  */
+
+/**
+ * Resolvers
+ *  - algum dos resolvers não implementado
+ *  - JSONSchema not found, ou não passado no construtor ou sem resolver
+ *
+ * JSON
+ *  - não possuir o flow 'default'
+ *  - flow não encontrado no schema (changeFlow - decision callback)
+ *  - stepSlug na lista do flow não existe na lista de steps
+ *
+ * Custom error
+ *  - erro criado pelo decision callback
+ *      // pode ser fields error
+ *      // decisão que não tratamos (caso não use ts?)
+ *
+ *
+ */
+
+{
+}

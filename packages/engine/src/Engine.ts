@@ -46,10 +46,13 @@ class Engine {
     const hasPredefinedJSONConfig = !!this.JSONConfig
     const hasJSONConfigResolver = !!this.resolvers.getExperienceJSON
     if (!hasPredefinedJSONConfig && !hasJSONConfigResolver) {
-      throw new Error("must provide a way to access the config json")
+      throw "noWayToFindJSONConfig" // TODO Handle error
     }
     if (!this.preDefinedJSONConfig && !!this.resolvers.getExperienceJSON) {
       const newJSON = await this.resolvers.getExperienceJSON(this.experienceId)
+      if (!newJSON) {
+        throw "JSONConfigNotFound" // TODO Handle error
+      }
       this.JSONConfig = new JSONConfig(newJSON)
     }
   }
@@ -63,7 +66,7 @@ class Engine {
       ? session.experienceState.visualizingStepSlug
       : this.JSONConfig?.getFirstStepFromFlow("default").slug
 
-    return receivingStepSlug as string
+    return receivingStepSlug
   }
 
   // dado um slug de step, a função deve retornar o próximo
@@ -82,7 +85,6 @@ class Engine {
 
   private async createTransitionReturn({
     errors = {},
-    webhookResult = {}, // replaced by processed data
     processedData = {},
     returningStep,
   }): Promise<IStepTransitionReturn> {
@@ -121,7 +123,7 @@ class Engine {
 
   /**
    * lida com dois casos de transição de experiencia:
-   * Iniciando uma experiencia do zero (request sem session id)
+   * Iniciando uma experiência do zero (request sem session id)
    * resumindo uma sessão (somente sessionId)
    *  no caso de resumindo, retornamos o passo de acordo com o estado salvo
    */
@@ -129,7 +131,6 @@ class Engine {
     payload?: IExperienceProceedPayload
   ): Promise<IStepTransitionReturn> {
     await this.session.loadSessionFromStorage(payload?.sessionId)
-    await this.loadJSONConfig()
     const session = this.session.current
     const stepToReturn = session
       ? this.JSONConfig?.getStepDefinition(
@@ -196,16 +197,6 @@ class Engine {
     const decision = decisionCB
       ? await this.useDecisionCallback(decisionCB, payload)
       : ({} as IExperienceDecision)
-
-    // const decision =
-    //   decisionCB &&
-    //   (await decisionCB(
-    //     {
-    //       sessionData: this.session.current,
-    //       receivingStepData: payload,
-    //     },
-    //     this.decisionCreator
-    //   ))
 
     const processedData = decision?.options?.processedData || {}
 
