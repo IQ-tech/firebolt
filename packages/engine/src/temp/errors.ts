@@ -27,6 +27,7 @@
  * Resolvers
  *  - algum dos resolvers não implementado
  *  - JSONSchema not found, ou não passado no construtor ou sem resolver
+ *  - Caso de erro gerado dentro do resolver ou retorno diferente do esperado
  *
  * JSON
  *  - não possuir o flow 'default'

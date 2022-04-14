@@ -42,14 +42,12 @@ export interface IEngineHooks {
  * representa o objeto que é retornado ao consumer após uma transição de passo do firebolt
  * */
 
-type TransitionStatus = "success" | "error"
-export interface IStepTransitionReturn<Status> {
+export interface IStepTransitionReturn {
   sessionId: string
-  status: TransitionStatus
+  error: IStepTransitionError | null
   step: IStepJSON
   capturedData: any // TODO
   experienceMetadata: IExperienceMetadata
-  error?: IStepTransitionError
   processedData: any
 }
 
@@ -139,3 +137,8 @@ export type IExperienceDecisionCallbackFunction = (
   decide: IDecisionCreator,
   decisionPayload: IExperienceDecisionPayload
 ) => void
+
+export interface IEngineError {
+  id: string
+  description: string
+}

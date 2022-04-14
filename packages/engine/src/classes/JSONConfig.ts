@@ -1,10 +1,4 @@
-import { IExperienceJSONSchema } from "./types"
-
-class Step {
-  //get raw(){}
-}
-
-class Flow {} // TODO - improve subclasses
+import { IExperienceJSONSchema } from "../types"
 
 export default class JSONConfig {
   private JSONConfig: IExperienceJSONSchema

@@ -14,7 +14,7 @@ import { IExperienceJSONSchema, IStepJSON } from "./types"
 
 // handlers
 import SessionHandler from "./SessionHandler"
-import JSONConfig from "./JSONConfig"
+import JSONConfig from "./classes/JSONConfig"
 
 // helpers
 import computeExperienceMetadata from "./helpers/computeExperienceMetadata"
@@ -84,19 +84,20 @@ class Engine {
   }
 
   private async createTransitionReturn({
-    errors = {},
     processedData = {},
     returningStep,
+    errorSlug = "",
   }): Promise<IStepTransitionReturn> {
     const session = this.session.current
     const computedMetadata = computeExperienceMetadata(this.JSONConfig, session)
     // apply plugins
     // apply autofill
+
     return {
       sessionId: session?.sessionId || "",
       step: returningStep,
       capturedData: session?.steps || {},
-      errors: errors,
+      error: errorSlug ? ({} as any) : null,
       experienceMetadata: computedMetadata,
       processedData,
     }
