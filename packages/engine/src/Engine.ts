@@ -15,11 +15,13 @@ import { IExperienceJSONSchema, IStepJSON } from "./types"
 // handlers
 import SessionHandler from "./SessionHandler"
 import JSONConfig from "./classes/JSONConfig"
+import EngineError from "./classes/EngineError"
 
 // helpers
 import computeExperienceMetadata from "./helpers/computeExperienceMetadata"
 import validateStep from "./helpers/validateStep"
 import getIsFieldsValidationNeeded from "./helpers/getIsFieldsValidationNeeded"
+import { tryCatch } from "ramda"
 
 class Engine {
   private experienceId: string
@@ -51,7 +53,7 @@ class Engine {
     if (!this.preDefinedJSONConfig && !!this.resolvers.getExperienceJSON) {
       const newJSON = await this.resolvers.getExperienceJSON(this.experienceId)
       if (!newJSON) {
-        throw "JSONConfigNotFound" // TODO Handle error
+        throw new EngineError("JSONNotFound")
       }
       this.JSONConfig = new JSONConfig(newJSON)
     }
@@ -76,7 +78,7 @@ class Engine {
   ) {
     const receivingFlowSlug = session?.experienceState.currentFlow || "default"
     const receivingFlow = this.JSONConfig?.getFlow(receivingFlowSlug)
-    const receivingStepIndex = receivingFlow!.stepsSlugs.indexOf(stepSlug)
+    const receivingStepIndex = receivingFlow.stepsSlugs.indexOf(stepSlug)
     const returningStepSlug = receivingFlow?.stepsSlugs[receivingStepIndex + 1]
     if (returningStepSlug) {
       return this.JSONConfig?.getStepDefinition(returningStepSlug)
@@ -86,18 +88,21 @@ class Engine {
   private async createTransitionReturn({
     processedData = {},
     returningStep,
-    errorSlug = "",
-  }): Promise<IStepTransitionReturn> {
+    error,
+  }: {
+    returningStep?: IStepJSON
+    error?: EngineError
+    processedData?: any
+  } = {}): Promise<IStepTransitionReturn> {
     const session = this.session.current
     const computedMetadata = computeExperienceMetadata(this.JSONConfig, session)
     // apply plugins
     // apply autofill
-
     return {
       sessionId: session?.sessionId || "",
       step: returningStep,
       capturedData: session?.steps || {},
-      error: errorSlug ? ({} as any) : null,
+      error: error || null,
       experienceMetadata: computedMetadata,
       processedData,
     }
@@ -131,7 +136,9 @@ class Engine {
   async start(
     payload?: IExperienceProceedPayload
   ): Promise<IStepTransitionReturn> {
-    await this.session.loadSessionFromStorage(payload?.sessionId)
+    try {
+      await this.session.loadSessionFromStorage(payload?.sessionId)
+    } catch (err) {}
     const session = this.session.current
     const stepToReturn = session
       ? this.JSONConfig?.getStepDefinition(
@@ -139,7 +146,7 @@ class Engine {
         )
       : this.JSONConfig?.getFirstStepFromFlow("default")
 
-    if (!stepToReturn) throw new Error("Step not found") // TODO: handle error
+    if (!stepToReturn) throw new EngineError("stepNotFound") // TODO: handle error
     return await this.createTransitionReturn({ returningStep: stepToReturn })
   }
 
@@ -157,15 +164,23 @@ class Engine {
      * - webhook call
      */
 
-    // todo - validate payload format
-    await this.session.loadSessionFromStorage(payload?.sessionId)
-    await this.loadJSONConfig()
+    try {
+      await this.session.loadSessionFromStorage(payload?.sessionId)
+      await this.loadJSONConfig()
+    } catch (engineError) {
+      const isEngineError = engineError instanceof EngineError
+      if (isEngineError) {
+        return this.createTransitionReturn({ error: engineError })
+      }
+    }
+
     const session = this.session.current
 
     // descobrir o slug do receiving
     const receivingStepSlug = this.getReceivingStepSlug({ session })
     const receivingStepDefinition =
-      this.JSONConfig!.getStepDefinition(receivingStepSlug)
+      this.JSONConfig.getStepDefinition(receivingStepSlug)
+
     const isCustomStep = receivingStepDefinition?.type !== "form"
     const isFirstStep = !session
     const isAnAlreadyVisitedStep = Object.keys(session?.steps || []).includes(
@@ -233,7 +248,7 @@ class Engine {
 
     if (isLastStepOfFlow) {
       await this.session.completeExperience()
-      return this.createTransitionReturn({ returningStep: {} as IStepJSON })
+      return this.createTransitionReturn()
     }
 
     await this.session.setVisualizingStepSlug(returningStepDefinition.slug)

@@ -3,30 +3,41 @@ import { IEngineError } from "../interfaces/IEngine"
 const EngineErrorConst = (params: IEngineError) => params
 
 interface IErrorData {
-  id: string
-  description: string
+  message: string
 }
 
 export type ErrorSlug =
-  | "JSON_NOT_FOUND"
-  | "JSON_WITHOUT_DEFAULT_PATH"
-  | "JSON_WITHOUT_SPECIFIED_FLOW"
+  | "JSONNotFound"
+  | "JSONWithoutDefaultPath"
+  | "JSONWithoutSpecifiedFlow"
+  | "resolverMissing"
+  | "fieldValidation"
 
 type ErrorsConfigMapType = {
   [key in ErrorSlug]: IErrorData
 }
 
 export const ErrorsConfigs: ErrorsConfigMapType = {
-  JSON_NOT_FOUND: {
-    id: "JSONNotFound",
-    description: "",
+  "JSONNotFound": {
+    message: "",
   },
-  JSON_WITHOUT_DEFAULT_PATH: {
-    id: "JSONWithouDefaultPath",
-    description: "",
+  "JSONWithoutDefaultPath": {
+    message: "",
   },
-  JSON_WITHOUT_SPECIFIED_FLOW: {
-    id: "JSONWithoutSpecifiedFlow",
-    description: "",
+  "JSONWithoutSpecifiedFlow": {
+    message: "",
+  },
+  // Resolver errors
+  // ausente
+  // quebra no meio
+  // retornam algo invalido
+  "resolverMissing": {
+    message: "",
+  },
+  // Validation errors
+  // campo está invalido de acordo com o firebolt validator
+  // validação manual do decision callback
+  "fieldValidation": {
+    message: "",
   },
 }

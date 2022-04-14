@@ -1,24 +1,21 @@
-import { IEngineError } from "../interfaces/IEngine"
+import { IEngineError, IStepTransitionError } from "../interfaces/IEngine"
 import { ErrorsConfigs, ErrorSlug } from "../constants/errors"
+import { InvalidField } from "@iq-firebolt/validators"
+class EngineError implements IStepTransitionError {
+  public id: string
+  public detail: string
+  public message: string
+  public invalidFields?: InvalidField[]
 
-class EngineError {
-  private errorData: IEngineError
-  private _details: string
-  constructor(errorConstant: ErrorSlug, detail?: string) {
-    this.errorData = ErrorsConfigs[errorConstant]
-    this._details = detail || ""
-  }
-
-  get description() {
-    return this.errorData.description
-  }
-
-  get id() {
-    return this.errorData.id
-  }
-
-  get details() {
-    return this._details
+  constructor(
+    errorId: ErrorSlug,
+    detail = "",
+    { invalidFields }: { invalidFields?: InvalidField[] } = {}
+  ) {
+    this.detail = detail
+    this.id = errorId
+    this.message = ErrorsConfigs[errorId]?.message
+    this.invalidFields = invalidFields
   }
 }
 

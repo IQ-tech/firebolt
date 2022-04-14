@@ -45,16 +45,17 @@ export interface IEngineHooks {
 export interface IStepTransitionReturn {
   sessionId: string
   error: IStepTransitionError | null
-  step: IStepJSON
+  step?: IStepJSON
   capturedData: any // TODO
   experienceMetadata: IExperienceMetadata
   processedData: any
 }
 
 export interface IStepTransitionError {
-  slug: string
+  id: string
   message: string
-  invalidFields: InvalidField[]
+  detail: string
+  invalidFields?: InvalidField[]
 }
 
 // representa os metadados da experincia atual (guardada no storage) do usuário,
