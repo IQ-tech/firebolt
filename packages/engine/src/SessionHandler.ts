@@ -6,7 +6,7 @@ import {
   IFireboltSession,
   IStepSession,
 } from "./interfaces/IEngine"
-import JSONConfig from "./JSONConfig"
+import JSONConfig from "./classes/JSONConfig"
 
 class SessionHandler {
   private resolvers: IEngineResolvers

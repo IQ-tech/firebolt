@@ -9,7 +9,7 @@ import {
   twoStepsCompletedFlowMedium,
 } from "../mocks/sample-experience-session"
 import computeExperienceMetadata from "./computeExperienceMetadata"
-import JSONConfig from "../JSONConfig"
+import JSONConfig from "../classes/JSONConfig"
 import { IFireboltSession, IExperienceMetadata } from "../interfaces/IEngine"
 
 interface ISessionTestCase {

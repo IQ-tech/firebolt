@@ -1,23 +1,4 @@
-import { IEngineError } from "../interfaces/IEngine"
-
-const EngineErrorConst = (params: IEngineError) => params
-
-interface IErrorData {
-  message: string
-}
-
-export type ErrorSlug =
-  | "JSONNotFound"
-  | "JSONWithoutDefaultPath"
-  | "JSONWithoutSpecifiedFlow"
-  | "resolverMissing"
-  | "fieldValidation"
-
-type ErrorsConfigMapType = {
-  [key in ErrorSlug]: IErrorData
-}
-
-export const ErrorsConfigs: ErrorsConfigMapType = {
+export const ErrorsConfigs = {
   "JSONNotFound": {
     message: "",
   },
@@ -25,6 +6,9 @@ export const ErrorsConfigs: ErrorsConfigMapType = {
     message: "",
   },
   "JSONWithoutSpecifiedFlow": {
+    message: "",
+  },
+  "stepNotFound": {
     message: "",
   },
   // Resolver errors
@@ -38,6 +22,14 @@ export const ErrorsConfigs: ErrorsConfigMapType = {
   // campo está invalido de acordo com o firebolt validator
   // validação manual do decision callback
   "fieldValidation": {
+    message: "",
+  },
+  "blockProgressionDecision": {
+    "message": "",
+  },
+
+  // Generic error
+  "externalError": {
     message: "",
   },
 }

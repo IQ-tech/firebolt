@@ -7,7 +7,7 @@ import {
   IStepSession,
 } from "./interfaces/IEngine"
 import JSONSample from "./mocks/sample-experience"
-import JSONConfig from "./JSONConfig"
+import JSONConfig from "./classes/JSONConfig"
 import * as uuid from "uuid"
 import { oneStepCompletedFlowDefault } from "./mocks/sample-experience-session"
 jest.mock("uuid")

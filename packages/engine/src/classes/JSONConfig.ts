@@ -38,7 +38,7 @@ export default class JSONConfig {
   getStepDefinition(stepSlug: string) {
     const step = this.steps.find((step) => step.slug === stepSlug)
     if (!step) {
-      throw new Error("flow not found")
+      throw new Error("step not found")
     }
     return step
   }

@@ -5,7 +5,7 @@ import {
   IFireboltSession,
 } from "../interfaces/IEngine"
 
-import JSONConfig from "../JSONConfig"
+import JSONConfig from "../classes/JSONConfig"
 
 /**
  * Each step transition, this function computes the experience metadata sent to the consumer,

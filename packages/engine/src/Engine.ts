@@ -21,7 +21,6 @@ import EngineError from "./classes/EngineError"
 import computeExperienceMetadata from "./helpers/computeExperienceMetadata"
 import validateStep from "./helpers/validateStep"
 import getIsFieldsValidationNeeded from "./helpers/getIsFieldsValidationNeeded"
-import { tryCatch } from "ramda"
 
 class Engine {
   private experienceId: string
@@ -127,6 +126,12 @@ class Engine {
     })
   }
 
+  private errorHandler = (err): EngineError => {
+    return err instanceof EngineError
+      ? err
+      : new EngineError("externalError", err.stack)
+  }
+
   /**
    * lida com dois casos de transição de experiencia:
    * Iniciando uma experiência do zero (request sem session id)
@@ -136,18 +141,31 @@ class Engine {
   async start(
     payload?: IExperienceProceedPayload
   ): Promise<IStepTransitionReturn> {
+    let stepToReturn: IStepJSON | undefined
+
     try {
       await this.session.loadSessionFromStorage(payload?.sessionId)
-    } catch (err) {}
-    const session = this.session.current
-    const stepToReturn = session
-      ? this.JSONConfig?.getStepDefinition(
-          session.experienceState.visualizingStepSlug
-        )
-      : this.JSONConfig?.getFirstStepFromFlow("default")
+      const session = this.session.current
+      const visualizingStepSlug = session?.experienceState?.visualizingStepSlug
 
-    if (!stepToReturn) throw new EngineError("stepNotFound") // TODO: handle error
-    return await this.createTransitionReturn({ returningStep: stepToReturn })
+      stepToReturn = session
+        ? this.JSONConfig?.getStepDefinition(visualizingStepSlug)
+        : this.JSONConfig?.getFirstStepFromFlow("default")
+
+      if (!stepToReturn) {
+        throw new EngineError(
+          "stepNotFound",
+          `Step ${visualizingStepSlug} not found on JSON config`
+        )
+      }
+      return await this.createTransitionReturn({ returningStep: stepToReturn })
+    } catch (err) {
+      const formattedError = this.errorHandler(err)
+      return await this.createTransitionReturn({
+        error: formattedError,
+        returningStep: stepToReturn,
+      })
+    }
   }
 
   async proceed(
@@ -157,104 +175,109 @@ class Engine {
     /**
      * Todo
      * - process returning definition
-     * - errors + validation
-     * - validate payload format
-     * - decision callback
-     * - experience hooks
      * - webhook call
+     * - experience hooks
+     * - globals
      */
+
+    let receivingStepDefinition: IStepJSON | undefined
 
     try {
       await this.session.loadSessionFromStorage(payload?.sessionId)
       await this.loadJSONConfig()
-    } catch (engineError) {
-      const isEngineError = engineError instanceof EngineError
-      if (isEngineError) {
-        return this.createTransitionReturn({ error: engineError })
-      }
-    }
 
-    const session = this.session.current
+      const session = this.session.current
 
-    // descobrir o slug do receiving
-    const receivingStepSlug = this.getReceivingStepSlug({ session })
-    const receivingStepDefinition =
-      this.JSONConfig.getStepDefinition(receivingStepSlug)
+      const receivingStepSlug = this.getReceivingStepSlug({ session })
+      receivingStepDefinition =
+        this.JSONConfig.getStepDefinition(receivingStepSlug)
 
-    const isCustomStep = receivingStepDefinition?.type !== "form"
-    const isFirstStep = !session
-    const isAnAlreadyVisitedStep = Object.keys(session?.steps || []).includes(
-      receivingStepSlug
-    )
-    const isFieldsValidationNeeded = getIsFieldsValidationNeeded({
-      session,
-      payload,
-      receivingStepSlug,
-      isCustomStep,
-      isAnAlreadyVisitedStep,
-    })
-
-    const validation = isFieldsValidationNeeded
-      ? validateStep(payload?.fields, receivingStepDefinition)
-      : { isValid: true, invalidFields: [] }
-
-    const isStepFieldsValid =
-      (isFieldsValidationNeeded && validation.isValid) ||
-      !isFieldsValidationNeeded
-
-    if (!isStepFieldsValid) {
-      return await this.createTransitionReturn({
-        returningStep: receivingStepDefinition,
-        errors: validation,
-      })
-    }
-
-    // decision point
-    const decision = decisionCB
-      ? await this.useDecisionCallback(decisionCB, payload)
-      : ({} as IExperienceDecision)
-
-    const processedData = decision?.options?.processedData || {}
-
-    if (decision?.action === "blockProgression") {
-      return await this.createTransitionReturn({
-        returningStep: receivingStepDefinition,
-        errors: decision?.options?.errors,
-      })
-    }
-
-    if (isFirstStep && isStepFieldsValid) {
-      await this.session.createSession(
-        this.JSONConfig,
-        decision?.options?.newFlow || "default"
+      const isCustomStep = receivingStepDefinition?.type !== "form"
+      const isFirstStep = !session
+      const isAnAlreadyVisitedStep = Object.keys(session?.steps || []).includes(
+        receivingStepSlug
       )
+      const isFieldsValidationNeeded = getIsFieldsValidationNeeded({
+        session,
+        payload,
+        receivingStepSlug,
+        isCustomStep,
+        isAnAlreadyVisitedStep,
+      })
+
+      const validation = isFieldsValidationNeeded
+        ? validateStep(payload?.fields, receivingStepDefinition)
+        : { isValid: true, invalidFields: [] }
+
+      const isStepFieldsValid =
+        (isFieldsValidationNeeded && validation.isValid) ||
+        !isFieldsValidationNeeded
+
+      if (!isStepFieldsValid) {
+        throw new EngineError("fieldValidation", "JSON config validation", {
+          invalidFields: validation.invalidFields,
+        })
+      }
+
+      // decision point
+      const decision = decisionCB
+        ? await this.useDecisionCallback(decisionCB, payload)
+        : ({} as IExperienceDecision)
+
+      const processedData = decision?.options?.processedData || {}
+
+      if (decision?.action === "blockProgression") {
+        throw new EngineError(
+          "blockProgressionDecision",
+          decision?.options?.errors?.message ?? "Decision callback validation",
+          decision.options?.errors
+        )
+      }
+
+      if (isFirstStep && isStepFieldsValid) {
+        await this.session.createSession(
+          this.JSONConfig,
+          decision?.options?.newFlow || "default"
+        )
+      }
+
+      if (decision?.action === "changeFlow") {
+        const newFlow = decision?.options?.newFlow || ""
+        if (!newFlow) {
+          throw new EngineError(
+            "JSONWithoutSpecifiedFlow",
+            `Flow ${decision?.options?.newFlow} not found on JSON config.`
+          )
+        }
+        this.session.changeCurrentFlow(newFlow)
+      }
+
+      await this.session.addCompletedStep(receivingStepSlug, {
+        fields: payload.fields,
+      })
+
+      const returningStepDefinition = this.getReturningStepDefinition(
+        receivingStepSlug,
+        session
+      )
+      const isLastStepOfFlow = !returningStepDefinition
+
+      if (isLastStepOfFlow) {
+        await this.session.completeExperience()
+        return this.createTransitionReturn()
+      }
+
+      await this.session.setVisualizingStepSlug(returningStepDefinition.slug)
+      return await this.createTransitionReturn({
+        returningStep: returningStepDefinition,
+      })
+    } catch (err) {
+      const error = this.errorHandler(err)
+      return this.createTransitionReturn({
+        error: error,
+        returningStep: receivingStepDefinition,
+      })
     }
-
-    if (decision?.action === "changeFlow") {
-      const newFlow = decision?.options?.newFlow || ""
-      if (!newFlow) throw new Error("flow not found") //retornar erro de flow inválido (ou se o flow não existe no json)
-      this.session.changeCurrentFlow(newFlow)
-    }
-
-    await this.session.addCompletedStep(receivingStepSlug, {
-      fields: payload.fields,
-    })
-
-    const returningStepDefinition = this.getReturningStepDefinition(
-      receivingStepSlug,
-      session
-    )
-    const isLastStepOfFlow = !returningStepDefinition
-
-    if (isLastStepOfFlow) {
-      await this.session.completeExperience()
-      return this.createTransitionReturn()
-    }
-
-    await this.session.setVisualizingStepSlug(returningStepDefinition.slug)
-    return await this.createTransitionReturn({
-      returningStep: returningStepDefinition,
-    })
   }
 
   async goBackHandler(
