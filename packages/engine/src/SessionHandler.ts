@@ -42,14 +42,14 @@ class SessionHandler {
     const currentSession = (await this.resolvers.getSession(
       this.current?.sessionId ?? this.sessionId
     )) as IFireboltSession
-    // add error handling
     this.current = currentSession
   }
 
   // return session id on create session
   async createSession(jsonConfig: JSONConfig, flow = "default") {
     const defaultFlow = jsonConfig.getFlow("default")
-    if (!defaultFlow) throw new Error("Flow not found") // TODO: Handle Error
+    if (!defaultFlow) {
+    }
 
     const firstStepSlug = defaultFlow?.stepsSlugs[0]
     const newSessionId = v4()

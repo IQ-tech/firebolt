@@ -18,12 +18,12 @@ export default function computeExperienceMetadata(
   jsonConfig: JSONConfig,
   session?: IFireboltSession
 ) {
-  const currentFlow = session?.experienceState.currentFlow ?? "default"
+  const currentFlow = session?.experienceState?.currentFlow ?? "default"
   const flowSteps = jsonConfig.getFlow(currentFlow).stepsSlugs
-  if (!flowSteps) throw new Error("Flow not found") // TODO: ERRO - retornar erro flow não encontrado
+
   const lastStepSlug = flowSteps?.[flowSteps?.length - 1]
   const currentStepIndex = session
-    ? flowSteps.indexOf(session?.experienceState.visualizingStepSlug)
+    ? flowSteps.indexOf(session?.experienceState?.visualizingStepSlug)
     : 0
   const currentPosition = currentStepIndex + 1
 

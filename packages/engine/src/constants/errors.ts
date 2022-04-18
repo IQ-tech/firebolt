@@ -1,35 +1,43 @@
 export const ErrorsConfigs = {
+  /** JSON Errors */
   "JSONNotFound": {
-    message: "",
+    message: "JSON config file could not found",
   },
-  "JSONWithoutDefaultPath": {
-    message: "",
+  "JSONWithoutDefaultFlow": {
+    message: "JSON config file does not provide a default flow",
   },
   "JSONWithoutSpecifiedFlow": {
-    message: "",
+    message: "JSON config file does not provide a specified flow",
+  },
+  "noWayToFindJSONConfig": {
+    message:
+      "JSON config file or JSON config resolver were not provided to Firebolt Engine instance",
   },
   "stepNotFound": {
-    message: "",
+    message: "step could not be found on the JSON config file",
   },
-  // Resolver errors
-  // ausente
-  // quebra no meio
-  // retornam algo invalido
+  /** Resolver errors */
   "resolverMissing": {
-    message: "",
+    message: "Required engine resolver is missing on instance",
   },
-  // Validation errors
-  // campo está invalido de acordo com o firebolt validator
-  // validação manual do decision callback
+  "resolverReturnIsInvalid": {
+    message:
+      "Data returned by resolver function is unexpected or nonexistent (bad implementation)",
+  },
+  /** Addons errors */
+  "invalidAddon": {
+    message: "Provided addon does not have required structure",
+  },
+  /** Validation Errors */
   "fieldValidation": {
-    message: "",
+    message: "Field from form step is invalid",
   },
   "blockProgressionDecision": {
-    "message": "",
+    message: "Step transition has been denied due to some validation",
   },
-
-  // Generic error
+  /** Generic error */
   "externalError": {
-    message: "",
+    message:
+      "Error ocurred in external integrations (example: inside resolver function)",
   },
 }

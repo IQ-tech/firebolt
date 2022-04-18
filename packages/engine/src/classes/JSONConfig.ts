@@ -1,4 +1,5 @@
 import { IExperienceJSONSchema } from "../types"
+import EngineError from "./EngineError"
 
 export default class JSONConfig {
   private JSONConfig: IExperienceJSONSchema
@@ -31,14 +32,14 @@ export default class JSONConfig {
   getFlow(flowSlug: string = "default") {
     const flow = this.flows.find((flow) => flow.slug === flowSlug)
     if (!flow) {
-      throw new Error("flow not found")
+      throw new EngineError("JSONWithoutSpecifiedFlow")
     }
     return flow
   }
   getStepDefinition(stepSlug: string) {
     const step = this.steps.find((step) => step.slug === stepSlug)
     if (!step) {
-      throw new Error("step not found")
+      throw new EngineError("stepNotFound")
     }
     return step
   }
