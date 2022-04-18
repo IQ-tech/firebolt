@@ -1,13 +1,28 @@
 import Engine from "./Engine"
 import { IFireboltSession } from "./interfaces/IEngine"
+import { IExperienceJSONSchema } from "./mocks/sample-experience"
 
 describe("should identify JSON Errors", () => {
+  test("should return an error when no way to get JSON Config is provided", async () => {
+    const engine = new Engine({
+      experienceId: "asd",
+      resolvers: {
+        getSession: async () => ({} as IFireboltSession),
+        setSession: async () => {},
+      },
+    })
+
+    const proceedingStep = await engine.start()
+    expect(proceedingStep?.error?.id).toBe("noWayToFindJSONConfig")
+  })
+
   test("should return an error when JSON config is not found", async () => {
     const engine = new Engine({
       experienceId: "asd",
       resolvers: {
         getSession: async () => ({} as IFireboltSession),
         setSession: async () => {},
+        getExperienceJSON: async () => (null as unknown as IExperienceJSONSchema)
       },
     })
 

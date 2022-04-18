@@ -47,7 +47,7 @@ export interface IStepTransitionReturn {
   error: IStepTransitionError | null
   step?: IStepJSON
   capturedData: any // TODO
-  experienceMetadata: IExperienceMetadata
+  experienceMetadata: IExperienceMetadata | null
   processedData: any
 }
 

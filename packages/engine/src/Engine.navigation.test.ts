@@ -314,7 +314,7 @@ describe("Engine.proceed handling", () => {
 
     /* expect(proceed.error).toEqual(mockedErrors) */ //TODO - add errors
     expect(proceed?.step?.slug).toBe("personal_data")
-    expect(proceed?.experienceMetadata.currentPosition).toBe(1)
+    expect(proceed?.experienceMetadata?.currentPosition).toBe(1)
   })
 
   test("should handle with proceed decision", async () => {

@@ -25,7 +25,7 @@ import errorHandler from "./helpers/errorHandler"
 
 class Engine {
   private experienceId: string
-  private preDefinedJSONConfig: boolean
+  private preDefinedJSONConfig?: IExperienceJSONSchema
   private resolvers: IEngineResolvers
   private session: SessionHandler
   private JSONConfig?: JSONConfig
@@ -38,18 +38,22 @@ class Engine {
     this.experienceId = experienceId
     this.resolvers = resolvers
     this.session = new SessionHandler(this.resolvers)
-
-    this.preDefinedJSONConfig = !!experienceJSONConfig
+    this.preDefinedJSONConfig = experienceJSONConfig
   }
 
   private async loadJSONConfig() {
-    const hasPredefinedJSONConfig = !!this.JSONConfig
+    const hasPredefinedJSONConfig = !!this.preDefinedJSONConfig
     const hasJSONConfigResolver = !!this.resolvers.getExperienceJSON
+
     if (!hasPredefinedJSONConfig && !hasJSONConfigResolver) {
       throw new EngineError("noWayToFindJSONConfig")
     }
-    if (!this.preDefinedJSONConfig && !!this.resolvers.getExperienceJSON) {
+
+    if (!!this.preDefinedJSONConfig) {
+      this.JSONConfig = new JSONConfig(this.preDefinedJSONConfig)
+    } else if (!!this.resolvers.getExperienceJSON) {
       const newJSON = await this.resolvers.getExperienceJSON(this.experienceId)
+      const isJSONValid = true
       if (!newJSON) {
         throw new EngineError("JSONNotFound")
       }
@@ -93,10 +97,10 @@ class Engine {
     processedData?: any
   } = {}): Promise<IStepTransitionReturn> {
     const session = this.session.current
-    const computedMetadata = computeExperienceMetadata(
-      this.JSONConfig as JSONConfig,
+    const computedMetadata = this.JSONConfig ? computeExperienceMetadata(
+      this.JSONConfig,
       session
-    )
+    ) : null
     // apply plugins
     // apply autofill
     return {
