@@ -7,6 +7,7 @@ import {
   IStepSession,
 } from "./interfaces/IEngine"
 import JSONConfig from "./classes/JSONConfig"
+import EngineError from "./classes/EngineError"
 
 class SessionHandler {
   private resolvers: IEngineResolvers
@@ -21,7 +22,28 @@ class SessionHandler {
     const session = (await this.resolvers.getSession(
       sessionId
     )) as IFireboltSession
+
+    if (session && !this.isValidSession(session)) {
+      console.log("getSessionReturn: ", session)
+      throw new EngineError(
+        "resolverReturnIsInvalid",
+        `Invalid session value: ${JSON.stringify(session)}`
+      )
+    }
+
     this.current = session
+  }
+
+  private isValidSession(session: any): session is IFireboltSession {
+    return (
+      "sessionId" in session &&
+      "experienceState" in session &&
+      "lastCompletedStepSlug" in session.experienceState &&
+      "visualizingStepSlug" in session.experienceState &&
+      "currentFlow" in session.experienceState &&
+      "completedExperience" in session.experienceState &&
+      "steps" in session
+    )
   }
 
   private setSessionId(sessionId: string) {

@@ -41,7 +41,7 @@ export default function computeExperienceMetadata(
     lastStepSlug,
     currentPosition,
     stepsList,
-    completedExperience: session?.experienceState.completedExperience || false,
+    completedExperience: session?.experienceState?.completedExperience || false,
   }
 
   return metadata

@@ -13,8 +13,14 @@ export const ErrorsConfigs = {
     message:
       "JSON config file or JSON config resolver were not provided to Firebolt Engine instance",
   },
+  "stepListNotProvided": {
+    message: "JSON config file does not provided a step list",
+  },
+  "flowWithoutSteps": {
+    message: "flow from JSON Config does not have steps",
+  },
   "stepNotFound": {
-    message: "step could not be found on the JSON config file",
+    message: "Step could not be found on the JSON config file",
   },
   /** Resolver errors */
   "resolverMissing": {

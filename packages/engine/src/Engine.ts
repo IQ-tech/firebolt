@@ -41,6 +41,12 @@ class Engine {
     this.preDefinedJSONConfig = experienceJSONConfig
   }
 
+  private async setupEnvironment(sessionId: string | undefined) {
+    this.checkResolvers()
+    await this.loadJSONConfig()
+    await this.session.loadSessionFromStorage(sessionId)
+  }
+
   private async loadJSONConfig() {
     const hasPredefinedJSONConfig = !!this.preDefinedJSONConfig
     const hasJSONConfigResolver = !!this.resolvers.getExperienceJSON
@@ -58,6 +64,21 @@ class Engine {
         throw new EngineError("JSONNotFound")
       }
       this.JSONConfig = new JSONConfig(newJSON)
+    }
+  }
+
+  private checkResolvers() {
+    if (!this.resolvers.hasOwnProperty("getSession")) {
+      throw new EngineError(
+        "resolverMissing",
+        "getSession resolver is missing."
+      )
+    }
+    if (!this.resolvers.hasOwnProperty("setSession")) {
+      throw new EngineError(
+        "resolverMissing",
+        "setSession resolver is missing."
+      )
     }
   }
 
@@ -97,10 +118,9 @@ class Engine {
     processedData?: any
   } = {}): Promise<IStepTransitionReturn> {
     const session = this.session.current
-    const computedMetadata = this.JSONConfig ? computeExperienceMetadata(
-      this.JSONConfig,
-      session
-    ) : null
+    const computedMetadata = this.JSONConfig
+      ? computeExperienceMetadata(this.JSONConfig, session)
+      : null
     // apply plugins
     // apply autofill
     return {
@@ -143,8 +163,7 @@ class Engine {
     let stepToReturn: IStepJSON | undefined
 
     try {
-      await this.loadJSONConfig()
-      await this.session.loadSessionFromStorage(payload?.sessionId)
+      await this.setupEnvironment(payload?.sessionId)
 
       const session = this.session.current
       const visualizingStepSlug = session?.experienceState?.visualizingStepSlug
@@ -185,8 +204,7 @@ class Engine {
     let receivingStepDefinition: IStepJSON | undefined
 
     try {
-      await this.session.loadSessionFromStorage(payload?.sessionId)
-      await this.loadJSONConfig()
+      await this.setupEnvironment(payload?.sessionId)
 
       const session = this.session.current
 
@@ -288,8 +306,7 @@ class Engine {
   ): Promise<IStepTransitionReturn> {
     let returningStep
     try {
-      await this.session.loadSessionFromStorage(payload?.sessionId)
-      await this.loadJSONConfig()
+      await this.setupEnvironment(payload?.sessionId)
 
       if (!this.session.current) {
         returningStep = this.JSONConfig!.getFirstStepFromFlow()

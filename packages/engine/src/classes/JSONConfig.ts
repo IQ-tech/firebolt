@@ -5,6 +5,7 @@ export default class JSONConfig {
   private JSONConfig: IExperienceJSONSchema
 
   constructor(JSONExperienceDefinition: IExperienceJSONSchema) {
+    this.validateJSON(JSONExperienceDefinition)
     this.JSONConfig = JSONExperienceDefinition
   }
 
@@ -22,6 +23,24 @@ export default class JSONConfig {
 
   get raw() {
     return this.JSONConfig
+  }
+
+  private validateJSON(JSONExperienceDefinition: IExperienceJSONSchema) {
+    //
+    const defaultFlow = JSONExperienceDefinition.flows.find(
+      (x) => x.slug === "default"
+    )
+    if (!defaultFlow) {
+      throw new EngineError("JSONWithoutDefaultFlow")
+    }
+
+    if (!!defaultFlow && !defaultFlow.stepsSlugs.length) {
+      throw new EngineError("flowWithoutSteps")
+    }
+
+    if (!JSONExperienceDefinition?.steps?.length) {
+      throw new EngineError("stepListNotProvided")
+    }
   }
 
   getFirstStepFromFlow(flowSlug = "default") {
