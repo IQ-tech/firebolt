@@ -5,13 +5,13 @@ import {
   IExperienceState,
   IFireboltSession,
   IStepSession,
-} from "./interfaces/IEngine"
-import JSONConfig from "./classes/JSONConfig"
-import EngineError from "./classes/EngineError"
+} from "../../interfaces/IEngine"
+import JSONConfig from "../../classes/JSONConfig"
+import EngineError from "../../classes/EngineError"
 
 class SessionHandler {
   private resolvers: IEngineResolvers
-  private sessionId?: string // TODO: check if we need it
+  private sessionId?: string
   private _current?: IFireboltSession
 
   constructor(resolvers: IEngineResolvers) {

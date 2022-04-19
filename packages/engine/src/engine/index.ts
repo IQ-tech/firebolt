@@ -3,33 +3,32 @@ import {
   ICreateEngineOptions,
   IEngineResolvers,
   IStepTransitionReturn,
-  IFireboltSession,
   IExperienceProceedPayload,
   IExperienceDecisionCallbackFunction,
   IExperienceDecision,
   IExperienceDecisionAction,
   IExperienceDecisionOptions,
-} from "./interfaces/IEngine"
-import { IExperienceJSONSchema, IStepJSON } from "./types"
+} from "../interfaces/IEngine"
+import { IStepJSON } from "../types"
+
+import JSONConfig from "../classes/JSONConfig"
+import EngineError from "../classes/EngineError"
 
 // handlers
-import SessionHandler from "./SessionHandler"
-import JSONConfig from "./classes/JSONConfig"
-import EngineError from "./classes/EngineError"
+import SessionHandler from "./handlers/SessionHandler"
+import JSONHandler from "./handlers/JSONHandler"
 
 // helpers
-import computeExperienceMetadata from "./helpers/computeExperienceMetadata"
-import validateStep from "./helpers/validateStep"
-import getIsFieldsValidationNeeded from "./helpers/getIsFieldsValidationNeeded"
-import errorHandler from "./helpers/errorHandler"
-import validateJSON from "./helpers/validateJSON"
+import computeExperienceMetadata from "../helpers/computeExperienceMetadata"
+import validateStep from "../helpers/validateStep"
+import getIsFieldsValidationNeeded from "../helpers/getIsFieldsValidationNeeded"
+import errorHandler from "../helpers/errorHandler"
 
 class Engine {
   private experienceId: string
-  private preDefinedJSONConfig?: IExperienceJSONSchema
   private resolvers: IEngineResolvers
   private session: SessionHandler
-  private JSONConfig?: JSONConfig
+  private json: JSONHandler
 
   constructor({
     experienceId,
@@ -39,55 +38,17 @@ class Engine {
     this.experienceId = experienceId
     this.resolvers = resolvers
     this.session = new SessionHandler(this.resolvers)
-    this.preDefinedJSONConfig = experienceJSONConfig
+    this.json = new JSONHandler({
+      resolvers,
+      experienceJSONConfig,
+      experienceId,
+    })
   }
 
   private async setupEnvironment(sessionId: string | undefined) {
-    await this.loadJSONConfig()
-    if (!!this.JSONConfig) {
-      validateJSON(this.JSONConfig.raw)
-    }
+    await this.json.loadJSONConfig()
     this.checkResolvers()
     await this.session.loadSessionFromStorage(sessionId)
-  }
-
-  private getFlow(flowSlug: string) {
-    const flow = this.JSONConfig!.getFlow(flowSlug)
-    if (!flow) {
-      throw new EngineError(
-        "JSONWithoutSpecifiedFlow",
-        `Decision callback action error. The new flow: '${flowSlug}' does not exist on JSON config.`
-      )
-    }
-    return flow
-  }
-
-  private getStepDefinition(stepSlug: string) {
-    const stepDefinition = this.JSONConfig?.getStepDefinition(stepSlug)
-    if (!stepDefinition) {
-      throw new EngineError("stepNotFound")
-    }
-    return stepDefinition
-  }
-
-  private async loadJSONConfig() {
-    const hasPredefinedJSONConfig = !!this.preDefinedJSONConfig
-    const hasJSONConfigResolver = !!this.resolvers.getExperienceJSON
-
-    if (!hasPredefinedJSONConfig && !hasJSONConfigResolver) {
-      throw new EngineError("noWayToFindJSONConfig")
-    }
-
-    if (!!this.preDefinedJSONConfig) {
-      this.JSONConfig = new JSONConfig(this.preDefinedJSONConfig)
-    } else if (!!this.resolvers.getExperienceJSON) {
-      const newJSON = await this.resolvers.getExperienceJSON(this.experienceId)
-      const isJSONValid = true
-      if (!newJSON) {
-        throw new EngineError("JSONNotFound")
-      }
-      this.JSONConfig = new JSONConfig(newJSON)
-    }
   }
 
   private checkResolvers() {
@@ -105,35 +66,6 @@ class Engine {
     }
   }
 
-  private getReceivingStepSlug({
-    session,
-  }: {
-    session: IFireboltSession | undefined
-  }): string {
-    const receivingStepSlug = session
-      ? session.experienceState.visualizingStepSlug
-      : this.JSONConfig!.getFirstStepFromFlow("default")?.slug
-
-    if (!receivingStepSlug) {
-      throw new EngineError("stepNotFound")
-    }
-    return receivingStepSlug
-  }
-
-  // dado um slug de step, a função deve retornar o próximo
-  private getReturningStepDefinition(
-    stepSlug: string,
-    session?: IFireboltSession
-  ) {
-    const receivingFlowSlug = session?.experienceState?.currentFlow || "default"
-    const receivingFlow = this.getFlow(receivingFlowSlug)
-    const receivingStepIndex = receivingFlow.stepsSlugs.indexOf(stepSlug)
-    const returningStepSlug = receivingFlow?.stepsSlugs[receivingStepIndex + 1]
-    if (returningStepSlug) {
-      return this.getStepDefinition(returningStepSlug)
-    }
-  }
-
   private async createTransitionReturn({
     processedData = {},
     returningStep,
@@ -144,8 +76,8 @@ class Engine {
     processedData?: any
   } = {}): Promise<IStepTransitionReturn> {
     const session = this.session.current
-    const computedMetadata = this.JSONConfig
-      ? computeExperienceMetadata(this.JSONConfig, session)
+    const computedMetadata = this.json.config
+      ? computeExperienceMetadata(this.json.config, session)
       : null
     // apply plugins
     // apply autofill
@@ -194,8 +126,8 @@ class Engine {
       const visualizingStepSlug = session?.experienceState?.visualizingStepSlug
 
       stepToReturn = session
-        ? this.getStepDefinition(visualizingStepSlug)
-        : this.JSONConfig?.getFirstStepFromFlow("default")
+        ? this.json.getStepDefinition(visualizingStepSlug)
+        : this.json.config?.getFirstStepFromFlow("default")
 
       if (!stepToReturn) {
         throw new EngineError(
@@ -233,8 +165,8 @@ class Engine {
 
       const session = this.session.current
 
-      const receivingStepSlug = this.getReceivingStepSlug({ session })
-      receivingStepDefinition = this.getStepDefinition(receivingStepSlug)
+      const receivingStepSlug = this.json.getReceivingStepSlug({ session })
+      receivingStepDefinition = this.json.getStepDefinition(receivingStepSlug)
 
       const isCustomStep = receivingStepDefinition?.type !== "form"
       const isFirstStep = !session
@@ -279,7 +211,7 @@ class Engine {
       }
 
       if (isFirstStep && isStepFieldsValid) {
-        const JSONConfig = this.JSONConfig as JSONConfig
+        const JSONConfig = this.json.config as JSONConfig
         await this.session.createSession(
           JSONConfig,
           decision?.options?.newFlow || "default"
@@ -288,7 +220,7 @@ class Engine {
 
       if (decision?.action === "changeFlow") {
         const newFlow = decision?.options?.newFlow || ""
-        this.getFlow(newFlow)
+        this.json.getFlow(newFlow)
         this.session.changeCurrentFlow(newFlow)
       }
 
@@ -296,7 +228,7 @@ class Engine {
         fields: payload.fields,
       })
 
-      const returningStepDefinition = this.getReturningStepDefinition(
+      const returningStepDefinition = this.json.getReturningStepDefinition(
         receivingStepSlug,
         session
       )
@@ -328,7 +260,7 @@ class Engine {
       await this.setupEnvironment(payload?.sessionId)
 
       if (!this.session.current) {
-        returningStep = this.JSONConfig!.getFirstStepFromFlow()
+        returningStep = this.json.config!.getFirstStepFromFlow()
         return this.createTransitionReturn({
           returningStep,
         })
@@ -336,18 +268,18 @@ class Engine {
 
       const currentState = this.session.current.experienceState
       const visualizingStepSlug = currentState.visualizingStepSlug
-      const currentFlow = this.getFlow(currentState.currentFlow)
+      const currentFlow = this.json.getFlow(currentState.currentFlow)
       const visualizingStepIndex =
         currentFlow.stepsSlugs.indexOf(visualizingStepSlug)
       const previousStepSlug = currentFlow.stepsSlugs[visualizingStepIndex - 1]
       const hasPreviousStep = !!previousStepSlug
 
       if (hasPreviousStep) {
-        returningStep = this.getStepDefinition(previousStepSlug)
+        returningStep = this.json.getStepDefinition(previousStepSlug)
         await this.session.setVisualizingStepSlug(previousStepSlug)
         return this.createTransitionReturn({ returningStep })
       } else {
-        const returningStep = this.getStepDefinition(visualizingStepSlug)
+        const returningStep = this.json.getStepDefinition(visualizingStepSlug)
         return this.createTransitionReturn({
           returningStep,
         })
@@ -362,7 +294,7 @@ class Engine {
   }
 
   async debugHandler(stepSlug: string): Promise<IStepTransitionReturn> {
-    const returningStep = this.getStepDefinition(stepSlug)
+    const returningStep = this.json.getStepDefinition(stepSlug)
     return this.createTransitionReturn({ returningStep })
   }
 

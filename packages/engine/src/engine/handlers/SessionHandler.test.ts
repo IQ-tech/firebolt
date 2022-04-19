@@ -1,15 +1,15 @@
 import faker from "faker"
 import SessionHandler from "./SessionHandler"
-import { IExperienceJSONSchema } from "./types"
+import { IExperienceJSONSchema } from "../../types"
 import {
   IEngineResolvers,
   IFireboltSession,
   IStepSession,
-} from "./interfaces/IEngine"
-import JSONSample from "./mocks/sample-experience"
-import JSONConfig from "./classes/JSONConfig"
+} from "../../interfaces/IEngine"
+import JSONSample from "../../mocks/sample-experience"
+import JSONConfig from "../../classes/JSONConfig"
 import * as uuid from "uuid"
-import { oneStepCompletedFlowDefault } from "./mocks/sample-experience-session"
+import { oneStepCompletedFlowDefault } from "../../mocks/sample-experience-session"
 jest.mock("uuid")
 
 const localStorage = global.localStorage

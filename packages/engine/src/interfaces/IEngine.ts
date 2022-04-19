@@ -8,6 +8,7 @@ export interface ICreateEngineOptions {
   resolvers: IEngineResolvers
   hooks?: IEngineHooks
   addons?: IAddonsConfig
+  debug?: boolean
 }
 
 // objeto que representa as opções de addons, futuramente receber validadores customizados por aqui

@@ -1,20 +1,20 @@
 import faker from "faker"
-import Engine from "./Engine"
-import * as validation from "./helpers/validateStep"
+import Engine from "./index"
+import * as validation from "../helpers/validateStep"
 
-import { IExperienceJSONSchema, IStepFormPayload } from "./types"
+import { IExperienceJSONSchema, IStepFormPayload } from "../types"
 import {
   IEngineResolvers,
   IExperienceDecisionCallbackFunction,
   IExperienceProceedPayload,
   IFireboltSession,
-} from "./interfaces/IEngine"
+} from "../interfaces/IEngine"
 
-import JSONSample from "./mocks/sample-experience"
+import JSONSample from "../mocks/sample-experience"
 import {
   oneStepCompletedFlowDefault,
   twoStepsCompletedFlowDefault,
-} from "./mocks/sample-experience-session"
+} from "../mocks/sample-experience-session"
 
 //#region MOCKS
 const localStorage = global.localStorage
