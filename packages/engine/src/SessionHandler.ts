@@ -24,7 +24,6 @@ class SessionHandler {
     )) as IFireboltSession
 
     if (session && !this.isValidSession(session)) {
-      console.log("getSessionReturn: ", session)
       throw new EngineError(
         "resolverReturnIsInvalid",
         `Invalid session value: ${JSON.stringify(session)}`
@@ -70,28 +69,27 @@ class SessionHandler {
   // return session id on create session
   async createSession(jsonConfig: JSONConfig, flow = "default") {
     const defaultFlow = jsonConfig.getFlow("default")
-    if (!defaultFlow) {
+    if (defaultFlow) {
+      const firstStepSlug = defaultFlow?.stepsSlugs[0]
+      const newSessionId = v4()
+      this.setSessionId(newSessionId)
+
+      const initialState: IExperienceState = {
+        currentFlow: flow,
+        visualizingStepSlug: firstStepSlug,
+        lastCompletedStepSlug: firstStepSlug,
+        completedExperience: false,
+      }
+
+      const initialSession = {
+        sessionId: newSessionId,
+        experienceState: initialState,
+        experienceMetadata: {} as IExperienceMetadata,
+        steps: {},
+      }
+
+      await this.updateSession(initialSession)
     }
-
-    const firstStepSlug = defaultFlow?.stepsSlugs[0]
-    const newSessionId = v4()
-    this.setSessionId(newSessionId)
-
-    const initialState: IExperienceState = {
-      currentFlow: flow,
-      visualizingStepSlug: firstStepSlug,
-      lastCompletedStepSlug: firstStepSlug,
-      completedExperience: false,
-    }
-
-    const initialSession = {
-      sessionId: newSessionId,
-      experienceState: initialState,
-      experienceMetadata: {} as IExperienceMetadata,
-      steps: {},
-    }
-
-    await this.updateSession(initialSession)
   }
 
   async changeCurrentFlow(flowSlug: string) {

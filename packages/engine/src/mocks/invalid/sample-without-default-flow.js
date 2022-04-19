@@ -6,6 +6,7 @@ const sampleExperience = require("../sample-experience")
 /** @type {IExperienceJSONSchema} */
 const sampleWithoutDefaultFlow = {
   ...sampleExperience,
+  "name": "flow-without-default-flow",
   "flows": [
     {
       "slug": "medium",

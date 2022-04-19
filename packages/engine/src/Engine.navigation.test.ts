@@ -16,6 +16,7 @@ import {
   twoStepsCompletedFlowDefault,
 } from "./mocks/sample-experience-session"
 
+//#region MOCKS
 const localStorage = global.localStorage
 const mockedGetFormJSONSchema = jest.fn(
   async () => ({} as IExperienceJSONSchema)
@@ -54,6 +55,7 @@ const getStepper = () => {
     resolvers: getResolvers(),
   })
 }
+//#endregion
 
 describe("Engine.start handling", () => {
   beforeEach(() => {
@@ -102,7 +104,6 @@ describe("Engine.proceed handling", () => {
       fields: firstStepField,
     }
     const proceed = await fireboltStepper.proceed(payload)
-
     expect(proceed).toHaveProperty("error")
     expect(proceed?.error?.invalidFields?.length).not.toBe(0)
     expect(proceed?.error?.id).toBe("fieldValidation")
@@ -312,7 +313,7 @@ describe("Engine.proceed handling", () => {
 
     const proceed = await fireboltStepper.proceed(payload, callbackFunction)
 
-    /* expect(proceed.error).toEqual(mockedErrors) */ //TODO - add errors
+    expect(proceed?.error?.id).toBe("blockProgressionDecision")
     expect(proceed?.step?.slug).toBe("personal_data")
     expect(proceed?.experienceMetadata?.currentPosition).toBe(1)
   })

@@ -22,6 +22,7 @@ import computeExperienceMetadata from "./helpers/computeExperienceMetadata"
 import validateStep from "./helpers/validateStep"
 import getIsFieldsValidationNeeded from "./helpers/getIsFieldsValidationNeeded"
 import errorHandler from "./helpers/errorHandler"
+import validateJSON from "./helpers/validateJSON"
 
 class Engine {
   private experienceId: string
@@ -42,9 +43,31 @@ class Engine {
   }
 
   private async setupEnvironment(sessionId: string | undefined) {
-    this.checkResolvers()
     await this.loadJSONConfig()
+    if (!!this.JSONConfig) {
+      validateJSON(this.JSONConfig.raw)
+    }
+    this.checkResolvers()
     await this.session.loadSessionFromStorage(sessionId)
+  }
+
+  private getFlow(flowSlug: string) {
+    const flow = this.JSONConfig!.getFlow(flowSlug)
+    if (!flow) {
+      throw new EngineError(
+        "JSONWithoutSpecifiedFlow",
+        `Decision callback action error. The new flow: '${flowSlug}' does not exist on JSON config.`
+      )
+    }
+    return flow
+  }
+
+  private getStepDefinition(stepSlug: string) {
+    const stepDefinition = this.JSONConfig?.getStepDefinition(stepSlug)
+    if (!stepDefinition) {
+      throw new EngineError("stepNotFound")
+    }
+    return stepDefinition
   }
 
   private async loadJSONConfig() {
@@ -86,11 +109,14 @@ class Engine {
     session,
   }: {
     session: IFireboltSession | undefined
-  }) {
+  }): string {
     const receivingStepSlug = session
       ? session.experienceState.visualizingStepSlug
-      : this.JSONConfig!.getFirstStepFromFlow("default").slug
+      : this.JSONConfig!.getFirstStepFromFlow("default")?.slug
 
+    if (!receivingStepSlug) {
+      throw new EngineError("stepNotFound")
+    }
     return receivingStepSlug
   }
 
@@ -100,11 +126,11 @@ class Engine {
     session?: IFireboltSession
   ) {
     const receivingFlowSlug = session?.experienceState?.currentFlow || "default"
-    const receivingFlow = this.JSONConfig!.getFlow(receivingFlowSlug)
+    const receivingFlow = this.getFlow(receivingFlowSlug)
     const receivingStepIndex = receivingFlow.stepsSlugs.indexOf(stepSlug)
     const returningStepSlug = receivingFlow?.stepsSlugs[receivingStepIndex + 1]
     if (returningStepSlug) {
-      return this.JSONConfig?.getStepDefinition(returningStepSlug)
+      return this.getStepDefinition(returningStepSlug)
     }
   }
 
@@ -161,7 +187,6 @@ class Engine {
     payload?: IExperienceProceedPayload
   ): Promise<IStepTransitionReturn> {
     let stepToReturn: IStepJSON | undefined
-
     try {
       await this.setupEnvironment(payload?.sessionId)
 
@@ -169,7 +194,7 @@ class Engine {
       const visualizingStepSlug = session?.experienceState?.visualizingStepSlug
 
       stepToReturn = session
-        ? this.JSONConfig?.getStepDefinition(visualizingStepSlug)
+        ? this.getStepDefinition(visualizingStepSlug)
         : this.JSONConfig?.getFirstStepFromFlow("default")
 
       if (!stepToReturn) {
@@ -209,8 +234,7 @@ class Engine {
       const session = this.session.current
 
       const receivingStepSlug = this.getReceivingStepSlug({ session })
-      const JSONConfig = this.JSONConfig as JSONConfig
-      receivingStepDefinition = JSONConfig.getStepDefinition(receivingStepSlug)
+      receivingStepDefinition = this.getStepDefinition(receivingStepSlug)
 
       const isCustomStep = receivingStepDefinition?.type !== "form"
       const isFirstStep = !session
@@ -264,12 +288,7 @@ class Engine {
 
       if (decision?.action === "changeFlow") {
         const newFlow = decision?.options?.newFlow || ""
-        if (!newFlow) {
-          throw new EngineError(
-            "JSONWithoutSpecifiedFlow",
-            `Decision callback action error. The new flow: '${decision?.options?.newFlow}' does not exist on JSON config.`
-          )
-        }
+        this.getFlow(newFlow)
         this.session.changeCurrentFlow(newFlow)
       }
 
@@ -317,19 +336,18 @@ class Engine {
 
       const currentState = this.session.current.experienceState
       const visualizingStepSlug = currentState.visualizingStepSlug
-      const currentFlow = this.JSONConfig!.getFlow(currentState.currentFlow)
+      const currentFlow = this.getFlow(currentState.currentFlow)
       const visualizingStepIndex =
         currentFlow.stepsSlugs.indexOf(visualizingStepSlug)
       const previousStepSlug = currentFlow.stepsSlugs[visualizingStepIndex - 1]
       const hasPreviousStep = !!previousStepSlug
 
       if (hasPreviousStep) {
-        returningStep = this.JSONConfig!.getStepDefinition(previousStepSlug)
+        returningStep = this.getStepDefinition(previousStepSlug)
         await this.session.setVisualizingStepSlug(previousStepSlug)
         return this.createTransitionReturn({ returningStep })
       } else {
-        const returningStep =
-          this.JSONConfig!.getStepDefinition(visualizingStepSlug)
+        const returningStep = this.getStepDefinition(visualizingStepSlug)
         return this.createTransitionReturn({
           returningStep,
         })
@@ -344,7 +362,7 @@ class Engine {
   }
 
   async debugHandler(stepSlug: string): Promise<IStepTransitionReturn> {
-    const returningStep = this.JSONConfig!.getStepDefinition(stepSlug)
+    const returningStep = this.getStepDefinition(stepSlug)
     return this.createTransitionReturn({ returningStep })
   }
 

@@ -19,7 +19,7 @@ export default function computeExperienceMetadata(
   session?: IFireboltSession
 ) {
   const currentFlow = session?.experienceState?.currentFlow ?? "default"
-  const flowSteps = jsonConfig.getFlow(currentFlow).stepsSlugs
+  const flowSteps = jsonConfig.getFlow(currentFlow)?.stepsSlugs || []
 
   const lastStepSlug = flowSteps?.[flowSteps?.length - 1]
   const currentStepIndex = session
