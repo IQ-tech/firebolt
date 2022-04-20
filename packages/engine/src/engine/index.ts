@@ -25,7 +25,6 @@ import getIsFieldsValidationNeeded from "../helpers/getIsFieldsValidationNeeded"
 import errorHandler from "../helpers/errorHandler"
 
 class Engine {
-  private experienceId: string
   private resolvers: IEngineResolvers
   private session: SessionHandler
   private json: JSONHandler
@@ -35,7 +34,6 @@ class Engine {
     experienceJSONConfig,
     resolvers,
   }: ICreateEngineOptions) {
-    this.experienceId = experienceId
     this.resolvers = resolvers
     this.session = new SessionHandler(this.resolvers)
     this.json = new JSONHandler({
