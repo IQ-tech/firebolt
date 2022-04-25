@@ -30,7 +30,6 @@ function numberRange(
     : onlyNumbers;
   const withDecimalPoint = withoutThousandSeparator.replaceAll(decimalSymbol, '.');
   const formatted = Number(withDecimalPoint);
-  console.log("---------- formatted", formatted, "minNumber", minNumber, "notransform",onlyNumbers)
 
   if (
     (typeof minNumber === 'number' || typeof minNumber === 'string') &&
