@@ -23,11 +23,12 @@ function numberRange(
   if (!value && typeof value !== 'number') return new ValidationResult(true);
 
   const stringfiedValue = String(value);
+
   const onlyNumbers = stringfiedValue.replace(/[^0-9,.]/g, '');
-  const withoutThousandSeparator = !!thousandsSeparatorSymbol
-    ? onlyNumbers.replace(thousandsSeparatorSymbol, '')
+  const withoutThousandSeparator = !!thousandsSeparatorSymbol // 1000000
+    ? onlyNumbers.replaceAll(thousandsSeparatorSymbol, '')
     : onlyNumbers;
-  const withDecimalPoint = withoutThousandSeparator.replace(decimalSymbol, '.');
+  const withDecimalPoint = withoutThousandSeparator.replaceAll(decimalSymbol, '.');
   const formatted = Number(withDecimalPoint);
 
   if (
