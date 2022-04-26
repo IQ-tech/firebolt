@@ -1,5 +1,6 @@
 import { StepForm } from "@iq-firebolt/client/src"
 import Theme from "@iq-firebolt/blueberry-theme"
+import { CheckboxGroup } from "iq-blueberry"
 /* import Theme from "@iq-firebolt/material-theme" */
 
 
@@ -56,6 +57,22 @@ const mockFields = [
     },
     validators: [{ type: "required" }, { type: "email" }],
     meta: {},
+  },
+  {
+    "slug": "emergencial_limit_check",
+    "ui:widget": "CheckboxGroup",
+    "ui:props": {
+      "label": "Limite emergencial",
+      "columns": 1,
+      "options": [
+        {
+          "label": "Permite avaliação emergencial para aprovação de transações acima do limite."
+        }
+      ]
+    },
+    "meta": {
+      "tooltip_text": "Para a sua comodidade, o Banco PAN oferece o serviço de Avaliação Emergencial de Crédito. Com este serviço, caso você realize compras acima do limite definido do seu cartão, o Banco PAN irá avaliar a aprovação dessas compras. Somente haverá cobrança de tarifa no valor de R$18,90 no mês em que o serviço for utilizado. Caso você opte por não contratar o serviço, eventuais transações que ultrapassem o limite do seu cartão não serão analisadas e consequentemente recusadas."
+    }
   },
   {
     "slug": "bad_credit",
