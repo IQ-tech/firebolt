@@ -5,7 +5,15 @@ import { clearFormSession } from "./helpers/session/clearFormSession"
 import getAutofillParam from "./helpers/getAutofillParam"
 import getUrlParams from "./helpers/getUrlParams"
 import formatFormOutput from "./formatters"
-import { IFormAccess, IAddonsConfig, IFormEngineOptions, IRequestMetadata } from "./types"
+import {
+  IFormAccess,
+  IAddonsConfig,
+  IFormEngineOptions,
+  IRequestMetadata,
+  IFormResponseData,
+  IFormStep,
+  IStepData
+} from "./types"
 
 class FireboltFormEngine {
   requestsMetadata?: IRequestMetadata
@@ -13,6 +21,7 @@ class FireboltFormEngine {
   debug?: boolean
   addons?: IAddonsConfig
   APIService: APIService
+  private mockStep?: IStepData
 
   constructor(
     formAccess: IFormAccess,
@@ -20,6 +29,7 @@ class FireboltFormEngine {
       requestsMetadata = {},
       debug = false,
       addons = {},
+      mockStep,
     }: IFormEngineOptions = {}
   ) {
     this.requestsMetadata = requestsMetadata
@@ -27,6 +37,25 @@ class FireboltFormEngine {
     this.debug = debug
     this.addons = addons
     this.APIService = new APIService({ formAccess, debug })
+    this.mockStep = mockStep
+  }
+
+  private decideStepResponse(
+    requestResponse: IFormResponseData
+  ): IFormResponseData {
+    if (!!this.debug && !!this.mockStep) {
+      const safeResponse = requestResponse || ({} as IFormResponseData)
+      const safeStep = safeResponse.step || ({} as IFormStep)
+      return {
+        ...safeResponse,
+        step: {
+          ...safeStep,
+          data: this.mockStep
+        },
+      }
+    }
+
+    return requestResponse
   }
 
   async start() {
@@ -45,7 +74,8 @@ class FireboltFormEngine {
       createFormSession(this.formName, formSessionKey)
     }
     const firstStepData = await this.APIService.getStartForm(formSessionKey)
-    const formattedData = formatFormOutput(firstStepData, {
+    const usedStepData = this.decideStepResponse(firstStepData)
+    const formattedData = formatFormOutput(usedStepData, {
       autofillData,
       addons: this.addons,
     })
@@ -75,7 +105,8 @@ class FireboltFormEngine {
         },
       }
     )
-    return formatFormOutput(nextStepData, { addons: this.addons, autofillData })
+    const usedStepData = this.decideStepResponse(nextStepData)
+    return formatFormOutput(usedStepData, { addons: this.addons, autofillData })
   }
 
   async previousStep(currentStepSlug: string) {
@@ -84,7 +115,8 @@ class FireboltFormEngine {
       formSessionKey,
       currentStepSlug
     )
-    return formatFormOutput(previousData, { addons: this.addons })
+    const usedStepData = this.decideStepResponse(previousData)
+    return formatFormOutput(usedStepData, { addons: this.addons })
   }
 
   uploadFile(file: any, fileName: string) {

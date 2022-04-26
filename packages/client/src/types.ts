@@ -4,7 +4,8 @@ import {
   IDefaultStep,
   IStepConfigField,
   IFormMetadata,
-  IRequestMetadata
+  IRequestMetadata,
+  IStepData 
 } from "@iq-firebolt/client-core"
 import React from "react"
 
@@ -17,6 +18,7 @@ export interface IFireboltProvider {
   withHistory?: boolean
   theme?: Object
   addons?: IAddonsConfig
+  mockStep?: IStepData 
 }
 
 export interface IFieldsObject {
