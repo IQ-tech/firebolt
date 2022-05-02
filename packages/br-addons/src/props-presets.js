@@ -1,4 +1,5 @@
 import STATE_OPTIONS from "./constants/state-options"
+import BANK_CODES from "./constants/bank-codes"
 
 // masks
 import CPFMask from "./masks/CPF"
@@ -16,6 +17,10 @@ const UIPropsPresetsList = {
   "br-states": {
     label: "Estado",
     options: STATE_OPTIONS,
+  },
+  "br-bank-codes": {
+    label: "Código do Banco",
+    options: BANK_CODES,
   },
   "br-cpf": {
     placeholder: "000.000.000-00",
