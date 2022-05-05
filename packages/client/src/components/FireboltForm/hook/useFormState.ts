@@ -2,18 +2,19 @@ import { useState, useEffect } from "react"
 import { validateFBTStep } from "@iq-firebolt/validators"
 import { IFieldsObject, IFormState } from "../../../types"
 
-
-export default function useFormState({ schema, autoFill, remoteErrors }: IFormState) {
+export default function useFormState({
+  schema,
+  autoFill,
+  remoteErrors,
+}: IFormState) {
   const [isFormValid, setIsFormValid] = useState(false)
   const [formPayload, setFormPayload] = useState<IFieldsObject>({})
   const [hasFormChanged, setHasFormChanged] = useState(false)
   const [isHavingInternaLoading, setIsHavingInternalLoading] = useState(false)
-  const [fieldValidationErrors, setFieldValidationErrors] = useState<IFieldsObject>(
-    {}
-  )
-  const [fieldManuallySetErrors, setFieldManuallySetErrors] = useState<IFieldsObject>(
-    {}
-  )
+  const [fieldValidationErrors, setFieldValidationErrors] =
+    useState<IFieldsObject>({})
+  const [fieldManuallySetErrors, setFieldManuallySetErrors] =
+    useState<IFieldsObject>({})
 
   useEffect(validateForm, [formPayload, fieldManuallySetErrors])
   useEffect(autoFillFromProp, [autoFill])
@@ -56,7 +57,11 @@ export default function useFormState({ schema, autoFill, remoteErrors }: IFormSt
     setFormPayload(autoFilledPayload)
   }
 
-  function setFieldWarning(fieldSlug: string, message: string, manualSetError = false) {
+  function setFieldWarning(
+    fieldSlug: string,
+    message: string,
+    manualSetError = false
+  ) {
     const usedState = manualSetError
       ? fieldManuallySetErrors
       : fieldValidationErrors
@@ -72,6 +77,9 @@ export default function useFormState({ schema, autoFill, remoteErrors }: IFormSt
 
   function clearFieldWarning(fieldSlug: string, manualSetError = false) {
     const { invalidFields } = getFormValidation()
+    const invalidFieldsList = (invalidFields || []).map(
+      (invalidField) => invalidField.slug
+    )
     const usedState = manualSetError
       ? fieldManuallySetErrors
       : fieldValidationErrors
@@ -81,7 +89,7 @@ export default function useFormState({ schema, autoFill, remoteErrors }: IFormSt
 
     const erroredFieldsSlugs = Object.keys(usedState)
     const filteredSlugs = erroredFieldsSlugs
-      .filter((errorSlug: any) => invalidFields.includes(errorSlug))
+      .filter((errorSlug: any) => invalidFieldsList.includes(errorSlug))
       .filter((slug) => slug !== fieldSlug)
     const newErroredFields = filteredSlugs.reduce((acc, slug) => {
       return {
