@@ -1,7 +1,7 @@
 import React from "react"
 import evaluate from "simple-evaluate"
 import classnames from "classnames"
-
+import { getFieldProps } from "@iq-firebolt/client-core"
 import getFieldComponent from "./helpers/getFieldComponent"
 import remapFormChildren from "./helpers/remapFormChildren"
 import getConditionalProps from "./helpers/getConditionalProps"
@@ -18,6 +18,7 @@ export default function useFormRendering({
   setFieldWarning,
   clearFieldWarning,
   classes,
+  standalonePropsPresets,
 }) {
   // get correct widgets components
   const fieldsChildren = schema.map((field: any = {}, index: number) => {
@@ -86,8 +87,19 @@ export default function useFormRendering({
       clearManuallySetError: () => clearFieldWarning(slug, true),
     }
 
+    const standalonePropsPresetsMap =
+      (() => {
+        if (!standalonePropsPresets) return {}
+        return getFieldProps(
+          field,
+          standalonePropsPresets.collectionsMap,
+          standalonePropsPresets.allPresetsMap
+        )
+      })() || {}
+
     const componentProps = {
       ...propsFromSchema,
+      ...standalonePropsPresetsMap,
       ...fieldsPropsConditional,
       ...commonFieldsProps,
     }

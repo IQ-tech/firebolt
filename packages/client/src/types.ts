@@ -5,7 +5,7 @@ import {
   IStepConfigField,
   IFormMetadata,
   IRequestMetadata,
-  IStepData 
+  IStepData,
 } from "@iq-firebolt/client-core"
 import React from "react"
 
@@ -18,7 +18,7 @@ export interface IFireboltProvider {
   withHistory?: boolean
   theme?: Object
   addons?: IAddonsConfig
-  mockStep?: IStepData 
+  mockStep?: IStepData
 }
 
 export interface IFieldsObject {
@@ -69,11 +69,13 @@ export interface IUseFireboltForm {
   onGoBack?(): void
   classes: Object
   onFocusField?: Event
+  addons?: IAddonsConfig
 }
 
 export interface IFormState {
   schema: Array<IStepConfigField>
   autoFill?: object
+  addons?: IAddonsConfig
   remoteErrors?: Array<IFieldsObject>
 }
 
@@ -104,7 +106,7 @@ export interface IFireboltForm {
   previousBtnText?: string
   customActionsChild?: React.FC<IFormActionsProps>
   className?: string
-
+  addons?: IAddonsConfig
   schema: Array<IStepConfigField>
   children?: Object[]
   onChange?: React.ChangeEvent<HTMLInputElement>
