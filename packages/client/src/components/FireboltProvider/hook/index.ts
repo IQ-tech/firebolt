@@ -16,9 +16,10 @@ function useFireboltProvider({
   withHistory,
   stepQueryParam = "step",
   addons = {},
+  mockStep
 }: IFireboltProvider) {
   const formEngine = useRef(
-    createFireboltForm(formAccess, { requestsMetadata, debug, addons })
+    createFireboltForm(formAccess, { requestsMetadata, debug, addons, mockStep })
   )
 
   const {
@@ -167,8 +168,8 @@ function useFireboltProvider({
     }
   }
 
-  function uploadFile(file) {
-    return formEngine.current.uploadFile(file)
+  function uploadFile(file, fileName: string) {
+    return formEngine.current.uploadFile(file, fileName)
   }
 
   return {
