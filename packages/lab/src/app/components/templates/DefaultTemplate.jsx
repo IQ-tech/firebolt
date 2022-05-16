@@ -1,8 +1,7 @@
-import { StepForm } from "@iq-firebolt/client/src"
+import { StepForm, FireboltForm } from "@iq-firebolt/client/src"
 import Theme from "@iq-firebolt/blueberry-theme"
 import { CheckboxGroup } from "iq-blueberry"
 /* import Theme from "@iq-firebolt/material-theme" */
-
 
 const mockFields = [
   {
@@ -66,13 +65,15 @@ const mockFields = [
       "columns": 1,
       "options": [
         {
-          "label": "Permite avaliação emergencial para aprovação de transações acima do limite."
-        }
-      ]
+          "label":
+            "Permite avaliação emergencial para aprovação de transações acima do limite.",
+        },
+      ],
     },
     "meta": {
-      "tooltip_text": "Para a sua comodidade, o Banco PAN oferece o serviço de Avaliação Emergencial de Crédito. Com este serviço, caso você realize compras acima do limite definido do seu cartão, o Banco PAN irá avaliar a aprovação dessas compras. Somente haverá cobrança de tarifa no valor de R$18,90 no mês em que o serviço for utilizado. Caso você opte por não contratar o serviço, eventuais transações que ultrapassem o limite do seu cartão não serão analisadas e consequentemente recusadas."
-    }
+      "tooltip_text":
+        "Para a sua comodidade, o Banco PAN oferece o serviço de Avaliação Emergencial de Crédito. Com este serviço, caso você realize compras acima do limite definido do seu cartão, o Banco PAN irá avaliar a aprovação dessas compras. Somente haverá cobrança de tarifa no valor de R$18,90 no mês em que o serviço for utilizado. Caso você opte por não contratar o serviço, eventuais transações que ultrapassem o limite do seu cartão não serão analisadas e consequentemente recusadas.",
+    },
   },
   {
     "slug": "bad_credit",
@@ -82,23 +83,24 @@ const mockFields = [
       "options": [
         {
           "value": "true",
-          "label": "Sim"
+          "label": "Sim",
         },
         {
           "value": "false",
-          "label": "Não"
-        }
-      ]
+          "label": "Não",
+        },
+      ],
     },
-    "ui:styles": { 
-      "size":"half"
+    "ui:styles": {
+      "size": "half",
     },
     "validators": [{ "type": "required" }],
     "meta": {
-      "tooltip_text": "Popularmente, o termo negativado significa “ter o nome sujo”. Está negativado(a) quem tem uma dívida em atraso e com o nome registrado em um órgão de proteção de crédito.",
-      "tooltip_container": ".tooltip-wrapper"
-    }
-  }
+      "tooltip_text":
+        "Popularmente, o termo negativado significa “ter o nome sujo”. Está negativado(a) quem tem uma dívida em atraso e com o nome registrado em um órgão de proteção de crédito.",
+      "tooltip_container": ".tooltip-wrapper",
+    },
+  },
 ]
 
 const DefaultTemplate = ({ fireboltStep }) => {
@@ -114,7 +116,7 @@ const DefaultTemplate = ({ fireboltStep }) => {
           }}
           onSubmit={(payload) => fireboltStep.goNextStep(payload)}
           onGoBack={fireboltStep.goPreviousStep}
-/*           customActionsChild={({ formData }) => {
+          /*           customActionsChild={({ formData }) => {
             return formData.isFormValid ? (
               <button>next liberado</button>
             ) : (
@@ -124,20 +126,30 @@ const DefaultTemplate = ({ fireboltStep }) => {
         >
           <StepForm.Insert after={"last"} render={<p>insert</p>} />
         </StepForm>
-
-        {/* <FireboltForm
-          submitBtnText="Next Step"
-          previousBtnText="Previous step"
-          schema={fields}
-          remoteErrors={fireboltStep?.remoteErrors}
-          onSubmit={(payload) => fireboltStep.goNextStep(payload)}
-          onGoBack={fireboltStep.goPreviousStep}
-        >
-          <FireboltForm.Insert
-            after={{fieldSlug: "full_name"}}
-            render={<p>cenoura</p>}
-          />
-        </FireboltForm> */}
+        <h1>second demo</h1>
+        <FireboltForm
+          theme={Theme}
+          addons={{
+            uiPropsPresets: [
+              {
+                name: "preset-a",
+                presets: {
+                  "common-item": {
+                    label: "cebola",
+                    placeholder: "cenoura",
+                  },
+                },
+              },
+            ],
+          }}
+          schema={[
+            {
+              slug: "test_field",
+              "ui:widget": "Text",
+              "ui:props-preset": "common-item",
+            },
+          ]}
+        />
       </div>
     </div>
   )

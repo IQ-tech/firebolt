@@ -6,13 +6,12 @@ import useFireboltForm from "./hook"
 import classes from "./style.module.css"
 import { IFireboltForm } from "../../types"
 
-
 const FireboltForm = ({
   submitBtnText = "Next Step",
   previousBtnText = "Previous Step",
   className,
   customActionsChild,
-  
+
   schema,
   children = [],
   onChange,
@@ -22,7 +21,8 @@ const FireboltForm = ({
   remoteErrors,
   onGoBack,
   onFocusField,
-}: IFireboltForm) => { 
+  addons,
+}: IFireboltForm) => {
   const { handleSubmit, formChildren, actionsChildData, handleGoBack } =
     useFireboltForm({
       schema,
@@ -35,8 +35,8 @@ const FireboltForm = ({
       onGoBack,
       classes,
       onFocusField,
+      addons,
     })
-
 
   const ActionsChild = customActionsChild
 
