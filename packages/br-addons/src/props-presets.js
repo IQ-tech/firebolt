@@ -1,4 +1,6 @@
 import STATE_OPTIONS from "./constants/state-options"
+import BANK_CODES from "./constants/bank-codes"
+import NATIONALITIES from "./constants/nationalities"
 
 // masks
 import CPFMask from "./masks/CPF"
@@ -33,6 +35,10 @@ const UIPropsPresetsList = {
     placeholder: "R$ 00.000,00",
     mask: BRCurrency,
     useNumericKeyboard: true,
+  },
+  "br-nationalities": {
+    label: "Nacionalidades",
+    options: NATIONALITIES,
   },
   "br-phone": {
     htmlType: "tel",
