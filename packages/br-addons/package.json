@@ -1,0 +1,31 @@
+{
+  "name": "@iq-firebolt/br-addons",
+  "version": "0.7.0",
+  "description": "> TODO: description",
+  "author": "iq team",
+  "homepage": "https://github.com/IQ-tech/firebolt#readme",
+  "license": "Apache-2.0",
+  "sideEffects": false,
+  "main": "./src/index.js",
+  "module": "./src/index.js",
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/IQ-tech/firebolt.git"
+  },
+  "scripts": {
+    "test": "jest",
+    "test:watch": "jest --watch"
+  },
+  "bugs": {
+    "url": "https://github.com/IQ-tech/firebolt/issues"
+  },
+  "dependencies": {
+    "text-mask-addons": "^3.8.0"
+  },
+  "browserslist": [
+    "last 1 Chrome version"
+  ]
+}

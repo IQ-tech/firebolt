@@ -1,0 +1,42 @@
+{
+  "name": "@iq-firebolt/json-schema",
+  "version": "0.7.0",
+  "description": "json schema lib",
+  "author": "iq team",
+  "homepage": "https://github.com/IQ-tech/firebolt#readme",
+  "license": "ISC",
+  "main": "lib/index.js",
+  "directories": {
+    "lib": "lib",
+    "test": "__tests__"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "files": [
+    "lib",
+    "form-schema.json"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/IQ-tech/firebolt.git"
+  },
+  "scripts": {
+    "admin": "concurrently \"yarn admin:renderer\" \"electron ./admin/index.js\"",
+    "admin:renderer": "vite --config admin/vite.config.js"
+  },
+  "bugs": {
+    "url": "https://github.com/IQ-tech/firebolt/issues"
+  },
+  "devDependencies": {
+    "@emotion/babel-plugin": "^11.7.2",
+    "@emotion/react": "^11.7.1",
+    "@vitejs/plugin-react": "^1.1.3",
+    "concurrently": "^6.5.1",
+    "electron": "^16.0.5",
+    "vite": "^2.7.5"
+  },
+  "dependencies": {
+    "ajv": "^8.8.2"
+  }
+}
