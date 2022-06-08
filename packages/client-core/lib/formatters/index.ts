@@ -1,5 +1,5 @@
 import applyAutofill from "./applyAutofill"
-import applyPropsPresets from "./applyPropsPresets"
+import applyStepPropsPresets from "./applyPropsPresets"
 import { IFormResponseData, IAddonsConfig, IUrlParams } from '../types'
 
  interface IFormatFormOutput {
@@ -8,7 +8,7 @@ import { IFormResponseData, IAddonsConfig, IUrlParams } from '../types'
 } 
 
 export default function formatFormOutput(formData: IFormResponseData, { autofillData, addons }: IFormatFormOutput = {}): IFormResponseData {
-  const withPropsPresets = applyPropsPresets(formData, addons)
+  const withPropsPresets = applyStepPropsPresets(formData, addons)
   return autofillData
     ? applyAutofill(withPropsPresets, autofillData)
     : withPropsPresets
