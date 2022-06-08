@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.8.0](https://github.com/IQ-tech/firebolt/compare/v0.7.0...v0.8.0) (2022-06-08)
+
+
+### Bug Fixes
+
+* **material-theme:** :bug: added missing react import ([ecceef6](https://github.com/IQ-tech/firebolt/commit/ecceef6ef55142a1bd19ce34d7bc160f5945bcb9))
+
+
+
+
+
 # [0.7.0](https://github.com/IQ-tech/firebolt/compare/v0.6.0...v0.7.0) (2022-04-26)
 
 **Note:** Version bump only for package @iq-firebolt/material-theme

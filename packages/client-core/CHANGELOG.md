@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.8.0](https://github.com/IQ-tech/firebolt/compare/v0.7.0...v0.8.0) (2022-06-08)
+
+
+### Features
+
+* **client:** :sparkles: allow FireboltForm to apply local props presets ([03522d7](https://github.com/IQ-tech/firebolt/commit/03522d7de16e73637b01999c06428c5a10317901))
+
+
+
+
+
 # [0.7.0](https://github.com/IQ-tech/firebolt/compare/v0.6.0...v0.7.0) (2022-04-26)
 
 

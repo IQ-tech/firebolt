@@ -3,6 +3,25 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.8.0](https://github.com/IQ-tech/firebolt/compare/v0.7.0...v0.8.0) (2022-06-08)
+
+
+### Bug Fixes
+
+* 🐛 import react at firebolt provider ([d3d873c](https://github.com/IQ-tech/firebolt/commit/d3d873c0c3b18db124979f14148928d6219533d1))
+* **client:** :bug: fixed form cleaning error on onblur ([5c5593c](https://github.com/IQ-tech/firebolt/commit/5c5593ca62d76019e4bf55353dd7437c35612948))
+* **material-theme:** :bug: added missing react import ([ecceef6](https://github.com/IQ-tech/firebolt/commit/ecceef6ef55142a1bd19ce34d7bc160f5945bcb9))
+
+
+### Features
+
+* **client:** :sparkles: add nationality preset to br-addon ([f7c4b20](https://github.com/IQ-tech/firebolt/commit/f7c4b201cbb8cd43e34923180a85645b8a4e7e10))
+* **client:** :sparkles: allow FireboltForm to apply local props presets ([03522d7](https://github.com/IQ-tech/firebolt/commit/03522d7de16e73637b01999c06428c5a10317901))
+
+
+
+
+
 # [0.7.0](https://github.com/IQ-tech/firebolt/compare/v0.6.0...v0.7.0) (2022-04-26)
 
 
