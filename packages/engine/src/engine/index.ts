@@ -8,6 +8,8 @@ import {
   IExperienceDecision,
   IExperienceDecisionAction,
   IExperienceDecisionOptions,
+  IEngineHooks,
+  IOnStepTransition,
 } from "../interfaces/IEngine"
 import { IStepJSON } from "../types"
 
@@ -28,11 +30,13 @@ class Engine {
   private resolvers: IEngineResolvers
   private session: SessionHandler
   private json: JSONHandler
+  private hooks?: IEngineHooks
 
   constructor({
     experienceId,
     experienceJSONConfig,
     resolvers,
+    hooks,
   }: ICreateEngineOptions) {
     this.resolvers = resolvers
     this.session = new SessionHandler(this.resolvers)
@@ -41,6 +45,7 @@ class Engine {
       experienceJSONConfig,
       experienceId,
     })
+    this.hooks = hooks
   }
 
   private async setupEnvironment(sessionId: string | undefined) {
@@ -67,11 +72,13 @@ class Engine {
   private async createTransitionReturn({
     processedData = {},
     returningStep,
+    hookStepInfo,
     error,
   }: {
-    returningStep?: IStepJSON
-    error?: EngineError
     processedData?: any
+    returningStep?: IStepJSON
+    hookStepInfo?: IOnStepTransition
+    error?: EngineError
   } = {}): Promise<IStepTransitionReturn> {
     const session = this.session.current
     const computedMetadata = this.json.config
@@ -79,6 +86,13 @@ class Engine {
       : null
     // apply plugins
     // apply autofill
+
+    if (this.hooks?.onEndStepTransition && hookStepInfo?.operation) {
+      this.hooks?.onEndStepTransition({
+        operation: hookStepInfo?.operation,
+        payload: hookStepInfo?.payload,
+      })
+    }
     return {
       sessionId: session?.sessionId || "",
       step: returningStep,
@@ -118,6 +132,10 @@ class Engine {
   ): Promise<IStepTransitionReturn> {
     let stepToReturn: IStepJSON | undefined
     try {
+      if (this.hooks?.onStartStepTransition) {
+        this.hooks?.onStartStepTransition({ operation: "start", payload })
+      }
+
       await this.setupEnvironment(payload?.sessionId)
 
       const session = this.session.current
@@ -134,12 +152,16 @@ class Engine {
         )
       }
 
-      return await this.createTransitionReturn({ returningStep: stepToReturn })
+      return await this.createTransitionReturn({
+        returningStep: stepToReturn,
+        hookStepInfo: { operation: "start", payload },
+      })
     } catch (err) {
       const formattedError = errorHandler(err)
       return await this.createTransitionReturn({
         error: formattedError,
         returningStep: stepToReturn,
+        hookStepInfo: { operation: "start", payload },
       })
     }
   }
@@ -159,6 +181,10 @@ class Engine {
     let receivingStepDefinition: IStepJSON | undefined
 
     try {
+      if (this.hooks?.onStartStepTransition) {
+        this.hooks?.onStartStepTransition({ operation: "proceed", payload })
+      }
+
       await this.setupEnvironment(payload?.sessionId)
 
       const session = this.session.current
@@ -234,18 +260,22 @@ class Engine {
 
       if (isLastStepOfFlow) {
         await this.session.completeExperience()
-        return this.createTransitionReturn()
+        return this.createTransitionReturn({
+          hookStepInfo: { operation: "proceed", payload },
+        })
       }
 
       await this.session.setVisualizingStepSlug(returningStepDefinition.slug)
       return await this.createTransitionReturn({
         returningStep: returningStepDefinition,
+        hookStepInfo: { operation: "proceed", payload },
       })
     } catch (err) {
       const error = errorHandler(err)
       return this.createTransitionReturn({
         error: error,
         returningStep: receivingStepDefinition,
+        hookStepInfo: { operation: "proceed", payload },
       })
     }
   }
@@ -253,14 +283,18 @@ class Engine {
   async goBackHandler(
     payload: IExperienceProceedPayload
   ): Promise<IStepTransitionReturn> {
-    let returningStep // let returningStep: IStepJSON | undefined
+    let returningStep: IStepJSON | undefined
     try {
+      if (this.hooks?.onStartStepTransition) {
+        this.hooks?.onStartStepTransition({ operation: "goBack", payload })
+      }
       await this.setupEnvironment(payload?.sessionId)
 
       if (!this.session.current) {
         returningStep = this.json.config!.getFirstStepFromFlow()
         return this.createTransitionReturn({
           returningStep,
+          hookStepInfo: { operation: "goBack", payload },
         })
       }
 
@@ -275,11 +309,15 @@ class Engine {
       if (hasPreviousStep) {
         returningStep = this.json.getStepDefinition(previousStepSlug)
         await this.session.setVisualizingStepSlug(previousStepSlug)
-        return this.createTransitionReturn({ returningStep })
+        return this.createTransitionReturn({
+          returningStep,
+          hookStepInfo: { operation: "goBack", payload },
+        })
       } else {
         const returningStep = this.json.getStepDefinition(visualizingStepSlug)
         return this.createTransitionReturn({
           returningStep,
+          hookStepInfo: { operation: "goBack", payload },
         })
       }
     } catch (err) {
@@ -292,8 +330,23 @@ class Engine {
   }
 
   async debugHandler(stepSlug: string): Promise<IStepTransitionReturn> {
-    const returningStep = this.json.getStepDefinition(stepSlug)
-    return this.createTransitionReturn({ returningStep })
+    let returningStep: IStepJSON | undefined
+    try {
+      if (this.hooks?.onStartStepTransition) {
+        this.hooks?.onStartStepTransition({ operation: "debug" })
+      }
+      returningStep = this.json.getStepDefinition(stepSlug)
+      return this.createTransitionReturn({
+        returningStep,
+        hookStepInfo: { operation: "debug" },
+      })
+    } catch (err) {
+      const formattedError = errorHandler(err)
+      return await this.createTransitionReturn({
+        error: formattedError,
+        returningStep,
+      })
+    }
   }
 
   // uploadHandler() { // TODO

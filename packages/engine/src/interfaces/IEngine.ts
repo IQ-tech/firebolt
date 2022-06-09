@@ -32,12 +32,20 @@ export interface IEngineResolvers {
 }
 
 // objeto que representa a configuração dos hooks, ou seja, funções que rodam em momentos especificos do formulário
+
+export type IEngineOperations = "start" | "proceed" | "goBack" | "debug"
+export interface IOnStepTransition {
+  operation: IEngineOperations
+  payload?: IExperienceProceedPayload
+}
+
 export interface IEngineHooks {
   onBeforeCallWebhook?: () => void
   onGetWebHookResponse?: () => void
-  onProceedStep?: () => void
-  onGoBackStep?: () => void
+  onStartStepTransition?: (args: IOnStepTransition) => void
+  onEndStepTransition?: (args: IOnStepTransition) => void
 }
+
 
 /**
  * representa o objeto que é retornado ao consumer após uma transição de passo do firebolt
