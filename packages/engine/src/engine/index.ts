@@ -198,7 +198,7 @@ class Engine {
         ? await this.useDecisionCallback(decisionCB, payload)
         : ({} as IExperienceDecision)
 
-      const processedData = decision?.options?.processedData || {}
+      // const processedData = decision?.options?.processedData || {} // TODO
 
       if (decision?.action === "blockProgression") {
         throw new EngineError(
@@ -253,7 +253,7 @@ class Engine {
   async goBackHandler(
     payload: IExperienceProceedPayload
   ): Promise<IStepTransitionReturn> {
-    let returningStep
+    let returningStep // let returningStep: IStepJSON | undefined
     try {
       await this.setupEnvironment(payload?.sessionId)
 
@@ -296,9 +296,9 @@ class Engine {
     return this.createTransitionReturn({ returningStep })
   }
 
-  uploadHandler() {
-    return () => {}
-  }
+  // uploadHandler() { // TODO
+  //   return () => {}
+  // }
 }
 
 export default Engine
