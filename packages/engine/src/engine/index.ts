@@ -158,10 +158,11 @@ class Engine {
       })
     } catch (err) {
       const formattedError = errorHandler(err)
+
       return await this.createTransitionReturn({
         error: formattedError,
         returningStep: stepToReturn,
-        hookStepInfo: { operation: "start", payload },
+        hookStepInfo: { operation: "error", payload },
       })
     }
   }
@@ -275,7 +276,7 @@ class Engine {
       return this.createTransitionReturn({
         error: error,
         returningStep: receivingStepDefinition,
-        hookStepInfo: { operation: "proceed", payload },
+        hookStepInfo: { operation: "error", payload },
       })
     }
   }
@@ -323,6 +324,7 @@ class Engine {
     } catch (err) {
       const formattedError = errorHandler(err)
       return await this.createTransitionReturn({
+        hookStepInfo: { operation: "error", payload },
         error: formattedError,
         returningStep,
       })
@@ -343,6 +345,7 @@ class Engine {
     } catch (err) {
       const formattedError = errorHandler(err)
       return await this.createTransitionReturn({
+        hookStepInfo: { operation: "error" },
         error: formattedError,
         returningStep,
       })

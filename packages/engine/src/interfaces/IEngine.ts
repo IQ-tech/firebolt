@@ -33,7 +33,7 @@ export interface IEngineResolvers {
 
 // objeto que representa a configuração dos hooks, ou seja, funções que rodam em momentos especificos do formulário
 
-export type IEngineOperations = "start" | "proceed" | "goBack" | "debug"
+export type IEngineOperations = "start" | "proceed" | "goBack" | "debug" | "error"
 export interface IOnStepTransition {
   operation: IEngineOperations
   payload?: IExperienceProceedPayload
