@@ -29,9 +29,9 @@ export default class JSONConfig {
     return this.getStepDefinition(firstStep)
   }
   getFlow(flowSlug: string = "default") {
-    return this.flows.find((flow) => flow.slug === flowSlug)
+    return this.flows?.find((flow) => flow.slug === flowSlug)
   }
   getStepDefinition(stepSlug: string = "") {
-    return this.steps.find((step) => step.slug === stepSlug)
+    return this.steps?.find((step) => step.slug === stepSlug)
   }
 }
