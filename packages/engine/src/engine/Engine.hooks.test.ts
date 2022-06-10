@@ -5,9 +5,8 @@ import { IExperienceJSONSchema, IStepFormPayload } from "../types"
 import {
   IEngineResolvers,
   IFireboltSession,
-  IExperienceProceedPayload
+  IExperienceProceedPayload,
 } from "../interfaces/IEngine"
-
 
 import JSONSample from "../mocks/sample-experience"
 
@@ -43,22 +42,30 @@ const getResolvers = (): IEngineResolvers => ({
   setSession: mockedSetSession,
 })
 
-const getSteper = ({action, onStart, onEnd}: {action: string, onStart: () => void, onEnd: () => void}) => {
+const getSteper = ({
+  action,
+  onStart,
+  onEnd,
+}: {
+  action: string
+  onStart: () => void
+  onEnd: () => void
+}) => {
   const mockedOnStartStepHook = ({ operation }) => {
-    if(operation === action) onStart()
+    if (operation === action) onStart()
   }
   const mockedOnEndStepHook = ({ operation }) => {
-    if(operation === action) onEnd()
+    if (operation === action) onEnd()
   }
 
   return new Engine({
-    experienceId: 'sample',
+    experienceId: "sample",
     experienceJSONConfig: JSONSample,
     resolvers: getResolvers(),
     hooks: {
       onStartStepTransition: mockedOnStartStepHook,
-      onEndStepTransition: mockedOnEndStepHook
-    }
+      onEndStepTransition: mockedOnEndStepHook,
+    },
   })
 }
 
@@ -73,7 +80,11 @@ describe("Engine hooks working", () => {
   test("should run onStartStepTransition on start method", async () => {
     const mockedStart = jest.fn(() => {})
     const mockedEnd = jest.fn(() => {})
-    const fireboltStepper = getSteper({action: 'start', onStart: mockedStart, onEnd: mockedEnd})
+    const fireboltStepper = getSteper({
+      action: "start",
+      onStart: mockedStart,
+      onEnd: mockedEnd,
+    })
     await fireboltStepper.start()
     expect(mockedStart).toBeCalledTimes(1)
   })
@@ -81,7 +92,11 @@ describe("Engine hooks working", () => {
   test("should run onEndStepTransition on start method", async () => {
     const mockedStart = jest.fn(() => {})
     const mockedEnd = jest.fn(() => {})
-    const fireboltStepper = getSteper({action: 'start', onStart: mockedStart, onEnd: mockedEnd})
+    const fireboltStepper = getSteper({
+      action: "start",
+      onStart: mockedStart,
+      onEnd: mockedEnd,
+    })
     await fireboltStepper.start()
     expect(mockedEnd).toBeCalledTimes(1)
   })
@@ -89,13 +104,18 @@ describe("Engine hooks working", () => {
   test("should run onStartStepTransition on proceed method", async () => {
     const mockedStart = jest.fn(() => {})
     const mockedEnd = jest.fn(() => {})
-    const fireboltStepper = getSteper({action: 'proceed', onStart: mockedStart, onEnd: mockedEnd})
-    const firstStepField = getFirstStepWrongFields()
+    const fireboltStepper = getSteper({
+      action: "proceed",
+      onStart: mockedStart,
+      onEnd: mockedEnd,
+    })
+    const firstStepField = getFirstStepCorrectFields()
     const sessionId = faker.datatype.uuid()
     const payload: IExperienceProceedPayload = {
       sessionId,
       fields: firstStepField,
     }
+
     await fireboltStepper.proceed(payload)
     expect(mockedStart).toBeCalledTimes(1)
   })
@@ -103,8 +123,12 @@ describe("Engine hooks working", () => {
   test("should run onEndStepTransition on proceed method", async () => {
     const mockedStart = jest.fn(() => {})
     const mockedEnd = jest.fn(() => {})
-    const fireboltStepper = getSteper({action: 'proceed', onStart: mockedStart, onEnd: mockedEnd})
-    const firstStepField = getFirstStepWrongFields()
+    const fireboltStepper = getSteper({
+      action: "proceed",
+      onStart: mockedStart,
+      onEnd: mockedEnd,
+    })
+    const firstStepField = getFirstStepCorrectFields()
     const sessionId = faker.datatype.uuid()
     const payload: IExperienceProceedPayload = {
       sessionId,
@@ -114,4 +138,21 @@ describe("Engine hooks working", () => {
     expect(mockedEnd).toBeCalledTimes(1)
   })
 
+  test("should run onEndStepTransition on error method", async () => {
+    const mockedStart = jest.fn(() => {})
+    const mockedEnd = jest.fn(() => {})
+    const fireboltStepper = getSteper({
+      action: "error",
+      onStart: mockedStart,
+      onEnd: mockedEnd,
+    })
+    const firstStepField = getFirstStepWrongFields()
+    const sessionId = faker.datatype.uuid()
+    const payload: IExperienceProceedPayload = {
+      sessionId,
+      fields: firstStepField,
+    }
+    await fireboltStepper.proceed(payload)
+    expect(mockedEnd).toBeCalledTimes(1)
+  })
 })
