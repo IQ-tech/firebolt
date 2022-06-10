@@ -43,10 +43,12 @@ const getResolvers = (): IEngineResolvers => ({
 })
 
 const getStepper = ({
+  experienceJSONConfig = JSONSample,
   action,
   onStart,
   onEnd,
 }: {
+  experienceJSONConfig?: IExperienceJSONSchema
   action: string
   onStart: () => void
   onEnd: () => void
@@ -60,7 +62,7 @@ const getStepper = ({
 
   return new Engine({
     experienceId: "sample",
-    experienceJSONConfig: JSONSample,
+    experienceJSONConfig,
     resolvers: getResolvers(),
     hooks: {
       onStartStepTransition: mockedOnStartStepHook,
@@ -94,6 +96,19 @@ describe("Engine hooks working", () => {
     const mockedEnd = jest.fn(() => {})
     const fireboltStepper = getStepper({
       action: "start",
+      onStart: mockedStart,
+      onEnd: mockedEnd,
+    })
+    await fireboltStepper.start()
+    expect(mockedEnd).toBeCalledTimes(1)
+  })
+
+  test("should run onEndStepTransition error on start method", async () => {
+    const mockedStart = jest.fn(() => {})
+    const mockedEnd = jest.fn(() => {})
+    const fireboltStepper = getStepper({
+      experienceJSONConfig: {} as IExperienceJSONSchema,
+      action: "error",
       onStart: mockedStart,
       onEnd: mockedEnd,
     })
