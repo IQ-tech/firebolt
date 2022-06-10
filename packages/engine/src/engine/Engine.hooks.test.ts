@@ -42,7 +42,7 @@ const getResolvers = (): IEngineResolvers => ({
   setSession: mockedSetSession,
 })
 
-const getSteper = ({
+const getStepper = ({
   action,
   onStart,
   onEnd,
@@ -80,7 +80,7 @@ describe("Engine hooks working", () => {
   test("should run onStartStepTransition on start method", async () => {
     const mockedStart = jest.fn(() => {})
     const mockedEnd = jest.fn(() => {})
-    const fireboltStepper = getSteper({
+    const fireboltStepper = getStepper({
       action: "start",
       onStart: mockedStart,
       onEnd: mockedEnd,
@@ -92,7 +92,7 @@ describe("Engine hooks working", () => {
   test("should run onEndStepTransition on start method", async () => {
     const mockedStart = jest.fn(() => {})
     const mockedEnd = jest.fn(() => {})
-    const fireboltStepper = getSteper({
+    const fireboltStepper = getStepper({
       action: "start",
       onStart: mockedStart,
       onEnd: mockedEnd,
@@ -104,7 +104,7 @@ describe("Engine hooks working", () => {
   test("should run onStartStepTransition on proceed method", async () => {
     const mockedStart = jest.fn(() => {})
     const mockedEnd = jest.fn(() => {})
-    const fireboltStepper = getSteper({
+    const fireboltStepper = getStepper({
       action: "proceed",
       onStart: mockedStart,
       onEnd: mockedEnd,
@@ -123,7 +123,7 @@ describe("Engine hooks working", () => {
   test("should run onEndStepTransition on proceed method", async () => {
     const mockedStart = jest.fn(() => {})
     const mockedEnd = jest.fn(() => {})
-    const fireboltStepper = getSteper({
+    const fireboltStepper = getStepper({
       action: "proceed",
       onStart: mockedStart,
       onEnd: mockedEnd,
@@ -141,7 +141,7 @@ describe("Engine hooks working", () => {
   test("should run onEndStepTransition on error method", async () => {
     const mockedStart = jest.fn(() => {})
     const mockedEnd = jest.fn(() => {})
-    const fireboltStepper = getSteper({
+    const fireboltStepper = getStepper({
       action: "error",
       onStart: mockedStart,
       onEnd: mockedEnd,
