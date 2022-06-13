@@ -10,6 +10,7 @@ import {
   IExperienceDecisionOptions,
   IEngineHooks,
   IOnStepTransition,
+  DecisionCalbackOption
 } from "../interfaces/IEngine"
 import { IStepJSON } from "../types"
 
@@ -25,18 +26,23 @@ import computeExperienceMetadata from "../helpers/computeExperienceMetadata"
 import validateStep from "../helpers/validateStep"
 import getIsFieldsValidationNeeded from "../helpers/getIsFieldsValidationNeeded"
 import errorHandler from "../helpers/errorHandler"
+import callWebhook from "../helpers/callWebhook"
+import getShouldSaveProcessedData from "../helpers/getShouldSaveProcessedData"
 
 class Engine {
   private resolvers: IEngineResolvers
   private session: SessionHandler
   private json: JSONHandler
   private hooks?: IEngineHooks
+  private decisionCallback: DecisionCalbackOption
+
 
   constructor({
     experienceId,
     experienceJSONConfig,
     resolvers,
     hooks,
+    decisionCallback
   }: ICreateEngineOptions) {
     this.resolvers = resolvers
     this.session = new SessionHandler(this.resolvers)
@@ -46,6 +52,7 @@ class Engine {
       experienceId,
     })
     this.hooks = hooks
+    this.decisionCallback = decisionCallback || "internal"
   }
 
   private async setupEnvironment(sessionId: string | undefined) {
@@ -115,10 +122,34 @@ class Engine {
         res({ action, options })
       }
 
-      decisionCB(decisionCreator, {
-        sessionData: this.session.current,
-        receivingStepData: payload,
-      })
+      if(this.decisionCallback === "internal"){
+        decisionCB(decisionCreator, {
+          sessionData: this.session.current,
+          receivingStepData: payload,
+        })
+      }
+
+      if(this.decisionCallback === "external") {
+        try {
+          // const axiosResponse = await axios.post<any>(webhookConfig.url, webhookReq, {
+          //   headers: reqHeaders,
+          // });
+          const result = callWebhook("webhookConfig.url", "data", {headers: "webhookConfig.headers"})
+      
+          // return {
+          //   preventContinue: axiosResponse.data.preventContinue || false,
+          //   errorMessage: axiosResponse.data.errorMessage || "",
+          //   errorSlugField: axiosResponse.data.errorSlugField || "",
+          //   processedData: axiosResponse.data.processedData || {},
+          // };
+        } catch (e: any) {
+          // return {
+          //   preventContinue: false,
+          //   errorMessage: e,
+          // };
+        }
+      }
+
     })
   }
   /**
@@ -182,6 +213,7 @@ class Engine {
     let receivingStepDefinition: IStepJSON | undefined
 
     try {
+      
       if (this.hooks?.onStartStepTransition) {
         this.hooks?.onStartStepTransition({ operation: "proceed", payload })
       }
@@ -225,7 +257,7 @@ class Engine {
         ? await this.useDecisionCallback(decisionCB, payload)
         : ({} as IExperienceDecision)
 
-      // const processedData = decision?.options?.processedData || {} // TODO
+      const processedData = decision?.options?.processedData || {}
 
       if (decision?.action === "blockProgression") {
         throw new EngineError(
@@ -249,9 +281,11 @@ class Engine {
         this.session.changeCurrentFlow(newFlow)
       }
 
+      const shouldSaveStepProcessedData = getShouldSaveProcessedData(receivingStepSlug, this.json.config?.webhookConfig)
       await this.session.addCompletedStep(receivingStepSlug, {
         fields: payload.fields,
-      })
+        processedData 
+      }, shouldSaveStepProcessedData)
 
       const returningStepDefinition = this.json.getReturningStepDefinition(
         receivingStepSlug,
@@ -263,6 +297,7 @@ class Engine {
         await this.session.completeExperience()
         return this.createTransitionReturn({
           hookStepInfo: { operation: "proceed", payload },
+          processedData
         })
       }
 
@@ -270,6 +305,7 @@ class Engine {
       return await this.createTransitionReturn({
         returningStep: returningStepDefinition,
         hookStepInfo: { operation: "proceed", payload },
+        processedData
       })
     } catch (err) {
       const error = errorHandler(err)

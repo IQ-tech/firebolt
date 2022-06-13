@@ -301,6 +301,13 @@ describe("Engine.proceed handling", () => {
       email: "user already exists",
     }
 
+    fireboltStepper.proceed({fields: {"cpf": "23212"}}, (decide, payload) => {
+      if(payload.receivingStepData.fields.cpf !== "cenoura"){
+        decide("blockProgression")
+      }
+      
+    })
+
     const callbackFunction: IExperienceDecisionCallbackFunction = (
       decide,
       payload
@@ -367,4 +374,9 @@ describe("Engine.goBack handling", () => {
     expect(previousStep?.step?.slug).toBe("personal_data")
     expect(previousStep?.experienceMetadata?.currentPosition).toBe(1)
   })
+
+  test.todo('webhook success')
+  test.todo('webhook fail')
+  test.todo('webhook with save processedData true')
+  test.todo('webhook with save processedData false')
 })

@@ -107,12 +107,12 @@ class SessionHandler {
   }
 
   // atualiza o last completed state
-  async addCompletedStep(stepSlug: string, stepSession: IStepSession) {
+  async addCompletedStep(stepSlug: string, {fields, processedData}: IStepSession, shouldSaveProcessedData: boolean = false) {
     const currentState = this.current?.experienceState
-
+    const definitiveStepSession = shouldSaveProcessedData ? {fields, processedData}: {fields}
     const newStepsCompleted = {
       ...this.current?.steps,
-      [stepSlug]: stepSession,
+      [stepSlug]: definitiveStepSession,
     }
     const newSession: IFireboltSession = {
       ...this.current,
@@ -121,6 +121,7 @@ class SessionHandler {
         lastCompletedStepSlug: stepSlug,
       },
       steps: newStepsCompleted,
+      
     }
 
     await this.updateSession(newSession)

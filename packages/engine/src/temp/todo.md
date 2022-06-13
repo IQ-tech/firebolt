@@ -3,18 +3,19 @@
 
 faltando
 
-- aplicar plugins (props presets)
 - autofill de valores ja inseridos
 - capturedData
 
 features
-
-- errors pattern
+- salvar o procesed data no session - option true or false
+- testar saved processed data
+- testar decision "proceed"
+- adicionar processed data no retorno do proximo passo
 - globals
 - optional steps on flow
 - custom validators
 - upload handler
--
+
 
 integração
 
