@@ -18,7 +18,7 @@ import { sampleWithMissingStep } from "../mocks/invalid/sample-with-missing-step
 const localStorage = global.localStorage
 
 const mockedGetSession = jest.fn(async (sessionId?: string) => {
-  const session = localStorage.getItem(sessionId)
+  const session = localStorage.getItem(sessionId ?? "")
   if (session) return JSON.parse(session) as IFireboltSession
   return undefined
 })

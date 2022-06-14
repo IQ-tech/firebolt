@@ -65,3 +65,11 @@ engine.proceed({}, (decide, s) => {
 // uso com serverless
 
 // uso com browser
+
+engine.proceed({ asdf: "sadf" }, (decide, { formData }) => {
+  decide({ action: "block", options: {} })
+})
+
+app.get("/test", (res) => {
+  res.json({ something: "test" })
+})

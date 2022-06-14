@@ -22,6 +22,12 @@ export const ErrorsConfigs = {
   "stepNotFound": {
     message: "Step could not be found on the JSON config file",
   },
+  "webhooksNotProvided": {
+    message: "JSON config file does not provided a webhook list",
+  },
+  "webhookNotFound": {
+    message: "Webhook could not be found on the JSON config file",
+  },
   /** Resolver errors */
   "resolverMissing": {
     message: "Required engine resolver is missing on instance",

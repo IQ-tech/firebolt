@@ -23,7 +23,7 @@ const mockedGetFormJSONSchema = jest.fn(
 )
 
 const mockedGetSession = jest.fn(async (sessionId?: string) => {
-  const session = localStorage.getItem(sessionId)
+  const session = localStorage.getItem(sessionId ?? "")
   if (session) return JSON.parse(session) as IFireboltSession
   return undefined
 })
@@ -301,12 +301,14 @@ describe("Engine.proceed handling", () => {
       email: "user already exists",
     }
 
-    fireboltStepper.proceed({fields: {"cpf": "23212"}}, (decide, payload) => {
-      if(payload.receivingStepData.fields.cpf !== "cenoura"){
-        decide("blockProgression")
+    fireboltStepper.proceed(
+      { fields: { "cpf": "23212" } },
+      (decide, payload) => {
+        if (payload.receivingStepData.fields?.cpf !== "cenoura") {
+          decide("blockProgression")
+        }
       }
-      
-    })
+    )
 
     const callbackFunction: IExperienceDecisionCallbackFunction = (
       decide,
@@ -375,8 +377,8 @@ describe("Engine.goBack handling", () => {
     expect(previousStep?.experienceMetadata?.currentPosition).toBe(1)
   })
 
-  test.todo('webhook success')
-  test.todo('webhook fail')
-  test.todo('webhook with save processedData true')
-  test.todo('webhook with save processedData false')
+  test.todo("webhook success")
+  test.todo("webhook fail")
+  test.todo("webhook with save processedData true")
+  test.todo("webhook with save processedData false")
 })

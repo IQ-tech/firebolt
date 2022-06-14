@@ -93,6 +93,19 @@ class JSONHandler {
     }
     return stepDefinition
   }
+
+  getStepWebhookDefinition(stepSlug: string) {
+    const webhooks = this.JSONConfig?.webhookConfig
+    if (!webhooks) {
+      throw new EngineError("webhooksNotProvided")
+    }
+
+    const currentWebhookConfig = webhooks.triggers.find(
+      (trigger) => trigger.slug === stepSlug
+    )
+
+    return currentWebhookConfig
+  }
 }
 
 export default JSONHandler

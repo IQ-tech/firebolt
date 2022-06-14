@@ -6,11 +6,9 @@ import {
   IExperienceProceedPayload,
   IExperienceDecisionCallbackFunction,
   IExperienceDecision,
-  IExperienceDecisionAction,
-  IExperienceDecisionOptions,
   IEngineHooks,
   IOnStepTransition,
-  DecisionCalbackOption
+  IDecisionCallbackStrategy,
 } from "../interfaces/IEngine"
 import { IStepJSON } from "../types"
 
@@ -26,7 +24,7 @@ import computeExperienceMetadata from "../helpers/computeExperienceMetadata"
 import validateStep from "../helpers/validateStep"
 import getIsFieldsValidationNeeded from "../helpers/getIsFieldsValidationNeeded"
 import errorHandler from "../helpers/errorHandler"
-import callWebhook from "../helpers/callWebhook"
+import useDecisionCallback from "../helpers/useDecisionCallback"
 import getShouldSaveProcessedData from "../helpers/getShouldSaveProcessedData"
 
 class Engine {
@@ -34,15 +32,14 @@ class Engine {
   private session: SessionHandler
   private json: JSONHandler
   private hooks?: IEngineHooks
-  private decisionCallback: DecisionCalbackOption
-
+  private decisionCallbackStrategy: IDecisionCallbackStrategy
 
   constructor({
     experienceId,
     experienceJSONConfig,
     resolvers,
     hooks,
-    decisionCallback
+    decisionCallbackStrategy,
   }: ICreateEngineOptions) {
     this.resolvers = resolvers
     this.session = new SessionHandler(this.resolvers)
@@ -52,7 +49,7 @@ class Engine {
       experienceId,
     })
     this.hooks = hooks
-    this.decisionCallback = decisionCallback || "internal"
+    this.decisionCallbackStrategy = decisionCallbackStrategy || "internal"
   }
 
   private async setupEnvironment(sessionId: string | undefined) {
@@ -91,7 +88,6 @@ class Engine {
     const computedMetadata = this.json.config
       ? computeExperienceMetadata(this.json.config, session)
       : null
-    // apply plugins
     // apply autofill
 
     if (this.hooks?.onEndStepTransition && hookStepInfo?.operation) {
@@ -108,49 +104,6 @@ class Engine {
       experienceMetadata: computedMetadata,
       processedData,
     }
-  }
-
-  private useDecisionCallback(
-    decisionCB: IExperienceDecisionCallbackFunction,
-    payload: IExperienceProceedPayload
-  ): Promise<IExperienceDecision> {
-    return new Promise((res) => {
-      const decisionCreator = (
-        action: IExperienceDecisionAction,
-        options?: IExperienceDecisionOptions
-      ) => {
-        res({ action, options })
-      }
-
-      if(this.decisionCallback === "internal"){
-        decisionCB(decisionCreator, {
-          sessionData: this.session.current,
-          receivingStepData: payload,
-        })
-      }
-
-      if(this.decisionCallback === "external") {
-        try {
-          // const axiosResponse = await axios.post<any>(webhookConfig.url, webhookReq, {
-          //   headers: reqHeaders,
-          // });
-          const result = callWebhook("webhookConfig.url", "data", {headers: "webhookConfig.headers"})
-      
-          // return {
-          //   preventContinue: axiosResponse.data.preventContinue || false,
-          //   errorMessage: axiosResponse.data.errorMessage || "",
-          //   errorSlugField: axiosResponse.data.errorSlugField || "",
-          //   processedData: axiosResponse.data.processedData || {},
-          // };
-        } catch (e: any) {
-          // return {
-          //   preventContinue: false,
-          //   errorMessage: e,
-          // };
-        }
-      }
-
-    })
   }
   /**
    * lida com dois casos de transição de experiencia:
@@ -213,7 +166,6 @@ class Engine {
     let receivingStepDefinition: IStepJSON | undefined
 
     try {
-      
       if (this.hooks?.onStartStepTransition) {
         this.hooks?.onStartStepTransition({ operation: "proceed", payload })
       }
@@ -253,8 +205,20 @@ class Engine {
       }
 
       // decision point
+      const webhookConfig = this.json.config?.webhookConfig
+      const stepWebhookDefinition =
+        this.json.getStepWebhookDefinition(receivingStepSlug)
+      const decisionCallbackStrategy = this.decisionCallbackStrategy
+
       const decision = decisionCB
-        ? await this.useDecisionCallback(decisionCB, payload)
+        ? await useDecisionCallback({
+            decisionCB,
+            payload,
+            stepWebhookDefinition,
+            webhookConfig,
+            decisionCallbackStrategy,
+            session,
+          })
         : ({} as IExperienceDecision)
 
       const processedData = decision?.options?.processedData || {}
@@ -281,11 +245,18 @@ class Engine {
         this.session.changeCurrentFlow(newFlow)
       }
 
-      const shouldSaveStepProcessedData = getShouldSaveProcessedData(receivingStepSlug, this.json.config?.webhookConfig)
-      await this.session.addCompletedStep(receivingStepSlug, {
-        fields: payload.fields,
-        processedData 
-      }, shouldSaveStepProcessedData)
+      const shouldSaveStepProcessedData = getShouldSaveProcessedData(
+        receivingStepSlug,
+        this.json.config?.webhookConfig
+      )
+      await this.session.addCompletedStep(
+        receivingStepSlug,
+        {
+          fields: payload.fields,
+          processedData,
+        },
+        shouldSaveStepProcessedData
+      )
 
       const returningStepDefinition = this.json.getReturningStepDefinition(
         receivingStepSlug,
@@ -297,7 +268,7 @@ class Engine {
         await this.session.completeExperience()
         return this.createTransitionReturn({
           hookStepInfo: { operation: "proceed", payload },
-          processedData
+          processedData,
         })
       }
 
@@ -305,7 +276,7 @@ class Engine {
       return await this.createTransitionReturn({
         returningStep: returningStepDefinition,
         hookStepInfo: { operation: "proceed", payload },
-        processedData
+        processedData,
       })
     } catch (err) {
       const error = errorHandler(err)

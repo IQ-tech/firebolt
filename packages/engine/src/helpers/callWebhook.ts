@@ -1,21 +1,26 @@
-import axios, {AxiosResponse} from "axios"
-import { IFireboltSession } from "../interfaces/IEngine"
-import { IWebhookConfig } from "../types"
+import axios, { AxiosResponse } from "axios"
+import { IFireboltSession, IExperienceDecision } from "../interfaces/IEngine"
+import { IWebhookConfig, IWebhookTrigger } from "../types"
 
+export default async function callWebhook(
+  { url, headers }: IWebhookConfig,
+  data: IFireboltSession
+): Promise<IExperienceDecision> {
+  //error handling
+  const response = await axios.post(url, data, {
+    headers: headers,
+  })
 
+  const responseData: IExperienceDecision = response.data
 
-export default function callWebhook(webhookConfig: IWebhookConfig, data: IFireboltSession): Promise<AxiosResponse<any, any>>{
-//error handling
- return axios.post(webhookConfig.url, data, {headers: webhookConfig.headers})
+  return responseData
 
-//  {  -> T response, D payload request?
-//   data: T;
-//   status: number;
-//   statusText: string;
-//   headers: AxiosResponseHeaders;
-//   config: AxiosRequestConfig<D>;
-//   request?: any;
-//  }
+  //  {  -> T response, D payload request?
+  //   data: T;
+  //   status: number;
+  //   statusText: string;
+  //   headers: AxiosResponseHeaders;
+  //   config: AxiosRequestConfig<D>;
+  //   request?: any;
+  //  }
 }
-
-const a = axios.post("sdf")
