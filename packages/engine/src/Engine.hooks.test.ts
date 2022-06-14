@@ -1,14 +1,14 @@
 import faker from "faker"
 import Engine from "./index"
 
-import { IExperienceJSONSchema, IStepFormPayload } from "../types"
+import { IExperienceJSONSchema, IStepFormPayload } from "./types"
 import {
   IEngineResolvers,
   IFireboltSession,
   IExperienceProceedPayload,
-} from "../interfaces/IEngine"
+} from "./interfaces/IEngine"
 
-import JSONSample from "../mocks/sample-experience"
+import JSONSample from "./mocks/sample-experience"
 
 //#region MOCKS
 const localStorage = global.localStorage
