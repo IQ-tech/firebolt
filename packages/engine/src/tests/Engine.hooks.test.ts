@@ -1,46 +1,20 @@
 import faker from "faker"
-import Engine from "./index"
+import Engine from "../index"
 
-import { IExperienceJSONSchema, IStepFormPayload } from "./types"
-import {
-  IEngineResolvers,
-  IFireboltSession,
-  IExperienceProceedPayload,
-} from "./interfaces/IEngine"
+import { IExperienceJSONSchema } from "../types"
+import { IExperienceProceedPayload } from "../interfaces/IEngine"
 
-import JSONSample from "./mocks/sample-experience"
+import JSONSample from "../mocks/sample-experience"
+import useMockNavigation from "../mocks/mock-navigation"
 
-//#region MOCKS
-const localStorage = global.localStorage
-const mockedGetFormJSONSchema = jest.fn(
-  async () => ({} as IExperienceJSONSchema)
-)
+const {
+  localStorage,
+  getFirstStepCorrectFields,
+  getFirstStepWrongFields,
+  getResolvers,
+} = useMockNavigation()
 
-const mockedGetSession = jest.fn(async (sessionId?: string) => {
-  const session = localStorage.getItem(sessionId ?? "")
-  if (session) return JSON.parse(session) as IFireboltSession
-  return undefined
-})
-
-const mockedSetSession = jest.fn(async (stepData: IFireboltSession) => {
-  localStorage.setItem(stepData.sessionId, JSON.stringify(stepData))
-})
-
-const getFirstStepCorrectFields = (): IStepFormPayload => ({
-  full_name: `${faker.name.firstName()} ${faker.name.lastName()}`,
-  email: faker.internet.email(),
-})
-
-const getFirstStepWrongFields = (): IStepFormPayload => ({
-  full_name: "Teste",
-  email: "teste@",
-})
-
-const getResolvers = (): IEngineResolvers => ({
-  getExperienceJSON: mockedGetFormJSONSchema,
-  getSession: mockedGetSession,
-  setSession: mockedSetSession,
-})
+// //#region MOCKS
 
 const getStepper = ({
   experienceJSONConfig = JSONSample,

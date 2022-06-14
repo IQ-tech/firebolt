@@ -26,6 +26,7 @@ import getIsFieldsValidationNeeded from "./helpers/getIsFieldsValidationNeeded"
 import errorHandler from "./helpers/errorHandler"
 import useDecisionCallback from "./helpers/useDecisionCallback"
 import getShouldSaveProcessedData from "./helpers/getShouldSaveProcessedData"
+import getReturningStepFilled from "./helpers/getReturningStepFilled"
 
 export default class Engine {
   private resolvers: IEngineResolvers
@@ -88,7 +89,10 @@ export default class Engine {
     const computedMetadata = this.json.config
       ? computeExperienceMetadata(this.json.config, session)
       : null
-    // apply autofill
+
+    const processedReturningStep = returningStep
+      ? getReturningStepFilled(returningStep, session)
+      : returningStep
 
     if (this.hooks?.onEndStepTransition && hookStepInfo?.operation) {
       this.hooks?.onEndStepTransition({
@@ -98,7 +102,7 @@ export default class Engine {
     }
     return {
       sessionId: session?.sessionId || "",
-      step: returningStep,
+      step: processedReturningStep,
       capturedData: session?.steps || {},
       error: error || null,
       experienceMetadata: computedMetadata,

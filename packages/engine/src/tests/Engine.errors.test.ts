@@ -1,19 +1,19 @@
-import Engine from "./index"
+import Engine from "../index"
 import faker from "faker"
 import {
   IExperienceDecisionCallbackFunction,
   IExperienceProceedPayload,
   IFireboltSession,
-} from "./interfaces/IEngine"
-import { IExperienceJSONSchema } from "./mocks/sample-experience"
-import { twoStepsCompletedFlowDefault } from "./mocks/sample-experience-session"
-import sampleExperienceMock from "./mocks/sample-experience"
+} from "../interfaces/IEngine"
+import { IExperienceJSONSchema } from "../mocks/sample-experience"
+import { twoStepsCompletedFlowDefault } from "../mocks/sample-experience-session"
+import sampleExperienceMock from "../mocks/sample-experience"
 import {
   sampleWithoutDefaultFlow,
   defaultFlowWithoutSteps,
   experienceWithoutSteps,
-} from "./mocks/invalid/sample-without-default-flow"
-import { sampleWithMissingStep } from "./mocks/invalid/sample-with-missing-step"
+} from "../mocks/invalid/sample-without-default-flow"
+import { sampleWithMissingStep } from "../mocks/invalid/sample-with-missing-step"
 
 const localStorage = global.localStorage
 

@@ -16,8 +16,17 @@ const mock = {
   "description": "sample json for tests",
   "business": "sample",
   "webhookConfig": {
-    "triggers": ["personal_data"],
-    "url": "{WEBHOOK_URL}",
+    "triggers": [
+      {
+        "slug": "personal_data",
+        "saveProcessedData": true,
+      },
+      {
+        "slug": "documents",
+        "saveProcessedData": false,
+      },
+    ],
+    "url": "https://teste.com.br",
   },
   "flows": [
     {
