@@ -13,10 +13,12 @@ import callWebhook from "./callWebhook"
 
 interface IUseDecisionCallback {
   decisionCB: IExperienceDecisionCallbackFunction
-  payload: IExperienceProceedPayload
+  payload: any
+  //payload: IExperienceProceedPayload
   stepWebhookDefinition?: IWebhookTrigger
   decisionCallbackStrategy: IDecisionCallbackStrategy
-  session: IFireboltSession
+  //session: IFireboltSession
+  session: any
   webhookConfig?: IWebhookConfig
 }
 export default function useDecisionCallback({
@@ -42,9 +44,12 @@ export default function useDecisionCallback({
       })
     }
 
+    // FIXME: Verificar a session e o payload
+    // Está enviando session vazia quando no primeiro passo.
+    // quando em outros passos, não pega o payload atual que foi enviado.
     if (decisionCallbackStrategy === "external") {
       if (webhookConfig && stepWebhookDefinition) {
-        callWebhook(webhookConfig, session).then((webhookResponse) => {
+        callWebhook(webhookConfig, payload).then((webhookResponse) => {
           res(webhookResponse)
         })
       }

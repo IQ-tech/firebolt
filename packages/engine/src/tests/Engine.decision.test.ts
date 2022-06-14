@@ -6,12 +6,16 @@ import {
 
 import useMockNavigation from "../mocks/mock-navigation"
 
-const { getFirstStepCorrectFields, getStepper } = useMockNavigation()
+const { getFirstStepCorrectFields, getStepper, localStorage } =
+  useMockNavigation()
 
 jest.mock("axios")
-const mockedAxios = axios as jest.Mocked<typeof axios>
 
 describe("Engine.decision handler", () => {
+  beforeEach(() => {
+    localStorage.clear()
+    jest.clearAllMocks()
+  })
   test("should handle with proceed decision", async () => {
     const fireboltStepper = getStepper()
 
@@ -29,7 +33,7 @@ describe("Engine.decision handler", () => {
   })
 
   test("should handle with changeFlow callback decision", async () => {
-    const fireboltStepper = getStepper()
+    const fireboltStepper = getStepper("external")
     const firstStepField = getFirstStepCorrectFields()
     const payload: IExperienceProceedPayload = {
       fields: firstStepField,
@@ -91,8 +95,28 @@ describe("Engine.decision handler", () => {
     expect(proceed?.experienceMetadata?.currentPosition).toBe(1)
   })
 
-  test("should be able to call api provided by webhook", () => {
-    expect(true).toBe(true)
+  test("should be able to call api provided by webhook", async () => {
+    const mockedAxios = axios as jest.Mocked<typeof axios>
+    const fireboltStepper = getStepper()
+    const firstStepField = getFirstStepCorrectFields()
+    const payload: IExperienceProceedPayload = {
+      fields: firstStepField,
+    }
+    const callbackFunction: IExperienceDecisionCallbackFunction = (
+      decide,
+      payload
+    ) => {
+      decide("proceed")
+    }
+    const proceed = await fireboltStepper.proceed(payload, callbackFunction)
+    console.log("🏷️ ~ proceed", proceed)
+
+    expect(mockedAxios.post).toBeCalledWith("https://teste.com.br", payload, {
+      "headers": {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer ",
+      },
+    })
   })
 
   test.todo("webhook fail")

@@ -27,6 +27,10 @@ const mock = {
       },
     ],
     "url": "https://teste.com.br",
+    "headers": {
+      "Content-Type": "application/json",
+      "Authorization": "Bearer ",
+    },
   },
   "flows": [
     {

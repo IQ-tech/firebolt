@@ -1,7 +1,11 @@
 import faker from "faker"
 import Engine from "../index"
 import { IExperienceJSONSchema, IStepFormPayload } from "../types"
-import { IEngineResolvers, IFireboltSession } from "../interfaces/IEngine"
+import {
+  IDecisionCallbackStrategy,
+  IEngineResolvers,
+  IFireboltSession,
+} from "../interfaces/IEngine"
 import JSONSample from "../mocks/sample-experience"
 
 export default function useMockNavigation() {
@@ -36,11 +40,12 @@ export default function useMockNavigation() {
     setSession: mockedSetSession,
   })
 
-  const getStepper = () => {
+  const getStepper = (decisionCallbackStrategy?: IDecisionCallbackStrategy) => {
     return new Engine({
       experienceId: "sample",
       experienceJSONConfig: JSONSample,
       resolvers: getResolvers(),
+      decisionCallbackStrategy,
     })
   }
 
