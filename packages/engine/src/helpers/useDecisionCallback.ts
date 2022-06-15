@@ -13,12 +13,10 @@ import callWebhook from "./callWebhook"
 
 interface IUseDecisionCallback {
   decisionCB: IExperienceDecisionCallbackFunction
-  payload: any
-  //payload: IExperienceProceedPayload
+  payload: IExperienceProceedPayload
   stepWebhookDefinition?: IWebhookTrigger
   decisionCallbackStrategy: IDecisionCallbackStrategy
-  //session: IFireboltSession
-  session: any
+  session: IFireboltSession
   webhookConfig?: IWebhookConfig
 }
 export default function useDecisionCallback({
@@ -49,7 +47,7 @@ export default function useDecisionCallback({
     // quando em outros passos, não pega o payload atual que foi enviado.
     if (decisionCallbackStrategy === "external") {
       if (webhookConfig && stepWebhookDefinition) {
-        callWebhook(webhookConfig, payload).then((webhookResponse) => {
+        callWebhook(webhookConfig, session).then((webhookResponse) => {
           res(webhookResponse)
         })
       }

@@ -33,7 +33,7 @@ describe("Engine.decision handler", () => {
   })
 
   test("should handle with changeFlow callback decision", async () => {
-    const fireboltStepper = getStepper("external")
+    const fireboltStepper = getStepper()
     const firstStepField = getFirstStepCorrectFields()
     const payload: IExperienceProceedPayload = {
       fields: firstStepField,
@@ -96,27 +96,28 @@ describe("Engine.decision handler", () => {
   })
 
   test("should be able to call api provided by webhook", async () => {
-    const mockedAxios = axios as jest.Mocked<typeof axios>
-    const fireboltStepper = getStepper()
+  
+    (axios.post as jest.Mock).mockResolvedValue({
+      data: "Result request callWebhook",
+    })
+
+    const fireboltStepper = getStepper("external")
     const firstStepField = getFirstStepCorrectFields()
     const payload: IExperienceProceedPayload = {
       fields: firstStepField,
     }
+
     const callbackFunction: IExperienceDecisionCallbackFunction = (
       decide,
       payload
     ) => {
       decide("proceed")
     }
-    const proceed = await fireboltStepper.proceed(payload, callbackFunction)
-    console.log("🏷️ ~ proceed", proceed)
 
-    expect(mockedAxios.post).toBeCalledWith("https://teste.com.br", payload, {
-      "headers": {
-        "Content-Type": "application/json",
-        "Authorization": "Bearer ",
-      },
-    })
+    const firstStep = await fireboltStepper.start()
+    const proceed = await fireboltStepper.proceed(payload, callbackFunction)
+  
+    expect(fireboltStepper["decisionCallbackStrategy"]).toEqual("external");
   })
 
   test.todo("webhook fail")
