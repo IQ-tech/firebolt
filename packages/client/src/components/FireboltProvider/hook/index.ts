@@ -16,10 +16,15 @@ function useFireboltProvider({
   withHistory,
   stepQueryParam = "step",
   addons = {},
-  mockStep
+  mockStep,
 }: IFireboltProvider) {
   const formEngine = useRef(
-    createFireboltForm(formAccess, { requestsMetadata, debug, addons, mockStep })
+    createFireboltForm(formAccess, {
+      requestsMetadata,
+      debug,
+      addons,
+      mockStep,
+    })
   )
 
   const {
@@ -91,7 +96,7 @@ function useFireboltProvider({
       setFormFlowMetadata(data.meta)
     })
   }
-  
+
   function goNextStep(
     stepFieldsPayload?: IFieldsObject,
     { extraRequestsMetaData = {} }: IRequestMetadata = {}
@@ -116,7 +121,7 @@ function useFireboltProvider({
           setFormFlowMetadata(data.meta)
         }
       })
-      .catch(_handleTransitionError)
+      .catch((err) => _handleTransitionError(err, stepFieldsPayload))
   }
 
   function goPreviousStep(): Promise<void | Object> {
@@ -154,14 +159,32 @@ function useFireboltProvider({
     formEngine.current.clearSession()
   }
 
-  function _handleTransitionError(err: {
-    response: { data: { errorData: { invalidFields: Object[] } }; status: number }
-  }) {
+  function _handleTransitionError(
+    err: {
+      response: {
+        data: { errorData: { invalidFields: Object[] } }
+        status: number
+      }
+    },
+    fillData?: IFieldsObject
+  ) {
     const invalidFields = err?.response?.data?.errorData?.invalidFields || []
     const isValidationError =
       err?.response?.status === 400 && !!invalidFields.length
     if (isValidationError) {
       setRemoteErrors(invalidFields)
+
+      if (fillData) {
+        const newFilledStepFields = currentStep.data.fields.map((field) => ({
+          ...field,
+          value: fillData[field.slug],
+        }))
+        const newCurrentStep = {
+          ...currentStep,
+          data: { ...currentStep?.data, fields: newFilledStepFields },
+        }
+        setCurrentStep(newCurrentStep)
+      }
       setIsFormLoading(false)
 
       return { errors: invalidFields }
