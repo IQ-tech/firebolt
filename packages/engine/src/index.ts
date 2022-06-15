@@ -213,8 +213,9 @@ export default class Engine {
       const stepWebhookDefinition =
         this.json.getStepWebhookDefinition(receivingStepSlug)
       const decisionCallbackStrategy = this.decisionCallbackStrategy
+      const shouldUseDecision = !!decisionCB || !!stepWebhookDefinition
 
-      const decision = decisionCB
+      const decision = shouldUseDecision
         ? await useDecisionCallback({
             decisionCB,
             payload,

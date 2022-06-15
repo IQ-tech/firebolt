@@ -1,42 +1,41 @@
 import axios from "axios"
 import callWebhook from "./callWebhook"
 import useMockNavigation from "../mocks/mock-navigation"
-import { twoStepsCompletedFlowDefault } from "../mocks/sample-experience-session"
-import { IFireboltSession } from "../interfaces/IEngine"
+import { oneStepCompletedFlowDefault } from "../mocks/sample-experience-session"
+import {
+  IFireboltSession,
+  IExperienceDecisionPayload,
+  IExperienceProceedPayload,
+} from "../interfaces/IEngine"
+import { IWebhookConfig } from "../types"
+import { sampleWithWebhookConfig } from "../mocks/sample-experience"
 
 const { mockedSetSession, mockedGetSession } = useMockNavigation()
 
 jest.mock("axios")
 
 describe("callWebhook", () => {
-  test("testing callwebhook request", async () => {
-    const webhookConfig = {
-      "triggers": [
-        {
-          "slug": "personal_data",
-          "saveProcessedData": true,
-        },
-        {
-          "slug": "documents",
-          "saveProcessedData": false,
-        },
-      ],
-      "url": "https://teste.com.br",
-      "headers": {
-        "Content-Type": "application/json",
-        "Authorization": "Bearer ",
-      },
-    }
-
-    mockedSetSession(twoStepsCompletedFlowDefault)
+  test("axios post request", async () => {
+    const webhookConfig = sampleWithWebhookConfig?.webhookConfig as IWebhookConfig
+    mockedSetSession(oneStepCompletedFlowDefault)
     const currentSession = (await mockedGetSession(
-      twoStepsCompletedFlowDefault.sessionId
+      oneStepCompletedFlowDefault.sessionId
     )) as IFireboltSession
 
-    (axios.post as jest.Mock).mockResolvedValue({
+    const payload: IExperienceProceedPayload = {
+      sessionId: oneStepCompletedFlowDefault.sessionId,
+      fields: { brazil_id_number: "1234567890" },
+    }
+
+    const data: IExperienceDecisionPayload = {
+      receivingStepData: payload,
+      sessionData: currentSession,
+    }
+
+    ;(axios.post as jest.Mock).mockResolvedValue({
       data: "Result request callWebhook",
     })
-    const requestCallWebhook = await callWebhook(webhookConfig, currentSession)
+   const requestCallWebhook = await callWebhook(webhookConfig, data)
 
     expect(requestCallWebhook).toBe("Result request callWebhook")
   })

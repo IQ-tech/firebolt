@@ -95,12 +95,9 @@ class JSONHandler {
   }
 
   getStepWebhookDefinition(stepSlug: string) {
-    const webhooks = this.JSONConfig?.webhookConfig
-    if (!webhooks) {
-      throw new EngineError("webhooksNotProvided")
-    }
-
-    const currentWebhookConfig = webhooks.triggers.find(
+    const webhookConfig = this.JSONConfig?.webhookConfig
+    const safeTriggers = webhookConfig?.triggers ?? []
+    const currentWebhookConfig = safeTriggers.find(
       (trigger) => trigger.slug === stepSlug
     )
 

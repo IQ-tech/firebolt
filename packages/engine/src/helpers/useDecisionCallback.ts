@@ -12,7 +12,7 @@ import { IWebhookTrigger, IWebhookConfig } from "../types"
 import callWebhook from "./callWebhook"
 
 interface IUseDecisionCallback {
-  decisionCB: IExperienceDecisionCallbackFunction
+  decisionCB?: IExperienceDecisionCallbackFunction
   payload: IExperienceProceedPayload
   stepWebhookDefinition?: IWebhookTrigger
   decisionCallbackStrategy: IDecisionCallbackStrategy
@@ -35,7 +35,7 @@ export default function useDecisionCallback({
       res({ action, options })
     }
 
-    if (decisionCallbackStrategy === "internal") {
+    if (decisionCallbackStrategy === "internal" && decisionCB) {
       decisionCB(decide, {
         sessionData: session,
         receivingStepData: payload,
@@ -45,9 +45,14 @@ export default function useDecisionCallback({
     // FIXME: Verificar a session e o payload
     // Está enviando session vazia quando no primeiro passo.
     // quando em outros passos, não pega o payload atual que foi enviado.
+    console.log("hehe")
     if (decisionCallbackStrategy === "external") {
       if (webhookConfig && stepWebhookDefinition) {
-        callWebhook(webhookConfig, session).then((webhookResponse) => {
+        callWebhook(webhookConfig, {
+          sessionData: session,
+          receivingStepData: payload,
+        }).then((webhookResponse) => {
+          console.log("lulul,", webhookResponse)
           res(webhookResponse)
         })
       }

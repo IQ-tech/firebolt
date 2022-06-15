@@ -6,7 +6,7 @@ import {
   IEngineResolvers,
   IFireboltSession,
 } from "../interfaces/IEngine"
-import JSONSample from "../mocks/sample-experience"
+import JSONSample, {sampleWithWebhookConfig} from "../mocks/sample-experience"
 
 export default function useMockNavigation() {
   const localStorage = global.localStorage
@@ -43,7 +43,7 @@ export default function useMockNavigation() {
   const getStepper = (decisionCallbackStrategy?: IDecisionCallbackStrategy) => {
     return new Engine({
       experienceId: "sample",
-      experienceJSONConfig: JSONSample,
+      experienceJSONConfig: decisionCallbackStrategy === "external" ? sampleWithWebhookConfig : JSONSample,
       resolvers: getResolvers(),
       decisionCallbackStrategy,
     })
