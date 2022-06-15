@@ -175,9 +175,10 @@ function useFireboltProvider({
       setRemoteErrors(invalidFields)
 
       if (fillData) {
-        const newFilledStepFields = currentStep.data.fields.map((field) => ({
+        const safeFields = currentStep?.data?.fields || []
+        const newFilledStepFields = safeFields.map((field) => ({
           ...field,
-          value: fillData[field.slug],
+          value: fillData[field?.slug],
         }))
         const newCurrentStep = {
           ...currentStep,
