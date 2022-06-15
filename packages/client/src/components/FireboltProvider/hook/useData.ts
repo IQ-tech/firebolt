@@ -1,6 +1,11 @@
-import { IDefaultStep, IFormMetadata, IFormStep } from "@iq-firebolt/client-core";
+import {
+  IDefaultStep,
+  IFormMetadata,
+  IFormStep,
+  IStepConfigField
+} from "@iq-firebolt/client-core"
 import { IFormEndPayload } from "../../../types"
-import { useState } from "react";
+import { useState } from "react"
 
 const defaultStep: IDefaultStep = {
   data: {
@@ -11,8 +16,7 @@ const defaultStep: IDefaultStep = {
   },
   position: 0,
   webhookResult: {},
-};
-
+}
 
 export default function useData() {
   const [currentStep, setCurrentStep] = useState<IDefaultStep>(defaultStep)

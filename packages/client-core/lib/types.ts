@@ -63,7 +63,7 @@ export interface IDefaultStep {
     slug: string,
     type: string,
     friendlyName: string,
-    fields: Object[],
+    fields: IStepConfigField[],
   },
   position: number,
   webhookResult: Object,
