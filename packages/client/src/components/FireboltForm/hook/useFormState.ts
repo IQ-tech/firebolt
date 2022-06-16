@@ -18,12 +18,20 @@ export default function useFormState({
     useState<IFieldsObject>({})
   const [fieldManuallySetErrors, setFieldManuallySetErrors] =
     useState<IFieldsObject>({})
+    const [ requiredFieldsSlugs, setRequiredFieldsSlugs ]= useState<string[]>([])
 
   useEffect(validateForm, [formPayload, fieldManuallySetErrors])
   useEffect(autoFillFromProp, [autoFill])
   useEffect(autoFillFromAPI, [schema])
   useEffect(setRemoteErrors, [remoteErrors])
   useEffect(setupStandalonePropsPresets, [addons])
+
+  useEffect(()=>{
+    const requiredFields = schema.filter((field) => field.validators.find(validator => validator.type === "required"))
+    const slugs = requiredFields.map((field) => field.slug)
+
+    setRequiredFieldsSlugs(slugs)
+    }, [schema])
 
   function setupStandalonePropsPresets() {
     if (addons?.uiPropsPresets) {
@@ -169,6 +177,7 @@ export default function useFormState({
     setFieldWarning,
     clearFieldWarning,
     markAllInvalidFields,
-    standalonePropsPresets
+    standalonePropsPresets,
+    requiredFieldsSlugs
   }
 }
