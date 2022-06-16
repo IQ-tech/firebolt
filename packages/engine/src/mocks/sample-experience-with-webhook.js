@@ -5,17 +5,17 @@ const mock = require("./sample-experience")
  */
 
 
-/** @type {IExperienceJSONSchema} */
-const sampleWithWebhookConfig = {
+/** @returns {IExperienceJSONSchema} */
+const sampleWithWebhookConfig = (saveDataToStorage = true) =>  ({
   "webhookConfig": {
     "triggers": [
       {
         "slug": "personal_data",
-        "saveProcessedData": true,
+        "saveProcessedData": saveDataToStorage,
       },
       {
         "slug": "documents",
-        "saveProcessedData": true,
+        "saveProcessedData": saveDataToStorage,
       },
     ],
     "url": "https://teste.com.br",
@@ -25,7 +25,7 @@ const sampleWithWebhookConfig = {
     },
   },
   ...mock,
-}
+})
 
 module.exports = sampleWithWebhookConfig
 

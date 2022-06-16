@@ -161,9 +161,6 @@ export default class Engine {
   ): Promise<IStepTransitionReturn> {
     /**
      * Todo
-     * - process returning definition
-     * - webhook call
-     * - experience hooks
      * - globals
      */
 
@@ -362,8 +359,4 @@ export default class Engine {
       })
     }
   }
-
-  // uploadHandler() { // TODO
-  //   return () => {}
-  // }
 }

@@ -41,10 +41,10 @@ export default function useMockNavigation() {
     setSession: mockedSetSession,
   })
 
-  const getStepper = (decisionCallbackStrategy?: IDecisionCallbackStrategy) => {
+  const getStepper = (decisionCallbackStrategy?: IDecisionCallbackStrategy, saveDataToStorage: boolean = true) => {
     return new Engine({
       experienceId: "sample",
-      experienceJSONConfig: decisionCallbackStrategy === "external" ? sampleWithWebhookConfig : JSONSample,
+      experienceJSONConfig: decisionCallbackStrategy === "external" ? sampleWithWebhookConfig(saveDataToStorage) : JSONSample,
       resolvers: getResolvers(),
       decisionCallbackStrategy,
     })

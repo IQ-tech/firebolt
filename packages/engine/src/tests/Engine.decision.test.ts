@@ -8,7 +8,6 @@ import {
 import sampleWithWebhookConfig from "../mocks/sample-experience-with-webhook"
 import { oneStepCompletedFlowDefault } from "../mocks/sample-experience-session"
 import useMockNavigation from "../mocks/mock-navigation"
-
 import { IWebhookConfig } from "../types"
 
 const {
@@ -109,7 +108,7 @@ describe("Engine.decision handler", () => {
       Promise.resolve("cenoura")
     )
     const webhookConfig =
-      sampleWithWebhookConfig.webhookConfig as IWebhookConfig
+      sampleWithWebhookConfig().webhookConfig as IWebhookConfig
 
     mockedSetSession(oneStepCompletedFlowDefault)
 
@@ -177,5 +176,23 @@ describe("Engine.decision handler", () => {
       activeOffers: 2,
     })
   })
-  test.todo("webhook with save processedData false")
+  test("webhook with save processedData false", async () => {
+    const fields = getFirstStepCorrectFields()
+    const mockExperienceDecision: IExperienceDecision = {
+      action: "proceed",
+      options: {
+        processedData: { activeOffers: 2 },
+      },
+    }
+
+    ;(axios.post as jest.Mock).mockImplementation(() => {
+      return Promise.resolve({ data: mockExperienceDecision })
+    })
+    const fireboltStepper = getStepper("external", false)
+    const step = await fireboltStepper.proceed({ fields: fields })
+    const savedSession = JSON.parse(
+      localStorage.getItem(step.sessionId) || "{}"
+    ) as IFireboltSession
+    expect(savedSession?.steps?.["personal_data"].processedData).toBeUndefined()
+  })
 })

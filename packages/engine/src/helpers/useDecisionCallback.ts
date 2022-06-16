@@ -42,9 +42,6 @@ export default function useDecisionCallback({
       })
     }
 
-    // FIXME: Verificar a session e o payload
-    // Está enviando session vazia quando no primeiro passo.
-    // quando em outros passos, não pega o payload atual que foi enviado.
     if (decisionCallbackStrategy === "external") {
       if (webhookConfig && stepWebhookDefinition) {
         callWebhook(webhookConfig, {

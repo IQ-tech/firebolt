@@ -8,7 +8,6 @@ import {
   IExperienceProceedPayload,
 } from "../interfaces/IEngine"
 import { IWebhookConfig } from "../types"
-import JSONConfig from "../mocks/sample-experience"
 import sampleWithWebhookConfig from "../mocks/sample-experience-with-webhook"
 
 const { mockedSetSession, mockedGetSession } = useMockNavigation()
@@ -17,7 +16,7 @@ jest.mock("axios")
 
 describe("callWebhook", () => {
   test("axios post request", async () => {
-    const webhookConfig = sampleWithWebhookConfig?.webhookConfig as IWebhookConfig
+    const webhookConfig = sampleWithWebhookConfig()?.webhookConfig as IWebhookConfig
     mockedSetSession(oneStepCompletedFlowDefault)
     const currentSession = (await mockedGetSession(
       oneStepCompletedFlowDefault.sessionId
