@@ -1,4 +1,4 @@
-import { IExperienceJSONSchema } from "../types"
+import { IExperienceJSONSchema, IWebhookConfig } from "../types"
 
 export default class JSONConfig {
   private JSONConfig: IExperienceJSONSchema
@@ -13,6 +13,10 @@ export default class JSONConfig {
 
   get flows() {
     return this.JSONConfig.flows
+  }
+
+  get webhookConfig(): IWebhookConfig | undefined {
+    return this.JSONConfig.webhookConfig
   }
 
   get steps() {

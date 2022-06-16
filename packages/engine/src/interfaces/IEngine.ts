@@ -2,12 +2,14 @@ import { IExperienceJSONSchema, IStepFormPayload, IStepJSON } from "../types"
 import { InvalidField } from "@iq-firebolt/validators"
 
 // objeto que representa as opções para criar uma instância da engine
+export type IDecisionCallbackStrategy = "internal" | "external"
 export interface ICreateEngineOptions {
   experienceJSONConfig?: IExperienceJSONSchema
   experienceId: string // legacy business replacement
   resolvers: IEngineResolvers
   hooks?: IEngineHooks
   addons?: IAddonsConfig
+  decisionCallbackStrategy?: IDecisionCallbackStrategy
   debug?: boolean
 }
 
@@ -33,7 +35,12 @@ export interface IEngineResolvers {
 
 // objeto que representa a configuração dos hooks, ou seja, funções que rodam em momentos especificos do formulário
 
-export type IEngineOperations = "start" | "proceed" | "goBack" | "debug" | "error"
+export type IEngineOperations =
+  | "start"
+  | "proceed"
+  | "goBack"
+  | "debug"
+  | "error"
 export interface IOnStepTransition {
   operation: IEngineOperations
   payload?: IExperienceProceedPayload
@@ -45,7 +52,6 @@ export interface IEngineHooks {
   onStartStepTransition?: (args: IOnStepTransition) => void
   onEndStepTransition?: (args: IOnStepTransition) => void
 }
-
 
 /**
  * representa o objeto que é retornado ao consumer após uma transição de passo do firebolt
@@ -93,7 +99,9 @@ export interface IFlowStepsListItem {
 // Representa um passo visitado por um determinado usuário e guardado no storage
 export interface IStepSession {
   fields?: IStepFormPayload
-  // possivelmente adicionar webhookResult
+  processedData?: {
+    [stepKey: string]: any
+  }
 }
 
 // Representa o mapa de steps visitados pelo usuário que vai dentro da sessão
@@ -125,7 +133,10 @@ export interface IExperienceDecision {
   options?: IExperienceDecisionOptions
 }
 
-export type IExperienceDecisionAction = "changeFlow" | "blockProgression"
+export type IExperienceDecisionAction =
+  | "changeFlow"
+  | "blockProgression"
+  | "proceed"
 
 export interface IExperienceDecisionOptions {
   newFlow?: string

@@ -15,10 +15,6 @@ const mock = {
   "name": "sample",
   "description": "sample json for tests",
   "business": "sample",
-  "webhookConfig": {
-    "triggers": ["personal_data"],
-    "url": "{WEBHOOK_URL}",
-  },
   "flows": [
     {
       "slug": "default",
@@ -172,3 +168,5 @@ const mock = {
 }
 
 module.exports = mock
+
+

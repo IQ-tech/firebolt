@@ -21,14 +21,18 @@ export interface IStepFormPayload {
 
 export interface IFlow {
   slug: string
-  stepsSlugs: string[]
+  stepsSlugs: string[] // todo - convert to object when implementing globals
 }
 
-export interface IStepConfigWebhook {
-  triggers: string[]
+export interface IWebhookTrigger {
+  slug: string
+  saveProcessedData: boolean
+}
+export interface IWebhookConfig {
+  triggers: IWebhookTrigger[]
   url: string
   headers: {
-    [prop: string]: any
+    [key: string]: string | boolean | number
   }
 }
 
@@ -39,7 +43,7 @@ export interface IExperienceJSONSchema {
   name: string //todo - add to schema
   description: string //todo - add to schema
   business: string // todo - to deprecate
-  webhookConfig: any /* IStepConfigWebhook */ //todo
+  webhookConfig?: IWebhookConfig
   flows: IFlow[]
   steps: IStepJSON[]
 }
