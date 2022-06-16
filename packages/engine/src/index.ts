@@ -168,7 +168,6 @@ export default class Engine {
      */
 
     let receivingStepDefinition: IStepJSON | undefined
-
     try {
       if (this.hooks?.onStartStepTransition) {
         this.hooks?.onStartStepTransition({ operation: "proceed", payload })

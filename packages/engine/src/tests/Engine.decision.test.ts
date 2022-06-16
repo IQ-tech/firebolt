@@ -3,10 +3,9 @@ import {
   IExperienceDecisionCallbackFunction,
   IExperienceProceedPayload,
   IFireboltSession,
-  IExperienceDecisionPayload,
   IExperienceDecision,
 } from "../interfaces/IEngine"
-import JSONConfig, {sampleWithWebhookConfig} from "../mocks/sample-experience"
+import sampleWithWebhookConfig from "../mocks/sample-experience-with-webhook"
 import { oneStepCompletedFlowDefault } from "../mocks/sample-experience-session"
 import useMockNavigation from "../mocks/mock-navigation"
 
@@ -17,7 +16,6 @@ const {
   getStepper,
   localStorage,
   mockedSetSession,
-  mockedGetSession,
 } = useMockNavigation()
 
 jest.mock("axios")
@@ -110,7 +108,9 @@ describe("Engine.decision handler", () => {
     ;(axios.post as jest.Mock).mockImplementation(() =>
       Promise.resolve("cenoura")
     )
-    const webhookConfig = sampleWithWebhookConfig.webhookConfig as IWebhookConfig
+    const webhookConfig =
+      sampleWithWebhookConfig.webhookConfig as IWebhookConfig
+
     mockedSetSession(oneStepCompletedFlowDefault)
 
     const payload: IExperienceProceedPayload = {
@@ -119,12 +119,7 @@ describe("Engine.decision handler", () => {
     }
 
     const fireboltStepper = getStepper("external")
-    await fireboltStepper.proceed(payload, (decide, payload) => {
-      if (payload.receivingStepData.fields?.brazil_id_number === "1234567890") {
-        decide("proceed")
-      }
-    })
-
+    await fireboltStepper.proceed(payload)
     expect(fireboltStepper["decisionCallbackStrategy"]).toEqual("external")
 
     expect(axios.post).toHaveBeenCalledWith(
@@ -161,7 +156,7 @@ describe("Engine.decision handler", () => {
     )
   })
 
-  test("webhook with save processedData true", async () => {   
+  test("webhook with save processedData true", async () => {
     const fields = getFirstStepCorrectFields()
     const mockExperienceDecision: IExperienceDecision = {
       action: "proceed",
@@ -169,14 +164,18 @@ describe("Engine.decision handler", () => {
         processedData: { activeOffers: 2 },
       },
     }
-    
-    ;(axios.post as jest.Mock).mockImplementation(() => { 
-      return Promise.resolve({data: mockExperienceDecision})
+
+    ;(axios.post as jest.Mock).mockImplementation(() => {
+      return Promise.resolve({ data: mockExperienceDecision })
     })
     const fireboltStepper = getStepper("external")
     const step = await fireboltStepper.proceed({ fields: fields })
-    const savedSession = JSON.parse(localStorage.getItem(step.sessionId) || '{}') as IFireboltSession
-    expect(savedSession?.steps?.["personal_data"].processedData).toEqual({ activeOffers: 2 })
+    const savedSession = JSON.parse(
+      localStorage.getItem(step.sessionId) || "{}"
+    ) as IFireboltSession
+    expect(savedSession?.steps?.["personal_data"].processedData).toEqual({
+      activeOffers: 2,
+    })
   })
   test.todo("webhook with save processedData false")
 })

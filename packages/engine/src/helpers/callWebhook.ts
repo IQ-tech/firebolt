@@ -9,7 +9,6 @@ export default async function callWebhook(
   const response = await axios.post(url, data, {
     headers: headers,
   })
-  console.log("lele", response)
   const responseData: IExperienceDecision = response.data
   return responseData
 }

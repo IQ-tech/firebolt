@@ -6,7 +6,8 @@ import {
   IEngineResolvers,
   IFireboltSession,
 } from "../interfaces/IEngine"
-import JSONSample, {sampleWithWebhookConfig} from "../mocks/sample-experience"
+import JSONSample from "../mocks/sample-experience"
+import  sampleWithWebhookConfig  from "../mocks/sample-experience-with-webhook"
 
 export default function useMockNavigation() {
   const localStorage = global.localStorage

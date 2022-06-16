@@ -8,7 +8,8 @@ import {
   IExperienceProceedPayload,
 } from "../interfaces/IEngine"
 import { IWebhookConfig } from "../types"
-import { sampleWithWebhookConfig } from "../mocks/sample-experience"
+import JSONConfig from "../mocks/sample-experience"
+import sampleWithWebhookConfig from "../mocks/sample-experience-with-webhook"
 
 const { mockedSetSession, mockedGetSession } = useMockNavigation()
 
