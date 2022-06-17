@@ -27,7 +27,7 @@ export default function useFormState({
   useEffect(setupStandalonePropsPresets, [addons])
 
   useEffect(()=>{
-    const requiredFields = schema.filter((field) => field.validators.find(validator => validator.type === "required"))
+    const requiredFields = schema.filter((field) => field?.validators?.find(validator => validator.type === "required"))
     const slugs = requiredFields.map((field) => field.slug)
 
     setRequiredFieldsSlugs(slugs)
