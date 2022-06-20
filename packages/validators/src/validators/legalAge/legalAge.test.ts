@@ -1,7 +1,9 @@
 import isOfLegalAge from './index';
 
 describe('legal age validation', () => {
-  test.each(['12/02/2007', '24/07/2009', '19/06/2004'])(
+  const mockedCloseLimitYear = new Date().getFullYear() - 17
+  const mockedCloseLimitDate = `19/06/${mockedCloseLimitYear}`
+  test.each(['12/02/2007', '24/07/2009', mockedCloseLimitDate])(
     'This date %p should not pass in legal age validator',
     (value) => {
       expect(isOfLegalAge.run(value).isValid).toBeFalsy();
