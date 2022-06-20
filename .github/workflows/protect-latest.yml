@@ -1,0 +1,28 @@
+name: Check prod release merge
+
+on:
+  pull_request:
+    types: [opened]
+    branches:
+      - latest
+
+permissions:
+  contents: write # for checkout and tag
+  pull-requests: write # for comments
+  packages: write # for publish
+
+jobs:
+  check:
+    name: Check prod PR
+    runs-on: ubuntu-latest
+    steps:
+      - name: "Checkout"
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: check if is correct branch
+        if: ${{ github.head_ref != 'main' }}
+        run: |
+          echo "Only PR from main branch is allowed"
+          exit 1
+

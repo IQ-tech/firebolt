@@ -1,3 +1,4 @@
-const TextAreaWidget = () => <p>textArea</p>;
+import React from "react"
+const TextAreaWidget = () => <p>textArea</p>
 
-export default TextAreaWidget;
+export default TextAreaWidget

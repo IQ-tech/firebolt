@@ -12,6 +12,7 @@ const CheckboxGroupWidget = ({
   meta,
   options,
   fieldId,
+  columns
 }) => {
   return (
     <CheckboxGroup
@@ -24,6 +25,7 @@ const CheckboxGroupWidget = ({
       tooltipConfig={getTooltipConfig(meta)}
       invalid={hasError}
       errorMessage={errorMessage}
+      columns={columns}
     />
   )
 }

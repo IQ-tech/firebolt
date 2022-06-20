@@ -1,5 +1,6 @@
 import React from 'react'
 import { RadioField } from "iq-blueberry"
+import getTooltipConfig from "../../helpers/getTooltipConfig"
 
 const RadioWidget = ({
   hasError,
@@ -10,9 +11,11 @@ const RadioWidget = ({
   isRequired,
   options,
   slug,
+  meta
 }) => {
   return (
     <RadioField
+      tooltipConfig={getTooltipConfig(meta)}
       options={options}
       required={isRequired}
       value={value}

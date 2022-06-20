@@ -2,7 +2,7 @@
 
 > TODO: descriptions
 
-still in alphaaa
+change later
 
 ## Usage
 

@@ -5,7 +5,7 @@ import autoprefixer from "autoprefixer"
 import { nodeResolve } from "@rollup/plugin-node-resolve"
 
 import packageConfig from "./package.json"
-const input = "src/index.js"
+const input = "src/index.ts"
 
 const esbuildPluginConfig = esbuild({
   jsx: "transform", // default, or 'preserve'

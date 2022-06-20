@@ -1,12 +1,12 @@
-import { useState } from "react";
-import FormControl from "@material-ui/core/FormControl";
-import InputLabel from "@material-ui/core/InputLabel";
-import OutlinedInput from "@material-ui/core/OutlinedInput";
-import IconButton from "@material-ui/core/IconButton";
-import InputAdornment from "@material-ui/core/InputAdornment";
-import Visibility from "@material-ui/icons/Visibility";
-import VisibilityOff from "@material-ui/icons/VisibilityOff";
-import FieldHolder from "../../FieldHolder";
+import React, { useState } from "react"
+import FormControl from "@material-ui/core/FormControl"
+import InputLabel from "@material-ui/core/InputLabel"
+import OutlinedInput from "@material-ui/core/OutlinedInput"
+import IconButton from "@material-ui/core/IconButton"
+import InputAdornment from "@material-ui/core/InputAdornment"
+import Visibility from "@material-ui/icons/Visibility"
+import VisibilityOff from "@material-ui/icons/VisibilityOff"
+import FieldHolder from "../../FieldHolder"
 
 const PasswordWidget = ({
   label,
@@ -18,7 +18,7 @@ const PasswordWidget = ({
   fieldId,
   hasError,
 }) => {
-  const [showPassword, setShowPassword] = useState(false);
+  const [showPassword, setShowPassword] = useState(false)
 
   return (
     <FieldHolder>
@@ -50,7 +50,7 @@ const PasswordWidget = ({
         />
       </FormControl>
     </FieldHolder>
-  );
-};
+  )
+}
 
-export default PasswordWidget;
+export default PasswordWidget
