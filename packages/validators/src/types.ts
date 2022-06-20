@@ -28,3 +28,9 @@ export interface InvalidField {
   slug: string;
   validationResults: ValidationResult[];
 }
+
+
+export interface ValidateFBTStepResult {
+  isValid: boolean;
+  invalidFields: InvalidField[];
+}
