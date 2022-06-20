@@ -1,7 +1,6 @@
 import { StepForm, FireboltForm } from "@iq-firebolt/client/src"
-import Theme from "@iq-firebolt/blueberry-theme"
-import { CheckboxGroup } from "iq-blueberry"
-/* import Theme from "@iq-firebolt/material-theme" */
+// import Theme from "@iq-firebolt/blueberry-theme"
+import Theme from "@iq-firebolt/material-theme"
 
 const mockFields = [
   {

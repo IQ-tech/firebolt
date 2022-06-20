@@ -111,11 +111,25 @@ export interface IStepConfigFieldValidator {
   type: string
 }
 
+interface IFieldPropsConditional {
+  conditional: string
+  props: {
+    [propKey: string]: any
+  }
+}
+
+interface IFieldStyles {
+  size: "full" | "half"
+}
+
 export interface IStepConfigField {
   slug: string
   "ui:widget": string
   "ui:props": IStepConfigFieldUiProps
   validators: IStepConfigFieldValidator[]
+  conditional?: string
+  "ui:props-conditional"?: IFieldPropsConditional[]
+  "ui:styles"?: IFieldStyles
   meta: Object
   component: string
   value?: any
