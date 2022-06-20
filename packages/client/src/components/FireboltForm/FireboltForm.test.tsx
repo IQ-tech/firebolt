@@ -1,9 +1,8 @@
-import { render, fireEvent, screen } from "@testing-library/react"
+import { render, fireEvent } from "@testing-library/react"
 import "@testing-library/jest-dom"
 import axios from "axios"
 
-import { createFireboltForm } from "@iq-firebolt/client-core"
-import { clearAllFormSessions } from "@iq-firebolt/client-core/lib/helpers/session/clearFormSession"
+import { createFireboltForm } from "@iq-firebolt/client-core/lib"
 import startFormResponse from "@iq-firebolt/client-core/lib/__mocks__/startFormResponse"
 import materialTheme from "@iq-firebolt/material-theme"
 

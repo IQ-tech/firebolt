@@ -1,7 +1,7 @@
 import React from "react"
 import evaluate from "simple-evaluate"
 import classnames from "classnames"
-import { getFieldProps } from "@iq-firebolt/client-core"
+import { getFieldProps } from "@iq-firebolt/client-core/lib"
 import getFieldComponent from "./helpers/getFieldComponent"
 import remapFormChildren from "./helpers/remapFormChildren"
 import getConditionalProps from "./helpers/getConditionalProps"

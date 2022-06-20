@@ -2,8 +2,7 @@ import {
   IDefaultStep,
   IFormMetadata,
   IFormStep,
-  IStepConfigField
-} from "@iq-firebolt/client-core"
+} from "@iq-firebolt/client-core/lib"
 import { IFormEndPayload } from "../../../types"
 import { useState } from "react"
 
