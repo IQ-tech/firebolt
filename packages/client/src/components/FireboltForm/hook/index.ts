@@ -12,7 +12,6 @@ export default function useFireboltForm({
   autoFill,
   remoteErrors,
   onGoBack,
-  classes,
   onFocusField,
   addons
 }: IUseFireboltForm) {
@@ -37,19 +36,14 @@ export default function useFireboltForm({
     addons
   })
 
-  const { getFieldEvent, handleSubmit, handleGoBack } = useFormEvents({
+  const {  handleSubmit, handleGoBack } = useFormEvents({
     onChange,
     onSubmit,
     formPayload,
-    modifyPayloadKeys,
     isFormValid,
     hasFormChanged,
-    setHasFormChanged,
-    setFieldWarning,
-    clearFieldWarning,
     markAllInvalidFields,
     onGoBack,
-    onFocusField,
     requiredFieldsSlugs
   })
 
@@ -58,14 +52,15 @@ export default function useFireboltForm({
     modifyPayloadKeys,
     children,
     formPayload,
-    getFieldEvent,
     fieldValidationErrors,
     fieldManuallySetErrors,
     theme,
     setFieldWarning,
     clearFieldWarning,
-    classes,
-    standalonePropsPresets
+    standalonePropsPresets,
+    hasFormChanged,
+    setHasFormChanged,
+    onFocusField
   })
 
   const actionsChildData: IActionsChildData = {

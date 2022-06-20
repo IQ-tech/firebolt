@@ -12,13 +12,14 @@ export default function useFormRendering({
   children: insertsChildren,
   formPayload,
   modifyPayloadKeys,
-  getFieldEvent,
   fieldValidationErrors,
   fieldManuallySetErrors,
   setFieldWarning,
   clearFieldWarning,
-  classes,
   standalonePropsPresets,
+  hasFormChanged,
+  setHasFormChanged,
+  onFocusField
 }) {
   // get correct widgets components
   const fieldsChildren = schema.map(
@@ -31,8 +32,6 @@ export default function useFormRendering({
         "ui:props": propsFromSchema = {},
         "ui:props-conditional": propsConditional,
       } = field
-
-
 
       const safeTheme = theme || {}
       const hasConditionalRender = !!conditional
@@ -73,9 +72,6 @@ export default function useFormRendering({
         errorMessage,
         isValid: !hasError,
         hasError,
-        onChange: getFieldEvent.onChange(field),
-        onBlur: getFieldEvent.onBlur(field),
-        onFocus: getFieldEvent.onFocus(field),
         modifyPayloadKeys,
         value,
         fieldValidators,
@@ -107,9 +103,18 @@ export default function useFormRendering({
         return (
           <InputHolder
             fieldConfig={field}
+            formPayload={formPayload}
             FieldComponent={FieldComponent}
             key={`form-item-${index}`}
+            hasFormChanged={hasFormChanged}
+            setHasFormChanged={setHasFormChanged}
+            modifyPayloadKeys={modifyPayloadKeys}
+            clearFieldWarning={clearFieldWarning}
+            setFieldWarning={setFieldWarning}
+            onFocusField={onFocusField}
+            //remove
             fieldProps={componentProps}
+
           />
         )
       }
