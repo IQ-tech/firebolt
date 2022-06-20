@@ -1,5 +1,5 @@
-import { useEffect } from "react";
-import { validateFBTField } from "@iq-firebolt/validators";
+import { useEffect } from "react"
+import { validateFBTField } from "@iq-firebolt/validators"
 
 export default function useFieldsEvents({
   formPayload,
@@ -13,7 +13,8 @@ export default function useFieldsEvents({
   clearFieldWarning,
   markAllInvalidFields,
   onGoBack,
-  onFocusField
+  onFocusField,
+  requiredFieldsSlugs
 }) {
   useEffect(() => {
     if (!!onChange && hasFormChanged) {
@@ -21,7 +22,15 @@ export default function useFieldsEvents({
     }
   }, [formPayload, onChange]);
 
-  function validateField(field: { slug: string; }, value: string) {
+  useEffect(() => {
+    const isAllRequiredFieldsFilled = requiredFieldsSlugs.every(
+      (item) => !!formPayload[item])
+    
+    if (isAllRequiredFieldsFilled && requiredFieldsSlugs.length) markAllInvalidFields()
+
+  }, [formPayload])
+
+  function validateField(field: { slug: string }, value: string) {
     return validateFBTField({
       value,
       field,

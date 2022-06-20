@@ -28,7 +28,8 @@ export default function useFireboltForm({
     clearFieldWarning,
     markAllInvalidFields,
     fieldManuallySetErrors,
-    standalonePropsPresets
+    standalonePropsPresets,
+    requiredFieldsSlugs
   } = useFormState({
     schema,
     autoFill,
@@ -49,6 +50,7 @@ export default function useFireboltForm({
     markAllInvalidFields,
     onGoBack,
     onFocusField,
+    requiredFieldsSlugs
   })
 
   const { formChildren } = useFormRendering({
