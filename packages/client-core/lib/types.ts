@@ -1,21 +1,21 @@
 export interface IFormAccess {
   /** Firebolt root endpoint */
-  root: string;
+  root: string
   /** Identifier to find form on endpoint */
-  formName: string;
+  formName: string
 }
 
 // ----------- V2-todo ------------
 
 export interface RemoteFormConfig {
-  access: IFormAccess;
-  debug: boolean;
-  requestMetadata: any;
+  access: IFormAccess
+  debug: boolean
+  requestMetadata: any
 }
 
 export interface LocalFormConfig {
-  schema: Object;
-  debug: boolean;
+  schema: Object
+  debug: boolean
 }
 
 // --------- end v2
@@ -25,32 +25,31 @@ export interface IApiService {
   debug?: boolean
 }
 
+export type GetPreviousStepRoute = (currentStep: string | number) => string
 
-export type GetPreviousStepRoute = (currentStep: string | number) => string;
-
-export type GetDebugStepRoute = (stepId: string | number) => string;
+export type GetDebugStepRoute = (stepId: string | number) => string
 export interface Endpoints {
   /** Route to start the form */
-  base: string;
+  base: string
   /** Route to proceed to next step */
-  nextStep: string;
+  nextStep: string
   /** Return url to get previous step */
-  getPreviousStepRoute: GetPreviousStepRoute;
+  getPreviousStepRoute: GetPreviousStepRoute
   /** return url to get previous step */
-  getDebugStepRoute: GetDebugStepRoute;
-};
+  getDebugStepRoute: GetDebugStepRoute
+}
 export interface IUrlParams {
   [key: string]: string
-};
+}
 
 export interface IPropsPresetCollection {
   name: string
   presets: {
     [key: string]: any
   }
-};
+}
 export interface IAddonsConfig {
-  uiPropsPresets?: IPropsPresetCollection[] 
+  uiPropsPresets?: IPropsPresetCollection[]
 }
 export interface IFormEngineOptions {
   requestsMetadata?: Object
@@ -60,13 +59,13 @@ export interface IFormEngineOptions {
 }
 export interface IDefaultStep {
   data: {
-    slug: string,
-    type: string,
-    friendlyName: string,
-    fields: IStepConfigField[],
-  },
-  position: number,
-  webhookResult: Object,
+    slug: string
+    type: string
+    friendlyName: string
+    fields: IStepConfigField[]
+  }
+  position: number
+  webhookResult: Object
 }
 
 export interface IFormResponseData {
@@ -104,22 +103,11 @@ export interface IStepData {
 
 export interface IStepConfigFieldUiProps {
   label?: string
-  placeholder?: string;
-  [key : string]: any;
+  placeholder?: string
+  [key: string]: any
 }
 export interface IStepConfigFieldValidator {
   type: string
-}
-
-interface IFieldPropsConditional {
-  conditional: string
-  props: {
-    [propKey: string]: any
-  }
-}
-
-interface IFieldStyles {
-  size: "full" | "half"
 }
 
 export interface IStepConfigField {
@@ -128,8 +116,15 @@ export interface IStepConfigField {
   "ui:props": IStepConfigFieldUiProps
   validators: IStepConfigFieldValidator[]
   conditional?: string
-  "ui:props-conditional"?: IFieldPropsConditional[]
-  "ui:styles"?: IFieldStyles
+  "ui:props-conditional"?: {
+    conditional: string
+    props: {
+      [propKey: string]: any
+    }
+  }[]
+  "ui:styles"?: {
+    size: "full" | "half"
+  }
   meta: Object
   component: string
   value?: any

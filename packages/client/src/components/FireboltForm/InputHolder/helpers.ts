@@ -1,6 +1,6 @@
 import evaluate from "simple-evaluate"
 
-export default function getConditionalProps({ propsConditional, formPayload }) {
+export function getConditionalProps({ propsConditional, formPayload }) {
   if (!propsConditional) return {}
   const safePropsConditional = propsConditional || []
 

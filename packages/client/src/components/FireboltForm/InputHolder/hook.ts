@@ -1,11 +1,11 @@
-import { useEffect, useRef } from "react"
+import { useRef } from "react"
 import classNames from "classnames"
 import { getFieldProps, IStepConfigField } from "@iq-firebolt/client-core/lib"
 import { IgetFormttedPropsPresets } from "@iq-firebolt/client-core/lib/formatters/applyPropsPresets"
 import { validateFBTField } from "@iq-firebolt/validators/src"
 import { IFieldsObject } from "../../../../types"
 
-import getConditionalProps from "../helpers/getConditionalProps"
+import { getConditionalProps } from "./helpers"
 
 export interface IUseInputHolder {
   FieldComponent?: any
@@ -46,6 +46,8 @@ export default function useInputHolder({
   isRequiredField,
   standalonePropsPresets,
 }: IUseInputHolder) {
+  const inputRef = useRef(null)
+
   const {
     slug,
     meta = {}, //todo remove
@@ -53,8 +55,6 @@ export default function useInputHolder({
     "ui:styles": propsStyles,
     "ui:props-conditional": propsConditional,
   } = fieldConfig
-
-  const inputRef = useRef(null)
   const fieldId = `firebolt-form-field-${slug}`
   const value = formPayload[slug] || ""
   const hasError =
