@@ -1,12 +1,13 @@
-import { Validator, ValidationResult } from '../../classes';
+import { Validator, ValidationResult } from "../../classes"
+import replaceAll from "../../utils/replaceAll"
 
 interface INumberRangeArgs {
-  minNumber?: number;
-  maxNumber?: number;
-  decimalSymbol?: string;
-  thousandsSeparatorSymbol?: string;
-  abovePermitedValueMessage?: string;
-  underPermitedValueMessage?: string;
+  minNumber?: number
+  maxNumber?: number
+  decimalSymbol?: string
+  thousandsSeparatorSymbol?: string
+  abovePermitedValueMessage?: string
+  underPermitedValueMessage?: string
 }
 // custom message
 function numberRange(
@@ -14,42 +15,46 @@ function numberRange(
   {
     minNumber = 0,
     maxNumber,
-    decimalSymbol = ',',
+    decimalSymbol = ",",
     thousandsSeparatorSymbol,
     abovePermitedValueMessage,
     underPermitedValueMessage,
-  }: INumberRangeArgs,
+  }: INumberRangeArgs
 ) {
-  if (!value && typeof value !== 'number') return new ValidationResult(true);
+  if (!value && typeof value !== "number") return new ValidationResult(true)
 
-  const stringfiedValue = String(value);
+  const stringfiedValue = String(value)
 
-  const onlyNumbers = stringfiedValue.replace(/[^0-9,.]/g, '');
+  const onlyNumbers = stringfiedValue.replace(/[^0-9,.]/g, "")
   const withoutThousandSeparator = !!thousandsSeparatorSymbol // 1000000
-    ? onlyNumbers.replaceAll(thousandsSeparatorSymbol, '')
-    : onlyNumbers;
-  const withDecimalPoint = withoutThousandSeparator.replaceAll(decimalSymbol, '.');
-  const formatted = Number(withDecimalPoint);
+    ? replaceAll(onlyNumbers, thousandsSeparatorSymbol, "")
+    : onlyNumbers
+  const withDecimalPoint = replaceAll(
+    withoutThousandSeparator,
+    decimalSymbol,
+    "."
+  )
+  const formatted = Number(withDecimalPoint)
 
   if (
-    (typeof minNumber === 'number' || typeof minNumber === 'string') &&
+    (typeof minNumber === "number" || typeof minNumber === "string") &&
     formatted < Number(minNumber)
   ) {
     const message =
-      underPermitedValueMessage || 'O número recebido é menor que o permitido';
-    return new ValidationResult(false, message);
+      underPermitedValueMessage || "O número recebido é menor que o permitido"
+    return new ValidationResult(false, message)
   }
 
   if (
-    (typeof maxNumber === 'number' || typeof maxNumber === 'string') &&
+    (typeof maxNumber === "number" || typeof maxNumber === "string") &&
     formatted > Number(maxNumber)
   ) {
     const message =
-      abovePermitedValueMessage || 'O número recebido é maior que o permitido';
-    return new ValidationResult(false, message);
+      abovePermitedValueMessage || "O número recebido é maior que o permitido"
+    return new ValidationResult(false, message)
   }
 
-  return new ValidationResult(true);
+  return new ValidationResult(true)
 }
 
-export default new Validator(numberRange);
+export default new Validator(numberRange)

@@ -3,7 +3,7 @@ import {
   IFormResponseData,
   IPropsPresetCollection,
   IStepConfigField,
-} from "lib/types"
+} from "../types"
 import UIPropsPresets from "../constants/ui-props-presets"
 
 interface ICollectionsMap {
@@ -79,6 +79,13 @@ export function getFieldProps(
   return fullfieldWithPropsPreset
 }
 
+export interface IgetFormttedPropsPresets {
+  propsPresetsCollections: IPropsPresetCollection[]
+  collectionsMap: IgetCollectionsMapReturn
+  allCustomPresetsMap: {}
+  allPresetsMap: {}
+}
+
 export function getFormattedPropsPresets(
   propsPresetsCollections: IPropsPresetCollection[]
 ) {
@@ -93,7 +100,14 @@ export function getFormattedPropsPresets(
   }
 }
 
-function getCollectionsMap(propsPresetsCollections: IPropsPresetCollection[]) {
+interface IgetCollectionsMapReturn {
+  [presetName: string]: {
+    [key: string]: any
+  }
+}
+function getCollectionsMap(
+  propsPresetsCollections: IPropsPresetCollection[]
+): IgetCollectionsMapReturn {
   return propsPresetsCollections.reduce((acc, { name, presets }) => {
     return { ...acc, [name]: presets }
   }, {})

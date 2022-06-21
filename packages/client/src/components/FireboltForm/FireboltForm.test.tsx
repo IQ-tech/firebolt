@@ -11,35 +11,28 @@ import FireboltForm from "./index"
 jest.mock("axios")
 
 //#region MOCKS
-const mockBlur = jest.fn(() => () => {})
-const mockChange = jest.fn(() => () => {})
 const mockSubmit = jest.fn((e) => e.preventDefault())
 const mockGoBack = jest.fn(() => {})
-const mockFocus = jest.fn()
 
 jest.mock("./hook/useFormEvents", () => {
   return jest.fn().mockImplementation(() => {
     return {
       handleSubmit: mockSubmit,
       handleGoBack: mockGoBack,
-      getFieldEvent: {
-        onBlur: mockBlur,
-        onChange: mockChange,
-        onFocus: mockFocus,
-      },
     }
   })
 })
 //#endregion
 
 describe("firebolt form test", () => {
-  const fields = []
+  const fields: any[] = []
   const textField = {
     "slug": "full_name",
     "ui:widget": "Text",
     "ui:props": {
       "placeholder": "Name",
     },
+    "value": "John Doe",
     "validators": [{ "type": "required" }, { "type": "name" }],
     "meta": {},
   }
@@ -59,7 +52,6 @@ describe("firebolt form test", () => {
 
     fireEvent.blur(input, { target: { value: value } })
     expect(input).toHaveValue(value)
-    expect(mockBlur).toHaveBeenCalled()
   })
 
   it("able to call the submit function", () => {
@@ -181,7 +173,7 @@ describe("firebolt form test", () => {
 
     const button = container.querySelector(
       `#firebolt-form-field-${selectField.slug}`
-    )
+    ) as Element
     fireEvent.mouseDown(button)
 
     expect(getByText("Test1")).toBeInTheDocument()
@@ -289,7 +281,7 @@ describe("autofilled fields test", () => {
   beforeEach(() => {
     // clearAllFormSessions()
 
-    (axios.get as jest.Mock).mockResolvedValue({ data: startFormResponse })
+    ;(axios.get as jest.Mock).mockResolvedValue({ data: startFormResponse })
 
     Object.defineProperty(window, "location", {
       writable: true,

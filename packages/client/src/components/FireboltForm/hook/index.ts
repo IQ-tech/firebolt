@@ -13,7 +13,8 @@ export default function useFireboltForm({
   remoteErrors,
   onGoBack,
   onFocusField,
-  addons
+  addons,
+  classes
 }: IUseFireboltForm) {
 
   const {
@@ -60,7 +61,8 @@ export default function useFireboltForm({
     standalonePropsPresets,
     hasFormChanged,
     setHasFormChanged,
-    onFocusField
+    onFocusField,
+    classes
   })
 
   const actionsChildData: IActionsChildData = {
