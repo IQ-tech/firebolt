@@ -1,5 +1,6 @@
 import { createTextMaskInputElement } from "text-mask-core"
 import { useRef, useEffect, MutableRefObject } from "react"
+import { parseMask } from "./helpers"
 
 type RegexOrString = RegExp | string
 type RegexGenerator = (...args: any[]) => RegexOrString[]
@@ -24,7 +25,7 @@ export default function useMaskedInput({
 
     textMask.current = createTextMaskInputElement({
       inputElement: input.current,
-      mask,
+      mask: mask ? parseMask(mask) : mask,
     })
 
     textMask.current.update(value)
