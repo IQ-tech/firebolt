@@ -38,6 +38,7 @@
     "@babel/runtime": "^7.16.3",
     "@iq-firebolt/client-core": "0.8.0",
     "@iq-firebolt/validators": "0.8.0",
+    "@viewstools/use-masked-input": "^2.0.1",
     "classnames": "^2.3.1",
     "fast-levenshtein": "^3.0.0",
     "simple-evaluate": "^1.4.3"

@@ -1,5 +1,6 @@
 import { useRef } from "react"
 import classNames from "classnames"
+import useMaskedInput from "./useMask"
 import { getFieldProps, IStepConfigField } from "@iq-firebolt/client-core/lib"
 import { IgetFormttedPropsPresets } from "@iq-firebolt/client-core/lib/formatters/applyPropsPresets"
 import { validateFBTField } from "@iq-firebolt/validators/src"
@@ -46,8 +47,6 @@ export default function useInputHolder({
   isRequiredField,
   standalonePropsPresets,
 }: IUseInputHolder) {
-  const inputRef = useRef(null)
-
   const {
     slug,
     meta = {}, //todo remove
@@ -55,6 +54,7 @@ export default function useInputHolder({
     "ui:styles": propsStyles,
     "ui:props-conditional": propsConditional,
   } = fieldConfig
+
   const fieldId = `firebolt-form-field-${slug}`
   const value = formPayload[slug] || ""
   const hasError =
@@ -86,6 +86,19 @@ export default function useInputHolder({
         standalonePropsPresets.allPresetsMap
       )
     })() || {}
+
+  const inputRef = useRef()
+  const mask =
+    propsFromSchema.mask ||
+    fieldsPropsConditional.mask ||
+    standalonePropsPresetsMap.mask
+
+  const onChangeMask = useMaskedInput({
+    input: inputRef,
+    mask: mask ? mask : false,
+    value,
+    onChange: (value: string) => onChangeFieldHandler(value),
+  })
 
   function onChangeFieldHandler(value: string) {
     const fieldSlug = fieldConfig?.slug
@@ -137,6 +150,7 @@ export default function useInputHolder({
     ...standalonePropsPresetsMap,
     ...fieldsPropsConditional,
     fieldId,
+    inputRef,
     slug,
     value,
     hasError,
@@ -148,7 +162,7 @@ export default function useInputHolder({
     errorMessage,
     modifyPayloadKeys,
     fieldValidators: fieldConfig?.validators || [],
-    onChange: onChangeFieldHandler,
+    onChange: mask ? onChangeMask : onChangeFieldHandler,
     onBlur: onBlurFieldHandler,
     onFocus: onFocusFieldHandler,
     manuallySetFieldError: manuallySetFieldErrorHandler,
