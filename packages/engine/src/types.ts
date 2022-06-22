@@ -39,10 +39,10 @@ export interface IWebhookConfig {
 //Representa a especificação do formulário geral dada pelo JSON
 export interface IExperienceJSONSchema {
   "$schema-version"?: string
-  "$experience-version"?: string //todo - add to schema
-  name: string //todo - add to schema
-  description: string //todo - add to schema
-  business: string // todo - to deprecate
+  "$experience-version"?: string
+  name: string 
+  description: string
+  business: string
   webhookConfig?: IWebhookConfig
   flows: IFlow[]
   steps: IStepJSON[]
