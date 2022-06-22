@@ -1,8 +1,7 @@
-import React, { useRef } from "react"
+import React from "react"
 import FormControl from "@material-ui/core/FormControl"
 import TextField from "@material-ui/core/TextField"
 import FieldHolder from "../../FieldHolder"
-import useMaskedInput from "@viewstools/use-masked-input"
 
 const TextWidget = ({
   // html attributtes
@@ -13,7 +12,6 @@ const TextWidget = ({
 
   // custom props
   slug,
-  mask,
   errorMessage,
   hasError,
   label,

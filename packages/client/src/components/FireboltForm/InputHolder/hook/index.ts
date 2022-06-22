@@ -3,10 +3,8 @@ import classNames from "classnames"
 import useMaskedInput from "./useMask"
 import { getFieldProps, IStepConfigField } from "@iq-firebolt/client-core/lib"
 import { IgetFormttedPropsPresets } from "@iq-firebolt/client-core/lib/formatters/applyPropsPresets"
-import { validateFBTField } from "@iq-firebolt/validators/src"
 import { IFieldsObject } from "../../../../types"
-
-import { getConditionalProps } from "./helpers"
+import { getConditionalProps, validateField } from "./helpers"
 
 export interface IUseInputHolder {
   FieldComponent?: any
@@ -145,7 +143,7 @@ export default function useInputHolder({
     clearFieldWarning(slug, true)
   }
 
-  const nfieldProps = {
+  const fieldProps = {
     ...propsFromSchema,
     ...standalonePropsPresetsMap,
     ...fieldsPropsConditional,
@@ -172,20 +170,8 @@ export default function useInputHolder({
   return {
     computedClasses,
     slug,
-    nfieldProps,
+    fieldProps,
   }
 }
 
-interface IvalidateField {
-  value: string
-  field: IStepConfigField
-  formPayload: { [fieldSlug: string]: any }
-}
-function validateField({ value, field, formPayload }: IvalidateField) {
-  return validateFBTField({
-    value,
-    field,
-    formPayload,
-    context: "client",
-  })
-}
+
