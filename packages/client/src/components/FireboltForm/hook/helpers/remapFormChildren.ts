@@ -42,7 +42,7 @@ export default function remapFormChildren({
           : componentRefs?.after,
       },
     }
-  }, {})
+  }, {} as any)
 
   const remapedChildren = fieldsChildren.reduce((acc, field, index) => {
     const isFirstItem = index === 0
