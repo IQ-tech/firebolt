@@ -14,7 +14,9 @@ export default function useFieldsEvents({
   markAllInvalidFields,
   onGoBack,
   onFocusField,
-  requiredFieldsSlugs
+  requiredFieldsSlugs,
+  remoteErrors,
+  setRemoteErrors
 }) {
   useEffect(() => {
     if (!!onChange && hasFormChanged) {
@@ -27,6 +29,8 @@ export default function useFieldsEvents({
       (item) => !!formPayload[item])
     
     if (isAllRequiredFieldsFilled && requiredFieldsSlugs.length) markAllInvalidFields()
+
+    if(remoteErrors?.length) setRemoteErrors()
 
   }, [formPayload])
 
