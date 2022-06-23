@@ -70,6 +70,7 @@ export interface IUseFireboltForm {
   classes: Object
   onFocusField?: Event
   addons?: IAddonsConfig
+  clearRemoteFieldError?:(fieldSlug: string) => void
 }
 
 export interface IFormState {
@@ -116,4 +117,5 @@ export interface IFireboltForm {
   remoteErrors?: Array<IFieldsObject>
   onGoBack?(): void
   onFocusField?: Event
+  clearRemoteFieldError?:(fieldSlug: string) => void
 }

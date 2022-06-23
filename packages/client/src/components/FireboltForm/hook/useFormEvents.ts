@@ -16,22 +16,22 @@ export default function useFieldsEvents({
   onFocusField,
   requiredFieldsSlugs,
   remoteErrors,
-  setRemoteErrors
+  setRemoteErrors,
+  clearRemoteFieldError,
 }) {
   useEffect(() => {
     if (!!onChange && hasFormChanged) {
-      onChange(formPayload);
+      onChange(formPayload)
     }
-  }, [formPayload, onChange]);
+  }, [formPayload, onChange])
 
   useEffect(() => {
     const isAllRequiredFieldsFilled = requiredFieldsSlugs.every(
-      (item) => !!formPayload[item])
-    
-    if (isAllRequiredFieldsFilled && requiredFieldsSlugs.length) markAllInvalidFields()
-
-    if(remoteErrors?.length) setRemoteErrors()
-
+      (item) => !!formPayload[item]
+    )
+    if (isAllRequiredFieldsFilled && requiredFieldsSlugs.length)
+      markAllInvalidFields()
+    if (remoteErrors?.length) setRemoteErrors()
   }, [formPayload])
 
   function validateField(field: { slug: string }, value: string) {
@@ -40,55 +40,63 @@ export default function useFieldsEvents({
       field,
       formPayload,
       context: "client",
-    });
+    })
   }
 
-  function getOnFieldBlur(field: { slug: string; }): Function {
-    const fieldSlug = field?.slug;
+  function getOnFieldBlur(field: { slug: string }): Function {
+    const fieldSlug = field?.slug
     return (value: string) => {
-      const fieldValidation = validateField(field, value);
-      const isValueValid = fieldValidation.isValid;
+      const fieldValidation = validateField(field, value)
+      const isValueValid = fieldValidation.isValid
 
       if (isValueValid) {
-        clearFieldWarning(fieldSlug);
+        clearFieldWarning(fieldSlug)
       } else {
-        const errorMessage = fieldValidation?.invalidValidations[0]?.message;
-        setFieldWarning(fieldSlug, errorMessage);
+        const errorMessage = fieldValidation?.invalidValidations[0]?.message
+        setFieldWarning(fieldSlug, errorMessage)
       }
-    };
+    }
   }
 
-  function getOnFieldChange(field: { slug: string; }): Function {
-    const fieldSlug = field?.slug;
+  function getOnFieldChange(field: { slug: string }): Function {
+    const fieldSlug = field?.slug
     return (value: string) => {
-      const isValueValid = validateField(field, value).isValid;
-      if (!hasFormChanged) setHasFormChanged(true);
-      modifyPayloadKeys({ [fieldSlug]: value });
+      const isValueValid = validateField(field, value).isValid
+      if (!hasFormChanged) setHasFormChanged(true)
+      console.log(remoteErrors)
+      modifyPayloadKeys({ [fieldSlug]: value })
       if (isValueValid) {
-        clearFieldWarning(fieldSlug);
+        const safeRemoteErrors = remoteErrors || []
+        const hasRemoteError = safeRemoteErrors?.find(
+          (item) => item.slug === field.slug
+        )
+        clearFieldWarning(fieldSlug)
+        if (hasRemoteError && clearRemoteFieldError) {
+          clearRemoteFieldError(field.slug)
+        }
       }
-    };
+    }
   }
 
-  function getOnFieldFocus(field: { slug: string; }) {
-    return () => !!onFocusField && onFocusField(field);
+  function getOnFieldFocus(field: { slug: string }) {
+    return () => !!onFocusField && onFocusField(field)
   }
 
-  function handleSubmit(e: { preventDefault: () => void; }) {
-    if (e && e?.preventDefault) e?.preventDefault();
+  function handleSubmit(e: { preventDefault: () => void }) {
+    if (e && e?.preventDefault) e?.preventDefault()
     if (!!onSubmit && isFormValid) {
-      onSubmit(formPayload);
+      onSubmit(formPayload)
     }
 
     if (!isFormValid) {
-      markAllInvalidFields();
+      markAllInvalidFields()
     }
   }
 
-  function handleGoBack(e: { preventDefault: () => void; }) {
-    e?.preventDefault();
+  function handleGoBack(e: { preventDefault: () => void }) {
+    e?.preventDefault()
     if (!!onGoBack) {
-      onGoBack(formPayload);
+      onGoBack(formPayload)
     }
   }
 
@@ -100,5 +108,5 @@ export default function useFieldsEvents({
       onChange: getOnFieldChange,
       onFocus: getOnFieldFocus,
     },
-  };
+  }
 }
