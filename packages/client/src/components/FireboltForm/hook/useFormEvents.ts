@@ -30,7 +30,7 @@ export default function useFieldsEvents({
     
     if (isAllRequiredFieldsFilled && requiredFieldsSlugs.length) markAllInvalidFields()
 
-    if(remoteErrors) setRemoteErrors()
+    if(remoteErrors?.length) setRemoteErrors()
 
   }, [formPayload])
 
