@@ -14,7 +14,8 @@ export default function useFireboltForm({
   onGoBack,
   classes,
   onFocusField,
-  addons
+  addons,
+  clearRemoteFieldError
 }: IUseFireboltForm) {
 
   const {
@@ -53,7 +54,8 @@ export default function useFireboltForm({
     onFocusField,
     requiredFieldsSlugs,
     remoteErrors,
-    setRemoteErrors
+    setRemoteErrors,
+    clearRemoteFieldError
   })
 
   const { formChildren } = useFormRendering({

@@ -8,7 +8,8 @@ export default function useStep() {
     formflowMetadata,
     capturedData,
     remoteErrors,
-    clearSession
+    clearSession,
+    clearRemoteFieldError,
   } = useFirebolt();
 
   const { data: stepData = {}, ...rest } = currentStep;
@@ -21,7 +22,8 @@ export default function useStep() {
     formflowMetadata,
     capturedData,
     remoteErrors,
-    clearSession
+    clearSession,
+    clearRemoteFieldError,
   };
 
   return { fireboltStep };

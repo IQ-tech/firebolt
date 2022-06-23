@@ -49,6 +49,7 @@ function useFireboltProvider({
     setStagedStep,
     lastVisitedStep,
     setLastVisitedStep,
+    clearRemoteFieldError
   } = useData()
 
   useBrowserNavigation({
@@ -218,6 +219,7 @@ function useFireboltProvider({
     getRequestsMetadata,
     uploadFile,
     clearSession,
+    clearRemoteFieldError
   }
 }
 
