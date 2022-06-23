@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.8.1](https://github.com/IQ-tech/firebolt/compare/v0.8.0...v0.8.1) (2022-06-23)
+
+
+### Bug Fixes
+
+* **client:** :bug: fixed autofill fields after validation error ([aadb3fd](https://github.com/IQ-tech/firebolt/commit/aadb3fd33bbb1e0214cfd96894dafebd0d4d59bf))
+
+
+
+
+
 # [0.8.0](https://github.com/IQ-tech/firebolt/compare/v0.7.0...v0.8.0) (2022-06-08)
 
 
