@@ -1,12 +1,12 @@
-import axios, { AxiosResponse } from "axios"
+import axios, { AxiosRequestHeaders } from "axios"
 import {
   IExperienceDecision,
   IExperienceDecisionPayload,
 } from "../interfaces/IEngine"
-import { IWebhookConfig } from "../types"
 
-export default function callWebhook(
-  { url, headers }: IWebhookConfig,
+export default function callRemoteDecision(
+  url: string,
+  headers: AxiosRequestHeaders,
   data: IExperienceDecisionPayload
 ): Promise<IExperienceDecision> {
   return axios

@@ -1,4 +1,4 @@
-import { IExperienceJSONSchema, IWebhookConfig } from "../types"
+import { IExperienceJSONSchema, IDecisionHandlerConfig } from "../types"
 
 export default class JSONConfig {
   private JSONConfig: IExperienceJSONSchema
@@ -15,8 +15,8 @@ export default class JSONConfig {
     return this.JSONConfig.flows
   }
 
-  get webhookConfig(): IWebhookConfig | undefined {
-    return this.JSONConfig.webhookConfig
+  get decisionHandlerConfig(): IDecisionHandlerConfig | undefined {
+    return this.JSONConfig.decisionHandlerConfig
   }
 
   get steps() {

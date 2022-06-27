@@ -24,18 +24,7 @@ export interface IFlow {
   stepsSlugs: string[] // todo - convert to object when implementing globals
 }
 
-export interface IWebhookTrigger {
-  slug: string
-  saveProcessedData: boolean
-}
-export interface IWebhookConfig {
-  triggers: IWebhookTrigger[]
-  url: string
-  headers: {
-    [key: string]: string | boolean | number
-  }
-}
-
+export type IDecisionHandlerStrategy = "local" | "remote"
 interface IRemoteDecisionURLMap {
   [stepKey: string]: string
 }
@@ -47,8 +36,8 @@ export interface IRemoteDecisionConfig {
   }
 }
 
-export interface IDecisionConfig {
-  strategy: "local" | "remote"
+export interface IDecisionHandlerConfig {
+  strategy: IDecisionHandlerStrategy
   triggers: string[] | "all"
   saveProcessedData: string[] | "all"
   // se tiver strategy remote e não tiver remoteConfig - retorna erro
@@ -61,8 +50,7 @@ export interface IExperienceJSONSchema {
   name: string
   description: string
   business: string // todo remove
-  webhookConfig?: IWebhookConfig
-  decisionHandler: IDecisionConfig
+  decisionHandlerConfig?: IDecisionHandlerConfig
   flows: IFlow[]
   steps: IStepJSON[]
 }

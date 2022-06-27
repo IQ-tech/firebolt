@@ -22,6 +22,9 @@ export const ErrorsConfigs = {
   "stepNotFound": {
     message: "Step could not be found on the JSON config file",
   },
+  "remoteDecisionConfigNotProvided": {
+    message: "JSON config file does not provided a remote decision config",
+  },
   /** Resolver errors */
   "resolverMissing": {
     message: "Required engine resolver is missing on instance",
@@ -29,6 +32,11 @@ export const ErrorsConfigs = {
   "resolverReturnIsInvalid": {
     message:
       "Data returned by resolver function is unexpected or nonexistent (bad implementation)",
+  },
+  /** Decision errors */
+  "localDecisionCallbackNotProvided": {
+    message:
+      "Local decision callback is not implemented but is required to this step",
   },
   /** Addons errors */
   "invalidAddon": {

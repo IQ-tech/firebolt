@@ -16,7 +16,8 @@ jest.mock("axios")
 
 describe("callWebhook", () => {
   test("axios post request", async () => {
-    const webhookConfig = sampleWithWebhookConfig()?.webhookConfig as IWebhookConfig
+    const webhookConfig = sampleWithWebhookConfig()
+      ?.webhookConfig as IWebhookConfig
     mockedSetSession(oneStepCompletedFlowDefault)
     const currentSession = (await mockedGetSession(
       oneStepCompletedFlowDefault.sessionId
@@ -35,7 +36,7 @@ describe("callWebhook", () => {
     ;(axios.post as jest.Mock).mockResolvedValue({
       data: "Result request callWebhook",
     })
-   const requestCallWebhook = await callWebhook(webhookConfig, data)
+    const requestCallWebhook = await callWebhook(webhookConfig, data)
 
     expect(requestCallWebhook).toBe("Result request callWebhook")
   })
