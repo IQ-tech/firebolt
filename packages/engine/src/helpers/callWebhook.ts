@@ -1,14 +1,26 @@
-import axios from "axios"
-import { IExperienceDecision, IExperienceDecisionPayload } from "../interfaces/IEngine"
+import axios, { AxiosResponse } from "axios"
+import {
+  IExperienceDecision,
+  IExperienceDecisionPayload,
+} from "../interfaces/IEngine"
 import { IWebhookConfig } from "../types"
 
-export default async function callWebhook(
+export default function callWebhook(
   { url, headers }: IWebhookConfig,
   data: IExperienceDecisionPayload
 ): Promise<IExperienceDecision> {
-  const response = await axios.post(url, data, {
-    headers: headers,
-  })
-  const responseData: IExperienceDecision = response.data
-  return responseData
+  return axios
+    .post(url, data, { headers: headers })
+    .then(({ data }) => {
+      return data as IExperienceDecision
+    })
+    .catch((err) => {
+      const responseError: IExperienceDecision = {
+        action: "blockProgression",
+        options: {
+          errors: JSON.stringify(err),
+        },
+      }
+      return responseError
+    })
 }
