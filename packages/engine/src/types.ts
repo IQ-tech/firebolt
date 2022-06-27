@@ -36,14 +36,33 @@ export interface IWebhookConfig {
   }
 }
 
+interface IRemoteDecisionURLMap {
+  [stepKey: string]: string
+}
+type IRemoteDecisionURL = IRemoteDecisionURLMap | string
+export interface IRemoteDecisionConfig {
+  url: IRemoteDecisionURL
+  headers?: {
+    [key: string]: string | boolean | number
+  }
+}
+
+export interface IDecisionConfig {
+  strategy: "local" | "remote"
+  triggers: string[] | "all"
+  saveProcessedData: string[] | "all"
+  // se tiver strategy remote e não tiver remoteConfig - retorna erro
+  remoteConfig?: IRemoteDecisionConfig
+}
 //Representa a especificação do formulário geral dada pelo JSON
 export interface IExperienceJSONSchema {
   "$schema-version"?: string
   "$experience-version"?: string
-  name: string 
+  name: string
   description: string
-  business: string
+  business: string // todo remove
   webhookConfig?: IWebhookConfig
+  decisionHandler: IDecisionConfig
   flows: IFlow[]
   steps: IStepJSON[]
 }
