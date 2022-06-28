@@ -1,9 +1,12 @@
-import { IWebhookConfig } from "../types"
+import { IDecisionHandlerConfig } from "../types"
 
-export default function getShouldSaveProcessedData( receivingStepSlug: string, webhookConfig?: IWebhookConfig): boolean{
-  const safeWebhookConfig = webhookConfig || {} as IWebhookConfig
-  const triggers = safeWebhookConfig?.triggers || []
-  const currentTrigger = triggers.find(trigger => trigger.slug === receivingStepSlug)
-  if(!currentTrigger) return false
-  return currentTrigger.saveProcessedData
+export default function getShouldSaveProcessedData(
+  receivingStepSlug: string,
+  decisionHandlerConfig?: IDecisionHandlerConfig
+): boolean {
+  const safeDecisionConfig =
+    decisionHandlerConfig || ({} as IDecisionHandlerConfig)
+  const stepsToSave = safeDecisionConfig?.saveProcessedData
+  if (stepsToSave === "all") return true
+  return stepsToSave?.includes(receivingStepSlug)
 }

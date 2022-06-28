@@ -24,26 +24,33 @@ export interface IFlow {
   stepsSlugs: string[] // todo - convert to object when implementing globals
 }
 
-export interface IWebhookTrigger {
-  slug: string
-  saveProcessedData: boolean
+export type IDecisionHandlerStrategy = "local" | "remote"
+interface IRemoteDecisionURLMap {
+  [stepKey: string]: string
 }
-export interface IWebhookConfig {
-  triggers: IWebhookTrigger[]
-  url: string
-  headers: {
+type IRemoteDecisionURL = IRemoteDecisionURLMap | string
+export interface IRemoteDecisionConfig {
+  url: IRemoteDecisionURL
+  headers?: {
     [key: string]: string | boolean | number
   }
 }
 
+export interface IDecisionHandlerConfig {
+  strategy: IDecisionHandlerStrategy
+  triggers: string[] | "all"
+  saveProcessedData: string[] | "all"
+  // se tiver strategy remote e não tiver remoteConfig - retorna erro
+  remoteConfig?: IRemoteDecisionConfig
+}
 //Representa a especificação do formulário geral dada pelo JSON
 export interface IExperienceJSONSchema {
   "$schema-version"?: string
   "$experience-version"?: string
-  name: string 
+  name: string
   description: string
-  business: string
-  webhookConfig?: IWebhookConfig
+  business: string // todo remove
+  decisionHandlerConfig?: IDecisionHandlerConfig
   flows: IFlow[]
   steps: IStepJSON[]
 }

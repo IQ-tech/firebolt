@@ -4,29 +4,27 @@ import {
   IExperienceDecision,
   IExperienceDecisionAction,
   IExperienceDecisionOptions,
-  IDecisionCallbackStrategy,
   IFireboltSession,
 } from "../interfaces/IEngine"
-import { IWebhookTrigger, IWebhookConfig } from "../types"
+import { IDecisionHandlerConfig, IRemoteDecisionConfig } from "../types"
 
-import callWebhook from "./callWebhook"
+import callRemoteDecision from "./callRemoteDecision"
 
 interface IUseDecisionCallback {
   decisionCB?: IExperienceDecisionCallbackFunction
   payload: IExperienceProceedPayload
-  stepWebhookDefinition?: IWebhookTrigger
-  decisionCallbackStrategy: IDecisionCallbackStrategy
+  decisionHandlerConfig?: IDecisionHandlerConfig
   session: IFireboltSession
-  webhookConfig?: IWebhookConfig
+  receivingStepSlug: string
 }
 export default function useDecisionCallback({
   decisionCB,
   payload,
-  stepWebhookDefinition,
-  webhookConfig,
-  decisionCallbackStrategy,
   session,
+  decisionHandlerConfig,
+  receivingStepSlug,
 }: IUseDecisionCallback): Promise<IExperienceDecision> {
+  const decisionCallbackStrategy = decisionHandlerConfig?.strategy
   return new Promise((res) => {
     const decide = (
       action: IExperienceDecisionAction,
@@ -35,22 +33,24 @@ export default function useDecisionCallback({
       res({ action, options })
     }
 
-    if (decisionCallbackStrategy === "internal" && decisionCB) {
+    if (decisionCallbackStrategy === "local" && decisionCB) {
       decisionCB(decide, {
         sessionData: session,
         receivingStepData: payload,
       })
     }
 
-    if (decisionCallbackStrategy === "external") {
-      if (webhookConfig && stepWebhookDefinition) {
-        callWebhook(webhookConfig, {
-          sessionData: session,
-          receivingStepData: payload,
-        }).then((webhookResponse) => {
-          res(webhookResponse)
-        })
-      }
+    if (decisionCallbackStrategy === "remote") {
+      const { url, headers = {} } = decisionHandlerConfig!
+        .remoteConfig as IRemoteDecisionConfig
+      const chosenUrl = typeof url === "object" ? url[receivingStepSlug] : url
+
+      callRemoteDecision(chosenUrl, headers, {
+        sessionData: session,
+        receivingStepData: payload,
+      }).then((webhookResponse) => {
+        res(webhookResponse)
+      })
     }
   })
 }

@@ -1,8 +1,9 @@
 import JSONConfig from "../classes/JSONConfig"
 import EngineError from "../classes/EngineError"
-import { IExperienceJSONSchema } from "../types"
+import { IExperienceJSONSchema, IDecisionHandlerConfig } from "../types"
 import { IEngineResolvers, IFireboltSession } from "../interfaces/IEngine"
 import validateJSON from "../helpers/validateJSON"
+import { transduce } from "ramda"
 
 class JSONHandler {
   private preDefinedJSONConfig?: IExperienceJSONSchema
@@ -92,16 +93,6 @@ class JSONHandler {
       throw new EngineError("stepNotFound")
     }
     return stepDefinition
-  }
-
-  getStepWebhookDefinition(stepSlug: string) {
-    const webhookConfig = this.JSONConfig?.webhookConfig
-    const safeTriggers = webhookConfig?.triggers ?? []
-    const currentWebhookConfig = safeTriggers.find(
-      (trigger) => trigger.slug === stepSlug
-    )
-
-    return currentWebhookConfig
   }
 }
 

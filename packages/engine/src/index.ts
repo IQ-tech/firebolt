@@ -8,7 +8,6 @@ import {
   IExperienceDecision,
   IEngineHooks,
   IOnStepTransition,
-  IDecisionCallbackStrategy,
 } from "./interfaces/IEngine"
 import { IStepJSON } from "./types"
 
@@ -27,20 +26,19 @@ import errorHandler from "./helpers/errorHandler"
 import useDecisionCallback from "./helpers/useDecisionCallback"
 import getShouldSaveProcessedData from "./helpers/getShouldSaveProcessedData"
 import getReturningStepFilled from "./helpers/getReturningStepFilled"
+import getShouldUseDecisionHandler from "./helpers/getShouldUseDecisionHandler"
 
 export default class Engine {
   private resolvers: IEngineResolvers
   private session: SessionHandler
   private json: JSONHandler
   private hooks?: IEngineHooks
-  private decisionCallbackStrategy: IDecisionCallbackStrategy
 
   constructor({
     experienceId,
     experienceJSONConfig,
     resolvers,
     hooks,
-    decisionCallbackStrategy,
   }: ICreateEngineOptions) {
     this.resolvers = resolvers
     this.session = new SessionHandler(this.resolvers)
@@ -50,7 +48,6 @@ export default class Engine {
       experienceId,
     })
     this.hooks = hooks
-    this.decisionCallbackStrategy = decisionCallbackStrategy || "internal"
   }
 
   private async setupEnvironment(sessionId: string | undefined) {
@@ -205,20 +202,20 @@ export default class Engine {
       }
 
       // decision point
-      const webhookConfig = this.json.config?.webhookConfig
-      const stepWebhookDefinition =
-        this.json.getStepWebhookDefinition(receivingStepSlug)
-      const decisionCallbackStrategy = this.decisionCallbackStrategy
-      const shouldUseDecision = !!decisionCB || !!stepWebhookDefinition
+      const decisionHandlerConfig = this.json.config?.decisionHandlerConfig
+      const shouldUseDecisionHandler = getShouldUseDecisionHandler(
+        decisionHandlerConfig,
+        !!decisionCB,
+        receivingStepSlug
+      )
 
-      const decision = shouldUseDecision
+      const decision = shouldUseDecisionHandler
         ? await useDecisionCallback({
             decisionCB,
             payload,
-            stepWebhookDefinition,
-            webhookConfig,
-            decisionCallbackStrategy,
             session,
+            decisionHandlerConfig,
+            receivingStepSlug,
           })
         : ({} as IExperienceDecision)
 
@@ -248,7 +245,7 @@ export default class Engine {
 
       const shouldSaveStepProcessedData = getShouldSaveProcessedData(
         receivingStepSlug,
-        this.json.config?.webhookConfig
+        decisionHandlerConfig
       )
       await this.session.addCompletedStep(
         receivingStepSlug,

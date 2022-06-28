@@ -2,14 +2,12 @@ import { IExperienceJSONSchema, IStepFormPayload, IStepJSON } from "../types"
 import { InvalidField } from "@iq-firebolt/validators"
 
 // objeto que representa as opções para criar uma instância da engine
-export type IDecisionCallbackStrategy = "internal" | "external"
 export interface ICreateEngineOptions {
   experienceJSONConfig?: IExperienceJSONSchema
   experienceId: string // legacy business replacement
   resolvers: IEngineResolvers
   hooks?: IEngineHooks
   addons?: IAddonsConfig
-  decisionCallbackStrategy?: IDecisionCallbackStrategy
   debug?: boolean
 }
 
