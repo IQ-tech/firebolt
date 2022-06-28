@@ -6,7 +6,7 @@ import {
 
 export default function callRemoteDecision(
   url: string,
-  headers: AxiosRequestHeaders,
+  headers: AxiosRequestHeaders = {},
   data: IExperienceDecisionPayload
 ): Promise<IExperienceDecision> {
   return axios

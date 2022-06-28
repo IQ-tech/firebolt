@@ -5,16 +5,19 @@ import {
   IFireboltSession,
   IExperienceDecision,
 } from "../interfaces/IEngine"
-import sampleWithWebhookConfig from "../mocks/sample-experience-with-webhook"
+import sampleWithDecisionHandler from "../mocks/sample-experience-with-remote-decision"
 import { oneStepCompletedFlowDefault } from "../mocks/sample-experience-session"
 import useMockNavigation from "../mocks/mock-navigation"
-import { IWebhookConfig } from "../types"
+import { IDecisionHandlerConfig } from "../types"
 
 const {
   getFirstStepCorrectFields,
   getStepper,
   localStorage,
   mockedSetSession,
+  getProceedDecision,
+  getChangeFlowDecision,
+  getBlockProgressionDecision,
 } = useMockNavigation()
 
 jest.mock("axios")
@@ -24,15 +27,17 @@ describe("Engine.decision handler", () => {
     localStorage.clear()
     jest.clearAllMocks()
   })
-  test("should handle with proceed callback decision", async () => {
-    const fireboltStepper = getStepper()
+
+  test("proceed with local decision", async () => {
+    const fireboltStepper = getStepper(true)
 
     const firstStepFields = getFirstStepCorrectFields()
     const payload: IExperienceProceedPayload = {
       fields: firstStepFields,
     }
 
-    const proceed = await fireboltStepper.proceed(payload)
+    const decisionCallback = getProceedDecision()
+    const proceed = await fireboltStepper.proceed(payload, decisionCallback)
 
     expect(proceed?.sessionId.length > 0).toBe(true)
     expect(proceed?.error).toBe(null)
@@ -40,20 +45,14 @@ describe("Engine.decision handler", () => {
     expect(proceed?.experienceMetadata?.currentPosition).toBe(2)
   })
 
-  test("should handle with changeFlow callback decision", async () => {
-    const fireboltStepper = getStepper()
+  test("changeFlow with local decision", async () => {
+    const fireboltStepper = getStepper(true)
     const firstStepField = getFirstStepCorrectFields()
     const payload: IExperienceProceedPayload = {
       fields: firstStepField,
     }
-    const callbackFunction: IExperienceDecisionCallbackFunction = (
-      decide,
-      payload
-    ) => {
-      if (payload.receivingStepData?.fields?.email) {
-        decide("changeFlow", { newFlow: "medium" })
-      }
-    }
+
+    const callbackFunction = getChangeFlowDecision()
     const proceed = await fireboltStepper.proceed(payload, callbackFunction)
 
     expect(proceed?.sessionId.length > 0).toBe(true)
@@ -65,37 +64,15 @@ describe("Engine.decision handler", () => {
     expect(proceed?.experienceMetadata?.lastStepSlug).toBe("token")
   })
 
-  test("should handle with blockProgression callback decision", async () => {
-    const fireboltStepper = getStepper()
+  test("blockProgression with local decision", async () => {
+    const fireboltStepper = getStepper(true)
 
     const firstStepField = getFirstStepCorrectFields()
     const payload: IExperienceProceedPayload = {
       fields: firstStepField,
     }
 
-    const mockedErrors = {
-      email: "user already exists",
-    }
-
-    fireboltStepper.proceed(
-      { fields: { "cpf": "23212" } },
-      (decide, payload) => {
-        if (payload.receivingStepData.fields?.cpf !== "cenoura") {
-          decide("blockProgression")
-        }
-      }
-    )
-
-    const callbackFunction: IExperienceDecisionCallbackFunction = (
-      decide,
-      payload
-    ) => {
-      if (payload.receivingStepData?.fields?.email) {
-        decide("blockProgression", { errors: mockedErrors })
-      }
-      decide("changeFlow", { newFlow: "medium" })
-    }
-
+    const callbackFunction = getBlockProgressionDecision()
     const proceed = await fireboltStepper.proceed(payload, callbackFunction)
 
     expect(proceed?.error?.id).toBe("blockProgressionDecision")
@@ -103,12 +80,66 @@ describe("Engine.decision handler", () => {
     expect(proceed?.experienceMetadata?.currentPosition).toBe(1)
   })
 
-  test("axios post parameters", async () => {
+  test("save processedData with default definition", async () => {
+    const fields = getFirstStepCorrectFields()
+    const mockExperienceDecision: IExperienceDecision = {
+      action: "proceed",
+      options: {
+        processedData: { activeOffers: 2 },
+      },
+    }
+
+    ;(axios.post as jest.Mock).mockImplementation(() => {
+      return Promise.resolve({ data: mockExperienceDecision })
+    })
+    const fireboltStepper = getStepper(true, {
+      strategy: "local",
+      saveProcessedData: "all",
+      triggers: "all",
+    })
+    const callbackFunction = getProceedDecision(mockExperienceDecision.options)
+    const step = await fireboltStepper.proceed(
+      { fields: fields },
+      callbackFunction
+    )
+    const savedSession = JSON.parse(
+      localStorage.getItem(step.sessionId) || "{}"
+    ) as IFireboltSession
+    expect(savedSession?.steps?.["personal_data"].processedData).toEqual({
+      activeOffers: 2,
+    })
+  })
+
+  test("do not save processedData", async () => {
+    const fields = getFirstStepCorrectFields()
+    const mockExperienceDecision: IExperienceDecision = {
+      action: "proceed",
+      options: {
+        processedData: { activeOffers: 2 },
+      },
+    }
+
+    ;(axios.post as jest.Mock).mockImplementation(() => {
+      return Promise.resolve({ data: mockExperienceDecision })
+    })
+    const fireboltStepper = getStepper(true, {
+      strategy: "remote",
+      saveProcessedData: [],
+      triggers: "all",
+    })
+    const step = await fireboltStepper.proceed({ fields: fields })
+    const savedSession = JSON.parse(
+      localStorage.getItem(step.sessionId) || "{}"
+    ) as IFireboltSession
+    expect(savedSession?.steps?.["personal_data"].processedData).toBeUndefined()
+  })
+
+  test("remote - call axios with correct post parameters", async () => {
     ;(axios.post as jest.Mock).mockImplementation(() =>
       Promise.resolve("cenoura")
     )
-    const webhookConfig =
-      sampleWithWebhookConfig().webhookConfig as IWebhookConfig
+    const remoteDecision = sampleWithDecisionHandler({})
+      .decisionHandlerConfig as IDecisionHandlerConfig
 
     mockedSetSession(oneStepCompletedFlowDefault)
 
@@ -117,12 +148,15 @@ describe("Engine.decision handler", () => {
       fields: { brazil_id_number: "1234567890" },
     }
 
-    const fireboltStepper = getStepper("external")
+    const fireboltStepper = getStepper(true, {
+      strategy: "remote",
+      saveProcessedData: "all",
+      triggers: "all",
+    })
     await fireboltStepper.proceed(payload)
-    expect(fireboltStepper["decisionCallbackStrategy"]).toEqual("external")
 
     expect(axios.post).toHaveBeenCalledWith(
-      webhookConfig.url,
+      remoteDecision.remoteConfig?.url,
       {
         "receivingStepData": {
           "fields": { "brazil_id_number": "1234567890" },
@@ -155,44 +189,8 @@ describe("Engine.decision handler", () => {
     )
   })
 
-  test("webhook with save processedData true", async () => {
-    const fields = getFirstStepCorrectFields()
-    const mockExperienceDecision: IExperienceDecision = {
-      action: "proceed",
-      options: {
-        processedData: { activeOffers: 2 },
-      },
-    }
-
-    ;(axios.post as jest.Mock).mockImplementation(() => {
-      return Promise.resolve({ data: mockExperienceDecision })
-    })
-    const fireboltStepper = getStepper("external")
-    const step = await fireboltStepper.proceed({ fields: fields })
-    const savedSession = JSON.parse(
-      localStorage.getItem(step.sessionId) || "{}"
-    ) as IFireboltSession
-    expect(savedSession?.steps?.["personal_data"].processedData).toEqual({
-      activeOffers: 2,
-    })
-  })
-  test("webhook with save processedData false", async () => {
-    const fields = getFirstStepCorrectFields()
-    const mockExperienceDecision: IExperienceDecision = {
-      action: "proceed",
-      options: {
-        processedData: { activeOffers: 2 },
-      },
-    }
-
-    ;(axios.post as jest.Mock).mockImplementation(() => {
-      return Promise.resolve({ data: mockExperienceDecision })
-    })
-    const fireboltStepper = getStepper("external", false)
-    const step = await fireboltStepper.proceed({ fields: fields })
-    const savedSession = JSON.parse(
-      localStorage.getItem(step.sessionId) || "{}"
-    ) as IFireboltSession
-    expect(savedSession?.steps?.["personal_data"].processedData).toBeUndefined()
-  })
+  test.todo("remote - call axios with default url")
+  test.todo("remote - call axios with step url")
+  test.todo("remote - trigger with default definition")
+  test.todo("remote - trigger with step definition")
 })

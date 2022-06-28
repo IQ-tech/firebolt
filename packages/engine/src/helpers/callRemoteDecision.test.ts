@@ -1,5 +1,5 @@
 import axios from "axios"
-import callWebhook from "./callWebhook"
+import callRemote from "./callRemoteDecision"
 import useMockNavigation from "../mocks/mock-navigation"
 import { oneStepCompletedFlowDefault } from "../mocks/sample-experience-session"
 import {
@@ -7,17 +7,18 @@ import {
   IExperienceDecisionPayload,
   IExperienceProceedPayload,
 } from "../interfaces/IEngine"
-import { IWebhookConfig } from "../types"
-import sampleWithWebhookConfig from "../mocks/sample-experience-with-webhook"
+import { IRemoteDecisionConfig } from "../types"
+import sampleWithRemoteConfig from "../mocks/sample-experience-with-remote-decision"
 
 const { mockedSetSession, mockedGetSession } = useMockNavigation()
 
 jest.mock("axios")
 
-describe("callWebhook", () => {
+describe("callRemote", () => {
   test("axios post request", async () => {
-    const webhookConfig = sampleWithWebhookConfig()
-      ?.webhookConfig as IWebhookConfig
+    const remoteConfig = sampleWithRemoteConfig()!.decisionHandlerConfig!
+      .remoteConfig as IRemoteDecisionConfig
+
     mockedSetSession(oneStepCompletedFlowDefault)
     const currentSession = (await mockedGetSession(
       oneStepCompletedFlowDefault.sessionId
@@ -36,7 +37,11 @@ describe("callWebhook", () => {
     ;(axios.post as jest.Mock).mockResolvedValue({
       data: "Result request callWebhook",
     })
-    const requestCallWebhook = await callWebhook(webhookConfig, data)
+    const requestCallWebhook = await callRemote(
+      String(remoteConfig.url),
+      {},
+      data
+    )
 
     expect(requestCallWebhook).toBe("Result request callWebhook")
   })
