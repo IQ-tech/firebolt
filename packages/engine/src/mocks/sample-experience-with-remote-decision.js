@@ -9,7 +9,7 @@ const sampleWithRemoteDecision = ({
   saveDataToStorage = "all",
   triggers = "all",
   url = "https://teste.com.br",
-}) => ({
+} = {}) => ({
   "decisionHandlerConfig": {
     "strategy": "remote",
     "triggers": triggers,

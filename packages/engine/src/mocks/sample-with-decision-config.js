@@ -20,15 +20,15 @@ const remoteConfigMock = {
 }
 
 /**
- * @param {IDecisionHandlerConfig} decisionConfig
+ * @param {strategy: ("local" | "remote"), triggers: ("all" | string[])}
  * @returns {IExperienceJSONSchema}
  * */
 const mockWithDecisionConfig = ({
   strategy = "local",
   triggers = "all",
   saveProcessedData = "all",
-  remoteConfig,
-}) => {
+  remoteConfig = {},
+} = {}) => {
   /** @type {IDecisionHandlerConfig} */
   const localConfig = {
     strategy: "local",
@@ -40,7 +40,7 @@ const mockWithDecisionConfig = ({
   const remoteDecisionConfig = {
     strategy: "remote",
     triggers,
-    remoteConfig: remoteConfig || remoteConfigMock,
+    remoteConfig: Object.keys(remoteConfig).length || remoteConfigMock,
   }
 
   const chosenConfig = (() => {

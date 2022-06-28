@@ -8,6 +8,7 @@ import {
 import { IExperienceJSONSchema } from "../mocks/sample-experience"
 import { twoStepsCompletedFlowDefault } from "../mocks/sample-experience-session"
 import sampleExperienceMock from "../mocks/sample-experience"
+import mockWithDecisionConfig from "../mocks/sample-with-decision-config.js"
 import {
   sampleWithoutDefaultFlow,
   defaultFlowWithoutSteps,
@@ -117,7 +118,7 @@ describe("should identify JSON Errors", () => {
   test("should return an error when flow does not exists on JSON Config", async () => {
     const engine = new Engine({
       experienceId: "sample",
-      experienceJSONConfig: sampleExperienceMock,
+      experienceJSONConfig: mockWithDecisionConfig({ strategy: "local" }),
       resolvers: {
         getSession: mockedGetSession,
         setSession: mockedSetSession,
@@ -215,7 +216,11 @@ describe("should identify generic errors", () => {
   test("should identify error ocurred inside decision callback", async () => {
     const engine = new Engine({
       experienceId: "sample",
-      experienceJSONConfig: sampleExperienceMock,
+      experienceJSONConfig: mockWithDecisionConfig({
+        strategy: "local",
+        triggers: "all",
+        saveProcessedData: "all",
+      }),
       resolvers: {
         getSession: mockedGetSession,
         setSession: async () => {},
