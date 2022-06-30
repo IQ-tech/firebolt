@@ -23,7 +23,6 @@
     "url": "https://github.com/IQ-tech/firebolt/issues"
   },
   "dependencies": {
-    "text-mask-addons": "^3.8.0"
   },
   "browserslist": [
     "last 1 Chrome version"

@@ -41,7 +41,8 @@
     "classnames": "^2.3.1",
     "fast-levenshtein": "^3.0.0",
     "regex-parser": "^2.2.11",
-    "simple-evaluate": "^1.4.3"
+    "simple-evaluate": "^1.4.3",
+    "text-mask-addons": "^3.8.0"
   },
   "devDependencies": {
     "@babel/core": "^7.15.5",

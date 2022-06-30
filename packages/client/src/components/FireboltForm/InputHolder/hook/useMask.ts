@@ -19,6 +19,7 @@ export default function useMaskedInput({
   value = "",
 }: IUseMask) {
   const textMask = useRef<any>()
+  useEffect(init, [mask])
 
   function init() {
     if (!input.current) return
@@ -30,8 +31,6 @@ export default function useMaskedInput({
 
     textMask.current.update(value)
   }
-
-  useEffect(init, [mask])
 
   return () => {
     if (textMask.current) {
