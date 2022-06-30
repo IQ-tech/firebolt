@@ -46,61 +46,103 @@
       "title": "The category schema",
       "type": "string"
     },
-    "webhookConfig": {
-      "$id": "#/properties/webhookConfig",
+    "decisionHandlerConfig": {
+      "$id": "#/properties/decisionHandlerConfig",
       "description": "While transitioning steps on a form, the Firebolt api can make webhook calls to third party api's. This property can be used to define which steps these calls should be made. What to do with the response. it can also define the third party api url that should be used.",
       "examples": [
         {
-          "triggers": [{
-            "slug": "personal_data",
-            "saveProcessedData": true
-          }],
-          "url": "https://my-api.com/v2/",
-          "headers": {
-            "Content-Type": "application/json",
-            "Authorization": "Bearer "
+          "strategy": "remote",
+          "triggers": "all",
+          "saveProcessedData": "all",
+          "remoteConfig": {
+            "url": "url",
+            "headers": {
+              "Content-Type": "application/json",
+              "Authorization": "Bearer "
+            }
           }
         }
       ],
       "required": ["url"],
-      "title": "The webhook config schema",
+      "title": "The decisionHandler config schema",
       "additionalProperties": false,
       "type": "object",
       "properties": {
+        "strategy": {
+          "$id": "#/properties/decisionHandler/properties/strategy",
+          "default": null,
+          "description": "strategy: This property should blablabla....",
+          "examples": [
+            {
+              "strategy": "remote"
+            }
+          ],
+          "title": "The strategy schema",
+          "type": "string"
+        },
         "triggers": {
-          "$id": "#/properties/webhook/properties/triggers",
-          "default": [],
-          "description": "This property should receive an array of objects contain the step slug and an boolean value to say if the processedData must be saved on localStorage, then, the webhook calls will happen on transitioning from these steps.",
-          "examples": [{
-            "slug": "personal_data",
-            "saveProcessedData": true
-          }],
+          "$id": "#/properties/decisionHandler/properties/triggers",
+          "default": "underfined",
+          "description": "This property should receive an array of objects contain the step slug and an boolean value to say if the processedData must be saved on localStorage, then, the decisionHandler calls will happen on transitioning from these steps.",
+          "examples": [
+            {
+              "slug": "personal_data",
+              "saveProcessedData": true
+            }
+          ],
           "title": "The triggers schema",
           "type": "array",
           "minItems": 1,
           "items": {
-            "$id": "#/properties/webhook/properties/triggers/items",
+            "$id": "#/properties/decisionHandler/properties/triggers/items",
             "type": "object"
           }
         },
-        "url": {
-          "$id": "#/properties/webhook/properties/url",
-          "default": "",
-          "description": "url to be used on webhook calls (between step transitions)",
-          "examples": ["http://my-api-url.com/endpoint/"],
-          "title": "Webhook url",
+        "saveProcessedData": {
+          "$id": "#/properties/decisionHandler/properties/saveProcessedData",
+          "default": "underfined",
+          "description": "saveProcessedData: This property blablabla etc...",
+          "examples": [
+            {
+              "saveProcessedData": "all"
+            }
+          ],
+          "title": "The saveProcessedData schema",
           "type": "string"
         },
-        "headers": {
-          "$id": "#/properties/webhook/properties/headers",
-          "type": "object",
-          "additionalProperties": true,
-          "title": "form headers",
-          "description": "headers to be used with webhook calls",
-          "examples": [{
-            "Content-Type": "application/json",
-            "Authorization": "Bearer "
-          }]
+        "remoteConfig": {
+          "$id": "#/properties/decisionHandler/properties/remoteConfig",
+          "default": null,
+          "description": "remoteConfig: This property should blablabla....",
+          "examples": [
+            {
+              "remoteConfig": {
+                "url": {
+                  "$id": "#/properties/decisionHandler/properties/url",
+                  "default": "",
+                  "description": "url to be used on decisionHandler calls (between step transitions)",
+                  "examples": ["http://my-api-url.com/endpoint/"],
+                  "title": "decisionHandler url",
+                  "type": "string"
+                },
+                "headers": {
+                  "$id": "#/properties/decisionHandler/properties/headers",
+                  "type": "object",
+                  "additionalProperties": true,
+                  "title": "form headers",
+                  "description": "headers to be used with decisionHandler calls",
+                  "examples": [
+                    {
+                      "Content-Type": "application/json",
+                      "Authorization": "Bearer "
+                    }
+                  ]
+                }
+              }
+            }
+          ],
+          "title": "The remoteConfig schema",
+          "type": "object"
         }
       }
     },
