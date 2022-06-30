@@ -28,6 +28,7 @@ export interface IFireboltContext {
   getRequestsMetadata?: object
   uploadFile?: any
   clearSession?(): void
+  clearRemoteFieldError(fieldSlug: string): void
 
   connectionError?: any
 }

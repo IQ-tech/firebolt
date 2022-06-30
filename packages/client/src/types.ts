@@ -72,6 +72,7 @@ export interface IUseFireboltForm {
   onBlurField?: (field: IStepConfigField, value: string) => void
   onChangeField?: (field: IStepConfigField, values: {value: any, previousValue: any}) => void
   addons?: IAddonsConfig
+  clearRemoteFieldError?:(fieldSlug: string) => void
 }
 
 export interface IFormState {
@@ -120,4 +121,5 @@ export interface IFireboltForm {
   onFocusField?: (field: IStepConfigField) => void
   onBlurField?: (field: IStepConfigField, value: string) => void
   onChangeField?: (field: IStepConfigField, values: {value: any, previousValue: any}) => void
+  clearRemoteFieldError?:(fieldSlug: string) => void
 }

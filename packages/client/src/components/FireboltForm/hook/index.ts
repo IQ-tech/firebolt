@@ -20,7 +20,8 @@ export default function useFireboltForm(
     onChangeField,
     onBlurField,
     addons,
-    classes
+    classes,
+    clearRemoteFieldError
   }: IUseFireboltForm,
 ) {
   const {
@@ -36,6 +37,7 @@ export default function useFireboltForm(
     fieldManuallySetErrors,
     standalonePropsPresets,
     requiredFieldsSlugs,
+    setRemoteErrors
   } = useFormState({
     schema,
     autoFill,
@@ -52,6 +54,8 @@ export default function useFireboltForm(
     markAllInvalidFields,
     onGoBack,
     requiredFieldsSlugs,
+    remoteErrors,
+    setRemoteErrors,
   })
 
   const { formChildren } = useFormRendering({

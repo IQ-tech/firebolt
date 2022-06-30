@@ -24,6 +24,7 @@ const FireboltForm = ({
   onBlurField,
   onChangeField,
   addons,
+  clearRemoteFieldError
 }: IFireboltForm) => {
   const { handleSubmit, formChildren, actionsChildData, handleGoBack } =
     useFireboltForm({
@@ -40,6 +41,7 @@ const FireboltForm = ({
       onBlurField,
       onChangeField,
       addons,
+      clearRemoteFieldError
     })
 
   const ActionsChild = customActionsChild
