@@ -5,7 +5,7 @@
     "packages/*"
   ],
   "scripts": {
-    "setup": "yarn && yarn build:libs",
+    "setup": "yarn clean && yarn && yarn build:libs",
     "clean": "lerna clean",
     "bootstrap": "lerna bootstrap --use-workspaces",
     "start": "lerna run dev --scope @iq-firebolt/lab --stream",
