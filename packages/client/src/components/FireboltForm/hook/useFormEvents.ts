@@ -25,7 +25,7 @@ export default function useFieldsEvents({
 
     if (isAllRequiredFieldsFilled && requiredFieldsSlugs.length)
       markAllInvalidFields()
-      if (remoteErrors?.length) setRemoteErrors()
+    if (remoteErrors?.length) setRemoteErrors()
   }, [formPayload])
 
   function handleSubmit(e: { preventDefault: () => void }) {

@@ -75,6 +75,8 @@ export default function useFireboltForm(
     onChangeField,
     onBlurField,
     classes,
+    clearRemoteFieldError,
+    remoteErrors
   })
 
   const actionsChildData: IActionsChildData = {

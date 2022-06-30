@@ -24,12 +24,17 @@ export interface IUseInputHolder {
   ) => void
   onFocusField: (field: IStepConfigField) => void
   onBlurField?: (field: IStepConfigField, value: string) => void
-  onChangeField?: (field: IStepConfigField, values: {value: any, previousValue: any}) => void
+  onChangeField?: (
+    field: IStepConfigField,
+    values: { value: any; previousValue: any }
+  ) => void
   classes: any
   fieldValidationErrors: IFieldsObject
   fieldManuallySetErrors: IFieldsObject
   isRequiredField: boolean
   standalonePropsPresets: IgetFormttedPropsPresets | undefined
+  clearRemoteFieldError?: (fieldSlug: string) => void
+  remoteErrors: IFieldsObject[]
 }
 
 export default function useInputHolder({
@@ -48,6 +53,8 @@ export default function useInputHolder({
   fieldValidationErrors,
   isRequiredField,
   standalonePropsPresets,
+  clearRemoteFieldError,
+  remoteErrors,
 }: IUseInputHolder) {
   const {
     slug,
@@ -112,15 +119,23 @@ export default function useInputHolder({
     }).isValid
     modifyPayloadKeys({ [fieldSlug]: value })
     if (isValueValid) {
+      const safeRemoteErrors = remoteErrors || []
+      const hasRemoteError = safeRemoteErrors?.find(
+        (item) => item.slug === fieldConfig.slug
+      )
       clearFieldWarning(fieldSlug)
+      if (hasRemoteError && clearRemoteFieldError) {
+        clearRemoteFieldError(fieldConfig.slug)
+      }
     }
     if (!hasFormChanged) setHasFormChanged(true)
-    if(onChangeField) onChangeField(fieldConfig, {value, previousValue: currentValue})
+    if (onChangeField)
+      onChangeField(fieldConfig, { value, previousValue: currentValue })
   }
 
   function onBlurFieldHandler(value: string) {
     const fieldSlug = fieldConfig?.slug
-    
+
     const fieldValidation = validateField({
       field: fieldConfig,
       value,
@@ -135,7 +150,7 @@ export default function useInputHolder({
       setFieldWarning(fieldSlug, errorMessage)
     }
 
-    if(onBlurField) onBlurField(fieldConfig, value)
+    if (onBlurField) onBlurField(fieldConfig, value)
   }
 
   function onFocusFieldHandler() {
@@ -182,5 +197,3 @@ export default function useInputHolder({
     fieldProps,
   }
 }
-
-

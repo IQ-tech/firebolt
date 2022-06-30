@@ -22,6 +22,8 @@ export default function useFormRendering({
   onChangeField,
   onBlurField,
   classes,
+  clearRemoteFieldError,
+  remoteErrors
 }) {
   // get correct widgets components
   const fieldsChildren = schema.map(
@@ -62,6 +64,8 @@ export default function useFormRendering({
             fieldValidationErrors={fieldValidationErrors}
             isRequiredField={isRequiredField}
             standalonePropsPresets={standalonePropsPresets}
+            clearRemoteFieldError={clearRemoteFieldError}
+            remoteErrors={remoteErrors}
           />
         )
       }
