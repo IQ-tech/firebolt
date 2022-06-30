@@ -1,22 +1,28 @@
 import useFormState from "./useFormState"
 import useFormEvents from "./useFormEvents"
 import useFormRendering from "./useFormRendering"
-import { IActionsChildData, IUseFireboltForm } from "../../../types"
+import {
+  IActionsChildData,
+  IUseFireboltForm
+} from "../../../types"
 
-export default function useFireboltForm({
-  schema,
-  children,
-  onChange,
-  onSubmit,
-  theme,
-  autoFill,
-  remoteErrors,
-  onGoBack,
-  onFocusField,
-  addons,
-  classes
-}: IUseFireboltForm) {
-
+export default function useFireboltForm(
+  {
+    schema,
+    children,
+    onChange,
+    onSubmit,
+    theme,
+    autoFill,
+    remoteErrors,
+    onGoBack,
+    onFocusField,
+    onChangeField,
+    onBlurField,
+    addons,
+    classes
+  }: IUseFireboltForm,
+) {
   const {
     isFormValid,
     formPayload,
@@ -29,15 +35,15 @@ export default function useFireboltForm({
     markAllInvalidFields,
     fieldManuallySetErrors,
     standalonePropsPresets,
-    requiredFieldsSlugs
+    requiredFieldsSlugs,
   } = useFormState({
     schema,
     autoFill,
     remoteErrors,
-    addons
+    addons,
   })
 
-  const {  handleSubmit, handleGoBack } = useFormEvents({
+  const { handleSubmit, handleGoBack } = useFormEvents({
     onChange,
     onSubmit,
     formPayload,
@@ -45,7 +51,7 @@ export default function useFireboltForm({
     hasFormChanged,
     markAllInvalidFields,
     onGoBack,
-    requiredFieldsSlugs
+    requiredFieldsSlugs,
   })
 
   const { formChildren } = useFormRendering({
@@ -62,7 +68,9 @@ export default function useFireboltForm({
     hasFormChanged,
     setHasFormChanged,
     onFocusField,
-    classes
+    onChangeField,
+    onBlurField,
+    classes,
   })
 
   const actionsChildData: IActionsChildData = {

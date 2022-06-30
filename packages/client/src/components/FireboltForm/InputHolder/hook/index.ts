@@ -23,6 +23,8 @@ export interface IUseInputHolder {
     manualSetError?: boolean
   ) => void
   onFocusField: (field: IStepConfigField) => void
+  onBlurField?: (field: IStepConfigField, value: string) => void
+  onChangeField?: (field: IStepConfigField, values: {value: any, previousValue: any}) => void
   classes: any
   fieldValidationErrors: IFieldsObject
   fieldManuallySetErrors: IFieldsObject
@@ -39,6 +41,8 @@ export default function useInputHolder({
   clearFieldWarning,
   setFieldWarning,
   onFocusField,
+  onBlurField,
+  onChangeField,
   classes,
   fieldManuallySetErrors,
   fieldValidationErrors,
@@ -100,6 +104,7 @@ export default function useInputHolder({
 
   function onChangeFieldHandler(value: string) {
     const fieldSlug = fieldConfig?.slug
+    const currentValue = formPayload[fieldSlug]
     const isValueValid = validateField({
       field: fieldConfig,
       value,
@@ -110,10 +115,12 @@ export default function useInputHolder({
       clearFieldWarning(fieldSlug)
     }
     if (!hasFormChanged) setHasFormChanged(true)
+    if(onChangeField) onChangeField(fieldConfig, {value, previousValue: currentValue})
   }
 
   function onBlurFieldHandler(value: string) {
     const fieldSlug = fieldConfig?.slug
+    
     const fieldValidation = validateField({
       field: fieldConfig,
       value,
@@ -127,6 +134,8 @@ export default function useInputHolder({
       const errorMessage = fieldValidation?.invalidValidations[0]?.message
       setFieldWarning(fieldSlug, errorMessage)
     }
+
+    if(onBlurField) onBlurField(fieldConfig, value)
   }
 
   function onFocusFieldHandler() {

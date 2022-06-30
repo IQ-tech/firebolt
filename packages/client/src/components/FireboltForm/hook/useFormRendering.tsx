@@ -19,6 +19,8 @@ export default function useFormRendering({
   hasFormChanged,
   setHasFormChanged,
   onFocusField,
+  onChangeField,
+  onBlurField,
   classes,
 }) {
   // get correct widgets components
@@ -53,6 +55,8 @@ export default function useFormRendering({
             clearFieldWarning={clearFieldWarning}
             setFieldWarning={setFieldWarning}
             onFocusField={onFocusField}
+            onBlurField={onBlurField}
+            onChangeField={onChangeField}
             classes={classes}
             fieldManuallySetErrors={fieldManuallySetErrors}
             fieldValidationErrors={fieldValidationErrors}

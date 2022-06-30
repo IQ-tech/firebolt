@@ -1,13 +1,11 @@
 import DefaultTemplate from "../../components/templates/DefaultTemplate"
-import UploadFileTemplate from "../../components/templates/UploadFileTemplate"
-import CustomFormTemplate from "../../components/templates/CustomFormTemplate"
 import { createFireboltProvider, Wizard } from "@iq-firebolt/client/src"
 import transmorphersPropsPresets from "../../constants/transmorphers-props-presets"
 import { propsPresets } from "@iq-firebolt/br-addons"
 
 const withFirebolt = createFireboltProvider({
   formAccess: {
-    root: "https://btti33t5h5.execute-api.sa-east-1.amazonaws.com/dev",
+    root: "https://dsv-firebolt-api.iq.com.br/",
     formName: "sample",
   },
   withHistory: true,
