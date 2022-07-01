@@ -2,7 +2,13 @@
   "$id": "https://github.com/IQ-tech/firebolt",
   "$schema": "http://json-schema.org/draft-07/schema",
   "description": "This schema should be used to the creation and validation of Firebolt Forms JSON files",
-  "required": ["$schema-version", "category", "flows", "steps"],
+  "required": [
+    "$schema-version",
+    "$experience-version",
+    "flows",
+    "steps",
+    "name"
+  ],
   "title": "The Firebolt form schema",
   "type": "object",
   "additionalProperties": false,
@@ -28,7 +34,7 @@
       "default": "",
       "description": "Name of the JSON form",
       "examples": ["sample"],
-      "title": "Name config",
+      "title": "Experience name",
       "type": "string"
     },
     "description": {
@@ -36,19 +42,19 @@
       "default": "",
       "description": "Description of the current JSON",
       "examples": ["sample json for tests"],
-      "title": "Description config",
+      "title": "Experience description",
       "type": "string"
     },
     "category": {
       "$id": "#/properties/category",
       "description": "This field requires a keyword to categorize the form",
       "examples": ["sample", "loans", "auth"],
-      "title": "The category schema",
+      "title": "Experience category",
       "type": "string"
     },
     "decisionHandlerConfig": {
       "$id": "#/properties/decisionHandlerConfig",
-      "description": "While transitioning steps on a form, the Firebolt api can make webhook calls to third party api's. This property can be used to define which steps these calls should be made. What to do with the response. it can also define the third party api url that should be used.",
+      "description": "While transitioning steps, firebolt can execute a middleware called decision handler, with this function the developer can modify the natural flow of the experience, process incoming data...",
       "examples": [
         {
           "strategy": "remote",
@@ -63,8 +69,8 @@
           }
         }
       ],
-      "required": ["url"],
-      "title": "The decisionHandler config schema",
+      "required": ["strategy", "triggers"],
+      "title": "Decision handler config",
       "additionalProperties": false,
       "type": "object",
       "properties": {
@@ -73,12 +79,12 @@
           "default": null,
           "description": "strategy: This property should blablabla....",
           "examples": [
-            {
-              "strategy": "remote"
-            }
+            "remote",
+            "local"
           ],
-          "title": "The strategy schema",
-          "type": "string"
+          "title": "Decision handling strategy",
+          "type": "string",
+          "enum": ["remote", "local"]
         },
         "triggers": {
           "$id": "#/properties/decisionHandler/properties/triggers",

@@ -18,9 +18,7 @@
     "url": "git+https://github.com/IQ-tech/firebolt.git"
   },
   "scripts": {
-    "generate-types": "node scripts/generate-types.js",
-    "generate-schema": "ts-json-schema-generator --path 'types-test.ts' --type 'IExperienceJSONSchema' --no-type-check --out 'test.json'",
-    "gen":"typescript-json-schema types-test.ts IExperienceJSONSchema --ignoreErrors --out test.json --jsdoc",
+    "generate-schema": "typescript-json-schema types-test.ts IExperienceJSONSchema --ignoreErrors --out test.json --jsdoc",
     "clear-dist": "rimraf dist",
     "test": "jest",
     "test:coverage": "jest --collect-coverage",
@@ -34,7 +32,6 @@
   "dependencies": {
     "@iq-firebolt/json-schema": "^0.7.0",
     "json-schema-to-typescript": "^11.0.1",
-    "ts-json-schema-generator": "^1.0.0",
     "typescript-json-schema": "^0.53.1"
   }
 }
