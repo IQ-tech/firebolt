@@ -92,8 +92,7 @@
           "description": "This property should receive an array of objects contain the step slug and an boolean value to say if the processedData must be saved on localStorage, then, the decisionHandler calls will happen on transitioning from these steps.",
           "examples": [
             {
-              "slug": "personal_data",
-              "saveProcessedData": true
+              "triggers": "personal_data"
             }
           ],
           "title": "The triggers schema",
