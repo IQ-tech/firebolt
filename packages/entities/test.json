@@ -1,0 +1,271 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "definitions": {
+        "Function": {
+            "properties": {
+                "arguments": {},
+                "caller": {
+                    "$ref": "#/definitions/Function"
+                },
+                "length": {
+                    "type": "number"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "prototype": {}
+            },
+            "type": "object"
+        },
+        "IDecisionHandlerConfig": {
+            "properties": {
+                "remoteConfig": {
+                    "$ref": "#/definitions/IRemoteDecisionConfig"
+                },
+                "saveProcessedData": {
+                    "anyOf": [
+                        {
+                            "items": {
+                                "type": "string"
+                            },
+                            "type": "array"
+                        },
+                        {
+                            "enum": [
+                                "all"
+                            ],
+                            "type": "string"
+                        }
+                    ]
+                },
+                "strategy": {
+                    "$ref": "#/definitions/IDecisionHandlerStrategy"
+                },
+                "triggers": {
+                    "anyOf": [
+                        {
+                            "items": {
+                                "type": "string"
+                            },
+                            "type": "array"
+                        },
+                        {
+                            "enum": [
+                                "all"
+                            ],
+                            "type": "string"
+                        }
+                    ]
+                }
+            },
+            "type": "object"
+        },
+        "IDecisionHandlerStrategy": {
+            "enum": [
+                "local",
+                "remote"
+            ],
+            "type": "string"
+        },
+        "IFieldPropsConditional": {
+            "properties": {
+                "conditional": {
+                    "type": "string"
+                },
+                "props": {
+                    "additionalProperties": {},
+                    "type": "object"
+                }
+            },
+            "type": "object"
+        },
+        "IFieldStyles": {
+            "properties": {
+                "size": {
+                    "enum": [
+                        "full",
+                        "half"
+                    ],
+                    "type": "string"
+                }
+            },
+            "type": "object"
+        },
+        "IFieldValidator": {
+            "properties": {
+                "context": {
+                    "enum": [
+                        "client",
+                        "server"
+                    ],
+                    "type": "string"
+                },
+                "properties": {
+                    "$ref": "#/definitions/Object"
+                },
+                "type": {
+                    "type": "string"
+                }
+            },
+            "type": "object"
+        },
+        "IFlow": {
+            "properties": {
+                "slug": {
+                    "type": "string"
+                },
+                "stepsSlugs": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": "array"
+                }
+            },
+            "type": "object"
+        },
+        "IRemoteDecisionConfig": {
+            "properties": {
+                "headers": {
+                    "additionalProperties": {
+                        "type": [
+                            "string",
+                            "number",
+                            "boolean"
+                        ]
+                    },
+                    "type": "object"
+                },
+                "url": {
+                    "anyOf": [
+                        {
+                            "$ref": "#/definitions/IRemoteDecisionURLMap"
+                        },
+                        {
+                            "type": "string"
+                        }
+                    ]
+                }
+            },
+            "type": "object"
+        },
+        "IRemoteDecisionURLMap": {
+            "additionalProperties": {
+                "type": "string"
+            },
+            "type": "object"
+        },
+        "IStepConfigField": {
+            "properties": {
+                "conditional": {
+                    "type": "string"
+                },
+                "slug": {
+                    "type": "string"
+                },
+                "ui:props": {
+                    "additionalProperties": {},
+                    "type": "object"
+                },
+                "ui:props-conditional": {
+                    "items": {
+                        "$ref": "#/definitions/IFieldPropsConditional"
+                    },
+                    "type": "array"
+                },
+                "ui:props-preset": {
+                    "anyOf": [
+                        {
+                            "maxItems": 0,
+                            "minItems": 0,
+                            "type": "array"
+                        },
+                        {
+                            "type": "string"
+                        }
+                    ]
+                },
+                "ui:styles": {
+                    "$ref": "#/definitions/IFieldStyles"
+                },
+                "ui:widget": {
+                    "type": "string"
+                },
+                "validators": {
+                    "items": {
+                        "$ref": "#/definitions/IFieldValidator"
+                    },
+                    "type": "array"
+                },
+                "value": {}
+            },
+            "type": "object"
+        },
+        "IStepJSON": {
+            "properties": {
+                "fields": {
+                    "items": {
+                        "$ref": "#/definitions/IStepConfigField"
+                    },
+                    "type": "array"
+                },
+                "friendlyName": {
+                    "type": "string"
+                },
+                "slug": {
+                    "type": "string"
+                },
+                "type": {
+                    "enum": [
+                        "custom",
+                        "form"
+                    ],
+                    "type": "string"
+                }
+            },
+            "type": "object"
+        },
+        "Object": {
+            "properties": {
+                "constructor": {
+                    "$ref": "#/definitions/Function"
+                }
+            },
+            "type": "object"
+        }
+    },
+    "properties": {
+        "$experience-version": {
+            "type": "string"
+        },
+        "$schema-version": {
+            "description": "test",
+            "type": "string"
+        },
+        "business": {
+            "type": "string"
+        },
+        "decisionHandlerConfig": {
+            "$ref": "#/definitions/IDecisionHandlerConfig"
+        },
+        "description": {
+            "type": "string"
+        },
+        "flows": {
+            "items": {
+                "$ref": "#/definitions/IFlow"
+            },
+            "type": "array"
+        },
+        "name": {
+            "type": "string"
+        },
+        "steps": {
+            "items": {
+                "$ref": "#/definitions/IStepJSON"
+            },
+            "type": "array"
+        }
+    },
+    "type": "object"
+}
+
