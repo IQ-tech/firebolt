@@ -18,7 +18,7 @@
     "url": "git+https://github.com/IQ-tech/firebolt.git"
   },
   "scripts": {
-    "generate-schema": "typescript-json-schema types/ExperienceConfig.ts IExperienceConfig --ignoreErrors --out schemas/experience-config.json --jsdoc",
+    "generate-schema": "typescript-json-schema types/ExperienceConfig.ts IExperienceConfig --ignoreErrors --out schemas/experience-config.json --refs false --required true",
     "clear-dist": "rimraf dist",
     "test": "jest",
     "test:coverage": "jest --collect-coverage",

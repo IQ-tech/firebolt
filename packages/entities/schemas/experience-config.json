@@ -1,27 +1,50 @@
 {
     "$schema": "http://json-schema.org/draft-07/schema#",
-    "definitions": {
-        "Function": {
-            "properties": {
-                "arguments": {},
-                "caller": {
-                    "$ref": "#/definitions/Function"
-                },
-                "length": {
-                    "type": "number"
-                },
-                "name": {
-                    "type": "string"
-                },
-                "prototype": {}
-            },
-            "type": "object"
+    "properties": {
+        "$experience-version": {
+            "description": "The Version of the Experience",
+            "type": "string"
         },
-        "IDecisionHandlerConfig": {
+        "$schema-version": {
+            "description": "This version should match with the used Firebolt version",
+            "type": "string"
+        },
+        "decisionHandlerConfig": {
+            "description": "While transitioning steps, firebolt can execute a middleware called decision handler, with this function the developer can modify the natural flow of the experience, process incoming data...",
             "properties": {
                 "remoteConfig": {
-                    "$ref": "#/definitions/IRemoteDecisionConfig",
-                    "description": "config used by the remote strategy"
+                    "description": "config used by the remote strategy",
+                    "properties": {
+                        "headers": {
+                            "additionalProperties": {
+                                "type": [
+                                    "string",
+                                    "number",
+                                    "boolean"
+                                ]
+                            },
+                            "description": "Headers to be added into the remote decision request",
+                            "type": "object"
+                        },
+                        "url": {
+                            "anyOf": [
+                                {
+                                    "additionalProperties": {
+                                        "type": "string"
+                                    },
+                                    "type": "object"
+                                },
+                                {
+                                    "type": "string"
+                                }
+                            ],
+                            "description": "URL to be contacted during a remote decision handling, it receives a string or a map [stepSlug]: [requestUrl]"
+                        }
+                    },
+                    "required": [
+                        "url"
+                    ],
+                    "type": "object"
                 },
                 "saveProcessedData": {
                     "anyOf": [
@@ -41,8 +64,12 @@
                     "description": "defines the steps that should save processed data in the session. accepts an array or steps slugs or the 'all' keyword"
                 },
                 "strategy": {
-                    "$ref": "#/definitions/IDecisionHandlerStrategy",
-                    "description": "Defines the used decision handling, it can be made locally with a callback on the engine operations"
+                    "description": "Defines the used decision handling, it can be made locally with a callback on the engine operations",
+                    "enum": [
+                        "local",
+                        "remote"
+                    ],
+                    "type": "string"
                 },
                 "triggers": {
                     "anyOf": [
@@ -62,263 +89,12 @@
                     "description": "defines the steps that triggers a decision handling. accepts an array or steps slugs or the 'all' keyword"
                 }
             },
-            "type": "object"
-        },
-        "IDecisionHandlerStrategy": {
-            "enum": [
-                "local",
-                "remote"
+            "required": [
+                "saveProcessedData",
+                "strategy",
+                "triggers"
             ],
-            "type": "string"
-        },
-        "IFieldConfig": {
-            "properties": {
-                "conditional": {
-                    "description": "receives a logical expression, if false the field won't be rendered or validated",
-                    "type": "string"
-                },
-                "required": {
-                    "description": "TODO",
-                    "type": "boolean"
-                },
-                "slug": {
-                    "description": "An unique identifier to the field",
-                    "type": "string"
-                },
-                "ui:mask": {
-                    "anyOf": [
-                        {
-                            "items": {
-                                "type": "string"
-                            },
-                            "type": "array"
-                        },
-                        {
-                            "$ref": "#/definitions/INumberRangeArgs"
-                        }
-                    ],
-                    "description": "TODO"
-                },
-                "ui:props": {
-                    "additionalProperties": {},
-                    "description": "Any value that can be passed right to the UI Widgets (components), values like label, placeholde, options, etc. these options are defined by the theme used by the front-end app",
-                    "type": "object"
-                },
-                "ui:props-conditional": {
-                    "description": "Conditionally add properties to a widget",
-                    "items": {
-                        "$ref": "#/definitions/IFieldPropsConditional"
-                    },
-                    "type": "array"
-                },
-                "ui:props-preset": {
-                    "anyOf": [
-                        {
-                            "maxItems": 0,
-                            "minItems": 0,
-                            "type": "array"
-                        },
-                        {
-                            "type": "string"
-                        }
-                    ]
-                },
-                "ui:styles": {
-                    "$ref": "#/definitions/IFieldStyles",
-                    "description": "used to modify certain aspects of the fields presentation, such as size"
-                },
-                "ui:widget": {
-                    "description": "The Widget (firebolt-client component) that should be used on render the form. check the firebolt client to see the available widgets. custom widgets can be used with custom firebolt-client themes",
-                    "type": "string"
-                },
-                "validators": {
-                    "description": "Used to defined wich validators should be applied to the field, these validators can run on the client app or in the server",
-                    "items": {
-                        "$ref": "#/definitions/IFieldValidator"
-                    },
-                    "type": "array"
-                },
-                "value": {
-                    "description": "TODO"
-                }
-            },
             "type": "object"
-        },
-        "IFieldPropsConditional": {
-            "properties": {
-                "conditional": {
-                    "description": "receives a logical expression, if false the field won't be rendered or validated",
-                    "type": "string"
-                },
-                "props": {
-                    "additionalProperties": {},
-                    "description": "UI props conditional props",
-                    "type": "object"
-                }
-            },
-            "type": "object"
-        },
-        "IFieldStyles": {
-            "properties": {
-                "size": {
-                    "description": "Set field horizontal size on UI",
-                    "enum": [
-                        "full",
-                        "half"
-                    ],
-                    "type": "string"
-                }
-            },
-            "type": "object"
-        },
-        "IFieldValidator": {
-            "properties": {
-                "context": {
-                    "description": "context: Specify the context when the validator should be used",
-                    "enum": [
-                        "client",
-                        "server"
-                    ],
-                    "type": "string"
-                },
-                "properties": {
-                    "$ref": "#/definitions/Object",
-                    "description": "TODO"
-                },
-                "type": {
-                    "description": "TODO",
-                    "type": "string"
-                }
-            },
-            "type": "object"
-        },
-        "IFlow": {
-            "properties": {
-                "slug": {
-                    "description": "An identifier to the flow, every form should have a default flow",
-                    "type": "string"
-                },
-                "stepsSlugs": {
-                    "description": "The list of steps that this flow should have, this array contains a list of steps slugs",
-                    "items": {
-                        "type": "string"
-                    },
-                    "type": "array"
-                }
-            },
-            "type": "object"
-        },
-        "INumberRangeArgs": {
-            "properties": {
-                "abovePermitedValueMessage": {
-                    "description": "TODO",
-                    "type": "string"
-                },
-                "decimalSymbol": {
-                    "description": "TODO",
-                    "type": "string"
-                },
-                "maxNumber": {
-                    "description": "TODO",
-                    "type": "number"
-                },
-                "minNumber": {
-                    "description": "TODO",
-                    "type": "number"
-                },
-                "thousandsSeparatorSymbol": {
-                    "description": "TODO",
-                    "type": "string"
-                },
-                "underPermitedValueMessage": {
-                    "description": "TODO",
-                    "type": "string"
-                }
-            },
-            "type": "object"
-        },
-        "IRemoteDecisionConfig": {
-            "properties": {
-                "headers": {
-                    "additionalProperties": {
-                        "type": [
-                            "string",
-                            "number",
-                            "boolean"
-                        ]
-                    },
-                    "description": "Headers to be added into the remote decision request",
-                    "type": "object"
-                },
-                "url": {
-                    "anyOf": [
-                        {
-                            "$ref": "#/definitions/IRemoteDecisionURLMap"
-                        },
-                        {
-                            "type": "string"
-                        }
-                    ],
-                    "description": "URL to be contacted during a remote decision handling, it receives a string or a map [stepSlug]: [requestUrl]"
-                }
-            },
-            "type": "object"
-        },
-        "IRemoteDecisionURLMap": {
-            "additionalProperties": {
-                "type": "string"
-            },
-            "type": "object"
-        },
-        "IStepConfig": {
-            "properties": {
-                "fields": {
-                    "description": "Used to define the list of fields inside a step, is not required in custom steps",
-                    "items": {
-                        "$ref": "#/definitions/IFieldConfig"
-                    },
-                    "type": "array"
-                },
-                "friendlyName": {
-                    "description": "This property is used to define a friendly display name to the step",
-                    "type": "string"
-                },
-                "slug": {
-                    "description": "An unique identifier to this step",
-                    "type": "string"
-                },
-                "type": {
-                    "description": "Should be 'form' or 'custom', is used to distiguish between a regular form step or a custom step that should not have field validations",
-                    "enum": [
-                        "custom",
-                        "form"
-                    ],
-                    "type": "string"
-                }
-            },
-            "type": "object"
-        },
-        "Object": {
-            "properties": {
-                "constructor": {
-                    "$ref": "#/definitions/Function"
-                }
-            },
-            "type": "object"
-        }
-    },
-    "properties": {
-        "$experience-version": {
-            "description": "The Version of the Experience",
-            "type": "string"
-        },
-        "$schema-version": {
-            "description": "This version should match with the used Firebolt version",
-            "type": "string"
-        },
-        "decisionHandlerConfig": {
-            "$ref": "#/definitions/IDecisionHandlerConfig",
-            "description": "While transitioning steps, firebolt can execute a middleware called decision handler, with this function the developer can modify the natural flow of the experience, process incoming data..."
         },
         "description": {
             "description": "Description of the current JSON",
@@ -327,7 +103,24 @@
         "flows": {
             "description": "Flows are the possible flows that can be performed during a form completion experience. the form process will use only one flow at time, but the firebolt api can change the flow of a form on the process.",
             "items": {
-                "$ref": "#/definitions/IFlow"
+                "properties": {
+                    "slug": {
+                        "description": "An identifier to the flow, every form should have a default flow",
+                        "type": "string"
+                    },
+                    "stepsSlugs": {
+                        "description": "The list of steps that this flow should have, this array contains a list of steps slugs",
+                        "items": {
+                            "type": "string"
+                        },
+                        "type": "array"
+                    }
+                },
+                "required": [
+                    "slug",
+                    "stepsSlugs"
+                ],
+                "type": "object"
             },
             "type": "array"
         },
@@ -338,11 +131,205 @@
         "steps": {
             "description": "Here we can define the possible steps that the form can have",
             "items": {
-                "$ref": "#/definitions/IStepConfig"
+                "properties": {
+                    "fields": {
+                        "description": "Used to define the list of fields inside a step, is not required in custom steps",
+                        "items": {
+                            "properties": {
+                                "conditional": {
+                                    "description": "receives a logical expression, if false the field won't be rendered or validated",
+                                    "type": "string"
+                                },
+                                "required": {
+                                    "description": "Defines if the field is required",
+                                    "type": "boolean"
+                                },
+                                "slug": {
+                                    "description": "An unique identifier to the field",
+                                    "type": "string"
+                                },
+                                "ui:mask": {
+                                    "anyOf": [
+                                        {
+                                            "items": {
+                                                "type": "string"
+                                            },
+                                            "type": "array"
+                                        },
+                                        {
+                                            "properties": {
+                                                "abovePermitedValueMessage": {
+                                                    "description": "TODO",
+                                                    "type": "string"
+                                                },
+                                                "decimalSymbol": {
+                                                    "description": "TODO",
+                                                    "type": "string"
+                                                },
+                                                "maxNumber": {
+                                                    "description": "TODO",
+                                                    "type": "number"
+                                                },
+                                                "minNumber": {
+                                                    "description": "TODO",
+                                                    "type": "number"
+                                                },
+                                                "thousandsSeparatorSymbol": {
+                                                    "description": "TODO",
+                                                    "type": "string"
+                                                },
+                                                "underPermitedValueMessage": {
+                                                    "description": "TODO",
+                                                    "type": "string"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    ],
+                                    "description": "mask in the text-field-mask format"
+                                },
+                                "ui:props": {
+                                    "additionalProperties": {},
+                                    "description": "Any value that can be passed right to the UI Widgets (components), values like label, placeholde, options, etc. these options are defined by the theme used by the front-end app",
+                                    "type": "object"
+                                },
+                                "ui:props-conditional": {
+                                    "description": "Conditionally add properties to a widget",
+                                    "items": {
+                                        "properties": {
+                                            "conditional": {
+                                                "description": "receives a logical expression, if false the field won't be rendered or validated",
+                                                "type": "string"
+                                            },
+                                            "props": {
+                                                "additionalProperties": {},
+                                                "description": "UI props conditional props",
+                                                "type": "object"
+                                            }
+                                        },
+                                        "required": [
+                                            "conditional",
+                                            "props"
+                                        ],
+                                        "type": "object"
+                                    },
+                                    "type": "array"
+                                },
+                                "ui:props-preset": {
+                                    "anyOf": [
+                                        {
+                                            "maxItems": 0,
+                                            "minItems": 0,
+                                            "type": "array"
+                                        },
+                                        {
+                                            "type": "string"
+                                        }
+                                    ]
+                                },
+                                "ui:styles": {
+                                    "description": "used to modify certain aspects of the fields presentation, such as size",
+                                    "properties": {
+                                        "size": {
+                                            "description": "Set field horizontal size on UI",
+                                            "enum": [
+                                                "full",
+                                                "half"
+                                            ],
+                                            "type": "string"
+                                        }
+                                    },
+                                    "required": [
+                                        "size"
+                                    ],
+                                    "type": "object"
+                                },
+                                "ui:widget": {
+                                    "description": "The Widget (firebolt-client component) that should be used on render the form. check the firebolt client to see the available widgets. custom widgets can be used with custom firebolt-client themes",
+                                    "type": "string"
+                                },
+                                "validators": {
+                                    "description": "Used to defined wich validators should be applied to the field, these validators can run on the client app or in the server",
+                                    "items": {
+                                        "properties": {
+                                            "context": {
+                                                "description": "context: Specify the context when the validator should be used",
+                                                "enum": [
+                                                    "client",
+                                                    "server"
+                                                ],
+                                                "type": "string"
+                                            },
+                                            "properties": {
+                                                "description": "TODO",
+                                                "properties": {
+                                                    "constructor": {
+                                                        "$ref": "#/definitions/Function"
+                                                    }
+                                                },
+                                                "required": [
+                                                    "constructor"
+                                                ],
+                                                "type": "object"
+                                            },
+                                            "type": {
+                                                "description": "TODO",
+                                                "type": "string"
+                                            }
+                                        },
+                                        "required": [
+                                            "type"
+                                        ],
+                                        "type": "object"
+                                    },
+                                    "type": "array"
+                                },
+                                "value": {
+                                    "description": "field value"
+                                }
+                            },
+                            "required": [
+                                "slug",
+                                "ui:mask",
+                                "ui:widget"
+                            ],
+                            "type": "object"
+                        },
+                        "type": "array"
+                    },
+                    "friendlyName": {
+                        "description": "This property is used to define a friendly display name to the step",
+                        "type": "string"
+                    },
+                    "slug": {
+                        "description": "An unique identifier to this step",
+                        "type": "string"
+                    },
+                    "type": {
+                        "description": "Should be 'form' or 'custom', is used to distiguish between a regular form step or a custom step that should not have field validations",
+                        "enum": [
+                            "custom",
+                            "form"
+                        ],
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "friendlyName",
+                    "slug",
+                    "type"
+                ],
+                "type": "object"
             },
             "type": "array"
         }
     },
+    "required": [
+        "description",
+        "flows",
+        "name",
+        "steps"
+    ],
     "type": "object"
 }
 
