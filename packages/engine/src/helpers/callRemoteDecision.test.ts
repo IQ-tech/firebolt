@@ -6,8 +6,8 @@ import {
   IFireboltSession,
   IExperienceDecisionPayload,
   IExperienceProceedPayload,
-} from "../interfaces/IEngine"
-import { IRemoteDecisionConfig } from "../types"
+} from "../types"
+import { IRemoteDecisionConfig } from "@iq-firebolt/entities"
 import sampleWithRemoteConfig from "../mocks/sample-experience-with-remote-decision"
 
 const { mockedSetSession, mockedGetSession } = useMockNavigation()

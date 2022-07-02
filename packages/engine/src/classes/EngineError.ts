@@ -1,4 +1,4 @@
-import { IStepTransitionError } from "../interfaces/IEngine"
+import { IStepTransitionError } from "../types"
 import { ErrorsConfigs } from "../constants/errors"
 import { InvalidField } from "@iq-firebolt/validators"
 

@@ -8,9 +8,8 @@ import {
   IExperienceDecision,
   IEngineHooks,
   IOnStepTransition,
-} from "./interfaces/IEngine"
-import { IStepJSON } from "./types"
-
+} from "./types"
+import { IStepConfig } from "@iq-firebolt/entities"
 import JSONConfig from "./classes/JSONConfig"
 import EngineError from "./classes/EngineError"
 
@@ -78,7 +77,7 @@ export default class Engine {
     error,
   }: {
     processedData?: any
-    returningStep?: IStepJSON
+    returningStep?: IStepConfig
     hookStepInfo?: IOnStepTransition
     error?: EngineError
   } = {}): Promise<IStepTransitionReturn> {
@@ -115,7 +114,7 @@ export default class Engine {
   async start(
     payload?: IExperienceProceedPayload
   ): Promise<IStepTransitionReturn> {
-    let stepToReturn: IStepJSON | undefined
+    let stepToReturn: IStepConfig | undefined
     try {
       if (this.hooks?.onStartStepTransition) {
         this.hooks?.onStartStepTransition({ operation: "start", payload })
@@ -161,7 +160,7 @@ export default class Engine {
      * - globals
      */
 
-    let receivingStepDefinition: IStepJSON | undefined
+    let receivingStepDefinition: IStepConfig | undefined
     try {
       if (this.hooks?.onStartStepTransition) {
         this.hooks?.onStartStepTransition({ operation: "proceed", payload })
@@ -289,7 +288,7 @@ export default class Engine {
   async goBackHandler(
     payload: IExperienceProceedPayload
   ): Promise<IStepTransitionReturn> {
-    let returningStep: IStepJSON | undefined
+    let returningStep: IStepConfig | undefined
     try {
       if (this.hooks?.onStartStepTransition) {
         this.hooks?.onStartStepTransition({ operation: "goBack", payload })
@@ -337,7 +336,7 @@ export default class Engine {
   }
 
   async debugHandler(stepSlug: string): Promise<IStepTransitionReturn> {
-    let returningStep: IStepJSON | undefined
+    let returningStep: IStepConfig | undefined
     try {
       if (this.hooks?.onStartStepTransition) {
         this.hooks?.onStartStepTransition({ operation: "debug" })

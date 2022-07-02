@@ -1,13 +1,13 @@
 const sampleExperience = require("./sample-experience")
 
 /**
- * @typedef {import("../types").IExperienceJSONSchema} IExperienceJSONSchema
+ * @typedef {import("@iq-firebolt/entities").IExperienceConfig} IExperienceConfig
  */
 /**
- * @typedef {import("../types").IDecisionHandlerConfig} IDecisionHandlerConfig
+ * @typedef {import("@iq-firebolt/entities").IDecisionHandlerConfig} IDecisionHandlerConfig
  */
 /**
- * @typedef {import("../types").IRemoteDecisionConfig} IRemoteDecisionConfig
+ * @typedef {import("@iq-firebolt/entities").IRemoteDecisionConfig} IRemoteDecisionConfig
  */
 
 /** @type {IRemoteDecisionConfig} */
@@ -21,7 +21,7 @@ const remoteConfigMock = {
 
 /**
  * @param {strategy: ("local" | "remote"), triggers: ("all" | string[])}
- * @returns {IExperienceJSONSchema}
+ * @returns {IExperienceConfig}
  * */
 const mockWithDecisionConfig = ({
   strategy = "local",

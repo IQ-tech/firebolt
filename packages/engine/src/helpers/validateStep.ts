@@ -1,9 +1,9 @@
 import { validateFBTStep, ValidateFBTStepResult } from "@iq-firebolt/validators"
-import { IStepJSON } from "../types"
+import { IStepConfig } from "@iq-firebolt/entities"
 
 export default function validateStep(
   formPayload = {},
-  currentStepConfig: IStepJSON
+  currentStepConfig: IStepConfig
 ): ValidateFBTStepResult {
   if (!currentStepConfig) {
     return { isValid: false, invalidFields: [] }

@@ -1,8 +1,8 @@
 import faker from "faker"
 import Engine from "../index"
 
-import { IExperienceJSONSchema } from "../types"
-import { IExperienceProceedPayload } from "../interfaces/IEngine"
+import { IExperienceConfig } from "@iq-firebolt/entities"
+import { IExperienceProceedPayload } from "../types"
 
 import JSONSample from "../mocks/sample-experience"
 import useMockNavigation from "../mocks/mock-navigation"
@@ -22,7 +22,7 @@ const getStepper = ({
   onStart,
   onEnd,
 }: {
-  experienceJSONConfig?: IExperienceJSONSchema
+  experienceJSONConfig?: IExperienceConfig
   action: string
   onStart: () => void
   onEnd: () => void
@@ -81,7 +81,7 @@ describe("Engine hooks working", () => {
     const mockedStart = jest.fn(() => {})
     const mockedEnd = jest.fn(() => {})
     const fireboltStepper = getStepper({
-      experienceJSONConfig: {} as IExperienceJSONSchema,
+      experienceJSONConfig: {} as IExperienceConfig,
       action: "error",
       onStart: mockedStart,
       onEnd: mockedEnd,

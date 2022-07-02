@@ -1,10 +1,10 @@
 const sampleExperience = require("../sample-experience")
 
 /**
- * @typedef {import("../../types").IExperienceJSONSchema} IExperienceJSONSchema
+ * @typedef {import("@iq-firebolt/entities").IExperienceConfig} IExperienceConfig
  */
 
-/** @type {IExperienceJSONSchema} */
+/** @type {IExperienceConfig} */
 const sampleWithMissingStep = {
   ...sampleExperience,
 

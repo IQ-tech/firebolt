@@ -1,9 +1,9 @@
 const sampleExperience = require("../sample-experience")
 /**
- * @typedef {import("../../types").IExperienceJSONSchema} IExperienceJSONSchema
+ * @typedef {import("@iq-firebolt/entities").IExperienceConfig} IExperienceConfig
  */
 
-/** @type {IExperienceJSONSchema} */
+/** @type {IExperienceConfig} */
 const sampleWithoutDefaultFlow = {
   ...sampleExperience,
   "name": "flow-without-default-flow",
@@ -19,7 +19,7 @@ const sampleWithoutDefaultFlow = {
   ],
 }
 
-/** @type {IExperienceJSONSchema} */
+/** @type {IExperienceConfig} */
 const defaultFlowWithoutSteps = {
   ...sampleExperience,
   "flows": [
@@ -30,7 +30,7 @@ const defaultFlowWithoutSteps = {
   ],
 }
 
-/** @type {IExperienceJSONSchema} */
+/** @type {IExperienceConfig} */
 const experienceWithoutSteps = {
   ...sampleExperience,
   "steps": [],

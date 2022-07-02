@@ -5,10 +5,10 @@
  */
 
 /**
- * @typedef {import("../types").IExperienceJSONSchema} IExperienceJSONSchema
+ * @typedef {import("@iq-firebolt/entities").IExperienceConfig} IExperienceConfig
  */
 
-/** @type {IExperienceJSONSchema} */
+/** @type {IExperienceConfig} */
 const mock = {
   "$schema-version": "1.0.0",
   "$experience-version": "0.0.1",

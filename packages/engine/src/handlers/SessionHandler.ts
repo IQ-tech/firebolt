@@ -5,7 +5,7 @@ import {
   IExperienceState,
   IFireboltSession,
   IStepSession,
-} from "../interfaces/IEngine"
+} from "../types"
 import JSONConfig from "../classes/JSONConfig"
 import EngineError from "../classes/EngineError"
 

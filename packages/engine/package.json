@@ -32,6 +32,7 @@
     "url": "https://github.com/IQ-tech/firebolt/issues"
   },
   "dependencies": {
+    "@iq-firebolt/entities": "^0.7.0",
     "ramda": "^0.28.0",
     "uuid": "^8.3.2"
   },

@@ -1,7 +1,7 @@
 import {
   IFireboltSession,
   IExperienceProceedPayload,
-} from "../interfaces/IEngine"
+} from "../types"
 import { equals } from "ramda"
 
 interface IIsFieldsValidationNeeded {

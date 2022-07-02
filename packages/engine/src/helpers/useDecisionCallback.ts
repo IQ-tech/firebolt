@@ -5,8 +5,11 @@ import {
   IExperienceDecisionAction,
   IExperienceDecisionOptions,
   IFireboltSession,
-} from "../interfaces/IEngine"
-import { IDecisionHandlerConfig, IRemoteDecisionConfig } from "../types"
+} from "../types"
+import {
+  IDecisionHandlerConfig,
+  IRemoteDecisionConfig,
+} from "@iq-firebolt/entities"
 
 import callRemoteDecision from "./callRemoteDecision"
 

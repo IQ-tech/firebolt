@@ -1,9 +1,9 @@
-import { IExperienceJSONSchema, IDecisionHandlerConfig } from "../types"
+import { IExperienceConfig, IDecisionHandlerConfig } from "@iq-firebolt/entities"
 
 export default class JSONConfig {
-  private JSONConfig: IExperienceJSONSchema
+  private JSONConfig: IExperienceConfig
 
-  constructor(JSONExperienceDefinition: IExperienceJSONSchema) {
+  constructor(JSONExperienceDefinition: IExperienceConfig) {
     this.JSONConfig = JSONExperienceDefinition
   }
 

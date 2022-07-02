@@ -4,7 +4,7 @@
  */
 
 /**
- * @typedef {import('../interfaces/IEngine').IFireboltSession} IFireboltSession
+ * @typedef {import('../types').IFireboltSession} IFireboltSession
  */
 
 /**

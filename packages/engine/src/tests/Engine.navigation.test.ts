@@ -1,10 +1,7 @@
 import faker from "faker"
 import * as validation from "../helpers/validateStep"
 
-import {
-  IExperienceProceedPayload,
-  IFireboltSession,
-} from "../interfaces/IEngine"
+import { IExperienceProceedPayload, IFireboltSession } from "../types"
 
 import {
   oneStepCompletedFlowDefault,
