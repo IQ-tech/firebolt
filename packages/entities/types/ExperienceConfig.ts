@@ -79,7 +79,7 @@ export interface IFieldConfig {
   /** used to modify certain aspects of the fields presentation, such as size */
   "ui:styles"?: IFieldStyles
   /** mask in the text-field-mask format */
-  "ui:mask": string[] | INumberRangeArgs
+  "ui:mask"?: string[] | INumberRangeArgs
   /** Defines if the field is required */
   required?: boolean
   /** receives a logical expression, if false the field won't be rendered or validated */

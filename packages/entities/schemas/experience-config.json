@@ -290,7 +290,6 @@
                             },
                             "required": [
                                 "slug",
-                                "ui:mask",
                                 "ui:widget"
                             ],
                             "type": "object"
