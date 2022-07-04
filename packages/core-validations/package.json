@@ -1,0 +1,35 @@
+{
+  "name": "@iq-firebolt/core-validations",
+  "version": "0.7.0",
+  "description": "> TODO: description",
+  "author": "iq team",
+  "homepage": "https://github.com/IQ-tech/firebolt#readme",
+  "license": "Apache-2.0",
+  "publishConfig": {
+    "access": "public"
+  },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "/dist"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/IQ-tech/firebolt.git"
+  },
+  "scripts": {
+    "clear-dist": "rimraf dist",
+    "test": "jest",
+    "test:coverage": "jest --collect-coverage",
+    "test:watch": "NODE_ENV=test jest --watchAll",
+    "build": "yarn clear-dist && tsc",
+    "clear-jest": "jest --clearCache"
+  },
+  "bugs": {
+    "url": "https://github.com/IQ-tech/firebolt/issues"
+  },
+  "dependencies": {
+    "faker": "^5.5.3",
+    "simple-evaluate": "^1.4.3"
+  }
+}

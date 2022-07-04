@@ -9,7 +9,8 @@
     "blueberry-theme",
     "material-theme",
     "json-schema",
-    "engine"
+    "engine",
+    "core-validators"
   ],
   "conventionalCommits.promptFooter": false,
   "conventionalCommits.promptBody": false
