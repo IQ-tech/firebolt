@@ -178,6 +178,7 @@ export default function useFormState({
     clearFieldWarning,
     markAllInvalidFields,
     standalonePropsPresets,
-    requiredFieldsSlugs
+    requiredFieldsSlugs,
+    setRemoteErrors
   }
 }

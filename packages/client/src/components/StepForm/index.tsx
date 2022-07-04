@@ -4,7 +4,13 @@ import FireboltForm from "../FireboltForm"
 import Insert from "../FireboltForm/Insert"
 
 const StepForm = (props) => {
-  const { goNextStep, goPreviousStep, remoteErrors, currentStep } = useFirebolt()
+  const {
+    goNextStep,
+    goPreviousStep,
+    remoteErrors,
+    currentStep,
+    clearRemoteFieldError,
+  } = useFirebolt()
 
   return (
     <FireboltForm
@@ -12,6 +18,7 @@ const StepForm = (props) => {
       onSubmit={goNextStep}
       onGoBack={goPreviousStep}
       remoteErrors={remoteErrors}
+      clearRemoteFieldError={clearRemoteFieldError}
       {...props}
     />
   )

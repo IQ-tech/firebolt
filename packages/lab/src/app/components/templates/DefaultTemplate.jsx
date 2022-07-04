@@ -101,6 +101,7 @@ const DefaultTemplate = ({ fireboltStep }) => {
           onFocusField={(field) => {
             // console.log(field)
           }}
+          onChange={(test) => {console.log(test)}}
           onSubmit={(payload) => fireboltStep.goNextStep(payload)}
           onGoBack={fireboltStep.goPreviousStep}
           /*           customActionsChild={({ formData }) => {
