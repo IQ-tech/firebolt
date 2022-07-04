@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.8.2](https://github.com/IQ-tech/firebolt/compare/v0.8.1...v0.8.2) (2022-07-04)
+
+
+### Bug Fixes
+
+* **client:** :bug: removed console.log ([6673ad1](https://github.com/IQ-tech/firebolt/commit/6673ad1821b0706625bf61f4ab21519cdaef9b71))
+
+
+
+
+
 ## [0.8.1](https://github.com/IQ-tech/firebolt/compare/v0.8.0...v0.8.1) (2022-06-23)
 
 

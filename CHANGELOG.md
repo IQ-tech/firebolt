@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.8.2](https://github.com/IQ-tech/firebolt/compare/v0.8.1...v0.8.2) (2022-07-04)
+
+
+### Bug Fixes
+
+* **client:** :bug: fixed bug with remote errors ([46df6c5](https://github.com/IQ-tech/firebolt/commit/46df6c53925f56b7376d4bde47754aaf323e34a1))
+* **client:** :bug: removed console.log ([6673ad1](https://github.com/IQ-tech/firebolt/commit/6673ad1821b0706625bf61f4ab21519cdaef9b71))
+* **client:** fixed autofill from api ([c18099b](https://github.com/IQ-tech/firebolt/commit/c18099b5795cd46d69991624c8bbbfdfb0e38273))
+* **client:** fixed if decision ([e0c2119](https://github.com/IQ-tech/firebolt/commit/e0c2119cce6ef0cc53b72ef1eba1616fd968bc2c))
+* **lab:** :art: add sample form to debug ([9109d99](https://github.com/IQ-tech/firebolt/commit/9109d99f4ba091b925fd6ce35b909deb7919039e))
+* some name validators ([d8083e6](https://github.com/IQ-tech/firebolt/commit/d8083e6e652952828e178763d0071a626f76af49))
+
+
+
+
+
 ## [0.8.1](https://github.com/IQ-tech/firebolt/compare/v0.8.0...v0.8.1) (2022-06-23)
 
 
