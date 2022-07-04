@@ -63,7 +63,6 @@ export default function useFieldsEvents({
     return (value: string) => {
       const isValueValid = validateField(field, value).isValid
       if (!hasFormChanged) setHasFormChanged(true)
-      console.log(remoteErrors)
       modifyPayloadKeys({ [fieldSlug]: value })
       if (isValueValid) {
         const safeRemoteErrors = remoteErrors || []
