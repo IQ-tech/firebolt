@@ -30,6 +30,7 @@
   },
   "dependencies": {
     "faker": "^5.5.3",
-    "simple-evaluate": "^1.4.3"
+    "simple-evaluate": "^1.4.3",
+    "validator": "^13.7.0"
   }
 }
