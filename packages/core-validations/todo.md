@@ -11,7 +11,7 @@ duvidas
 
 lista de validadores
 
-string
+text (minLength, maxLength, equalsLength, maxPerWord, minPerWord, maxWords,)
 stringLength (min, max, equals)
 wordsLength (maxPerWord, minPerWord)
 wordsCount (maxWords, minWords)

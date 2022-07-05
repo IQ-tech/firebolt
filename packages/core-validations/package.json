@@ -29,6 +29,7 @@
     "url": "https://github.com/IQ-tech/firebolt/issues"
   },
   "dependencies": {
+    "@iq-firebolt/entities": "^0.7.0",
     "faker": "^5.5.3",
     "simple-evaluate": "^1.4.3",
     "validator": "^13.7.0"
