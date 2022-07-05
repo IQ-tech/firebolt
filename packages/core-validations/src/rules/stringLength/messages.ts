@@ -1,6 +1,6 @@
-export const errors = {
+const errorMessages = {
   "tooShort": "provided is too short",
   "tooBig": "provided text is to big",
 }
 
-export type ErrorsType = typeof errors
+export default errorMessages
