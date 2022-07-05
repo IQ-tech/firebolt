@@ -127,3 +127,9 @@ interface IFieldValidator {
   /** context: Specify the context when the validator should be used */
   context?: "client" | "server"
 }
+
+interface IFieldValidationRules {
+  rule: string
+  properties?: Object
+  context?: "client" | "server"
+}
