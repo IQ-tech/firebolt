@@ -1,14 +1,23 @@
+import errorMessages from "../../rules/stringLength/messages"
 import { CreatorFunction, ValidationFunction, IAction } from "./types"
 
-export default function createValidator<EM, PM>(
-  creatorFunction: CreatorFunction<EM, PM>,
-  errors: EM
-): ValidationFunction {
-  return (givenValue, properties?: PM) => {
-    const action: IAction = {
+export default function createValidator<EM = {}, P = {}>(
+  creatorFunction: CreatorFunction<EM, P>,
+  defaultErrorsMap: EM
+): ValidationFunction<EM, P> {
+  return (givenValue, options) => {
+    const { properties, errorsMap } = options
+    const usedErrorsMap = errorsMap || defaultErrorsMap
+
+    const action: IAction<keyof EM> = {
       approve: () => ({ isValid: true, givenValue }),
-      refuse: (message: string) => ({ isValid: false, givenValue, message }),
+      refuse: (errorID) => {
+        const safeErrorsMap = usedErrorsMap || ({} as any)
+
+        return { isValid: false, givenValue, message: safeErrorsMap[errorID] }
+      },
     }
-    return creatorFunction({ value: givenValue, action, errors, properties })
+
+    return creatorFunction({ value: givenValue, action, properties })
   }
 }

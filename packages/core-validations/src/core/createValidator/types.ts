@@ -1,14 +1,23 @@
 import { IValidationValueResult } from "../../types"
 
-export type ValidationFunction = (value: any) => IValidationValueResult
-export interface IAction {
-  approve: () => IValidationValueResult
-  refuse: (message: string) => IValidationValueResult
+export interface ValidationFunctionOptions<EM = {}, P = {}> {
+  errorsMap?: EM
+  properties?: P
 }
-export interface ICreatorFunctionArgs<EM, PM> {
+export type ValidationFunction<EM, P> = (
+  value: any,
+  options: ValidationFunctionOptions<EM, P>
+) => IValidationValueResult
+
+
+export interface IAction<E = string> {
+  approve: () => IValidationValueResult
+  refuse: (message?: E) => IValidationValueResult
+}
+
+export interface ICreatorFunctionArgs<EM ={}, PM ={}> {
   value: any
-  action: IAction
-  errors: EM
+  action: IAction<keyof EM>
   properties?: PM
 }
 export type CreatorFunction<EM, PM> = (

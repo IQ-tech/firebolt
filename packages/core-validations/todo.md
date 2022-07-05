@@ -11,8 +11,8 @@ duvidas
 
 lista de validadores
 
-text (minLength, maxLength, equalsLength, maxPerWord, minPerWord, maxWords,)
 stringLength (min, max, equals)
+text (minLength, maxLength, equalsLength, maxPerWord, minPerWord, maxWords,)
 wordsLength (maxPerWord, minPerWord)
 wordsCount (maxWords, minWords)
 repeatedChars (char, times)
@@ -27,5 +27,8 @@ lowercase
 equals
 date
 dateTime
+
+
+
 
 

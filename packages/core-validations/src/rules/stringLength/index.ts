@@ -10,23 +10,23 @@ interface IProps {
 type ErrorsType = typeof errorMessages
 
 const stringLength = createValidator<ErrorsType, IProps>(
-  ({ value, action, errors, properties = {} }) => {
+  ({ value, action, properties = {} }) => {
     const valueCharLength = value.split("").length
     const { minLength, maxLength, equals } = properties
 
     if (!!minLength && valueCharLength < minLength) {
-      return action.refuse(errors.tooShort)
+      return action.refuse("tooBig")
     }
 
     if (!!maxLength && valueCharLength > maxLength) {
-      return action.refuse(errors.tooBig)
+      return action.refuse("tooBig")
     }
 
     if (!!equals) {
       if (valueCharLength > equals) {
-        return action.refuse(errors.tooBig)
+        return action.refuse("tooShort")
       } else if (valueCharLength < equals) {
-        return action.refuse(errors.tooShort)
+        return action.refuse("tooShort")
       } else {
         return action.approve()
       }
@@ -38,3 +38,5 @@ const stringLength = createValidator<ErrorsType, IProps>(
 )
 
 export default stringLength
+
+const isFieldValid = stringLength("cebola", { properties: { maxLength: 3 }, errorsMap: en }).message
