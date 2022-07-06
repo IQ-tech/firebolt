@@ -11,8 +11,6 @@ duvidas
 
 lista de validadores
 
-stringLength (min, max, equals)
-text (minLength, maxLength, equalsLength, maxPerWord, minPerWord, maxWords,)
 wordsLength (maxPerWord, minPerWord)
 wordsCount (maxWords, minWords)
 repeatedChars (char, times)

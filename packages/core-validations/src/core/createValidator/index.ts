@@ -1,6 +1,8 @@
 import { CreatorFunction, ValidationFunction, IAction } from "./types"
 import parseErrorMessage from "../../utils/parseErrorMessage"
 
+// todo if not value
+
 export default function createValidator<EM = {}, P = {}>(
   creatorFunction: CreatorFunction<EM, P>,
   defaultErrorsMap: EM
