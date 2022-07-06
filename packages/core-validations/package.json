@@ -19,7 +19,7 @@
   },
   "scripts": {
     "clear-dist": "rimraf dist",
-    "test": "jest",
+    "test": "jest --no-cache",
     "test:coverage": "jest --collect-coverage",
     "test:watch": "NODE_ENV=test jest --watchAll",
     "build": "yarn clear-dist && tsc",

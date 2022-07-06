@@ -24,9 +24,9 @@ const stringLength = createValidator<ErrorsType, IProps>(
 
     if (!!equals) {
       if (valueCharLength > equals) {
-        return action.refuse("greaterThanEquals")
+        return action.refuse("shouldEquals")
       } else if (valueCharLength < equals) {
-        return action.refuse("lessThanEquals")
+        return action.refuse("shouldEquals")
       } else {
         return action.approve()
       }

@@ -1,5 +1,5 @@
-import errorMessages from "../../rules/stringLength/messages"
 import { CreatorFunction, ValidationFunction, IAction } from "./types"
+import parseErrorMessage from "../../utils/parseErrorMessage"
 
 export default function createValidator<EM = {}, P = {}>(
   creatorFunction: CreatorFunction<EM, P>,
@@ -14,8 +14,13 @@ export default function createValidator<EM = {}, P = {}>(
       refuse: (errorID) => {
         const safeErrorsMap = usedErrorsMap || ({} as any)
         const usedErrorMessage = safeErrorsMap[errorID] || ""
+        const parsedErrorMessage = parseErrorMessage(
+          usedErrorMessage,
+          givenValue,
+          properties as any
+        )
 
-        return { isValid: false, givenValue, message: usedErrorMessage }
+        return { isValid: false, givenValue, message: parsedErrorMessage }
       },
     }
 
