@@ -10,9 +10,9 @@ duvidas
 
 
 lista de validadores
+sahsah sahshaaashaa asabbbbhhash
 
-wordsCount (maxWords, minWords) <<>>
-repeatedChars (char, times) <<>>
+repeatedChars (char = b, times = maxRepetições) <<>>
 
 regexRule
 email

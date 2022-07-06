@@ -1,17 +1,17 @@
 import createValidator from "../../core/createValidator"
 import errorMessages from "./messages"
 
-interface IProps {
+export interface IWordsCount {
   maxWords?: number 
   minWords?: number
 }
 
 type ErrorsType = typeof errorMessages
 
-const wordsCount = createValidator<ErrorsType, IProps>(
+const wordsCount = createValidator<ErrorsType, IWordsCount>(
   ({ value, action, properties = {} }) => {
     const valueWordsLength = value.split(" ").length
-    const { minWords, maxWords } = properties // TODO: coloca min e max default nas properties???
+    const { minWords, maxWords } = properties 
 
     if(!!minWords && !!maxWords && minWords > maxWords) {
         return action.refuse("conflictBetweenMinAndMax")

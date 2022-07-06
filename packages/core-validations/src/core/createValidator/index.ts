@@ -8,9 +8,10 @@ export default function createValidator<EM = {}, P = {}>(
 ) {
   return (
     givenValue: any,
-    options: ValidationFunctionOptions<EM, P>
+    options?: ValidationFunctionOptions<EM, P>
   ): IValidationValueResult => {
-    const { properties, errorsMap } = options
+    const properties = options?.properties
+    const errorsMap = options?.errorsMap
     const usedErrorsMap = errorsMap || defaultErrorsMap || ({} as any)
 
     const action = actionFactory<keyof EM>({

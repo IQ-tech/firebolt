@@ -1,7 +1,7 @@
 import createValidator from "../../core/createValidator"
 import errorMessages from "./messages"
 
-interface IProps {
+export interface IStringLength {
   minLength?: number
   maxLength?: number
   equals?: number
@@ -9,7 +9,7 @@ interface IProps {
 
 type ErrorsType = typeof errorMessages
 
-const stringLength = createValidator<ErrorsType, IProps>(
+const stringLength = createValidator<ErrorsType, IStringLength>(
   ({ value, action, properties = {} }) => {
     const valueCharLength = value.split("").length
     const { minLength, maxLength, equals } = properties

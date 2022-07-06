@@ -1,7 +1,7 @@
 import createValidator from "../../core/createValidator"
 import defaultMessages from "./messages"
 
-interface IProps {
+export interface IWordsLength {
   maxWordLength?: number
   minWordLength?: number
   equalsWordLength?: number
@@ -9,7 +9,7 @@ interface IProps {
 
 type ErrorsType = typeof defaultMessages
 
-const wordsLength = createValidator<ErrorsType, IProps>(
+const wordsLength = createValidator<ErrorsType, IWordsLength>(
   ({ action, value, properties = {} }) => {
     const { maxWordLength, minWordLength, equalsWordLength } = properties
     const safeValue = value || ""
