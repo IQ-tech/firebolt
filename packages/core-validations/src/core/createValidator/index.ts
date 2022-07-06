@@ -13,8 +13,9 @@ export default function createValidator<EM = {}, P = {}>(
       approve: () => ({ isValid: true, givenValue }),
       refuse: (errorID) => {
         const safeErrorsMap = usedErrorsMap || ({} as any)
+        const usedErrorMessage = safeErrorsMap[errorID] || ""
 
-        return { isValid: false, givenValue, message: safeErrorsMap[errorID] }
+        return { isValid: false, givenValue, message: usedErrorMessage }
       },
     }
 

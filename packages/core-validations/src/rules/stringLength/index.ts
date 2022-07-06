@@ -15,18 +15,18 @@ const stringLength = createValidator<ErrorsType, IProps>(
     const { minLength, maxLength, equals } = properties
 
     if (!!minLength && valueCharLength < minLength) {
-      return action.refuse("tooBig")
+      return action.refuse("lessThanMin")
     }
 
     if (!!maxLength && valueCharLength > maxLength) {
-      return action.refuse("tooBig")
+      return action.refuse("greaterThanMax")
     }
 
     if (!!equals) {
       if (valueCharLength > equals) {
-        return action.refuse("tooShort")
+        return action.refuse("greaterThanEquals")
       } else if (valueCharLength < equals) {
-        return action.refuse("tooShort")
+        return action.refuse("lessThanEquals")
       } else {
         return action.approve()
       }
@@ -38,5 +38,3 @@ const stringLength = createValidator<ErrorsType, IProps>(
 )
 
 export default stringLength
-
-const isFieldValid = stringLength("cebola", { properties: { maxLength: 3 }, errorsMap: en }).message
