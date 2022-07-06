@@ -85,7 +85,7 @@ export interface IFieldConfig {
   /** receives a logical expression, if false the field won't be rendered or validated */
   conditional?: string
   /** Used to defined wich validators should be applied to the field, these validators can run on the client app or in the server */
-  validators?: IFieldValidator[]
+  validation?: IFieldValidationRule[]
   /** field value */
   value?: any
 }
@@ -119,17 +119,19 @@ interface IFieldStyles {
   size: "full" | "half"
 }
 
-interface IFieldValidator {
+interface IFieldValidationRule {
   /**  TODO */
-  type: string
+  rule: string
   /**  TODO */
-  properties?: Object
+  properties?: {
+    [propertyKey: string]: any
+  }
+  errorsMap?: {
+    [errorKey: string]: string
+  }
   /** context: Specify the context when the validator should be used */
-  context?: "client" | "server"
+  context?: ExperienceContext
 }
 
-interface IFieldValidationRules {
-  rule: string
-  properties?: Object
-  context?: "client" | "server"
-}
+
+export type ExperienceContext = "client" | "server" | "all"
