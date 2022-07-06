@@ -1,31 +1,24 @@
-import { CreatorFunction, ValidationFunction, IAction } from "./types"
-import parseErrorMessage from "../../utils/parseErrorMessage"
-
-// todo if not value
+import { CreatorFunction, ValidationFunctionOptions } from "./types"
+import { IValidationValueResult } from "../../types"
+import { actionFactory } from "./helpers"
 
 export default function createValidator<EM = {}, P = {}>(
   creatorFunction: CreatorFunction<EM, P>,
   defaultErrorsMap: EM
-): ValidationFunction<EM, P> {
-  return (givenValue, options) => {
+) {
+  return (
+    givenValue: any,
+    options: ValidationFunctionOptions<EM, P>
+  ): IValidationValueResult => {
     const { properties, errorsMap } = options
-    const usedErrorsMap = errorsMap || defaultErrorsMap
+    const usedErrorsMap = errorsMap || defaultErrorsMap || ({} as any)
 
-    const action: IAction<keyof EM> = {
-      approve: () => ({ isValid: true, givenValue }),
-      refuse: (errorID) => {
-        const safeErrorsMap = usedErrorsMap || ({} as any)
-        const usedErrorMessage = safeErrorsMap[errorID] || ""
-        const parsedErrorMessage = parseErrorMessage(
-          usedErrorMessage,
-          givenValue,
-          properties as any
-        )
+    const action = actionFactory<keyof EM>({
+      givenValue,
+      errorsMap: usedErrorsMap,
+      properties,
+    })
 
-        return { isValid: false, givenValue, message: parsedErrorMessage }
-      },
-    }
-
-    return creatorFunction({ value: givenValue, action, properties })
+    return creatorFunction({ value: givenValue, action: action, properties })
   }
 }

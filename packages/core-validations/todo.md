@@ -11,9 +11,9 @@ duvidas
 
 lista de validadores
 
-wordsLength (maxPerWord, minPerWord)
-wordsCount (maxWords, minWords)
-repeatedChars (char, times)
+wordsCount (maxWords, minWords) <<>>
+repeatedChars (char, times) <<>>
+
 regexRule
 email
 type
