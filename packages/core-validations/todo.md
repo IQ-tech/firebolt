@@ -10,12 +10,9 @@ duvidas
 
 
 lista de validadores
-sahsah sahshaaashaa asabbbbhhash
 
-repeatedChars (char = b, times = maxRepetições) <<>>
-
-regexRule
 email
+regexRule
 type
 nonSpecialChars
 nonSequential

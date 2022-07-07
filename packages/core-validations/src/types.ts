@@ -22,17 +22,22 @@ export interface IValidationValueResult {
   givenValue: any
 }
 
-export interface IValidationFunctionOptions<EM = {}, P = {}> {
+export interface IGenericObject<T = any> {
+  [key: string]: T
+}
+
+export interface IValidationFunctionOptions<EM = IGenericObject, P = IGenericObject> {
   errorsMap?: EM
   properties?: P
 }
 
-export type GenericValidationFunc = (
+export type GenericValidationFunc<EM = IGenericObject, P = IGenericObject> = (
   givenValue: any,
-  options: IValidationFunctionOptions
+  options?: IValidationFunctionOptions<EM, P>
 ) => IValidationValueResult
+
 export interface ICustomValidationRulesMap {
-  [validatorKey: string]: GenericValidationFunc
+  [validatorKey: string | number | symbol]: GenericValidationFunc
 }
 
 export interface IFBTFieldValidationResult {

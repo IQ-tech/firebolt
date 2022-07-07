@@ -8,6 +8,7 @@ import {
   ICustomValidationRulesMap,
   IFBTFieldValidationResult,
   GenericValidationFunc,
+  IGenericObject,
 } from "../../types"
 
 import {
@@ -16,14 +17,25 @@ import {
   processProperties,
 } from "./helpers"
 
-interface IValidateFBTField {
+interface IValidateFBTFieldBase {
   fieldConfig: IFieldConfig
-  value: any
-  customValidatorsMap?: ICustomValidationRulesMap
+  customValidatorsMap?: ICustomValidationRulesMap | IGenericObject
   locale?: any
-  formPayload?: IStepFormPayload
+
   context?: ExperienceContext
 }
+
+interface IValidateFBTFieldPayload extends IValidateFBTFieldBase {
+  formPayload: IStepFormPayload
+  value?: any
+}
+
+interface IValidateFBTFieldValue extends IValidateFBTFieldBase {
+  value: any
+  formPayload?: IStepFormPayload
+}
+
+type IValidateFBTField = IValidateFBTFieldValue | IValidateFBTFieldPayload
 
 function validateFBTField({
   fieldConfig,
@@ -69,7 +81,7 @@ function validateFBTField({
           )
         }
 
-        return ruleValidation(value, { properties: processedProperties })
+        return ruleValidation(fieldValue, { properties: processedProperties })
       } else {
         const customValidator = customValidatorsMap?.[cleanneadRuleName]
         if (!customValidator) {
@@ -77,7 +89,7 @@ function validateFBTField({
             `rule validation ${cleanneadRuleName} does not exists on firebolt or name is wrongly configured`
           )
         }
-        return customValidator(value, { properties: processedProperties })
+        return customValidator(fieldValue, { properties: processedProperties })
       }
     }
   )

@@ -1,11 +1,15 @@
-import { CreatorFunction} from "./types"
-import { IValidationValueResult, IValidationFunctionOptions  } from "../../types"
+import { CreatorFunction } from "./types"
+import {
+  IValidationValueResult,
+  IValidationFunctionOptions,
+  GenericValidationFunc,
+} from "../../types"
 import { actionFactory } from "./helpers"
 
 export default function createValidator<EM = {}, P = {}>(
   creatorFunction: CreatorFunction<EM, P>,
   defaultErrorsMap: EM
-) {
+): GenericValidationFunc<EM, P> {
   return (
     givenValue: any,
     options?: IValidationFunctionOptions<EM, P>

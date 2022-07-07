@@ -1,5 +1,7 @@
 import validateFBTField from "./index"
 import { IFieldConfig } from "@iq-firebolt/entities"
+import createValidator from "../../core/createValidator"
+import { IGenericObject } from "../../types"
 
 describe("basic validations", () => {
   const mockField: IFieldConfig = {
@@ -184,15 +186,117 @@ describe("required field", () => {
       value,
     })
 
-    console.log(invalidValidations)
-
     expect(isValid).toBeFalsy()
-    expect(invalidValidations?.[0].message).toBe("Value 'asafs asaasgsgsgsgsgsgsgs s s s s' is greater than the max length: 20 chars")
+    expect(invalidValidations?.[0].message).toBe(
+      "Value 'asafs asaasgsgsgsgsgsgsgs s s s s' is greater than the max length: 20 chars"
+    )
   })
 })
 
 describe("custom validation rules", () => {
-  test.todo("correctly applies custom validation rules")
+  const mockFieldSimple = {
+    slug: "mockfield",
+    "ui:props": {},
+    required: true,
+    "ui:widget": "Text",
+    "validation": [
+      {
+        rule: "core:stringLength",
+        properties: { maxLength: 20 },
+      },
+      {
+        rule: "isPotato",
+      },
+    ],
+  }
+
+  const isPotato = createValidator(
+    ({ value, action }) => {
+      if (value === "potato") {
+        return action.approve()
+      }
+
+      return action.refuse("defaultError")
+    },
+    { "defaultError": "#{value} is not potato" }
+  )
+
+  test("correctly applies custom validation rules (valid value)", () => {
+    const customValidatorsMap: IGenericObject = {
+      isPotato,
+    } // todo remove force typing
+
+    const { isValid } = validateFBTField({
+      fieldConfig: mockFieldSimple,
+      value: "potato",
+      customValidatorsMap,
+    })
+
+    expect(isValid).toBeTruthy()
+  })
+
+  test("correctly applies custom validation rules (invalid value)", () => {
+    const customValidatorsMap = {
+      isPotato,
+    } // todo remove force typing
+
+    const { isValid, invalidValidations } = validateFBTField({
+      fieldConfig: mockFieldSimple,
+      value: "carrot",
+      customValidatorsMap,
+    })
+
+    expect(isValid).toBeFalsy()
+    expect(invalidValidations?.[0].message).toBe("carrot is not potato")
+  })
+  test("correctly applies custom validation rules with properties (valid value)", () => {
+    const mockFieldComplex = {
+      slug: "mockfield",
+      "ui:props": {},
+      required: true,
+      "ui:widget": "Text",
+      "validation": [
+        {
+          rule: "core:stringLength",
+          properties: { maxLength: 50 },
+        },
+        {
+          rule: "havePotato",
+          properties: {
+            potatoCount: 2,
+          },
+        },
+      ],
+    }
+    const value = "lala potato sdkjf potato"
+    const havePotato = createValidator(
+      ({ value, properties, action }) => {
+        const potatoCount = (properties as any)?.potatoCount || 0
+        const safeValue: string = value || ""
+        const countPotato = safeValue.match(/potato/g)?.length
+        console.log(potatoCount, countPotato)
+        if (countPotato === potatoCount) {
+          return action.approve()
+        }
+        return action.refuse("defaultError")
+      },
+      { "defaultError": "should have potato" }
+    )
+
+    const customMap = {
+      havePotato,
+    }
+    const { isValid, invalidValidations } = validateFBTField({
+      fieldConfig: mockFieldComplex,
+      value,
+      customValidatorsMap: customMap,
+    })
+
+    expect(isValid).toBeTruthy()
+  })
+  test.todo(
+    "correctly applies custom validation rules with more than one validator with properties"
+  )
 })
 
 describe("applies localization", () => {

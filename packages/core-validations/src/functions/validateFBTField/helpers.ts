@@ -5,6 +5,7 @@ import {
   IStepFormPayload,
 } from "@iq-firebolt/entities"
 
+
 export function getInvalidRequired(value: any): IFBTFieldValidationResult {
   return {
     isValid: false,
