@@ -42,6 +42,7 @@ describe("Regular step validation", () => {
       stepConfig,
       formPayload,
     })
+    console.log("asasa", JSON.stringify(invalidFields))
     expect(isValid).toBeTruthy()
     expect(invalidFields.length).toBe(0)
   })
@@ -58,9 +59,12 @@ describe("Regular step validation", () => {
       stepConfig,
       formPayload,
     })
+
     expect(isValid).toBeFalsy()
     expect(invalidFields.length).toBe(4)
-    expect(invalidFields?.[0]?.invalidRules?.[0].message).toBe("asdjhfj")
+    expect(invalidFields?.[0]?.invalidRules?.[0].message).toBe(
+      "Value 'cebola1234' is greater than the max length: 5 chars"
+    )
   })
 })
 
@@ -71,7 +75,7 @@ describe("Validate correctly based on platform context", () => {
       "nickname": "c1234",
       "email": "cebola@teste.com",
       "full_name": "cebola carlos",
-      "mothers_name": "",
+      "mothers_name": "jshdf sjhfs sdkjhf",
     }
     const { isValid, invalidFields } = validateFBTStep({
       formPayload,
@@ -85,7 +89,7 @@ describe("Validate correctly based on platform context", () => {
   test("Invalid value on client context", () => {
     const formPayload = {
       "nickname": "c1234",
-      "email": "",
+      "email": "asdsfsgs",
       "full_name": "cebola carlos",
       "mothers_name": "cebola maria",
     }
@@ -98,11 +102,12 @@ describe("Validate correctly based on platform context", () => {
 
     expect(isValid).toBeFalsy()
     expect(invalidFields.length).toBe(1)
-    expect(invalidFields?.[0]?.invalidRules?.[0].message).toBe("asdjhfj")
+    expect(invalidFields?.[0]?.invalidRules?.[0].message).toBe("invalid email")
   })
   test("Valid value on server context", () => {
     const formPayload = {
       "nickname": "c1234",
+      "email": "cebola@teste.com",
       "full_name": "cebola carlos",
       "mothers_name": "cebola roxa",
     }
@@ -118,6 +123,7 @@ describe("Validate correctly based on platform context", () => {
   test("Invalid value on server context", () => {
     const formPayload = {
       "nickname": "c1234",
+      "email": "cebola@teste.com",
       "full_name": "cebola carlos",
       "mothers_name": "cebola",
     }
@@ -129,7 +135,7 @@ describe("Validate correctly based on platform context", () => {
 
     expect(isValid).toBeFalsy()
     expect(invalidFields.length).toBe(1)
-    expect(invalidFields?.[0]?.invalidRules?.[0].message).toBe("asdjhfj")
+    expect(invalidFields?.[0]?.invalidRules?.[0].message).toBe("cebola, must have at least 2 words")
   })
 })
 
@@ -276,7 +282,7 @@ describe("correctly source properties from another fields", () => {
       "tested_field": "asdsf sjshdf adfasd",
     }
 
-    const {isValid} = validateFBTStep({stepConfig, formPayload})
+    const { isValid } = validateFBTStep({ stepConfig, formPayload })
 
     expect(isValid).toBeTruthy()
   })
@@ -291,8 +297,12 @@ describe("correctly source properties from another fields", () => {
       "tested_field": "asdsf sjshdf adfasd asdsf",
     }
 
-    const {isValid} = validateFBTStep({stepConfig, formPayload})
+    const { isValid, invalidFields } = validateFBTStep({
+      stepConfig,
+      formPayload,
+    })
 
-    expect(isValid).toBeTruthy()
+    expect(isValid).toBeFalsy()
+    expect(invalidFields?.[0]?.invalidRules?.[0].message).toBe("sadsfs")
   })
 })

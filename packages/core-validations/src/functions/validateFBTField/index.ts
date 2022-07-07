@@ -45,24 +45,25 @@ function validateFBTField({
   customValidatorsMap,
   locale,
 }: IValidateFBTField): IFBTFieldValidationResult {
+  const fieldSlug = fieldConfig.slug
   const fieldIsRequired = fieldConfig.required
+  const fieldValue = value || formPayload?.[fieldSlug]
 
-  if (fieldIsRequired && !value) {
-    return getInvalidRequired(value)
+  if (fieldIsRequired && !fieldValue) {
+    return getInvalidRequired(fieldValue)
   }
 
-  if (!fieldIsRequired && !value) {
+  if (!fieldIsRequired && !fieldValue) {
     return { isValid: true }
   }
 
   const validationRules = fieldConfig.validation || []
-  const fieldSlug = fieldConfig.slug
-  const fieldValue = value || formPayload?.[fieldSlug]
 
   const filteredContextValidations = filterRulesByContext(
     validationRules,
     context
   )
+  
 
   const validationsResults = filteredContextValidations.map(
     ({ rule, properties, errorsMap }) => {

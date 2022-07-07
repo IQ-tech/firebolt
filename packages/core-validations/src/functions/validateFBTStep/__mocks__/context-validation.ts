@@ -22,7 +22,7 @@ const fields: IFieldConfig[] = [
       {
         "rule": "core:email",
         "context": "client",
-      },
+      }
     ],
   },
   {
@@ -63,27 +63,5 @@ const fields: IFieldConfig[] = [
     ],
   },
 ]
-
-const payloadClient: Record<string, string> = {
-  "gender": "male",
-  "date_of_birth": "20/01/2000",
-  "marital_status": "single",
-  "nationality": "BR",
-  "mothers_name": "", //required only on server
-  "educational_level": "no education",
-  "birth_region": "BR-AC",
-  "main_phone": "(11) 91234-1234",
-}
-
-const payloadServer: Record<string, string> = {
-  "gender": "male",
-  "date_of_birth": "20/01/2000",
-  "marital_status": "", //required only on client
-  "nationality": "BR",
-  "mothers_name": "cebola batata",
-  "educational_level": "no education",
-  "birth_region": "BR-AC",
-  "main_phone": "(11) 91234-1234",
-}
 
 export default fields
