@@ -3,18 +3,26 @@ import {
   IStepFormPayload,
   ExperienceContext,
 } from "@iq-firebolt/entities"
-import { IValidationValueResult } from "../../types"
+import rulesMap from "../../rulesMap"
+import {
+  ICustomValidationRulesMap,
+  IFBTFieldValidationResult,
+  GenericValidationFunc,
+} from "../../types"
+
+import {
+  getInvalidRequired,
+  filterRulesByContext,
+  processProperties,
+} from "./helpers"
 
 interface IValidateFBTField {
   fieldConfig: IFieldConfig
   value: any
+  customValidatorsMap?: ICustomValidationRulesMap
+  locale?: any
   formPayload?: IStepFormPayload
   context?: ExperienceContext
-}
-
-interface IFBTFieldValidationResult {
-  isValid: boolean
-  invalidValidations?: IValidationValueResult[]
 }
 
 function validateFBTField({
@@ -22,10 +30,63 @@ function validateFBTField({
   value,
   formPayload = {},
   context = "all",
+  customValidatorsMap,
+  locale,
 }: IValidateFBTField): IFBTFieldValidationResult {
   const fieldIsRequired = fieldConfig.required
 
-  return {}
+  if (fieldIsRequired && !value) {
+    return getInvalidRequired(value)
+  }
+
+  if (!fieldIsRequired && !value) {
+    return { isValid: true }
+  }
+
+  const validationRules = fieldConfig.validation || []
+  const fieldSlug = fieldConfig.slug
+  const fieldValue = value || formPayload?.[fieldSlug]
+
+  const filteredContextValidations = filterRulesByContext(
+    validationRules,
+    context
+  )
+
+  const validationsResults = filteredContextValidations.map(
+    ({ rule, properties, errorsMap }) => {
+      const cleanneadRuleName = rule.replace(/ /g, "")
+      const isCoreRule = cleanneadRuleName.startsWith("core:")
+      const processedProperties = !!properties
+        ? processProperties(properties, formPayload)
+        : properties
+      if (isCoreRule) {
+        const ruleId = cleanneadRuleName.replace("core:", "")
+        const ruleValidation: GenericValidationFunc = (rulesMap as any)[ruleId]
+        // localization map
+        if (!ruleValidation) {
+          throw new TypeError(
+            `rule validation ${ruleId} does not exists on firebolt core validation rules`
+          )
+        }
+
+        return ruleValidation(value, { properties: processedProperties })
+      } else {
+        const customValidator = customValidatorsMap?.[cleanneadRuleName]
+        if (!customValidator) {
+          throw new TypeError(
+            `rule validation ${cleanneadRuleName} does not exists on firebolt or name is wrongly configured`
+          )
+        }
+        return customValidator(value, { properties: processedProperties })
+      }
+    }
+  )
+  const invalidValidations = validationsResults.filter(
+    (result) => !result.isValid
+  )
+  const isValid = invalidValidations.length === 0
+
+  return { isValid, invalidValidations }
 }
 
 export default validateFBTField

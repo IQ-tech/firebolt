@@ -1,5 +1,5 @@
-import { CreatorFunction, ValidationFunctionOptions } from "./types"
-import { IValidationValueResult } from "../../types"
+import { CreatorFunction} from "./types"
+import { IValidationValueResult, IValidationFunctionOptions  } from "../../types"
 import { actionFactory } from "./helpers"
 
 export default function createValidator<EM = {}, P = {}>(
@@ -8,7 +8,7 @@ export default function createValidator<EM = {}, P = {}>(
 ) {
   return (
     givenValue: any,
-    options?: ValidationFunctionOptions<EM, P>
+    options?: IValidationFunctionOptions<EM, P>
   ): IValidationValueResult => {
     const properties = options?.properties
     const errorsMap = options?.errorsMap

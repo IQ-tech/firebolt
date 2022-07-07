@@ -22,3 +22,20 @@ export interface IValidationValueResult {
   givenValue: any
 }
 
+export interface IValidationFunctionOptions<EM = {}, P = {}> {
+  errorsMap?: EM
+  properties?: P
+}
+
+export type GenericValidationFunc = (
+  givenValue: any,
+  options: IValidationFunctionOptions
+) => IValidationValueResult
+export interface ICustomValidationRulesMap {
+  [validatorKey: string]: GenericValidationFunc
+}
+
+export interface IFBTFieldValidationResult {
+  isValid: boolean
+  invalidValidations?: IValidationValueResult[]
+}

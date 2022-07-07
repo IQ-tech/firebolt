@@ -36,7 +36,9 @@ describe("basic validations", () => {
 
     expect(isValid).toBeFalsy()
     expect(invalidValidations?.length).toBe(1)
-    expect(invalidValidations?.[0]?.message).toBe("lala")
+    expect(invalidValidations?.[0]?.message).toBe(
+      "Value 'asds asdsasfs asdsfasfg' is greater than the max length: 10 chars"
+    )
   })
 
   test("correctly validate invalid value (two rules)", () => {
@@ -48,8 +50,12 @@ describe("basic validations", () => {
 
     expect(isValid).toBeFalsy()
     expect(invalidValidations?.length).toBe(2)
-    expect(invalidValidations?.[0]?.message).toBe("lala")
-    expect(invalidValidations?.[1]?.message).toBe("lele")
+    expect(invalidValidations?.[0]?.message).toBe(
+      "Value 'asds asdsasfs asdsfasfg aaaasdsf' is greater than the max length: 10 chars"
+    )
+    expect(invalidValidations?.[1]?.message).toBe(
+      "asds asdsasfs asdsfasfg aaaasdsf, exceeds the maximum number of words allowed, enter 3 words"
+    )
   })
 })
 
@@ -83,7 +89,7 @@ describe("dynamic properties", () => {
   })
   test("correctly validate invalid value with dynamic properties", () => {
     const formPayload = { maxLength: 10, maxWords: 4 }
-    const value = "ce bo la lu"
+    const value = "ce bo la lu je"
 
     const { isValid, invalidValidations } = validateFBTField({
       fieldConfig: mockField,
@@ -92,8 +98,12 @@ describe("dynamic properties", () => {
     })
     expect(isValid).toBeFalsy()
     expect(invalidValidations?.length).toBe(2)
-    expect(invalidValidations?.[0]?.message).toBe("lala")
-    expect(invalidValidations?.[1]?.message).toBe("lele")
+    expect(invalidValidations?.[0]?.message).toBe(
+      "Value 'ce bo la lu je' is greater than the max length: 10 chars"
+    )
+    expect(invalidValidations?.[1]?.message).toBe(
+      "ce bo la lu je, exceeds the maximum number of words allowed, enter 4 words"
+    )
   })
 })
 
@@ -136,37 +146,56 @@ describe("required field", () => {
       {
         rule: "core:stringLength",
         properties: { maxLength: 20 },
-        context: "client",
       },
       {
         rule: "core:wordsCount",
-        properties: { maxWords: 5 },
-        context: "server",
+        properties: { maxWords: 5, minWords: 1 },
       },
     ],
   })
   test("validate required field empty", () => {
-
     const mock = getMock()
     const value = ""
-    const {isValid, invalidValidations} = validateFBTField({fieldConfig: mock, value})
+    const { isValid, invalidValidations } = validateFBTField({
+      fieldConfig: mock,
+      value,
+    })
 
     expect(isValid).toBeFalsy()
-    expect(invalidValidations?.[0].message).toBe("asdfkj")
+    expect(invalidValidations?.[0].message).toBe("this value is required")
   })
 
-  test("validate not required field empty", () => {
-
+  test("not validate no required field empty", () => {
     const mock = getMock(false)
     const value = ""
-    const {isValid} = validateFBTField({fieldConfig: mock, value})
+    const { isValid } = validateFBTField({
+      fieldConfig: mock,
+      value,
+    })
 
     expect(isValid).toBeTruthy()
   })
+
+  test("validate no required field with value", () => {
+    const mock = getMock(false)
+    const value = "asafs asaasgsgsgsgsgsgsgs s s s s"
+    const { isValid, invalidValidations } = validateFBTField({
+      fieldConfig: mock,
+      value,
+    })
+
+    console.log(invalidValidations)
+
+    expect(isValid).toBeFalsy()
+    expect(invalidValidations?.[0].message).toBe("Value 'asafs asaasgsgsgsgsgsgsgs s s s s' is greater than the max length: 20 chars")
+  })
+})
+
+describe("custom validation rules", () => {
+  test.todo("correctly applies custom validation rules")
 })
 
 describe("applies localization", () => {
   test.todo("corretly applies localization to validation")
   test.todo("correctly applies localization on required field")
 })
-
