@@ -1,13 +1,39 @@
 import email from "./index"
+import faker from 'faker';
 
+const checkingValidEmail = ({
+  min,
+  max,
+  locale,
+}: {
+  min: number;
+  max: number;
+  locale: string;
+}) => {
+  faker.locale = locale;
+  let i = min;
 
+  for (i; i < max; i++) {
+    const value = faker.internet.email();
+    expect(email(value).isValid).toBeTruthy();
+  }
+};
+
+describe("email validation", () => {
+  test('should all emails that faker generates with default `pt-br` will be validated', () => {
+    checkingValidEmail({ min: 0, max: 10000, locale: 'pt_BR' });
+  });
+
+  test('should all emails that faker generates with default `en` will be validated', () => {
+    checkingValidEmail({ min: 0, max: 10000, locale: 'en' });
+  });
+})
 
 describe.each([
   { value: "paraanue@gmail.com" },
   { value: "assda-asd@gmail.com" },
 ])("", ({ value }) => {
   test(`${value}: valid email test`, () => {
-    console.log(email(value))
     expect(email(value).isValid).toBeTruthy()
   })
 })
