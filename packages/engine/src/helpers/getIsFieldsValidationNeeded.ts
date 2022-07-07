@@ -19,6 +19,7 @@ export default function isFieldsValidationNeeded({
   receivingStepSlug,
   payload,
 }: IIsFieldsValidationNeeded): boolean {
+  // manter somente a comparação com o storage
   if (isCustomStep) return false
   if (isAnAlreadyVisitedStep) {
     const storedReceivedStepPayload =

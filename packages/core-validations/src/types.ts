@@ -42,5 +42,5 @@ export interface ICustomValidationRulesMap {
 
 export interface IFBTFieldValidationResult {
   isValid: boolean
-  invalidValidations?: IValidationValueResult[]
+  invalidRules?: IValidationValueResult[]
 }

@@ -80,10 +80,8 @@ export interface IFieldConfig {
   "ui:styles"?: IFieldStyles
   /** mask in the text-field-mask format */
   "ui:mask"?: string[] | INumberRangeArgs
-  /** Defines if the field is required */
-  required?: boolean
-  /** receives a logical expression, if false the field won't be rendered or validated */
-  conditional?: string
+  /** Defines if the field is required also receives a logical expression, if false the field won't be rendered or validated */
+  required?: boolean | string
   /** Used to defined wich validators should be applied to the field, these validators can run on the client app or in the server */
   validation?: IFieldValidationRuleConfig[]
   /** field value */

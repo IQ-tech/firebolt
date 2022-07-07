@@ -8,8 +8,16 @@ const email = createValidator<ErrorsType>(({ value, action }) => {
     /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/i
 
   const hasSpecialCharacter = /[~!"/#$%^&*()+=`{}[\]|\\:;'<>,?]/gi
- 
-  if (!regExp.test(value) || hasSpecialCharacter.test(value) || value.indexOf('@-') > 0) {
+
+  if(value.indexOf("@-") > 0 || value.indexOf("-.") > 0){
+    return action.refuse("invalidDomain")
+  }
+
+  if(hasSpecialCharacter.test(value)){
+    return action.refuse("specialCharacters")
+  }
+
+  if(!regExp.test(value)){
     return action.refuse("invalidEmail")
   }
 

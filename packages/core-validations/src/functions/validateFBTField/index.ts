@@ -80,7 +80,6 @@ function validateFBTField({
             `rule validation ${ruleId} does not exists on firebolt core validation rules`
           )
         }
-
         return ruleValidation(fieldValue, { properties: processedProperties })
       } else {
         const customValidator = customValidatorsMap?.[cleanneadRuleName]
@@ -93,12 +92,12 @@ function validateFBTField({
       }
     }
   )
-  const invalidValidations = validationsResults.filter(
+  const invalidRules = validationsResults.filter(
     (result) => !result.isValid
   )
-  const isValid = invalidValidations.length === 0
+  const isValid = invalidRules.length === 0
 
-  return { isValid, invalidValidations }
+  return { isValid, invalidRules }
 }
 
 export default validateFBTField

@@ -22,40 +22,40 @@ describe("basic validations", () => {
 
   test("correcly validate valid value", () => {
     const value = "cenoura ll"
-    const { isValid, invalidValidations } = validateFBTField({
+    const { isValid, invalidRules } = validateFBTField({
       fieldConfig: mockField,
       value,
     })
     expect(isValid).toBeTruthy()
-    expect(invalidValidations?.length).toBe(0)
+    expect(invalidRules?.length).toBe(0)
   })
   test("correctly validate invalid value (one rule)", () => {
     const value = "asds asdsasfs asdsfasfg"
-    const { isValid, invalidValidations } = validateFBTField({
+    const { isValid, invalidRules } = validateFBTField({
       fieldConfig: mockField,
       value,
     })
 
     expect(isValid).toBeFalsy()
-    expect(invalidValidations?.length).toBe(1)
-    expect(invalidValidations?.[0]?.message).toBe(
+    expect(invalidRules?.length).toBe(1)
+    expect(invalidRules?.[0]?.message).toBe(
       "Value 'asds asdsasfs asdsfasfg' is greater than the max length: 10 chars"
     )
   })
 
   test("correctly validate invalid value (two rules)", () => {
     const value = "asds asdsasfs asdsfasfg aaaasdsf"
-    const { isValid, invalidValidations } = validateFBTField({
+    const { isValid, invalidRules } = validateFBTField({
       fieldConfig: mockField,
       value,
     })
 
     expect(isValid).toBeFalsy()
-    expect(invalidValidations?.length).toBe(2)
-    expect(invalidValidations?.[0]?.message).toBe(
+    expect(invalidRules?.length).toBe(2)
+    expect(invalidRules?.[0]?.message).toBe(
       "Value 'asds asdsasfs asdsfasfg aaaasdsf' is greater than the max length: 10 chars"
     )
-    expect(invalidValidations?.[1]?.message).toBe(
+    expect(invalidRules?.[1]?.message).toBe(
       "asds asdsasfs asdsfasfg aaaasdsf, exceeds the maximum number of words allowed, enter 3 words"
     )
   })
@@ -81,29 +81,29 @@ describe("dynamic properties", () => {
     const formPayload = { maxLength: 10, maxWords: 4 }
     const value = "ce bo la"
 
-    const { isValid, invalidValidations } = validateFBTField({
+    const { isValid, invalidRules } = validateFBTField({
       fieldConfig: mockField,
       formPayload,
       value,
     })
     expect(isValid).toBeTruthy()
-    expect(invalidValidations?.length).toBe(0)
+    expect(invalidRules?.length).toBe(0)
   })
   test("correctly validate invalid value with dynamic properties", () => {
     const formPayload = { maxLength: 10, maxWords: 4 }
     const value = "ce bo la lu je"
 
-    const { isValid, invalidValidations } = validateFBTField({
+    const { isValid, invalidRules } = validateFBTField({
       fieldConfig: mockField,
       formPayload,
       value,
     })
     expect(isValid).toBeFalsy()
-    expect(invalidValidations?.length).toBe(2)
-    expect(invalidValidations?.[0]?.message).toBe(
+    expect(invalidRules?.length).toBe(2)
+    expect(invalidRules?.[0]?.message).toBe(
       "Value 'ce bo la lu je' is greater than the max length: 10 chars"
     )
-    expect(invalidValidations?.[1]?.message).toBe(
+    expect(invalidRules?.[1]?.message).toBe(
       "ce bo la lu je, exceeds the maximum number of words allowed, enter 4 words"
     )
   })
@@ -158,13 +158,13 @@ describe("required field", () => {
   test("validate required field empty", () => {
     const mock = getMock()
     const value = ""
-    const { isValid, invalidValidations } = validateFBTField({
+    const { isValid, invalidRules } = validateFBTField({
       fieldConfig: mock,
       value,
     })
 
     expect(isValid).toBeFalsy()
-    expect(invalidValidations?.[0].message).toBe("this value is required")
+    expect(invalidRules?.[0].message).toBe("this value is required")
   })
 
   test("not validate no required field empty", () => {
@@ -181,13 +181,13 @@ describe("required field", () => {
   test("validate no required field with value", () => {
     const mock = getMock(false)
     const value = "asafs asaasgsgsgsgsgsgsgs s s s s"
-    const { isValid, invalidValidations } = validateFBTField({
+    const { isValid, invalidRules } = validateFBTField({
       fieldConfig: mock,
       value,
     })
 
     expect(isValid).toBeFalsy()
-    expect(invalidValidations?.[0].message).toBe(
+    expect(invalidRules?.[0].message).toBe(
       "Value 'asafs asaasgsgsgsgsgsgsgs s s s s' is greater than the max length: 20 chars"
     )
   })
@@ -221,6 +221,32 @@ describe("custom validation rules", () => {
     { "defaultError": "#{value} is not potato" }
   )
 
+  const havePotato = createValidator(
+    ({ value, properties, action }) => {
+      const potatoCount = (properties as any)?.potatoCount || 0
+      const safeValue: string = value || ""
+      const countPotato = safeValue.match(/potato/g)?.length
+      if (countPotato === potatoCount) {
+        return action.approve()
+      }
+      return action.refuse("defaultError")
+    },
+    { "defaultError": "should have potato" }
+  )
+
+  const haveCarrot = createValidator(
+    ({ value, properties, action }) => {
+      const potatoCount = (properties as any)?.carrotCount || 0
+      const safeValue: string = value || ""
+      const countPotato = safeValue.match(/carrot/g)?.length
+      if (countPotato === potatoCount) {
+        return action.approve()
+      }
+      return action.refuse("defaultError")
+    },
+    { "defaultError": "should have carrot" }
+  )
+
   test("correctly applies custom validation rules (valid value)", () => {
     const customValidatorsMap: IGenericObject = {
       isPotato,
@@ -240,14 +266,14 @@ describe("custom validation rules", () => {
       isPotato,
     } // todo remove force typing
 
-    const { isValid, invalidValidations } = validateFBTField({
+    const { isValid, invalidRules } = validateFBTField({
       fieldConfig: mockFieldSimple,
       value: "carrot",
       customValidatorsMap,
     })
 
     expect(isValid).toBeFalsy()
-    expect(invalidValidations?.[0].message).toBe("carrot is not potato")
+    expect(invalidRules?.[0].message).toBe("carrot is not potato")
   })
   test("correctly applies custom validation rules with properties (valid value)", () => {
     const mockFieldComplex = {
@@ -269,24 +295,11 @@ describe("custom validation rules", () => {
       ],
     }
     const value = "lala potato sdkjf potato"
-    const havePotato = createValidator(
-      ({ value, properties, action }) => {
-        const potatoCount = (properties as any)?.potatoCount || 0
-        const safeValue: string = value || ""
-        const countPotato = safeValue.match(/potato/g)?.length
-        console.log(potatoCount, countPotato)
-        if (countPotato === potatoCount) {
-          return action.approve()
-        }
-        return action.refuse("defaultError")
-      },
-      { "defaultError": "should have potato" }
-    )
 
     const customMap = {
       havePotato,
     }
-    const { isValid, invalidValidations } = validateFBTField({
+    const { isValid } = validateFBTField({
       fieldConfig: mockFieldComplex,
       value,
       customValidatorsMap: customMap,
@@ -294,9 +307,49 @@ describe("custom validation rules", () => {
 
     expect(isValid).toBeTruthy()
   })
-  test.todo(
-    "correctly applies custom validation rules with more than one validator with properties"
-  )
+  test("correctly applies custom validation rules with more than one validator with properties", () => {
+    const mockFieldComplex = {
+      slug: "mockfield",
+      "ui:props": {},
+      required: true,
+      "ui:widget": "Text",
+      "validation": [
+        {
+          rule: "core:stringLength",
+          properties: { maxLength: 50 },
+        },
+        {
+          rule: "havePotato",
+          properties: {
+            potatoCount: 1,
+          },
+        },
+        {
+          rule: "haveCarrot",
+          properties: {
+            carrotCount: 1,
+          },
+        },
+      ],
+    }
+
+    const value = "lala potata sdkjf potata"
+
+    const customMap = {
+      havePotato,
+      haveCarrot
+    }
+    const { isValid, invalidRules } = validateFBTField({
+      fieldConfig: mockFieldComplex,
+      value,
+      customValidatorsMap: customMap,
+    })
+
+    expect(isValid).toBeFalsy()
+    expect(invalidRules?.length).toBe(2)
+    expect(invalidRules?.[0].message).toBe("should have potato")
+    expect(invalidRules?.[1].message).toBe("should have carrot")
+  })
 })
 
 describe("applies localization", () => {
