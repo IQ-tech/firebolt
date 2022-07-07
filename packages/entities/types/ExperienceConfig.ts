@@ -85,12 +85,12 @@ export interface IFieldConfig {
   /** receives a logical expression, if false the field won't be rendered or validated */
   conditional?: string
   /** Used to defined wich validators should be applied to the field, these validators can run on the client app or in the server */
-  validation?: IFieldValidationRule[]
+  validation?: IFieldValidationRuleConfig[]
   /** field value */
   value?: any
 }
 
-interface INumberRangeArgs {
+export interface INumberRangeArgs {
   /** TODO */
   minNumber?: number
   /** TODO */
@@ -105,7 +105,7 @@ interface INumberRangeArgs {
   underPermitedValueMessage?: string
 }
 
-interface IFieldPropsConditional {
+export interface IFieldPropsConditional {
   /** receives a logical expression, if false the field won't be rendered or validated */
   conditional: string
   /** UI props conditional props */
@@ -114,12 +114,12 @@ interface IFieldPropsConditional {
   }
 }
 
-interface IFieldStyles {
+export interface IFieldStyles {
   /** Set field horizontal size on UI */
   size: "full" | "half"
 }
 
-interface IFieldValidationRule {
+export interface IFieldValidationRuleConfig {
   /**  TODO */
   rule: string
   /**  TODO */
