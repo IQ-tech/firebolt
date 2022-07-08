@@ -2,7 +2,7 @@
   "name": "@iq-firebolt/core-validations",
   "version": "0.7.0",
   "description": "> TODO: description",
-  "author": "iq team",
+  "author": "iq-team",
   "homepage": "https://github.com/IQ-tech/firebolt#readme",
   "license": "Apache-2.0",
   "publishConfig": {
@@ -23,7 +23,9 @@
     "test:coverage": "jest --collect-coverage",
     "test:watch": "NODE_ENV=test jest --watchAll",
     "build": "yarn clear-dist && tsc",
-    "clear-jest": "jest --clearCache"
+    "clear-jest": "jest --clearCache",
+    "generate-rules-docs": "ts-node scripts/generate-rules-docs.ts",
+    "testg": "typescript-json-schema src/rules/email/index.ts ErrorsType --ignoreErrors --out schemas/experience-config.json --refs false --required true"
   },
   "bugs": {
     "url": "https://github.com/IQ-tech/firebolt/issues"
@@ -33,6 +35,7 @@
     "simple-evaluate": "1.4.5"
   },
   "devDependencies": {
-    "faker": "6.6.6"
+    "faker": "6.6.6",
+    "typescript-json-schema": "^0.54.0"
   }
 }

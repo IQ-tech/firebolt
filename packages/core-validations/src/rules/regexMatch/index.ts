@@ -11,7 +11,10 @@ const regexMatch = createValidationRule<ErrorsType, IRegexMatch>(
   ({ value, action, properties = {} }) => {
     const { pattern } = properties
 
-    if (!pattern) throw new TypeError("Validator Rule Error. regexMatch: no regex pattern provided")
+    if (!pattern)
+      throw new TypeError(
+        "Validator Rule Error. regexMatch: no regex pattern provided"
+      )
 
     const jsonRegExp = new RegExp(pattern)
 
