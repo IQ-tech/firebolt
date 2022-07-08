@@ -164,7 +164,7 @@ describe("required field", () => {
     })
 
     expect(isValid).toBeFalsy()
-    expect(invalidRules?.[0].message).toBe("this value is required")
+    expect(invalidRules?.[0].message).toBe("This field is required")
   })
 
   test("not validate no required field empty", () => {
@@ -337,7 +337,7 @@ describe("custom validation rules", () => {
 
     const customMap = {
       havePotato,
-      haveCarrot
+      haveCarrot,
     }
     const { isValid, invalidRules } = validateFBTField({
       fieldConfig: mockFieldComplex,

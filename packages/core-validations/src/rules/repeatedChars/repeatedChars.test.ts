@@ -12,7 +12,6 @@ describe.each([
   }, maximum number of times the letter can repeat: ${
     times ? times : "did not pass any number of letters to be verified"
   } `, () => {
-    
     expect(
       repeatedChars(value, { properties: { char, times } }).isValid
     ).toBeTruthy()
@@ -22,19 +21,24 @@ describe.each([
 describe("testing error messages", () => {
   test("test the repeated specific letters", () => {
     expect(
-      repeatedChars("lllorem isum", { properties: { char: "l", times: 2 } }).message
-    ).toBe("the letter l cannot be repeated more than 2 times")
+      repeatedChars("lllorem isum", { properties: { char: "l", times: 2 } })
+        .message
+    ).toBe("The letter 'l' cannot be repeated more than 2 times in a row")
   })
 
   test("test the repeated letters", () => {
     expect(
       repeatedChars("Lorem iiiisum", { properties: { times: 3 } }).message
-    ).toBe("cannot contain repeated letters in a row, acceptable to follow no more than 3 times of letters in a row")
+    ).toBe(
+      "Cannot contain repeated letters in a row, acceptable to follow no more than 3 times of letters in a row"
+    )
   })
 
   test("case sensitive test", () => {
     expect(
-      repeatedChars("Lllorem isum", { properties: { char: "L", times: 2, caseSensitive: false} }).message
-    ).toBe("the letter L cannot be repeated more than 2 times")
+      repeatedChars("Lllorem isum", {
+        properties: { char: "L", times: 2, caseSensitive: false },
+      }).message
+    ).toBe("The letter 'L' cannot be repeated more than 2 times in a row")
   })
 })

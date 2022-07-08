@@ -42,7 +42,7 @@ describe("Regular step validation", () => {
       stepConfig,
       formPayload,
     })
-    console.log("asasa", JSON.stringify(invalidFields))
+
     expect(isValid).toBeTruthy()
     expect(invalidFields.length).toBe(0)
   })
@@ -52,7 +52,7 @@ describe("Regular step validation", () => {
       "nickname": "cebola1234",
       "email": "cebola@-teste.com",
       "full_name": "cebola",
-      "mothers_name": "cebola"
+      "mothers_name": "cebola",
     }
     const stepConfig = encapsulateStep(allRightFieldsMock)
     const { isValid, invalidFields } = validateFBTStep({
@@ -102,7 +102,7 @@ describe("Validate correctly based on platform context", () => {
 
     expect(isValid).toBeFalsy()
     expect(invalidFields.length).toBe(1)
-    expect(invalidFields?.[0]?.invalidRules?.[0].message).toBe("invalid email")
+    expect(invalidFields?.[0]?.invalidRules?.[0].message).toBe("Invalid email")
   })
   test("Valid value on server context", () => {
     const formPayload = {
@@ -169,7 +169,7 @@ describe("Required fields validation", () => {
     expect(isValid).toBeFalsy()
     expect(invalidFields.length).toBe(1)
     expect(invalidFields?.[0]?.invalidRules?.[0].message).toBe(
-      "domain must not start or end with a hyphen -"
+      "Domain must not start or end with a hyphen '-'"
     )
   })
   test("Ignore filled conditional field (without condition match)", () => {
