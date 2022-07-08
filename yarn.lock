@@ -5514,6 +5514,11 @@ extsprintf@^1.2.0:
   resolved "https://registry.yarnpkg.com/extsprintf/-/extsprintf-1.4.0.tgz#e2689f8f356fad62cca65a3a91c5df5f9551692f"
   integrity sha1-4mifjzVvrWLMplo6kcXfX5VRaS8=
 
+faker@6.6.6:
+  version "6.6.6"
+  resolved "https://registry.yarnpkg.com/faker/-/faker-6.6.6.tgz#e9529da0109dca4c7c5dbfeaadbd9234af943033"
+  integrity sha512-9tCqYEDHI5RYFQigXFwF1hnCwcWCOJl/hmll0lr5D2Ljjb0o4wphb69wikeJDz5qCEzXCoPvG6ss5SDP6IfOdg==
+
 faker@^5.5.3:
   version "5.5.3"
   resolved "https://registry.yarnpkg.com/faker/-/faker-5.5.3.tgz#c57974ee484431b25205c2c8dc09fda861e51e0e"
@@ -9865,17 +9870,17 @@ signal-exit@^3.0.0, signal-exit@^3.0.2, signal-exit@^3.0.3:
   resolved "https://registry.yarnpkg.com/signal-exit/-/signal-exit-3.0.3.tgz#a1410c2edd8f077b08b4e253c8eacfcaf057461c"
   integrity sha512-VUJ49FC8U1OxwZLxIbTTrDvLnf/6TDgxZcK8wxR8zs13xpx7xbG60ndBlhNrFi2EMuFRoeDoJO7wthSLq42EjA==
 
+simple-evaluate@1.4.5:
+  version "1.4.5"
+  resolved "https://registry.yarnpkg.com/simple-evaluate/-/simple-evaluate-1.4.5.tgz#23a83e50d9b302b8ab1c4d2553b07c8ea3481b89"
+  integrity sha512-X4BBLKnCherQly9ZWgKHm812gX8lOEEa2ejlQ33Sp84X1qXwLKyf0XY2LdmSTA6bJuOTEcFJ8wu8Cek3yLqW2w==
+  dependencies:
+    get-value "^2.0.6"
+
 simple-evaluate@^1.4.3:
   version "1.4.3"
   resolved "https://registry.yarnpkg.com/simple-evaluate/-/simple-evaluate-1.4.3.tgz#75d43df7c48566889a2c6f2f2023c4b80b9825f7"
   integrity sha512-71CmBReCowrHM37Y16bE4jz1I6pY4Hl9VH22d1G2DFyre/rWPlXfShgWJmi1CjZhTHvdvc5S0+iRddeIK0tsGQ==
-  dependencies:
-    get-value "^2.0.6"
-
-simple-evaluate@^1.4.5:
-  version "1.4.5"
-  resolved "https://registry.yarnpkg.com/simple-evaluate/-/simple-evaluate-1.4.5.tgz#23a83e50d9b302b8ab1c4d2553b07c8ea3481b89"
-  integrity sha512-X4BBLKnCherQly9ZWgKHm812gX8lOEEa2ejlQ33Sp84X1qXwLKyf0XY2LdmSTA6bJuOTEcFJ8wu8Cek3yLqW2w==
   dependencies:
     get-value "^2.0.6"
 
@@ -10879,11 +10884,6 @@ validate-npm-package-name@^3.0.0:
   integrity sha1-X6kS2B630MdK/BQN5zF/DKffQ34=
   dependencies:
     builtins "^1.0.3"
-
-validator@^13.7.0:
-  version "13.7.0"
-  resolved "https://registry.yarnpkg.com/validator/-/validator-13.7.0.tgz#4f9658ba13ba8f3d82ee881d3516489ea85c0857"
-  integrity sha512-nYXQLCBkpJ8X6ltALua9dRrZDHVYxjJ1wgskNt1lH9fzGjs3tgojGSCBjmEPwkWS1y29+DrizMTW19Pr9uB2nw==
 
 value-equal@^1.0.1:
   version "1.0.1"

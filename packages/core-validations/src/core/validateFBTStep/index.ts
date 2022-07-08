@@ -7,7 +7,6 @@ import evaluate from "simple-evaluate"
 import { ILocaleConfig } from "../../locales/types"
 import {
   ICustomValidationRulesMap,
-  IFBTFieldValidationResult,
   IGenericObject,
   IValidationValueResult,
 } from "../../types"

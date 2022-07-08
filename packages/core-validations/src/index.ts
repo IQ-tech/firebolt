@@ -1,8 +1,12 @@
 export * from "./types"
 export * from "./locales/types"
 // firebolt functions
-export { default as validateFBTField } from "./functions/validateFBTField"
-export { default as validateFBTStep } from "./functions/validateFBTStep"
+export { default as validateFBTField } from "./core/validateFBTField"
+export { default as validateFBTStep } from "./core/validateFBTStep"
+export { default as createValidationRule } from "./core/createValidationRule"
+//locales
+export { default as ptBRLocale } from "./locales/pt-BR"
+
 // full rules map
 export { default as rulesMap } from "./rulesMap"
 // individual rules

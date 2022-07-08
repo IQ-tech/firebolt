@@ -4,13 +4,18 @@ import {
   IFieldValidationRuleConfig,
   IStepFormPayload,
 } from "@iq-firebolt/entities"
+import { ILocaleConfig } from "../../locales/types"
 
-
-export function getInvalidRequired(value: any): IFBTFieldValidationResult {
+export function getInvalidRequired(
+  value: any,
+  locale?: ILocaleConfig
+): IFBTFieldValidationResult {
+  const errorMessage =
+    locale?.generalMessages.emptyRequiredField || "This field is required"
   return {
     isValid: false,
     invalidRules: [
-      { isValid: false, message: "This field is required", givenValue: value },
+      { isValid: false, message: errorMessage, givenValue: value },
     ],
   }
 }

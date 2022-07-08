@@ -5,7 +5,7 @@ import conditionalFieldsMock from "./__mocks__/conditional-fields"
 import sourceFieldMock from "./__mocks__/source-field"
 import contextMock from "./__mocks__/context-validation"
 import customValidatorRulesMock from "./__mocks__/custom-validator-rules"
-import createValidationRule from "../../core/createValidationRule"
+import createValidationRule from "../createValidationRule"
 
 const encapsulateStep = (
   fields: IFieldConfig[] = [],

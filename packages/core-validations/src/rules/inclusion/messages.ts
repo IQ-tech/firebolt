@@ -1,5 +1,6 @@
 const errorMessages = {
-    "mustBeIncluded": "The value '#{value}' must be included in #{includeList}",
+    "notIncluded": "The value '#{value}' is not included in provided information",
+    "notContains": "The value '#{value}' not contain #{contains}"
   }
   
   export default errorMessages

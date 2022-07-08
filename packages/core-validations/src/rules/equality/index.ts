@@ -9,9 +9,8 @@ type ErrorsType = typeof errorMessages
 
 const equality = createValidationRule<ErrorsType, IEquality>(
   ({ value, action, properties = {} }) => {
-    const { compareTo } = properties
-
-    if (value !== compareTo) return action.refuse("valueErrorConfirmation")
+    if (value !== properties?.compareTo)
+      return action.refuse("valueErrorConfirmation")
 
     return action.approve()
   },

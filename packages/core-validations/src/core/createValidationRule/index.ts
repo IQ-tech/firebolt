@@ -15,8 +15,9 @@ export default function createValidationRule<EM = {}, P = {}>(
     options?: IValidationFunctionOptions<EM, P>
   ): IValidationValueResult => {
     const properties = options?.properties
-    const errorsMap = options?.errorsMap
-    const usedErrorsMap = errorsMap || defaultErrorsMap || ({} as any)
+    const customErrorsMap = options?.errorsMap || {}
+    const safeDefaultErrorsMap = defaultErrorsMap || {}
+    const usedErrorsMap = { ...safeDefaultErrorsMap, ...customErrorsMap }
 
     const action = actionFactory<keyof EM>({
       givenValue,

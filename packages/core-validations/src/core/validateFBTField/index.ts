@@ -51,7 +51,7 @@ function validateFBTField({
   const fieldValue = value || formPayload?.[fieldSlug]
 
   if (fieldIsRequired && !fieldValue) {
-    return getInvalidRequired(fieldValue)
+    return getInvalidRequired(fieldValue, locale)
   }
 
   if (!fieldIsRequired && !fieldValue) {
@@ -82,10 +82,12 @@ function validateFBTField({
           )
         }
         const coreRuleId = ruleId as keyof typeof rulesMap
-        const ruleLocale = locale?.rulesMessages?.[coreRuleId]
+        const ruleLocale = locale?.rulesMessages?.[coreRuleId] || {}
+        const customErrorsMessages = errorsMap || {}
+        const usedMap = { ...ruleLocale, ...customErrorsMessages }
         return ruleValidation(fieldValue, {
           properties: processedProperties,
-          errorsMap: ruleLocale,
+          errorsMap: usedMap,
         })
       } else {
         const customValidator = customValidatorsMap?.[cleanneadRuleName]
@@ -94,7 +96,10 @@ function validateFBTField({
             `rule validation ${cleanneadRuleName} does not exists on firebolt or name is wrongly configured`
           )
         }
-        return customValidator(fieldValue, { properties: processedProperties })
+        return customValidator(fieldValue, {
+          properties: processedProperties,
+          errorsMap,
+        })
       }
     }
   )

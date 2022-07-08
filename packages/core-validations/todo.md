@@ -1,10 +1,6 @@
-* definir quais são os validadores
-* começar a codar a createValidationRule (factory)
-* definir a nova arquitetura de um validador
- * função de validação
- * mapa de propriedades
- * mapa de mensagens
-* i18n (locales) a11ty
+gerar docs
+build do ts
+instalar core validations na br-addons
 
 duvidas
 
@@ -21,9 +17,7 @@ negative
 integer
 float
 
-
-equality(secondValue = igual o primeiro valor )
-regexRule (¿¿¿ matchs ???)
+regexMatch (¿¿¿ matchs ???)
 inclusion
 type(string, number, boolean, array.isArray(), objeto)
 nonSpecialChars

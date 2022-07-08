@@ -1,7 +1,8 @@
 import validateFBTField from "./index"
 import { IFieldConfig } from "@iq-firebolt/entities"
-import createValidationRule from "../../core/createValidationRule"
+import createValidationRule from "../createValidationRule"
 import { IGenericObject } from "../../types"
+import ptBRLocale from "../../locales/pt-BR"
 
 describe("basic validations", () => {
   const mockField: IFieldConfig = {
@@ -353,6 +354,73 @@ describe("custom validation rules", () => {
 })
 
 describe("applies localization", () => {
-  test.todo("corretly applies localization to validation")
-  test.todo("correctly applies localization on required field")
+  test("corretly applies localization to validation", () => {
+    const fieldConfig: IFieldConfig = {
+      slug: "mockField",
+      "ui:widget": "Text",
+      "validation": [
+        {
+          "rule": "core:email",
+        },
+      ],
+    }
+
+    const value = "asdf@-sdkc.com"
+    const { isValid, invalidRules } = validateFBTField({
+      fieldConfig,
+      value,
+      locale: ptBRLocale,
+    })
+    expect(isValid).toBeFalsy()
+    expect(invalidRules?.[0]?.message).toBe(
+      "O dominio do email não deve começar ou terminar com hífen (-)"
+    )
+  })
+  test("correctly applies localization on required field", () => {
+    const fieldConfig: IFieldConfig = {
+      slug: "mockField",
+      "ui:widget": "Text",
+      "required": true,
+      "validation": [
+        {
+          "rule": "core:wordsLength",
+          "properties": {
+            "maxWordLength": 50,
+          },
+        },
+      ],
+    }
+
+    const value = ""
+    const { isValid, invalidRules } = validateFBTField({
+      fieldConfig,
+      value,
+      locale: ptBRLocale,
+    })
+    expect(isValid).toBeFalsy()
+    expect(invalidRules?.[0]?.message).toBe("Esse campo é obrigatório")
+  })
+  test("custom messages defined on json should overwrite localization rules", () => {
+    const fieldConfig: IFieldConfig = {
+      slug: "mockField",
+      "ui:widget": "Text",
+      "validation": [
+        {
+          "rule": "core:email",
+          "errorsMap": {
+            "invalidDomain": "#{value} - custom message",
+          },
+        },
+      ],
+    }
+
+    const value = "asdf@-sdkc.com"
+    const { isValid, invalidRules } = validateFBTField({
+      fieldConfig,
+      value,
+      locale: ptBRLocale,
+    })
+    expect(isValid).toBeFalsy()
+    expect(invalidRules?.[0]?.message).toBe("asdf@-sdkc.com - custom message")
+  })
 })
