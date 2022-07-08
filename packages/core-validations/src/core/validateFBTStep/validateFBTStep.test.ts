@@ -1,5 +1,6 @@
 import { IFieldConfig, IStepConfig } from "@iq-firebolt/entities"
 import validateFBTStep from "./index"
+import ptbrLocale from "../../locales/pt-BR"
 import allRightFieldsMock from "./__mocks__/all-right-fields"
 import conditionalFieldsMock from "./__mocks__/conditional-fields"
 import sourceFieldMock from "./__mocks__/source-field"
@@ -221,7 +222,129 @@ describe("Required fields validation", () => {
 })
 
 describe("Step localization", () => {
-  test.todo("Correctly applies localization")
+  test("Correctly applies localization on all fields", () => {
+    const fieldsMock: IFieldConfig[] = [
+      {
+        "slug": "field-a",
+        "ui:widget": "Text",
+        "required": true,
+        "validation": [
+          {
+            "rule": "core:wordsCount",
+            "properties": {
+              "maxWords": 4,
+            },
+          },
+        ],
+      },
+      {
+        "slug": "field-b",
+        "ui:widget": "Text",
+        "required": true,
+        "validation": [
+          {
+            "rule": "core:stringLength",
+            "properties": {
+              "maxLength": 6,
+            },
+          },
+          {
+            "rule": "core:wordsCount",
+            "properties": {
+              "maxWords": 4,
+            },
+          },
+        ],
+      },
+    ]
+    const stepConfig = encapsulateStep(fieldsMock)
+    const formPayload = {
+      "field-a": "awerd sdfdfds dfdsdf sdfdf dfdsdf fdsdfdgd",
+      "field-b": "sdfdf sdfdsdf dsdfdgds sdfdgsd sdfdg",
+    }
+    const { isValid, invalidFields } = validateFBTStep({
+      stepConfig,
+      formPayload,
+      locale: ptbrLocale,
+    })
+
+    expect(isValid).toBeFalsy()
+    expect(invalidFields.length).toBe(2)
+    expect(invalidFields?.[0]?.invalidRules?.[0]?.message).toBe(
+      "O valor deve ter no máximo 4 palavras"
+    )
+    expect(invalidFields?.[1]?.invalidRules?.[0]?.message).toBe(
+      "O valor 'sdfdf sdfdsdf dsdfdgds sdfdgsd sdfdg' é maior que o tamanho máximo permitido: 6 caracteres"
+    )
+    expect(invalidFields?.[1]?.invalidRules?.[1]?.message).toBe(
+      "O valor deve ter no máximo 4 palavras"
+    )
+  })
+  test("Overwrite localization with custom error message", () => {
+    const fieldsMock: IFieldConfig[] = [
+      {
+        "slug": "field-a",
+        "ui:widget": "Text",
+        "required": true,
+        "validation": [
+          {
+            "rule": "core:wordsCount",
+            "properties": {
+              "maxWords": 2,
+            },
+            "errorsMap": {
+              "maxWords": "#{value} não rola",
+            },
+          },
+        ],
+      },
+      {
+        "slug": "field-b",
+        "ui:widget": "Text",
+        "required": true,
+        "validation": [
+          {
+            "rule": "core:stringLength",
+            "properties": {
+              "maxLength": 6,
+            },
+            "errorsMap": {
+              "greaterThanMax": "#{value} falhou",
+            },
+          },
+          {
+            "rule": "core:wordsCount",
+            "properties": {
+              "maxWords": 4,
+            },
+          },
+        ],
+      },
+    ]
+
+    const stepConfig = encapsulateStep(fieldsMock)
+    const formPayload = {
+      "field-a": "awerd sdfdfds dfdsdf sdfdf dfdsdf fdsdfdgd",
+      "field-b": "sdfdf sdfdsdf dsdfdgds sdfdgsd sdfdg",
+    }
+    const { isValid, invalidFields } = validateFBTStep({
+      stepConfig,
+      formPayload,
+      locale: ptbrLocale,
+    })
+
+    expect(isValid).toBeFalsy()
+    expect(invalidFields.length).toBe(2)
+    expect(invalidFields?.[0]?.invalidRules?.[0]?.message).toBe(
+      "awerd sdfdfds dfdsdf sdfdf dfdsdf fdsdfdgd não rola"
+    )
+    expect(invalidFields?.[1]?.invalidRules?.[0]?.message).toBe(
+      "sdfdf sdfdsdf dsdfdgds sdfdgsd sdfdg falhou"
+    )
+    expect(invalidFields?.[1]?.invalidRules?.[1]?.message).toBe(
+      "O valor deve ter no máximo 4 palavras"
+    )
+  })
 })
 
 describe("custom validation rules", () => {

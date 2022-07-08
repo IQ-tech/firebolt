@@ -3,32 +3,41 @@ import inclusion from "./index"
 describe("Rule - Inclusion", () => {
   const stringArray = ["Tomate", 'Batata', 'Cenoura']
   test.each([
-    { value: "Tomate", included: stringArray },
-    { value: "teste@email.com", included: "@email.com" },
-  ])("Success includes: '$value' in '$included'", ({ value, included }) => {
-    const validate = inclusion(value, { properties: { included }})
-    expect(validate.isValid).toBeTruthy()
-    expect(validate.givenValue).toBe(value)
+    { value: "Batata", included: stringArray },
+    { value: "bata", included: "batata" },
+  ])("Success Case (includes): '$value' in '$included'", ({ value, included }) => {
+    const {isValid, givenValue} = inclusion(value, { properties: { included }})
+    expect(isValid).toBeTruthy()
+    expect(givenValue).toBe(value)
   })
 
   test.each([
     { value: "tomate", included: stringArray },
     { value: "Beringela", included: stringArray },
-    { value: "teste@email.com", included: "@email.com.br" },
-  ])("Fail includes: '$value' not in '$included'", ({ value, included }) => {
-
-    const validate = inclusion(value, { properties: { included }})
-    expect(validate.isValid).toBeFalsy()
-    expect(validate.message).toBe("Values ​​must be the same for confirmation")
-    expect(validate.givenValue).toBe(value)
+    { value: "teste@email.com", included: "tomate" },
+  ])("Fail Case (includes): '$value' not in '$included'", ({ value, included }) => {
+    const {isValid, message, givenValue} = inclusion(value, { properties: { included }})
+    expect(isValid).toBeFalsy()
+    expect(message).toBe(`The value '${value}' is not included in ${included}`)
+    expect(givenValue).toBe(value)
   })
 
   test.each([
-    { value: "tomate", contains: "mate" },
+    { value: "batata", contains: "bata" },
     { value: "teste@email.com", contains: "@email.com" },
-  ])("Success contains: '$contains' in '$value'", ({ value, contains }) => {
-    const validate = inclusion(value, { properties: { contains }})
-    expect(validate.isValid).toBeTruthy()
-    expect(validate.givenValue).toBe(value)
+  ])("Success Case (contains): '$contains' in '$value'", ({ value, contains }) => {
+    const {isValid, givenValue} = inclusion(value, { properties: { contains }})
+    expect(isValid).toBeTruthy()
+    expect(givenValue).toBe(value)
+  })
+
+  test.each([
+    { value: "tomate", contains: "batata" },
+    { value: "teste@email.com", contains: "@email.com.br" },
+  ])("Fail Case (includes): '$contains' not in $value'", ({ value, contains }) => {
+    const {isValid, message, givenValue} = inclusion(value, { properties: { contains }})
+    expect(isValid).toBeFalsy()
+    expect(message).toBe(`The value '${value}' not contain ${contains}`)
+    expect(givenValue).toBe(value)
   })
 })

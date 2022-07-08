@@ -45,10 +45,9 @@ describe("should correctly validate", () => {
   ])(
     "validate email that has a domain that ends or begins with a hyphen $value",
     ({ value }) => {
-      expect(email(value).isValid).toBeFalsy()
-      expect(email(value).message).toBe(
-        "Domain must not start or end with a hyphen '-'"
-      )
+      const { isValid, message } =  email(value)
+      expect(isValid).toBeFalsy()
+      expect(message).toBe("Domain must not start or end with a hyphen '-'")
     }
   )
 
@@ -60,8 +59,9 @@ describe("should correctly validate", () => {
     { value: "email@example.com (Joe Smith)" },
     { value: "Joe Smith <email@example.com>" },
   ])("validating emails with special characters $value", ({ value }) => {
-    expect(email(value).isValid).toBeFalsy()
-    expect(email(value).message).toBe("Special characters are not allowed")
+    const { isValid, message } =  email(value)
+    expect(isValid).toBeFalsy()
+    expect(message).toBe("Special characters are not allowed")
   })
 
   test.each([
@@ -72,7 +72,8 @@ describe("should correctly validate", () => {
     { value: ".email@example.com" },
     { value: "email.@example.com" },
   ])("invalid email test $value", ({ value }) => {
-    expect(email(value).isValid).toBeFalsy()
-    expect(email(value).message).toBe("Invalid email")
+    const { isValid, message } =  email(value)
+    expect(isValid).toBeFalsy()
+    expect(message).toBe("Invalid email")
   })
 })
