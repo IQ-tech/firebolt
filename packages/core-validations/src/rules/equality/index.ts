@@ -2,7 +2,7 @@ import createValidationRule from "../../core/createValidationRule"
 import errorMessages from "./messages"
 
 interface IEquality {
-    compareTo: string | number 
+  compareTo: string | number
 }
 
 type ErrorsType = typeof errorMessages
