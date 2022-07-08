@@ -22,9 +22,9 @@
     "test": "jest --no-cache",
     "test:coverage": "jest --collect-coverage",
     "test:watch": "NODE_ENV=test jest --watchAll",
-    "build": "yarn clear-dist && tsc",
+    "generate-rules-specs": "ts-node scripts/generate-rules-docs/index.ts",
+    "build": "yarn generate-rules-specs && yarn clear-dist && tsc",
     "clear-jest": "jest --clearCache",
-    "generate-rules-docs": "ts-node scripts/generate-rules-docs.ts",
     "testg": "typescript-json-schema src/rules/email/index.ts ErrorsType --ignoreErrors --out schemas/experience-config.json --refs false --required true"
   },
   "bugs": {
@@ -36,6 +36,6 @@
   },
   "devDependencies": {
     "faker": "6.6.6",
-    "typescript-json-schema": "^0.54.0"
+    "typescript-json-schema": "0.54.0"
   }
 }

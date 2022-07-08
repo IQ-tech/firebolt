@@ -1,7 +1,7 @@
 import createValidationRule from "../../core/createValidationRule"
 import errorMessages from "./messages"
 
-export interface IStringLength {
+export interface IProps {
   minLength?: number
   maxLength?: number
   equals?: number
@@ -9,7 +9,7 @@ export interface IStringLength {
 
 type ErrorsType = typeof errorMessages
 
-const stringLength = createValidationRule<ErrorsType, IStringLength>(
+const stringLength = createValidationRule<ErrorsType, IProps>(
   ({ value, action, properties = {} }) => {
     const valueCharLength = value.split("").length
     const { minLength, maxLength, equals } = properties

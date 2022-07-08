@@ -18,7 +18,8 @@ integer
 float
 
 regexMatch (¿¿¿ matchs ???)
-inclusion
+inclusion - ok
+exclusion - ok
 type(string, number, boolean, array.isArray(), objeto)
 nonSpecialChars
 nonSequential

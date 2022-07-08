@@ -1,14 +1,14 @@
 import createValidationRule from "../../core/createValidationRule"
 import errorMessages from "./messages"
 
-export interface IWordsCount {
+export interface IProps {
   maxWords?: number 
   minWords?: number
 }
 
 type ErrorsType = typeof errorMessages
 
-const wordsCount = createValidationRule<ErrorsType, IWordsCount>(
+const wordsCount = createValidationRule<ErrorsType, IProps>(
   ({ value, action, properties = {} }) => {
     const valueWordsLength = value.split(" ").length
     const { minWords, maxWords } = properties 

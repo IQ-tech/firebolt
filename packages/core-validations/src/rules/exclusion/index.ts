@@ -1,30 +1,30 @@
 import createValidationRule from "../../core/createValidationRule"
 import errorMessages from "./messages"
 
-interface IInclusionA {
+interface IRequiredIncluded {
   included: Array<string | number> | string
   contains?: string
 }
 
-interface IInclusionB {
+interface IRequiredContains {
   included?: Array<string | number> | string
   contains: string
 }
 
-export type IProps = IInclusionA | IInclusionB
+export type IProps = IRequiredIncluded | IRequiredContains
 
 type ErrorsType = typeof errorMessages
 
-const inclusion = createValidationRule<ErrorsType, IProps>(
+const exclusion = createValidationRule<ErrorsType, IProps>(
   ({ value, action, properties }) => {
     const included = properties?.included
     const contains = properties?.contains
 
-    if (included && !included?.includes(value)) {
-      return action.refuse("notIncluded")
+    if (included && included?.includes(value)) {
+      return action.refuse("included")
     }
-    if (contains && !value?.includes(contains)) {
-      return action.refuse("notContains")
+    if (contains && value?.includes(contains)) {
+      return action.refuse("contains")
     }
 
     return action.approve()
@@ -32,4 +32,4 @@ const inclusion = createValidationRule<ErrorsType, IProps>(
   errorMessages
 )
 
-export default inclusion
+export default exclusion
