@@ -2,16 +2,16 @@ import createValidationRule from "../../core/createValidationRule"
 import errorMessages from "./messages"
 
 interface IEquality {
-  valueToConfirm: string | number | any
+    compareTo: string | number 
 }
 
 type ErrorsType = typeof errorMessages
 
 const equality = createValidationRule<ErrorsType, IEquality>(
   ({ value, action, properties = {} }) => {
-    const { valueToConfirm } = properties
+    const { compareTo } = properties
 
-    if (value !== valueToConfirm) return action.refuse("valueErrorConfirmation")
+    if (value !== compareTo) return action.refuse("valueErrorConfirmation")
 
     return action.approve()
   },
