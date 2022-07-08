@@ -1,5 +1,5 @@
 * definir quais são os validadores
-* começar a codar a createValidator (factory)
+* começar a codar a createValidationRule (factory)
 * definir a nova arquitetura de um validador
  * função de validação
  * mapa de propriedades
@@ -9,20 +9,32 @@
 duvidas
 
 
+
 lista de validadores
 
-email
-regexRule
-type
+### numbers
+moreThan
+lessThan
+inRange
+positive
+negative
+integer
+float
+
+
+equality(secondValue = igual o primeiro valor )
+regexRule (¿¿¿ matchs ???)
+inclusion
+type(string, number, boolean, array.isArray(), objeto)
 nonSpecialChars
 nonSequential
-isBoolean
-empty
 lowercase
-equals
 date
 dateTime
+url
 
+regra de contribuição:
+como adicionar uma core rule
 
 
 

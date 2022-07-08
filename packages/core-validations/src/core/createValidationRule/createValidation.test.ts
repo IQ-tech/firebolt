@@ -1,7 +1,7 @@
-import createValidator from "./index"
+import createValidationRule from "./index"
 
 describe("create validator", () => {
-  const isCenoura = createValidator(
+  const isCenoura = createValidationRule(
     ({ value, action }) => {
       if (value === "cenoura") return action.approve()
 
@@ -27,7 +27,7 @@ describe("create validator", () => {
 
 describe("validator localization", () => {
   test("custom validator correctly applies a localization map", () => {
-    const isBatata = createValidator(
+    const isBatata = createValidationRule(
       ({ value, action }) => {
         if (value === "batata") return action.approve()
 

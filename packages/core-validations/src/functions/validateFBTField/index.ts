@@ -3,6 +3,7 @@ import {
   IStepFormPayload,
   ExperienceContext,
 } from "@iq-firebolt/entities"
+import { ILocaleConfig } from "../../locales/types"
 import rulesMap from "../../rulesMap"
 import {
   ICustomValidationRulesMap,
@@ -20,7 +21,7 @@ import {
 interface IValidateFBTFieldBase {
   fieldConfig: IFieldConfig
   customValidatorsMap?: ICustomValidationRulesMap | IGenericObject
-  locale?: any
+  locale?: ILocaleConfig
 
   context?: ExperienceContext
 }
@@ -63,7 +64,6 @@ function validateFBTField({
     validationRules,
     context
   )
-  
 
   const validationsResults = filteredContextValidations.map(
     ({ rule, properties, errorsMap }) => {
@@ -81,7 +81,12 @@ function validateFBTField({
             `rule validation ${ruleId} does not exists on firebolt core validation rules`
           )
         }
-        return ruleValidation(fieldValue, { properties: processedProperties })
+        const coreRuleId = ruleId as keyof typeof rulesMap
+        const ruleLocale = locale?.rulesMessages?.[coreRuleId]
+        return ruleValidation(fieldValue, {
+          properties: processedProperties,
+          errorsMap: ruleLocale,
+        })
       } else {
         const customValidator = customValidatorsMap?.[cleanneadRuleName]
         if (!customValidator) {
@@ -93,9 +98,7 @@ function validateFBTField({
       }
     }
   )
-  const invalidRules = validationsResults.filter(
-    (result) => !result.isValid
-  )
+  const invalidRules = validationsResults.filter((result) => !result.isValid)
   const isValid = invalidRules.length === 0
 
   return { isValid, invalidRules }

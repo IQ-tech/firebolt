@@ -1,9 +1,9 @@
-import createValidator from "../../core/createValidator"
+import createValidationRule from "../../core/createValidationRule"
 import errorMessages from "./messages"
 
 type ErrorsType = typeof errorMessages
 
-const email = createValidator<ErrorsType>(({ value, action }) => {
+const email = createValidationRule<ErrorsType>(({ value, action }) => {
   const regExp =
     /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/i
 

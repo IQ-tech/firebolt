@@ -10,7 +10,7 @@ export function getInvalidRequired(value: any): IFBTFieldValidationResult {
   return {
     isValid: false,
     invalidRules: [
-      { isValid: false, message: "this value is required", givenValue: value },
+      { isValid: false, message: "This field is required", givenValue: value },
     ],
   }
 }

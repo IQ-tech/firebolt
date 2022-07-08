@@ -6,7 +6,7 @@ import {
 } from "../../types"
 import { actionFactory } from "./helpers"
 
-export default function createValidator<EM = {}, P = {}>(
+export default function createValidationRule<EM = {}, P = {}>(
   creatorFunction: CreatorFunction<EM, P>,
   defaultErrorsMap: EM
 ): GenericValidationFunc<EM, P> {

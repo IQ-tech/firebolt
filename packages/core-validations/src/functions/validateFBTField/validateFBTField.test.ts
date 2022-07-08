@@ -1,6 +1,6 @@
 import validateFBTField from "./index"
 import { IFieldConfig } from "@iq-firebolt/entities"
-import createValidator from "../../core/createValidator"
+import createValidationRule from "../../core/createValidationRule"
 import { IGenericObject } from "../../types"
 
 describe("basic validations", () => {
@@ -210,7 +210,7 @@ describe("custom validation rules", () => {
     ],
   }
 
-  const isPotato = createValidator(
+  const isPotato = createValidationRule(
     ({ value, action }) => {
       if (value === "potato") {
         return action.approve()
@@ -221,7 +221,7 @@ describe("custom validation rules", () => {
     { "defaultError": "#{value} is not potato" }
   )
 
-  const havePotato = createValidator(
+  const havePotato = createValidationRule(
     ({ value, properties, action }) => {
       const potatoCount = (properties as any)?.potatoCount || 0
       const safeValue: string = value || ""
@@ -234,7 +234,7 @@ describe("custom validation rules", () => {
     { "defaultError": "should have potato" }
   )
 
-  const haveCarrot = createValidator(
+  const haveCarrot = createValidationRule(
     ({ value, properties, action }) => {
       const potatoCount = (properties as any)?.carrotCount || 0
       const safeValue: string = value || ""

@@ -1,6 +1,8 @@
 export * from "./types"
+export * from "./locales/types"
 // firebolt functions
 export { default as validateFBTField } from "./functions/validateFBTField"
+export { default as validateFBTStep } from "./functions/validateFBTStep"
 // full rules map
 export { default as rulesMap } from "./rulesMap"
 // individual rules
@@ -8,3 +10,4 @@ export { default as wordsLength } from "./rules/wordsLength"
 export { default as wordsCount } from "./rules/wordsCount"
 export { default as stringLength } from "./rules/stringLength"
 export { default as repeatedChars } from "./rules/repeatedChars"
+export { default as email } from "./rules/email"

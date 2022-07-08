@@ -1,4 +1,4 @@
-import createValidator from "../../core/createValidator"
+import createValidationRule from "../../core/createValidationRule"
 import defaultMessages from "./messages"
 
 export interface IWordsLength {
@@ -9,7 +9,7 @@ export interface IWordsLength {
 
 type ErrorsType = typeof defaultMessages
 
-const wordsLength = createValidator<ErrorsType, IWordsLength>(
+const wordsLength = createValidationRule<ErrorsType, IWordsLength>(
   ({ action, value, properties = {} }) => {
     const { maxWordLength, minWordLength, equalsWordLength } = properties
     const safeValue = value || ""

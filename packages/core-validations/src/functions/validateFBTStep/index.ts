@@ -4,6 +4,7 @@ import {
   IStepFormPayload,
 } from "@iq-firebolt/entities"
 import evaluate from "simple-evaluate"
+import { ILocaleConfig } from "../../locales/types"
 import {
   ICustomValidationRulesMap,
   IFBTFieldValidationResult,
@@ -18,7 +19,7 @@ interface IValidateFBTStepArgs {
   formPayload: IStepFormPayload
   context?: ExperienceContext
   customValidatorsMap?: ICustomValidationRulesMap | IGenericObject
-  locale?: any // todo
+  locale?: ILocaleConfig
 }
 
 interface IInvalidField {

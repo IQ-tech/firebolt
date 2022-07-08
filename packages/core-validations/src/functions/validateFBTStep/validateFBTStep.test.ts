@@ -5,7 +5,7 @@ import conditionalFieldsMock from "./__mocks__/conditional-fields"
 import sourceFieldMock from "./__mocks__/source-field"
 import contextMock from "./__mocks__/context-validation"
 import customValidatorRulesMock from "./__mocks__/custom-validator-rules"
-import createValidator from "../../core/createValidator"
+import createValidationRule from "../../core/createValidationRule"
 
 const encapsulateStep = (
   fields: IFieldConfig[] = [],
@@ -52,7 +52,7 @@ describe("Regular step validation", () => {
       "nickname": "cebola1234",
       "email": "cebola@-teste.com",
       "full_name": "cebola",
-      "mothers_name": "cebola",
+      "mothers_name": "cebola"
     }
     const stepConfig = encapsulateStep(allRightFieldsMock)
     const { isValid, invalidFields } = validateFBTStep({
@@ -226,7 +226,7 @@ describe("Step localization", () => {
 
 describe("custom validation rules", () => {
   const stepConfig = encapsulateStep(customValidatorRulesMock)
-  const hasCenoura = createValidator(
+  const hasCenoura = createValidationRule(
     ({ value, action }) => {
       if (value.includes("cenoura")) {
         return action.approve()

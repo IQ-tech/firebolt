@@ -1,4 +1,4 @@
-import createValidator from "../../core/createValidator"
+import createValidationRule from "../../core/createValidationRule"
 import errorMessages from "./messages"
 
 export interface IRepeatedChars {
@@ -9,7 +9,7 @@ export interface IRepeatedChars {
 
 type ErrorsType = typeof errorMessages
 
-const repeatedChars = createValidator<ErrorsType, IRepeatedChars>(
+const repeatedChars = createValidationRule<ErrorsType, IRepeatedChars>(
   ({ value, action, properties = {} }) => {
     const { char, times, caseSensitive = true } = properties
     const useCaseSensitive = `${caseSensitive ? "" : "i"}`

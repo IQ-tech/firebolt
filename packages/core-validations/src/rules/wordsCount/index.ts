@@ -1,4 +1,4 @@
-import createValidator from "../../core/createValidator"
+import createValidationRule from "../../core/createValidationRule"
 import errorMessages from "./messages"
 
 export interface IWordsCount {
@@ -8,7 +8,7 @@ export interface IWordsCount {
 
 type ErrorsType = typeof errorMessages
 
-const wordsCount = createValidator<ErrorsType, IWordsCount>(
+const wordsCount = createValidationRule<ErrorsType, IWordsCount>(
   ({ value, action, properties = {} }) => {
     const valueWordsLength = value.split(" ").length
     const { minWords, maxWords } = properties 
