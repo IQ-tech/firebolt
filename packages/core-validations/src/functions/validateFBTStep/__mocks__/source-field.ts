@@ -60,7 +60,7 @@ const correctFields: IFieldConfig[] = [
     "ui:widget": "Text",
     "validation": [
       {
-        "rule": "core:maxWords",
+        "rule": "core:wordsCount",
         "properties": { "maxWords": "step.max_words" },
       },
     ],

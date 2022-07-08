@@ -1,7 +1,7 @@
 import { IFieldConfig, IStepConfig } from "@iq-firebolt/entities"
 import validateFBTStep from "./index"
 import allRightFieldsMock from "./__mocks__/all-right-fields"
-import conditionalFieldsMock from "./__mocks__/all-right-fields"
+import conditionalFieldsMock from "./__mocks__/conditional-fields"
 import sourceFieldMock from "./__mocks__/source-field"
 import contextMock from "./__mocks__/context-validation"
 import customValidatorRulesMock from "./__mocks__/custom-validator-rules"
@@ -135,7 +135,9 @@ describe("Validate correctly based on platform context", () => {
 
     expect(isValid).toBeFalsy()
     expect(invalidFields.length).toBe(1)
-    expect(invalidFields?.[0]?.invalidRules?.[0].message).toBe("cebola, must have at least 2 words")
+    expect(invalidFields?.[0]?.invalidRules?.[0].message).toBe(
+      "cebola, must have at least 2 words"
+    )
   })
 })
 
@@ -143,7 +145,7 @@ describe("Required fields validation", () => {
   const stepConfig = encapsulateStep(conditionalFieldsMock)
   test("Validate correctly conditional fields (valid)", () => {
     const formPayload = {
-      "nickname": "cebola123",
+      "nickname": "ce123",
       "email": "cebola@teste.com",
       "full_name": "cebola carlos",
       "mothers_name": "cebola roxa",
@@ -154,7 +156,7 @@ describe("Required fields validation", () => {
   })
   test("Validate correctly conditional fields (invalid)", () => {
     const formPayload = {
-      "nickname": "cebola123",
+      "nickname": "ce123",
       "email": "cebola@-**teste.com",
       "full_name": "cebola carlos",
       "mothers_name": "cebola roxa",
@@ -166,7 +168,9 @@ describe("Required fields validation", () => {
     })
     expect(isValid).toBeFalsy()
     expect(invalidFields.length).toBe(1)
-    expect(invalidFields?.[0]?.invalidRules?.[0].message).toBe("sdsfs")
+    expect(invalidFields?.[0]?.invalidRules?.[0].message).toBe(
+      "domain must not start or end with a hyphen -"
+    )
   })
   test("Ignore filled conditional field (without condition match)", () => {
     const formPayload = {
@@ -230,7 +234,7 @@ describe("custom validation rules", () => {
 
       return action.refuse("defaultError")
     },
-    { "defaultError": "is not cenoura" }
+    { "defaultError": "dont have 'cenoura'" }
   )
 
   const customValidatorsMap = {
@@ -238,13 +242,13 @@ describe("custom validation rules", () => {
   }
   test("Correctly applies custom validation rules (valid value)", () => {
     const formPayload = {
-      "nickname": "cebola123",
+      "nickname": "ce123",
       "email": "cebola@teste.com",
       "full_name": "cenoura teste",
       "mothers_name": "cebola roxa",
     }
 
-    const { isValid } = validateFBTStep({
+    const { isValid, invalidFields } = validateFBTStep({
       stepConfig,
       formPayload,
       customValidatorsMap,
@@ -253,7 +257,7 @@ describe("custom validation rules", () => {
   })
   test("Correctly applies custom validation rules (invalid value)", () => {
     const formPayload = {
-      "nickname": "cebola123",
+      "nickname": "ce123",
       "email": "cebola@teste.com",
       "full_name": "cebola teste",
       "mothers_name": "cebola roxa",
@@ -265,7 +269,9 @@ describe("custom validation rules", () => {
       customValidatorsMap,
     })
     expect(isValid).toBeFalsy()
-    expect(invalidFields?.[0]?.invalidRules?.[0].message).toBe("sadsfs")
+    expect(invalidFields?.[0]?.invalidRules?.[0].message).toBe(
+      "dont have 'cenoura'"
+    )
   })
 })
 
@@ -274,7 +280,7 @@ describe("correctly source properties from another fields", () => {
 
   test("validate max words (valid)", () => {
     const formPayload = {
-      "nickname": "cebola123",
+      "nickname": "ce123",
       "email": "cebola@teste.com",
       "full_name": "cebola teste",
       "mothers_name": "cebola roxa",
@@ -289,7 +295,7 @@ describe("correctly source properties from another fields", () => {
 
   test("validate max words (invalid)", () => {
     const formPayload = {
-      "nickname": "cebola123",
+      "nickname": "ce123",
       "email": "cebola@teste.com",
       "full_name": "cebola teste",
       "mothers_name": "cebola roxa",
@@ -303,6 +309,8 @@ describe("correctly source properties from another fields", () => {
     })
 
     expect(isValid).toBeFalsy()
-    expect(invalidFields?.[0]?.invalidRules?.[0].message).toBe("sadsfs")
+    expect(invalidFields?.[0]?.invalidRules?.[0].message).toBe(
+      "asdsf sjshdf adfasd asdsf, exceeds the maximum number of words allowed, enter 3 words"
+    )
   })
 })

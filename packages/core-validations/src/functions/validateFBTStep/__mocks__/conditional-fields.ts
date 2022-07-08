@@ -16,7 +16,7 @@ const fields: IFieldConfig[] = [
   },
   {
     "slug": "email",
-    "required": "step.nickname === 'cebola123'",
+    "required": "step.nickname === 'ce123'",
     "ui:widget": "Text",
     "validation": [
       {
