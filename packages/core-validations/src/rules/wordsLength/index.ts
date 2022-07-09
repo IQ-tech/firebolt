@@ -9,7 +9,7 @@ export interface IProps {
 
 type ErrorsType = typeof defaultMessages
 
-const wordsLength = createValidationRule<ErrorsType, IProps>(
+const wordsLength = createValidationRule<IProps, ErrorsType>(
   ({ action, value, properties = {} }) => {
     const { maxWordLength, minWordLength, equalsWordLength } = properties
     const safeValue = value || ""

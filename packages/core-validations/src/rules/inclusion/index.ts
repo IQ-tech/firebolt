@@ -15,7 +15,7 @@ export type IProps = IInclusionA | IInclusionB
 
 type ErrorsType = typeof errorMessages
 
-const inclusion = createValidationRule<ErrorsType, IProps>(
+const inclusion = createValidationRule<IProps, ErrorsType>(
   ({ value, action, properties }) => {
     const included = properties?.included
     const contains = properties?.contains

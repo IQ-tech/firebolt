@@ -9,7 +9,7 @@ export interface IProps {
 
 type ErrorsType = typeof errorMessages
 
-const repeatedChars = createValidationRule<ErrorsType, IProps>(
+const repeatedChars = createValidationRule<IProps, ErrorsType>(
   ({ value, action, properties = {} }) => {
     const { char, times, caseSensitive = true } = properties
     const useCaseSensitive = `${caseSensitive ? "" : "i"}`

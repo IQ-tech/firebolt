@@ -7,7 +7,7 @@ interface IProps {
 
 type ErrorsType = typeof errorMessages
 
-const regexMatch = createValidationRule<ErrorsType, IProps>(
+const regexMatch = createValidationRule<IProps, ErrorsType>(
   ({ value, action, properties = {} }) => {
     const { pattern } = properties
 

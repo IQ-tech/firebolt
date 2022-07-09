@@ -3,14 +3,16 @@ import {
   IValidationValueResult,
   IValidationFunctionOptions,
   GenericValidationFunc,
+  IGenericObject,
 } from "../../types"
 import { actionFactory } from "./helpers"
 
-export default function createValidationRule<EM = {}, P = {}>(
+type U<EM> = EM extends EM ? EM : {}
+export default function createValidationRule<P = IGenericObject, EM = {}>(
   creatorFunction: CreatorFunction<EM, P>,
   defaultErrorsMap: EM
 ): GenericValidationFunc<EM, P> {
-  return (
+  const validationFunction = (
     givenValue: any,
     options?: IValidationFunctionOptions<EM, P>
   ): IValidationValueResult => {
@@ -25,6 +27,24 @@ export default function createValidationRule<EM = {}, P = {}>(
       properties,
     })
 
-    return creatorFunction({ value: givenValue, action: action, properties })
+    const validationResult = creatorFunction({
+      value: givenValue,
+      action: action,
+      properties,
+    })
+    if (typeof validationResult?.isValid !== "boolean") {
+      throw new Error(
+        "bad implementation: validator function does not return an validation result ({isValid: boolean, givenValue?: any, message?: string}"
+      )
+    }
+
+    return validationResult
   }
+
+  validationFunction.freeze = (properties: P, errorsMap?: EM) => {
+    return (givenValue: any) =>
+      validationFunction(givenValue, { properties, errorsMap })
+  }
+
+  return validationFunction
 }

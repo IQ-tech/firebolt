@@ -9,7 +9,7 @@ export interface IProps {
 
 type ErrorsType = typeof errorMessages
 
-const stringLength = createValidationRule<ErrorsType, IProps>(
+const stringLength = createValidationRule<IProps, ErrorsType>(
   ({ value, action, properties = {} }) => {
     const valueCharLength = value.split("").length
     const { minLength, maxLength, equals } = properties
@@ -38,4 +38,3 @@ const stringLength = createValidationRule<ErrorsType, IProps>(
 )
 
 export default stringLength
-

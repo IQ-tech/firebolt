@@ -6,6 +6,8 @@ import {
   repeatedChars,
   wordsCount,
   wordsLength,
+  inclusion,
+  exclusion,
 } from "./rules"
 
 const ptbrLocale: ILocaleConfig = {
@@ -19,6 +21,8 @@ const ptbrLocale: ILocaleConfig = {
     repeatedChars,
     wordsCount,
     wordsLength,
+    inclusion,
+    exclusion,
   },
 }
 

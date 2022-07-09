@@ -32,6 +32,7 @@
   },
   "dependencies": {
     "@iq-firebolt/entities": "^0.7.0",
+    "faker": "^6.6.6",
     "simple-evaluate": "1.4.5"
   },
   "devDependencies": {

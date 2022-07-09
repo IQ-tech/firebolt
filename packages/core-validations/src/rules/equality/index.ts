@@ -7,7 +7,7 @@ interface IProps {
 
 type ErrorsType = typeof errorMessages
 
-const equality = createValidationRule<ErrorsType, IProps>(
+const equality = createValidationRule<IProps, ErrorsType>(
   ({ value, action, properties = {} }) => {
     if (value !== properties?.compareTo)
       return action.refuse("valueErrorConfirmation")

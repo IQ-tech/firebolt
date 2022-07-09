@@ -50,3 +50,33 @@ describe("validator localization", () => {
     expect(givenValue).toBe("cenoura")
   })
 })
+
+describe("freeze complex rule", () => {
+  test("Correctly freezes complex rule into a simpler one", () => {
+    const complexValidation = createValidationRule(
+      ({ properties, action, value }) => {
+        const maxSize = properties?.maxSize
+        const minSize = properties?.minSize
+        if (!!maxSize && value.length > maxSize) {
+          return action.refuse("error1")
+        }
+
+        if (!!minSize && value.length < minSize) {
+          return action.refuse("error2")
+        }
+
+        return action.approve()
+      },
+      {
+        "error1": "error case one #{value}",
+        "error2": "error case two #{value}",
+      }
+    )
+
+    const max5Length = complexValidation.freeze({ maxSize: 5 })
+
+    const { isValid, message } = max5Length("aksdjsfk")
+    expect(isValid).toBeFalsy()
+    expect(message).toBe("error case one aksdjsfk")
+  })
+})

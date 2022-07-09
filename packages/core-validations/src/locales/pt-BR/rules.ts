@@ -35,3 +35,13 @@ export const wordsLength = {
     "O valor '#{value}' inclui menos do que #{minWordLength} palavras",
   "equals": "O valor '#{value}' deve ter #{equalsWordLength} palavras",
 }
+
+export const inclusion = {
+  "notIncluded": "O valor '#{value}' não está incluso em #{included}",
+  "notContains": "O valor '#{value}' não contém #{contains}",
+}
+
+export const exclusion = {
+  "included": "O valor '#{value}' está incluso em #{included}",
+  "contains": "O valor '#{value}' contém #{contains}",
+}

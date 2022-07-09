@@ -15,7 +15,7 @@ export type IProps = IRequiredIncluded | IRequiredContains
 
 type ErrorsType = typeof errorMessages
 
-const exclusion = createValidationRule<ErrorsType, IProps>(
+const exclusion = createValidationRule<IProps, ErrorsType>(
   ({ value, action, properties }) => {
     const included = properties?.included
     const contains = properties?.contains
