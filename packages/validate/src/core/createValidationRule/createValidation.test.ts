@@ -72,6 +72,7 @@ describe("freeze complex rule", () => {
         "error2": "error case two #{value}",
       }
     )
+    
 
     const max5Length = complexValidation.freeze({ maxSize: 5 })
 

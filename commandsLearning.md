@@ -5,7 +5,7 @@
 - `yarn bootstrap`
 
 * instalar um pacote em outro
-- `lerna add @iq-firebolt/entities --scope=@iq-firebolt/core-validations`
+- `lerna add @iq-firebolt/validate --scope=@iq-firebolt/engine`
 
 
 * primeira publicação

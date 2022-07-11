@@ -8,7 +8,8 @@ import { ILocaleConfig } from "../../locales/types"
 import {
   ICustomValidationRulesMap,
   IGenericObject,
-  IValidationValueResult,
+  IInvalidField,
+  IStepValidationResult,
 } from "../../types"
 import validateFBTField from "../validateFBTField"
 
@@ -21,15 +22,6 @@ interface IValidateFBTStepArgs {
   locale?: ILocaleConfig
 }
 
-interface IInvalidField {
-  fieldSlug: string
-  invalidRules: IValidationValueResult[]
-}
-
-interface IStepValidationResult {
-  isValid: boolean
-  invalidFields: IInvalidField[]
-}
 export default function validateFBTStep({
   stepConfig,
   formPayload,

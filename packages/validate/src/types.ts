@@ -8,6 +8,16 @@ export interface IRuleMapItem {
   }
 }
 
+export interface IInvalidField {
+  fieldSlug: string
+  invalidRules: IValidationValueResult[]
+}
+
+export interface IStepValidationResult {
+  isValid: boolean
+  invalidFields: IInvalidField[]
+}
+
 export interface IRulesMap {
   [ruleId: string]: IRuleMapItem
 }
