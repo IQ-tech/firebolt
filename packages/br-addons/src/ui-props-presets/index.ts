@@ -1,16 +1,16 @@
-import STATE_OPTIONS from "./constants/state-options"
+import STATE_OPTIONS from "../constants/state-options"
 
 // masks
-import CPFMask from "./masks/CPF"
-import CEPMask from "./masks/CEP"
-import BRCurrency from "./masks/currency"
+import CPFMask from "../masks/CPF"
+import CEPMask from "../masks/CEP"
+import BRCurrency from "../masks/currency"
 import {
   BRPhoneMask,
   BRPhoneResidentialMask,
   BRPhoneHybridMask,
-} from "./masks/phone"
-import MonthYearMask from "./masks/date/month-year"
-import DayMonthYearMask from "./masks/date/day-month-year"
+} from "../masks/phone"
+import MonthYearMask from "../masks/date/month-year"
+import DayMonthYearMask from "../masks/date/day-month-year"
 
 const UIPropsPresetsList = {
   "br-states": {

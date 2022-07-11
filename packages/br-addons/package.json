@@ -8,6 +8,14 @@
   "sideEffects": false,
   "main": "./src/index.js",
   "module": "./src/index.js",
+  "files": [
+    "/dist",
+    "./",
+    "/src",
+    "/es",
+    "/types",
+    "/specs"
+  ],
   "publishConfig": {
     "access": "public"
   },
@@ -17,13 +25,20 @@
   },
   "scripts": {
     "test": "jest",
-    "test:watch": "jest --watch"
+    "test:watch": "jest --watch",
+    "bundle": "rollup -c"
   },
   "bugs": {
     "url": "https://github.com/IQ-tech/firebolt/issues"
   },
   "dependencies": {
     "text-mask-addons": "^3.8.0"
+  },
+  "devDependencies": {
+    "rollup": "^2.76.0",
+    "rollup-plugin-dts": "^4.2.2",
+    "rollup-plugin-esbuild": "^4.9.1",
+    "typescript-json-schema": "0.54.0"
   },
   "browserslist": [
     "last 1 Chrome version"
