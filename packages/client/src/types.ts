@@ -6,7 +6,7 @@ import {
   IFormMetadata,
   IRequestMetadata,
   IStepData,
-} from "@iq-firebolt/client-core"
+} from "@iq-firebolt/client-core/lib"
 import React from "react"
 
 export interface IFireboltProvider {
@@ -61,14 +61,16 @@ export interface IWizardComponent {
 export interface IUseFireboltForm {
   schema: Array<IStepConfigField>
   children?: Object[]
-  onChange?: React.ChangeEvent<HTMLInputElement>
+  onChange?: (formPayload: IFieldsObject) => void
   onSubmit?(): void
   theme?: Object
   autoFill?: IFieldsObject
   remoteErrors?: Array<IFieldsObject>
   onGoBack?(): void
   classes: Object
-  onFocusField?: Event
+  onFocusField?: (field: IStepConfigField) => void
+  onBlurField?: (field: IStepConfigField, value: string) => void
+  onChangeField?: (field: IStepConfigField, values: {value: any, previousValue: any}) => void
   addons?: IAddonsConfig
   clearRemoteFieldError?:(fieldSlug: string) => void
 }
@@ -110,12 +112,14 @@ export interface IFireboltForm {
   addons?: IAddonsConfig
   schema: Array<IStepConfigField>
   children?: Object[]
-  onChange?: React.ChangeEvent<HTMLInputElement>
+  onChange?: (formPayload: IFieldsObject) => void
   onSubmit?(): void
   theme?: Object
   autoFill?: IFieldsObject
   remoteErrors?: Array<IFieldsObject>
   onGoBack?(): void
-  onFocusField?: Event
+  onFocusField?: (field: IStepConfigField) => void
+  onBlurField?: (field: IStepConfigField, value: string) => void
+  onChangeField?: (field: IStepConfigField, values: {value: any, previousValue: any}) => void
   clearRemoteFieldError?:(fieldSlug: string) => void
 }

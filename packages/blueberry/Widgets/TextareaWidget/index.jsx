@@ -1,4 +1,4 @@
-import React from 'react'
+import React from "react"
 import { TextareaField } from "iq-blueberry"
 import getTooltipConfig from "../../helpers/getTooltipConfig"
 
@@ -20,7 +20,8 @@ const TextWidget = ({
   spellcheck,
   resize,
   minLength,
-  maxLength
+  maxLength,
+  inputRef,
 }) => {
   return (
     <TextareaField
@@ -42,6 +43,7 @@ const TextWidget = ({
       resize={resize}
       minLength={minLength}
       maxLength={maxLength}
+      ref={inputRef}
     />
   )
 }

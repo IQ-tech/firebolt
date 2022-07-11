@@ -3,7 +3,7 @@ import {
   IDefaultStep,
   IFormStep,
   IFormMetadata,
-} from "@iq-firebolt/client-core"
+} from "@iq-firebolt/client-core/lib"
 import { IFieldsObject, INextStepFunction } from "./types"
 
 export interface IFireboltContext {

@@ -1,12 +1,12 @@
-import { useRef, useEffect } from "react"
-import { createFireboltForm } from "@iq-firebolt/client-core"
+import { useEffect, useMemo } from "react"
+import { createFireboltForm } from "@iq-firebolt/client-core/lib"
 import getDebugStepName from "../../../helpers/getDebugStepName"
 
 import useStates from "./useStates"
 import useData from "./useData"
 import useBrowserNavigation from "./useBrowserNavigation"
 import { IFireboltProvider, IFieldsObject } from "../../../types"
-import { IRequestMetadata } from "@iq-firebolt/client-core"
+import { IRequestMetadata } from "@iq-firebolt/client-core/lib"
 
 function useFireboltProvider({
   formAccess,
@@ -18,13 +18,15 @@ function useFireboltProvider({
   addons = {},
   mockStep,
 }: IFireboltProvider) {
-  const formEngine = useRef(
-    createFireboltForm(formAccess, {
-      requestsMetadata,
-      debug,
-      addons,
-      mockStep,
-    })
+  const formEngine = useMemo(
+    () =>
+      createFireboltForm(formAccess, {
+        requestsMetadata,
+        debug,
+        addons,
+        mockStep,
+      }),
+    []
   )
 
   const {
@@ -77,7 +79,7 @@ function useFireboltProvider({
 
   function _startForm() {
     setIsFormLoading(true)
-    formEngine.current
+    formEngine
       .start()
       .then((data) => {
         setIsFormLoading(false)
@@ -90,7 +92,7 @@ function useFireboltProvider({
 
   function _startDebugStep(stepSlug: string) {
     setIsFormLoading(true)
-    return formEngine.current.debugStep(stepSlug).then((data) => {
+    return formEngine.debugStep(stepSlug).then((data) => {
       setIsFormLoading(false)
       setCurrentStep(data.step)
       setCapturedData(data.capturedData)
@@ -104,7 +106,7 @@ function useFireboltProvider({
   ): Promise<void | Object> {
     setIsFormLoading(true)
     const isLastStep = currentStep?.data?.slug === formflowMetadata?.lastStep
-    return formEngine.current
+    return formEngine
       .nextStep(currentStep.data.slug, stepFieldsPayload, {
         extraRequestsMetaData,
       })
@@ -127,7 +129,7 @@ function useFireboltProvider({
 
   function goPreviousStep(): Promise<void | Object> {
     setIsFormLoading(true)
-    return formEngine.current
+    return formEngine
       .previousStep(currentStep.data.slug)
       .then((data) => {
         setCapturedData(data.capturedData)
@@ -146,18 +148,18 @@ function useFireboltProvider({
   }
 
   function addRequestsMetadata(key: string, data: Object = {}): void {
-    formEngine.current.addRequestMetadataItem(key, data)
+    formEngine.addRequestMetadataItem(key, data)
   }
   function removeRequestsMetadata(key: string): void {
-    formEngine.current.removeRequestMetadataItem(key)
+    formEngine.removeRequestMetadataItem(key)
   }
 
   function getRequestsMetadata(): Object {
-    return formEngine.current.requestsMetadata
+    return formEngine.requestsMetadata
   }
 
   function clearSession(): void {
-    formEngine.current.clearSession()
+    formEngine.clearSession()
   }
 
   function _handleTransitionError(
@@ -194,7 +196,7 @@ function useFireboltProvider({
   }
 
   function uploadFile(file, fileName: string) {
-    return formEngine.current.uploadFile(file, fileName)
+    return formEngine.uploadFile(file, fileName)
   }
 
   return {

@@ -10,7 +10,7 @@ interface ValidateSingleFieldArgs {
   value?: String | Number | undefined;
 }
 
-interface FieldValidationResult {
+export interface FieldValidationResult {
   isValid: boolean;
   validationsResults: ValidationResult[];
   invalidValidations?: ValidationResult[];

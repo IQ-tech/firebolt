@@ -21,6 +21,8 @@ const FireboltForm = ({
   remoteErrors,
   onGoBack,
   onFocusField,
+  onBlurField,
+  onChangeField,
   addons,
   clearRemoteFieldError
 }: IFireboltForm) => {
@@ -36,6 +38,8 @@ const FireboltForm = ({
       onGoBack,
       classes,
       onFocusField,
+      onBlurField,
+      onChangeField,
       addons,
       clearRemoteFieldError
     })

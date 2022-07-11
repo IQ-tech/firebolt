@@ -4,7 +4,7 @@ import { StepForm, Wizard, clearFormSession, FireboltProvider } from "./index"
 import Theme from "@iq-firebolt/material-theme"
 import * as propsPresetsMock from "../__mocks__/props-presets-steps" // TODO - create common mocks on root
 
-import { IFormAccess, IPropsPresetCollection } from "@iq-firebolt/client-core"
+import { IFormAccess, IPropsPresetCollection } from "@iq-firebolt/client-core/lib"
 
 jest.mock("axios")
 
