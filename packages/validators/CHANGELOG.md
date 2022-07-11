@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.8.2](https://github.com/IQ-tech/firebolt/compare/v0.8.1...v0.8.2) (2022-07-04)
+
+
+### Bug Fixes
+
+* some name validators ([d8083e6](https://github.com/IQ-tech/firebolt/commit/d8083e6e652952828e178763d0071a626f76af49))
+
+
+
+
+
 # [0.8.0](https://github.com/IQ-tech/firebolt/compare/v0.7.0...v0.8.0) (2022-06-08)
 
 **Note:** Version bump only for package @iq-firebolt/validators

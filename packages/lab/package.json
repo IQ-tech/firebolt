@@ -1,12 +1,12 @@
 {
   "name": "@iq-firebolt/lab",
-  "version": "0.8.1",
+  "version": "0.8.2",
   "private": true,
   "license": "Apache-2.0",
   "dependencies": {
-    "@iq-firebolt/blueberry-theme": "^0.8.0",
+    "@iq-firebolt/blueberry-theme": "0.8.2",
     "@iq-firebolt/br-addons": "^0.8.0",
-    "@iq-firebolt/client": "0.8.1",
+    "@iq-firebolt/client": "0.8.2",
     "@iq-firebolt/client-core": "0.8.1",
     "@iq-firebolt/material-theme": "^0.8.0",
     "iq-blueberry": "^0.0.18",
