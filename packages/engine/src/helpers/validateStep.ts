@@ -1,10 +1,14 @@
-import { validateFBTStep, ValidateFBTStepResult } from "@iq-firebolt/validators"
+import {
+  validateFBTStep,
+  IStepValidationResult,
+} from "@iq-firebolt/validate/src"
+
 import { IStepConfig } from "@iq-firebolt/entities"
 
 export default function validateStep(
   formPayload = {},
   currentStepConfig: IStepConfig
-): ValidateFBTStepResult {
+): IStepValidationResult {
   if (!currentStepConfig) {
     return { isValid: false, invalidFields: [] }
   }
@@ -14,7 +18,7 @@ export default function validateStep(
   }
 
   return validateFBTStep({
-    stepFields: currentStepConfig.fields!,
+    stepConfig: currentStepConfig,
     formPayload,
   })
 }

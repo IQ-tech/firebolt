@@ -3,7 +3,7 @@ import {
   IStepConfig,
   IStepFormPayload,
 } from "@iq-firebolt/entities"
-import { InvalidField } from "@iq-firebolt/validators"
+import { IInvalidField } from "@iq-firebolt/validate/src"
 
 // objeto que representa as opções para criar uma instância da engine
 export interface ICreateEngineOptions {
@@ -72,7 +72,7 @@ export interface IStepTransitionError {
   id: string
   message: string
   detail: string
-  invalidFields?: InvalidField[]
+  invalidFields?: IInvalidField[]
 }
 
 // representa os metadados da experincia atual (guardada no storage) do usuário,

@@ -34,15 +34,23 @@ const mock = {
       "slug": "personal_data",
       "type": "form",
       "friendlyName": "Vamos começar",
+
       "fields": [
         {
+          "required": true,
           "slug": "full_name",
           "ui:widget": "Text",
           "ui:props": {
             "label": "Nome completo",
             "placeholder": "Nome completo",
           },
-          "validators": [{ "type": "required" }, { "type": "name" }],
+          "validation": [
+            { "rule": "core:wordsCount", "properties": { "minWords": 2 } },
+            {
+              "rule": "core:wordsLength",
+              "properties": { "minWordLength": 3 },
+            },
+          ],
         },
         {
           "slug": "email",
@@ -51,7 +59,8 @@ const mock = {
             "label": "Email",
             "placeholder": "contato@email.com",
           },
-          "validators": [{ "type": "required" }],
+          "required": true,
+          "validation": [{ "rule": "core:email" }],
         },
       ],
     },
@@ -66,7 +75,7 @@ const mock = {
           "ui:props": {
             "label": "Número do documento",
           },
-          "validators": [{ "type": "required" }],
+          "required": true,
         },
       ],
     },
@@ -78,6 +87,7 @@ const mock = {
         {
           "slug": "zipcode",
           "ui:widget": "CEP",
+          "required": true,
           "ui:props-preset": "br-cep",
           "ui:props": {
             "relatedFieldsSlugs": {
@@ -87,17 +97,16 @@ const mock = {
               "additionalAddressFieldSlug": "additional_info",
               "neighborhoodFieldSlug": "neighborhood",
             },
-          },
-          "validators": [{ "type": "required" }, { "type": "cep" }],
+          }, // todo cep br-addons
         },
         {
           "slug": "street_address",
           "ui:widget": "Text",
+          "required": true,
           "ui:props": {
             "label": "Endereço",
             "placeholder": "Ex.: Av Paulista",
           },
-          "validators": [{ "type": "required" }],
         },
         {
           "slug": "street_number",
@@ -105,7 +114,7 @@ const mock = {
           "ui:props": {
             "label": "Número",
           },
-          "validators": [{ "type": "required" }],
+          "required": true,
         },
         {
           "slug": "additional_info",
@@ -118,11 +127,11 @@ const mock = {
         {
           "slug": "neighborhood",
           "ui:widget": "Text",
+          "required": true,
           "ui:props": {
             "label": "Bairro",
             "placeholder": "Ex.: Centro",
-          },
-          "validators": [{ "type": "required" }, { "type": "nonNumeric" }],
+          }, // todo add nonNumeric to core, "not include number"
         },
         {
           "slug": "city",
@@ -130,7 +139,8 @@ const mock = {
           "ui:props": {
             "label": "Cidade",
           },
-          "validators": [{ "type": "required" }, { "type": "nonNumeric" }],
+          "required": true,
+          // todo add nonNumeric to core, no include number"
         },
         {
           "slug": "state",
@@ -139,7 +149,7 @@ const mock = {
           "ui:props": {
             "label": "Estado",
           },
-          "validators": [{ "type": "required" }],
+          "required": true
         },
       ],
     },
@@ -160,7 +170,7 @@ const mock = {
           "ui:props": {
             "label": "Token recebido",
           },
-          "validators": [{ "type": "required" }],
+          "required": true
         },
       ],
     },
@@ -168,5 +178,3 @@ const mock = {
 }
 
 module.exports = mock
-
-
