@@ -45,3 +45,12 @@ export const exclusion = {
   "included": "O valor '#{value}' está incluso em #{included}",
   "contains": "O valor '#{value}' contém #{contains}",
 }
+
+export const moreThan = {
+  "numberLess": "O valor '#{value}' é menor que o valor requerido: #{minValue}",
+}
+
+export const lessThan = {
+  "numberBigger":
+    "O valor '#{value}' é maior que o valor máximo permitido: #{maxValue}",
+}

@@ -8,10 +8,17 @@
   "publishConfig": {
     "access": "public"
   },
+  "sideEffects": false,
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
+  "module": "./es/index.js",
   "files": [
-    "/dist"
+    "/dist",
+    "./",
+    "/src",
+    "/es",
+    "/types",
+    "/specs"
   ],
   "repository": {
     "type": "git",
@@ -23,7 +30,8 @@
     "test:coverage": "jest --collect-coverage",
     "test:watch": "NODE_ENV=test jest --watchAll",
     "generate-rules-specs": "ts-node scripts/generate-rules-docs/index.ts",
-    "build": "yarn generate-rules-specs && yarn clear-dist && tsc",
+    "bundle": "rollup -c",
+    "build": "yarn clear-dist && yarn generate-rules-specs && yarn bundle",
     "clear-jest": "jest --clearCache",
     "testg": "typescript-json-schema src/rules/email/index.ts ErrorsType --ignoreErrors --out schemas/experience-config.json --refs false --required true"
   },
@@ -37,6 +45,9 @@
   },
   "devDependencies": {
     "faker": "6.6.6",
+    "rollup": "^2.76.0",
+    "rollup-plugin-dts": "^4.2.2",
+    "rollup-plugin-esbuild": "^4.9.1",
     "typescript-json-schema": "0.54.0"
   }
 }

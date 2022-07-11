@@ -9,7 +9,7 @@ duvidas
 lista de validadores
 
 ### numbers
-moreThan
+moreThan - ok
 lessThan
 inRange
 positive

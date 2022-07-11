@@ -8,6 +8,8 @@ import {
   wordsLength,
   inclusion,
   exclusion,
+  moreThan,
+  lessThan,
 } from "./rules"
 
 const ptbrLocale: ILocaleConfig = {
@@ -23,6 +25,8 @@ const ptbrLocale: ILocaleConfig = {
     wordsLength,
     inclusion,
     exclusion,
+    moreThan,
+    lessThan,
   },
 }
 
