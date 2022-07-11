@@ -32,6 +32,7 @@
     "url": "https://github.com/IQ-tech/firebolt/issues"
   },
   "dependencies": {
+    "@iq-firebolt/validate": "^0.7.0",
     "text-mask-addons": "^3.8.0"
   },
   "devDependencies": {

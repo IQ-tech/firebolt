@@ -10,7 +10,8 @@
     "material-theme",
     "json-schema",
     "engine",
-    "core-validators"
+    "validate",
+    "br-addons"
   ],
   "conventionalCommits.promptFooter": false,
   "conventionalCommits.promptBody": false
