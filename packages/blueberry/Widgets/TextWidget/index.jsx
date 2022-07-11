@@ -1,4 +1,4 @@
-import React from 'react'
+import React from "react"
 import { InputField } from "iq-blueberry"
 import getTooltipConfig from "../../helpers/getTooltipConfig"
 
@@ -13,13 +13,12 @@ const TextWidget = ({
   placeholder,
   slug,
   value,
-  mask,
   isOptional,
   isRequired,
   meta,
-  useNumericKeyboard
+  useNumericKeyboard,
+  inputRef,
 }) => {
-
   return (
     <InputField
       tooltipConfig={getTooltipConfig(meta)}
@@ -35,8 +34,8 @@ const TextWidget = ({
       placeholder={placeholder}
       name={slug}
       value={value}
-      mask={mask}
       useNumericKeyboard={useNumericKeyboard}
+      ref={inputRef}
     />
   )
 }
