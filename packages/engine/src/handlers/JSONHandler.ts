@@ -1,12 +1,11 @@
 import JSONConfig from "../classes/JSONConfig"
 import EngineError from "../classes/EngineError"
-import { IExperienceJSONSchema, IDecisionHandlerConfig } from "../types"
-import { IEngineResolvers, IFireboltSession } from "../interfaces/IEngine"
+import { IExperienceConfig } from "@iq-firebolt/entities"
+import { IEngineResolvers, IFireboltSession } from "../types"
 import validateJSON from "../helpers/validateJSON"
-import { transduce } from "ramda"
 
 class JSONHandler {
-  private preDefinedJSONConfig?: IExperienceJSONSchema
+  private preDefinedJSONConfig?: IExperienceConfig
   private JSONConfig?: JSONConfig
   private resolvers: IEngineResolvers
   private experienceId: string
@@ -16,7 +15,7 @@ class JSONHandler {
     resolvers,
     experienceId,
   }: {
-    experienceJSONConfig: IExperienceJSONSchema | undefined
+    experienceJSONConfig: IExperienceConfig | undefined
     resolvers: IEngineResolvers
     experienceId: string
   }) {

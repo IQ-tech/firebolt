@@ -1,17 +1,17 @@
-import { IStepTransitionError } from "../interfaces/IEngine"
+import { IStepTransitionError } from "../types"
 import { ErrorsConfigs } from "../constants/errors"
-import { InvalidField } from "@iq-firebolt/validators"
+import {IInvalidField} from "@iq-firebolt/validate/src"
 
 class EngineError implements IStepTransitionError {
   public id: keyof typeof ErrorsConfigs
   public detail: string
   public message: string
-  public invalidFields?: InvalidField[]
+  public invalidFields?: IInvalidField[]
 
   constructor(
     errorId: keyof typeof ErrorsConfigs,
     detail = "",
-    { invalidFields }: { invalidFields?: InvalidField[] } = {}
+    { invalidFields }: { invalidFields?: IInvalidField[] } = {}
   ) {
     this.detail = detail
     this.id = errorId

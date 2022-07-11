@@ -1,10 +1,10 @@
 /**
  * This case represents a session of the sample experience that:
- * - user has completed 2 steps from the 4 of the default flow
+ * - user has completed 2 steps from the 4 of the default flow 
  */
 
 /**
- * @typedef {import('../interfaces/IEngine').IFireboltSession} IFireboltSession
+ * @typedef {import('../types').IFireboltSession} IFireboltSession
  */
 
 /**

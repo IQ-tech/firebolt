@@ -1,0 +1,53 @@
+{
+  "name": "@iq-firebolt/validate",
+  "version": "0.7.0",
+  "description": "> TODO: description",
+  "author": "iq-team",
+  "homepage": "https://github.com/IQ-tech/firebolt#readme",
+  "license": "Apache-2.0",
+  "publishConfig": {
+    "access": "public"
+  },
+  "sideEffects": false,
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "module": "./es/index.js",
+  "files": [
+    "/dist",
+    "./",
+    "/src",
+    "/es",
+    "/types",
+    "/specs"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/IQ-tech/firebolt.git"
+  },
+  "scripts": {
+    "clear-dist": "rimraf dist",
+    "test": "jest --no-cache",
+    "test:coverage": "jest --collect-coverage",
+    "test:watch": "NODE_ENV=test jest --watchAll",
+    "generate-rules-specs": "ts-node scripts/generate-rules-docs/index.ts",
+    "bundle": "rollup -c",
+    "build": "yarn clear-dist && yarn generate-rules-specs && yarn bundle",
+    "clear-jest": "jest --clearCache",
+    "testg": "typescript-json-schema src/rules/email/index.ts ErrorsType --ignoreErrors --out schemas/experience-config.json --refs false --required true"
+  },
+  "bugs": {
+    "url": "https://github.com/IQ-tech/firebolt/issues"
+  },
+  "dependencies": {
+    "@iq-firebolt/entities": "^0.7.0",
+    "faker": "^6.6.6",
+    "simple-evaluate": "1.4.5"
+  },
+  "devDependencies": {
+    "faker": "6.6.6",
+    "rollup": "^2.76.0",
+    "rollup-plugin-dts": "^4.2.2",
+    "rollup-plugin-esbuild": "^4.9.1",
+    "typescript-json-schema": "0.54.0"
+  }
+}

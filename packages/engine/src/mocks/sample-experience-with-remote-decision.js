@@ -1,10 +1,10 @@
 const mock = require("./sample-experience")
 
 /**
- * @typedef {import("../types").IExperienceJSONSchema} IExperienceJSONSchema
+ * @typedef {import("@iq-firebolt/entities").IExperienceConfig} IExperienceConfig
  */
 
-/** @returns {IExperienceJSONSchema} */
+/** @returns {IExperienceConfig} */
 const sampleWithRemoteDecision = ({
   saveDataToStorage = "all",
   triggers = "all",

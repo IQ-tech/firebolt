@@ -1,9 +1,9 @@
-import { IStepJSON } from "../types"
+import { IStepConfig } from "@iq-firebolt/entities"
 import {
   IFlowStepsListItem,
   IExperienceMetadata,
   IFireboltSession,
-} from "../interfaces/IEngine"
+} from "../types"
 
 import JSONConfig from "../classes/JSONConfig"
 
@@ -28,7 +28,7 @@ export default function computeExperienceMetadata(
   const currentPosition = currentStepIndex + 1
 
   const stepsList: IFlowStepsListItem[] = flowSteps.map((item, index) => {
-    const schemaStep: IStepJSON | undefined = jsonConfig.getStepDefinition(item)
+    const schemaStep: IStepConfig | undefined = jsonConfig.getStepDefinition(item)
     return {
       position: index + 1,
       slug: item,

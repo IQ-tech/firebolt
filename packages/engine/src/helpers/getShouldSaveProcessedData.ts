@@ -1,4 +1,4 @@
-import { IDecisionHandlerConfig } from "../types"
+import { IDecisionHandlerConfig } from "@iq-firebolt/entities"
 
 export default function getShouldSaveProcessedData(
   receivingStepSlug: string,

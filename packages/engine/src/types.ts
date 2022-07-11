@@ -1,96 +1,167 @@
-/**
- * Pontos para ver:
- * atualizar json schema com alterações de interfaces
- * unificar start e next - proceed
- *  fazer update corretamente quando a pessoa passar um passo ja preenchido anteriormente (usar estado do currentStepSlug)
- * webhook
- * tracks (flows)
- * erros
- * capturedData request
- * devemos salvar os dados de webhook em um  passo especifico no storage??
- *
- * definir namespaces
- * matar meta do field - breaking change
- */
+import {
+  IExperienceConfig,
+  IStepConfig,
+  IStepFormPayload,
+} from "@iq-firebolt/entities"
+import { IInvalidField } from "@iq-firebolt/validate/src"
 
-// --------
-// representa o estado da sessão do usuário, campos concluidos, validade dos passos e etc
-export interface IStepFormPayload {
-  [key: string]: string
+// objeto que representa as opções para criar uma instância da engine
+export interface ICreateEngineOptions {
+  experienceJSONConfig?: IExperienceConfig
+  experienceId: string // legacy business replacement
+  resolvers: IEngineResolvers
+  hooks?: IEngineHooks
+  addons?: IAddonsConfig
+  debug?: boolean
 }
 
-export interface IFlow {
-  slug: string
-  stepsSlugs: string[] // todo - convert to object when implementing globals
+// objeto que representa as opções de addons, futuramente receber validadores customizados por aqui
+export interface IAddonsConfig {
+  uiPropsPresets?: IPropsPresetCollection[]
 }
 
-export type IDecisionHandlerStrategy = "local" | "remote"
-interface IRemoteDecisionURLMap {
-  [stepKey: string]: string
-}
-type IRemoteDecisionURL = IRemoteDecisionURLMap | string
-export interface IRemoteDecisionConfig {
-  url: IRemoteDecisionURL
-  headers?: {
-    [key: string]: string | boolean | number
-  }
-}
-
-export interface IDecisionHandlerConfig {
-  strategy: IDecisionHandlerStrategy
-  triggers: string[] | "all"
-  saveProcessedData: string[] | "all"
-  // se tiver strategy remote e não tiver remoteConfig - retorna erro
-  remoteConfig?: IRemoteDecisionConfig
-}
-//Representa a especificação do formulário geral dada pelo JSON
-export interface IExperienceJSONSchema {
-  "$schema-version"?: string
-  "$experience-version"?: string
+// Objeto que representa a coleção de props presets que podem ser usadas para preencher o json automaticamente
+export interface IPropsPresetCollection {
   name: string
-  description: string
-  business: string // todo remove
-  decisionHandlerConfig?: IDecisionHandlerConfig
-  flows: IFlow[]
-  steps: IStepJSON[]
-}
-// Representa a especificação do campo dada pelo JSON do form
-// Value preenchido no goBack e autofill
-
-interface IFieldPropsConditional {
-  conditional: string
-  props: {
-    [propKey: string]: any
+  presets: {
+    [key: string]: any
   }
 }
 
-interface IFieldStyles {
-  size: "full" | "half"
+// objeto que representa a configuração dos resolvers, ou seja os pontos de acesso a dados
+export interface IEngineResolvers {
+  getExperienceJSON?: (experienceSlug: string) => Promise<IExperienceConfig>
+  getSession: (sessionId?: string) => Promise<IFireboltSession | undefined>
+  setSession: (fireboltStepData: IFireboltSession) => Promise<void>
 }
 
-interface IFieldValidator {
-  type: string
-  properties?: Object
-  context?: "client" | "server"
-}
-export interface IStepConfigField {
-  slug: string
-  "ui:widget": string
-  "ui:props"?: {
-    [propKey: string]: any
-  }
-  "ui:props-preset"?: string | [] // todo add multiple props presets
-  "ui:props-conditional"?: IFieldPropsConditional[]
-  "ui:styles"?: IFieldStyles
-  conditional?: string
-  validators?: IFieldValidator[]
-  value?: any
+// objeto que representa a configuração dos hooks, ou seja, funções que rodam em momentos especificos do formulário
+
+export type IEngineOperations =
+  | "start"
+  | "proceed"
+  | "goBack"
+  | "debug"
+  | "error"
+export interface IOnStepTransition {
+  operation: IEngineOperations
+  payload?: IExperienceProceedPayload
 }
 
-// Representa a especificação do passo dada pelo json do form
-export interface IStepJSON {
+export interface IEngineHooks {
+  onBeforeCallWebhook?: () => void
+  onGetWebHookResponse?: () => void
+  onStartStepTransition?: (args: IOnStepTransition) => void
+  onEndStepTransition?: (args: IOnStepTransition) => void
+}
+
+/**
+ * representa o objeto que é retornado ao consumer após uma transição de passo do firebolt
+ * */
+
+export interface IStepTransitionReturn {
+  sessionId: string
+  error: IStepTransitionError | null
+  step?: IStepConfig
+  capturedData: any // TODO
+  experienceMetadata: IExperienceMetadata | null
+  processedData: any
+}
+
+export interface IStepTransitionError {
+  id: string
+  message: string
+  detail: string
+  invalidFields?: IInvalidField[]
+}
+
+// representa os metadados da experincia atual (guardada no storage) do usuário,
+// mudar experience metadata para ser computado a partir do JSON SCHEMA + session state
+export interface IExperienceMetadata {
+  name: string
+  currentPosition: number
+  lastStepSlug: string
+  stepsList?: IFlowStepsListItem[]
+  completedExperience: boolean
+}
+
+export interface IExperienceState {
+  lastCompletedStepSlug: string // setado como o receiving no final da operação
+  visualizingStepSlug: string // setado como o returning no final da operação
+  currentFlow: string | "default"
+  completedExperience: boolean
+}
+
+export interface IFlowStepsListItem {
+  position: number
   slug: string
-  type: "form" | "custom" // qualquer coisa alem desses dois vai ser tratado como custom
   friendlyName: string
-  fields?: IStepConfigField[]
+}
+
+// Representa um passo visitado por um determinado usuário e guardado no storage
+export interface IStepSession {
+  fields?: IStepFormPayload
+  processedData?: {
+    [stepKey: string]: any
+  }
+}
+
+// Representa o mapa de steps visitados pelo usuário que vai dentro da sessão
+export interface IFireboltSessionSteps {
+  [stepSlug: string]: IStepSession
+}
+// Representa a sessão que é guardada no storage
+export interface IFireboltSession {
+  sessionId: string
+  experienceState: IExperienceState
+  steps: IFireboltSessionSteps
+}
+
+// Representa a requisição do consumer para o firebolt transicionar um passo
+export interface IExperienceProceedPayload {
+  //todo - rename
+  sessionId?: string
+  fields?: IStepFormPayload
+  additionalData?: any // todo, improve later
+}
+
+// decision handling
+export interface IExperienceDecisionPayload {
+  sessionData?: IFireboltSession
+  receivingStepData: IExperienceProceedPayload
+}
+export interface IExperienceDecision {
+  action: IExperienceDecisionAction
+  options?: IExperienceDecisionOptions
+}
+
+export type IExperienceDecisionAction =
+  | "changeFlow"
+  | "blockProgression"
+  | "proceed"
+
+export interface IExperienceDecisionOptions {
+  newFlow?: string
+  processedData?: {
+    [key: string]: any
+  }
+  errors?: any
+  autofill?: {
+    [key: string]: any
+  }
+}
+
+export type IDecisionCreator = (
+  action: IExperienceDecisionAction,
+  options?: IExperienceDecisionOptions | undefined
+) => void
+
+export type IExperienceDecisionCallbackFunction = (
+  decide: IDecisionCreator,
+  decisionPayload: IExperienceDecisionPayload
+) => void
+
+export interface IEngineError {
+  id: string
+  description: string
 }

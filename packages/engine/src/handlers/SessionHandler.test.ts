@@ -1,21 +1,19 @@
 import faker from "faker"
+import * as uuid from "uuid"
 import SessionHandler from "./SessionHandler"
-import { IExperienceJSONSchema } from "../types"
+import { IExperienceConfig } from "@iq-firebolt/entities"
 import {
   IEngineResolvers,
   IFireboltSession,
   IStepSession,
-} from "../interfaces/IEngine"
+} from "../types"
 import JSONSample from "../mocks/sample-experience"
 import JSONConfig from "../classes/JSONConfig"
-import * as uuid from "uuid"
 import { oneStepCompletedFlowDefault } from "../mocks/sample-experience-session"
 jest.mock("uuid")
 
 const localStorage = global.localStorage
-const mockedGetFormJSONSchema = jest.fn(
-  async () => ({} as IExperienceJSONSchema)
-)
+const mockedGetFormJSONSchema = jest.fn(async () => ({} as IExperienceConfig))
 
 const mockedGetSession = jest.fn(async (sessionId?: string) => {
   const session = localStorage.getItem(sessionId ?? "")

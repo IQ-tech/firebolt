@@ -4,8 +4,8 @@ import {
   IExperienceDecisionCallbackFunction,
   IExperienceProceedPayload,
   IFireboltSession,
-} from "../interfaces/IEngine"
-import { IExperienceJSONSchema } from "../mocks/sample-experience"
+} from "../types"
+import { IExperienceConfig } from "@iq-firebolt/entities"
 import { twoStepsCompletedFlowDefault } from "../mocks/sample-experience-session"
 import sampleExperienceMock from "../mocks/sample-experience"
 import mockWithDecisionConfig from "../mocks/sample-with-decision-config.js"
@@ -48,7 +48,7 @@ describe("should identify JSON Errors", () => {
       resolvers: {
         getSession: async () => ({} as IFireboltSession),
         setSession: async () => {},
-        getExperienceJSON: async () => null as unknown as IExperienceJSONSchema,
+        getExperienceJSON: async () => null as unknown as IExperienceConfig,
       },
     })
 
@@ -206,7 +206,7 @@ describe("should identify generic errors", () => {
         getExperienceJSON: async () => {
           const mockArray = [{ id: "test" }]
           mockArray[5].id
-          return {} as IExperienceJSONSchema
+          return {} as IExperienceConfig
         },
       },
     })

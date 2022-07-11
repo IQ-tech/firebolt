@@ -79,18 +79,16 @@ export interface IFieldConfig {
   /** used to modify certain aspects of the fields presentation, such as size */
   "ui:styles"?: IFieldStyles
   /** mask in the text-field-mask format */
-  "ui:mask": string[] | INumberRangeArgs
-  /** Defines if the field is required */
-  required?: boolean
-  /** receives a logical expression, if false the field won't be rendered or validated */
-  conditional?: string
+  "ui:mask"?: string[] | INumberRangeArgs
+  /** Defines if the field is required also receives a logical expression, if false the field won't be rendered or validated */
+  required?: boolean | string
   /** Used to defined wich validators should be applied to the field, these validators can run on the client app or in the server */
-  validators?: IFieldValidator[]
+  validation?: IFieldValidationRuleConfig[]
   /** field value */
   value?: any
 }
 
-interface INumberRangeArgs {
+export interface INumberRangeArgs {
   /** TODO */
   minNumber?: number
   /** TODO */
@@ -105,7 +103,7 @@ interface INumberRangeArgs {
   underPermitedValueMessage?: string
 }
 
-interface IFieldPropsConditional {
+export interface IFieldPropsConditional {
   /** receives a logical expression, if false the field won't be rendered or validated */
   conditional: string
   /** UI props conditional props */
@@ -114,16 +112,24 @@ interface IFieldPropsConditional {
   }
 }
 
-interface IFieldStyles {
+export interface IFieldStyles {
   /** Set field horizontal size on UI */
   size: "full" | "half"
 }
 
-interface IFieldValidator {
+export interface IFieldValidationRuleConfig {
   /**  TODO */
-  type: string
+  rule: string
   /**  TODO */
-  properties?: Object
+  properties?: {
+    [propertyKey: string]: any
+  }
+  errorsMap?: {
+    [errorKey: string]: string
+  }
   /** context: Specify the context when the validator should be used */
-  context?: "client" | "server"
+  context?: ExperienceContext
 }
+
+
+export type ExperienceContext = "client" | "server" | "all"

@@ -1,6 +1,6 @@
 /**
- * @typedef {import('../interfaces/IEngine').IFireboltSession} IFireboltSession
- * @typedef {import("../interfaces/IEngine").IFlowStepsListItem} IFlowStepsListItem
+ * @typedef {import('../types').IFireboltSession} IFireboltSession
+ * @typedef {import("../types").IFlowStepsListItem} IFlowStepsListItem
  */
 
 /** @type {IFlowStepsListItem[]} */

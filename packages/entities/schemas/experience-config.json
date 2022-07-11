@@ -136,13 +136,12 @@
                         "description": "Used to define the list of fields inside a step, is not required in custom steps",
                         "items": {
                             "properties": {
-                                "conditional": {
-                                    "description": "receives a logical expression, if false the field won't be rendered or validated",
-                                    "type": "string"
-                                },
                                 "required": {
-                                    "description": "Defines if the field is required",
-                                    "type": "boolean"
+                                    "description": "Defines if the field is required also receives a logical expression, if false the field won't be rendered or validated",
+                                    "type": [
+                                        "string",
+                                        "boolean"
+                                    ]
                                 },
                                 "slug": {
                                     "description": "An unique identifier to the field",
@@ -248,37 +247,37 @@
                                     "description": "The Widget (firebolt-client component) that should be used on render the form. check the firebolt client to see the available widgets. custom widgets can be used with custom firebolt-client themes",
                                     "type": "string"
                                 },
-                                "validators": {
+                                "validation": {
                                     "description": "Used to defined wich validators should be applied to the field, these validators can run on the client app or in the server",
                                     "items": {
                                         "properties": {
                                             "context": {
                                                 "description": "context: Specify the context when the validator should be used",
                                                 "enum": [
+                                                    "all",
                                                     "client",
                                                     "server"
                                                 ],
                                                 "type": "string"
                                             },
-                                            "properties": {
-                                                "description": "TODO",
-                                                "properties": {
-                                                    "constructor": {
-                                                        "$ref": "#/definitions/Function"
-                                                    }
+                                            "errorsMap": {
+                                                "additionalProperties": {
+                                                    "type": "string"
                                                 },
-                                                "required": [
-                                                    "constructor"
-                                                ],
                                                 "type": "object"
                                             },
-                                            "type": {
+                                            "properties": {
+                                                "additionalProperties": {},
+                                                "description": "TODO",
+                                                "type": "object"
+                                            },
+                                            "rule": {
                                                 "description": "TODO",
                                                 "type": "string"
                                             }
                                         },
                                         "required": [
-                                            "type"
+                                            "rule"
                                         ],
                                         "type": "object"
                                     },
@@ -290,7 +289,6 @@
                             },
                             "required": [
                                 "slug",
-                                "ui:mask",
                                 "ui:widget"
                             ],
                             "type": "object"

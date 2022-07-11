@@ -1,10 +1,10 @@
-import { IStepJSON } from "../types"
-import { IFireboltSession } from "../interfaces/IEngine"
+import { IStepConfig } from "@iq-firebolt/entities"
+import { IFireboltSession } from "../types"
 
 export default function getReturningStepFilled(
-  stepDefinition: IStepJSON,
+  stepDefinition: IStepConfig,
   session?: IFireboltSession
-): IStepJSON {
+): IStepConfig {
   const stepSlug = stepDefinition.slug
   const filledFields = session?.steps?.[stepSlug]?.fields
   if (!filledFields) return stepDefinition

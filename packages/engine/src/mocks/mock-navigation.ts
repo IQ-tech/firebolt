@@ -1,27 +1,22 @@
 import faker from "faker"
 import Engine from "../index"
 import {
-  IExperienceJSONSchema,
+  IExperienceConfig,
   IStepFormPayload,
   IDecisionHandlerConfig,
-} from "../types"
+} from "@iq-firebolt/entities"
 import {
   IEngineResolvers,
-  IExperienceDecision,
   IExperienceDecisionCallbackFunction,
   IExperienceDecisionOptions,
-  IExperienceDecisionPayload,
   IFireboltSession,
-} from "../interfaces/IEngine"
+} from "../types"
 import JSONSample from "../mocks/sample-experience"
 import mockWithDecisionConfig from "../mocks/sample-with-decision-config"
-import fs from "fs"
 
 export default function useMockNavigation() {
   const localStorage = global.localStorage
-  const mockedGetFormJSONSchema = jest.fn(
-    async () => ({} as IExperienceJSONSchema)
-  )
+  const mockedGetFormJSONSchema = jest.fn(async () => ({} as IExperienceConfig))
 
   const mockedGetSession = jest.fn(async (sessionId?: string) => {
     const session = localStorage.getItem(sessionId ?? "")

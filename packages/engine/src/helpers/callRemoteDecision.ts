@@ -2,7 +2,7 @@ import axios, { AxiosRequestHeaders } from "axios"
 import {
   IExperienceDecision,
   IExperienceDecisionPayload,
-} from "../interfaces/IEngine"
+} from "../types"
 
 export default function callRemoteDecision(
   url: string,

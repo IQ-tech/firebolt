@@ -1,14 +1,13 @@
 import axios from "axios"
 import {
-  IExperienceDecisionCallbackFunction,
   IExperienceProceedPayload,
   IFireboltSession,
   IExperienceDecision,
-} from "../interfaces/IEngine"
+} from "../types"
 import sampleWithDecisionHandler from "../mocks/sample-experience-with-remote-decision"
 import { oneStepCompletedFlowDefault } from "../mocks/sample-experience-session"
 import useMockNavigation from "../mocks/mock-navigation"
-import { IDecisionHandlerConfig } from "../types"
+import { IDecisionHandlerConfig } from "@iq-firebolt/entities"
 
 const {
   getFirstStepCorrectFields,

@@ -1,7 +1,7 @@
 import EngineError from "../classes/EngineError"
-import { IExperienceJSONSchema } from "../types"
+import { IExperienceConfig } from "@iq-firebolt/entities"
 
-function validateJSON(JSONExperienceDefinition: IExperienceJSONSchema) {
+function validateJSON(JSONExperienceDefinition: IExperienceConfig) {
   const defaultFlow = JSONExperienceDefinition?.flows?.find(
     (x) => x.slug === "default"
   )
