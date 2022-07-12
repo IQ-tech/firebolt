@@ -18,7 +18,7 @@
     "test:client": "cd packages/client && yarn test",
     "test:client:coverage": "lerna exec --scope @iq-firebolt/client yarn test:coverage",
     "generate-core-schema": "lerna run generate-schema --scope @iq-firebolt/entities",
-    "build:validators": "cd packages/validators && yarn build",
+    "build:validators": "cd packages/validate && yarn build",
     "build:libs": "yarn generate-core-schema && lerna run build --scope @iq-firebolt/client-core --scope @iq-firebolt/validators --scope @iq-firebolt/client",
     "versionup": "lerna version --conventional-commits --exact --create-release github --yes",
     "publish:libs": "lerna publish from-package --yes --no-verify-access",

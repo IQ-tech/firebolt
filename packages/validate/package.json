@@ -10,7 +10,7 @@
   },
   "sideEffects": false,
   "main": "./dist/index.js",
-  "types": "./dist/index.d.ts",
+  "types": "./types/index.d.ts",
   "module": "./es/index.js",
   "files": [
     "/dist",
@@ -40,7 +40,6 @@
   },
   "dependencies": {
     "@iq-firebolt/entities": "^0.7.0",
-    "faker": "^6.6.6",
     "simple-evaluate": "1.4.5"
   },
   "devDependencies": {

@@ -1,6 +1,4 @@
-import createNumberMask from "text-mask-addons/dist/createNumberMask"
-
-export default createNumberMask({
+const currencyMaskConfig = {
   prefix: "R$ ",
   suffix: "",
   includeThousandsSeparator: true,
@@ -11,4 +9,6 @@ export default createNumberMask({
   integerLimit: 7, // limit length of integer numbers
   allowNegative: false,
   allowLeadingZeroes: false,
-})
+}
+
+export default currencyMaskConfig
