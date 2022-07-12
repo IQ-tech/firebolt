@@ -11,3 +11,5 @@ export {
 
 export { default as DayMonthYear } from "./masks/date/day-month-year"
 export { default as MonthYear } from "./masks/date/month-year"
+
+export * from "./validators"

@@ -33,6 +33,7 @@
   },
   "dependencies": {
     "@iq-firebolt/validate": "^0.7.0",
+    "cpf-cnpj-validator": "^1.0.3",
     "text-mask-addons": "^3.8.0"
   },
   "devDependencies": {
