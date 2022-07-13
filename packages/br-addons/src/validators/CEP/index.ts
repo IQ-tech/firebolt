@@ -8,10 +8,10 @@ const CEP = createValidationRule(
     if (result && !/^(.)\1+$/.test(value.replace(/[\D]/, ""))) {
       const hasEightDigits = result?.length === 8
       if (hasEightDigits) return action.approve()
-      else return action.refuse("defaultError")
+      else return action.reprove("defaultError")
     }
 
-    return action.refuse("defaultError")
+    return action.reprove("defaultError")
   },
   {
     "defaultError": "o CEP #{value} não é valido",

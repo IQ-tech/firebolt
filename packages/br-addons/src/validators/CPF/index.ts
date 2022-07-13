@@ -6,7 +6,7 @@ const CPF = createValidationRule(
     const hasSpecialChar = value.replace(/[._-]+/gi, "").match(/^(.)\1+$/)
     const isValid = !hasSpecialChar && cpf.isValid(value)
 
-    return isValid ? action.approve() : action.refuse("defaultError")
+    return isValid ? action.approve() : action.reprove("defaultError")
   },
   {
     "defaultError": "CPF inválido",
