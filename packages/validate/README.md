@@ -1,9 +1,10 @@
-# Firebolt Validator
+# Firebolt Validate
 
-![alt text](./static/Firebolt-logo.png)
+The Firebolt Validate library brings a simple pattern to implement and utilize value validation functions, it also has a series of core rules out of the box.
 
-alpha state
-A package full of brazilian based validations, designed to be used with `firebolt-api` and `firebolt-client`, or also with standalone applications.
+## Why Firebolt Validation
+
+There are lots of excellent validation libraries, but they work in very different ways and formats. the Firebolt Validate try to bring a way to patternize and compose all those validation rules. another item that this library is focused is the validation feedback, such as i18n and the possibilty to define custom feedback messages for each validation error case. the Firebolt Validate library can be combined with any existent validation library <3.
 
 ## Getting started
 
@@ -32,52 +33,107 @@ yarn
 
 ## Usage
 
+### Directly importing a rule
 
-### Validating standalone values
-
-#### Using 'validate' function
-
-```js
-import { validate } from '@iq-firebolt/validators'
-
-const isValueValid = validate('phone', '(11) 91234-1234).isValid
-```
-
-#### Using validators map
+You can import one of the core rules included in the package:
 
 ```js
-import { validators } from '@iq-firebolt/validators'
+import { stringLength } from "firebolt-validate"
 
-const isValueValid = validators.phone.run('(11) 91234-1234').isValid
+const { isValid, message } = stringLength("myValue", {
+  properties: { maxLength: 5 },
+})
 ```
 
-### Complex validators
+### Defining custom messages to the validation rule
 
-Some validators need some extra data to validate a given value
+We believe that a validation may fail due to many reasons, instead of being just a matter of `true` or `false`. we call these reasons "error cases". each validation rule can have custom messages for each error case using the `errorsMap` option key:
 
 ```js
-import { validate } from "@iq-firebolt/validators"
+const validation = stringLength("i like pizza", {
+  properties: { maxLength: 5, minLength: 2 },
+  errorsMap: {
+    "greaterThanMax":
+      "The value '#{value}' is begger than the limit of #{maxLength} characters",
+    "smallerThanMin":
+      "The value '#{value}' is smaller the minimun of #{minLength} characters",
+  },
+})
 
-// validate(validatonName: string, value: any, properties: {})
-
-const isValid = validate('bankAccountNumber', '123242-2', {bankSlug: "itau"}).isValid
-
+console.log(validation.message) // "The value 'i like pizza' is bigger than the limit o 5 characters
 ```
 
-### Group validation
+### Freezing a rule
 
-Is possible to validate multiple fields at the same time with `validateGroup`
+It is possible to simplify generic rules into simpler ones using the freeze function, with this feature we can define properties of the validation before it occurs:
 
 ```js
-import { validateGroup } from "@iq-firebolt/validators"
+// importing a generic validation rule
+import { stringLength } from "firebolt-validate"
 
-const fieldsValidation = validateGroup(
-    ['cpf', '584.298.880-12'],
-    ['name', 'random johson4'],
-    ['minAge', '19/12/1999', { 'minAge': 18 }],
-    ['cep', '13224-430']
-) // {allFieldsValid: boolean, invalidFields: []}
+// freezing it into a more specific rule
+const isBiggerThan5Chars = stringLength.freeze({ maxLength: 5 }) // [validator].freeze(properties, errorsMap)
+
+// Using the new validation rule
+const { isValid, message } = isBiggerThan5Chars("i like potato")
 ```
+
+### Composing rules
+
+We can also compose rules into a single one using the `composeRules` function:
+
+```js
+import {
+  composeRules,
+  stringLength,
+  email,
+  wordsLength,
+} from "firebolt-validate"
+
+const myComposedRule = composeRules(
+  email,
+  stringLength.freeze({ maxLength: 20 }),
+  wordsCount.freeze({ maxWords: 1 })
+)
+
+const validation = myComposedRule("myreallylongemail@carrot.com")
+
+console.log(validation.message)
+// "Value 'myreallylongemail@carrot.com' is greater than the max length: 20 chars"
+```
+
+Composing rules is also useful when complex regex validations are necessary:
+
+```js
+import { composeRules, regexMatch } from "firebolt-validate"
+
+const hasSpecificFormat = regexMatch.freeze(
+  {
+    pattern:
+      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/i,
+    shouldMatch: true,
+  },
+  { invalidField: "The value #{value} should have the format xxxx@xxxx.xxx" }
+) // creating a custom message for each rule is optional, it already has a default one
+
+const hasSpecialChars = regexMatch.freeze(
+  {
+    pattern: /[~!"/#$%^&*()+=`{}[\]|\\:;'<>,?]/gi,
+    shouldMatch: false,
+  },
+  {
+    invalidField: "The value should not contain special charachters",
+  }
+)
+
+const myComplexValidation = composeRules(hasSpecificFormat, hasSpecialChars)
+
+const { isValid, message } = myComplexValidation("someweird value +sd*")
+```
+
+
+
+
 
 ### Firebolt focused functionality
 
