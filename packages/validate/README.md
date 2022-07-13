@@ -122,7 +122,7 @@ const hasSpecialChars = regexMatch.freeze(
     shouldMatch: false,
   },
   {
-    invalidField: "The value should not contain special charachters",
+    invalidField: "The value should not contain special characters",
   }
 )
 
@@ -132,12 +132,31 @@ const { isValid, message } = myComplexValidation("someweird value +sd*")
 ```
 
 
+### Creating custom rules
+To create a efficient rule, is necessary to understand some important concepts:
+* properties: values that a rule can receive to validate a value, example: a `maxWidth` to a `stringLength` rule.
+* errorsMap: A map where we can define a error message to each validation error case.
+* action: an object that contain two function `action.approve()` and `action.reprove([errorCaseId])`, used to define if a value is valid or not.
+the `createValidationRule` function, receives two parameters, a builder function and a default errorsMap object.
+
+```js
+import { createValidationRule } from "firebolt-validate"
+
+// Creating the rule
+
+const isPotato = createValidationRule(({value, action}) => {
+  if(value === "potato"){
+    return action.accept()
+  }
+},{})
+
+```
 
 
 
-### Firebolt focused functionality
+### Firebolt ecosystem focused functionality
 
-This functions are used on `firebolt-api` and `firebolt-client` libs, it provides a convenient design to validate fields in a multistep form context, where inter relationships between fields are common.
+This functions are used on `firebolt-engine` and `firebolt-client` libs, it provides a convenient design to validate fields in a multistep form context, where inter relationships between fields are common.
 
 ### `validateFBTField` and `validateFBTStep`
 

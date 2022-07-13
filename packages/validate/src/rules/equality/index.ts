@@ -10,7 +10,7 @@ type ErrorsType = typeof errorMessages
 const equality = createValidationRule<IProps, ErrorsType>(
   ({ value, action, properties = {} }) => {
     if (value !== properties?.compareTo)
-      return action.refuse("valueErrorConfirmation")
+      return action.reprove("valueErrorConfirmation")
 
     return action.approve()
   },

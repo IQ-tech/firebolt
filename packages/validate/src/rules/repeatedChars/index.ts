@@ -17,7 +17,7 @@ const repeatedChars = createValidationRule<IProps, ErrorsType>(
     if (!!char && !!times) {
       const valid = new RegExp(char?.repeat(times), useCaseSensitive)
       if (valid.test(value)) {
-        return action.refuse("certainRepeatedLetter")
+        return action.reprove("certainRepeatedLetter")
       }
     }
 
@@ -25,7 +25,7 @@ const repeatedChars = createValidationRule<IProps, ErrorsType>(
       const numberOfRepetitions = `(.)\\1{${times},}`
       const valid = new RegExp(numberOfRepetitions, useCaseSensitive)
       if (valid.test(value)) {
-        return action.refuse("repeatedLetters")
+        return action.reprove("repeatedLetters")
       }
     }
 

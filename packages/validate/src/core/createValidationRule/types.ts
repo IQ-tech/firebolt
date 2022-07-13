@@ -2,7 +2,7 @@ import { IValidationValueResult } from "../../types"
 
 export interface IAction<E = string> {
   approve: () => IValidationValueResult
-  refuse: (message?: E) => IValidationValueResult
+  reprove: (message?: E) => IValidationValueResult
 }
 
 interface ICreatorFunctionArgs<EM = {}, PM = {}> {

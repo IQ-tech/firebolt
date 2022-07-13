@@ -21,10 +21,10 @@ const inclusion = createValidationRule<IProps, ErrorsType>(
     const contains = properties?.contains
 
     if (included && !included?.includes(value)) {
-      return action.refuse("notIncluded")
+      return action.reprove("notIncluded")
     }
     if (contains && !value?.includes(contains)) {
-      return action.refuse("notContains")
+      return action.reprove("notContains")
     }
 
     return action.approve()

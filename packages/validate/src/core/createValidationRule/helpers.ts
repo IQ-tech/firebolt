@@ -17,7 +17,7 @@ export function actionFactory<T>({
 }: IActionFactory): IAction<T> {
   return {
     approve: () => ({ isValid: true, givenValue, message: "" }),
-    refuse: (errorID) => {
+    reprove: (errorID) => {
       const safeErrorId = String(errorID)
       const usedErrorMessage = errorsMap[safeErrorId] || ""
       if (!errorID) {

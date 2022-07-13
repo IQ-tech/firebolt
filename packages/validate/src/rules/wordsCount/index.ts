@@ -14,15 +14,15 @@ const wordsCount = createValidationRule<IProps, ErrorsType>(
     const { minWords, maxWords } = properties
 
     if (!!minWords && !!maxWords && minWords > maxWords) {
-      return action.refuse("conflictBetweenMinAndMax")
+      return action.reprove("conflictBetweenMinAndMax")
     }
 
     if (!!maxWords && valueWordsLength > maxWords) {
-      return action.refuse("maxWords")
+      return action.reprove("maxWords")
     }
 
     if (!!minWords && valueWordsLength < minWords) {
-      return action.refuse("minWords")
+      return action.reprove("minWords")
     }
 
     return action.approve()

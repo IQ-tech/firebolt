@@ -15,18 +15,18 @@ const stringLength = createValidationRule<IProps, ErrorsType>(
     const { minLength, maxLength, equals } = properties
 
     if (!!minLength && valueCharLength < minLength) {
-      return action.refuse("lessThanMin")
+      return action.reprove("lessThanMin")
     }
 
     if (!!maxLength && valueCharLength > maxLength) {
-      return action.refuse("greaterThanMax")
+      return action.reprove("greaterThanMax")
     }
 
     if (!!equals) {
       if (valueCharLength > equals) {
-        return action.refuse("shouldEquals")
+        return action.reprove("shouldEquals")
       } else if (valueCharLength < equals) {
-        return action.refuse("shouldEquals")
+        return action.reprove("shouldEquals")
       } else {
         return action.approve()
       }

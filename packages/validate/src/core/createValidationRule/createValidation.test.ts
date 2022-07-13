@@ -5,7 +5,7 @@ describe("create validator", () => {
     ({ value, action }) => {
       if (value === "cenoura") return action.approve()
 
-      return action.refuse("defaultError")
+      return action.reprove("defaultError")
     },
     { "defaultError": "value #{value} is not cenoura" }
   )
@@ -31,7 +31,7 @@ describe("validator localization", () => {
       ({ value, action }) => {
         if (value === "batata") return action.approve()
 
-        return action.refuse("defaultError")
+        return action.reprove("defaultError")
       },
       {
         "defaultError": "value #{value} is not 'batata'",
@@ -58,11 +58,11 @@ describe("freeze complex rule", () => {
         const maxSize = properties?.maxSize
         const minSize = properties?.minSize
         if (!!maxSize && value.length > maxSize) {
-          return action.refuse("error1")
+          return action.reprove("error1")
         }
 
         if (!!minSize && value.length < minSize) {
-          return action.refuse("error2")
+          return action.reprove("error2")
         }
 
         return action.approve()

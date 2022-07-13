@@ -10,15 +10,15 @@ const email = createValidationRule<{}, ErrorsType>(({ value, action }) => {
   const hasSpecialCharacter = /[~!"/#$%^&*()+=`{}[\]|\\:;'<>,?]/gi
 
   if (value.indexOf("@-") > 0 || value.indexOf("-.") > 0) {
-    return action.refuse("invalidDomain")
+    return action.reprove("invalidDomain")
   }
 
   if (hasSpecialCharacter.test(value)) {
-    return action.refuse("specialCharacters")
+    return action.reprove("specialCharacters")
   }
 
   if (!regExp.test(value)) {
-    return action.refuse("invalidEmail")
+    return action.reprove("invalidEmail")
   }
 
   return action.approve()

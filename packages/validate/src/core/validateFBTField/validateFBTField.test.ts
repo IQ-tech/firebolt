@@ -217,7 +217,7 @@ describe("custom validation rules", () => {
         return action.approve()
       }
 
-      return action.refuse("defaultError")
+      return action.reprove("defaultError")
     },
     { "defaultError": "#{value} is not potato" }
   )
@@ -230,7 +230,7 @@ describe("custom validation rules", () => {
       if (countPotato === potatoCount) {
         return action.approve()
       }
-      return action.refuse("defaultError")
+      return action.reprove("defaultError")
     },
     { "defaultError": "should have potato" }
   )
@@ -243,7 +243,7 @@ describe("custom validation rules", () => {
       if (countPotato === potatoCount) {
         return action.approve()
       }
-      return action.refuse("defaultError")
+      return action.reprove("defaultError")
     },
     { "defaultError": "should have carrot" }
   )
