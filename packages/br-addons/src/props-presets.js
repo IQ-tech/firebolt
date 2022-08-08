@@ -78,6 +78,9 @@ const UIPropsPresetsList = {
       label: Number(i) + 1,
     })),
   },
+  "generic-account-number": {
+    mask: [/\d/, /\d/, /\d/, /\d/],
+  },
 }
 
 export default {
