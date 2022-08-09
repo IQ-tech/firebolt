@@ -355,7 +355,7 @@ describe("custom validation rules", () => {
         return action.approve()
       }
 
-      return action.refuse("defaultError")
+      return action.reprove("defaultError")
     },
     { "defaultError": "dont have 'cenoura'" }
   )

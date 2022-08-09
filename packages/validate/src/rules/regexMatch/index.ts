@@ -24,7 +24,7 @@ const regexMatch = createValidationRule<IProps, ErrorsType>(
     if (regexResult && shouldMatch) return action.approve()
     if (!regexResult && !shouldMatch) return action.approve()
 
-    return action.refuse("invalidField")
+    return action.reprove("invalidField")
   },
   errorMessages
 )

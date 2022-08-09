@@ -13,7 +13,7 @@ const wordsLength = createValidationRule<IProps, ErrorsType>(
   ({ action, value, properties = {} }) => {
     const { maxWordLength, minWordLength, equalsWordLength } = properties
     const safeValue = value || ""
-    if (!safeValue.length) return action.refuse("noWords")
+    if (!safeValue.length) return action.reprove("noWords")
 
     const words = safeValue.split(" ")
 
@@ -21,14 +21,14 @@ const wordsLength = createValidationRule<IProps, ErrorsType>(
       const currentWord = words[c]
 
       if (!!maxWordLength && currentWord.length > maxWordLength) {
-        return action.refuse("wordsExceedsMax")
+        return action.reprove("wordsExceedsMax")
       } else if (!!minWordLength && currentWord.length < minWordLength) {
-        return action.refuse("wordsSmallerMin")
+        return action.reprove("wordsSmallerMin")
       } else if (
         !!equalsWordLength &&
         currentWord.length !== equalsWordLength
       ) {
-        return action.refuse("equals")
+        return action.reprove("equals")
       }
     }
     return action.approve()

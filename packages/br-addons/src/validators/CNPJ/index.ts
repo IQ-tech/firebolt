@@ -6,7 +6,7 @@ const CNPJ = createValidationRule(
     const isValid = cnpj.isValid(value)
 
     if (isValid) return action.approve()
-    else return action.refuse("defaultError")
+    else return action.reprove("defaultError")
   },
   {
     "defaultError": "CNPJ não é válido",

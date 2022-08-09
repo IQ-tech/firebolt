@@ -1,14 +1,6 @@
 {
     "$schema": "http://json-schema.org/draft-07/schema#",
     "properties": {
-        "$experience-version": {
-            "description": "The Version of the Experience",
-            "type": "string"
-        },
-        "$schema-version": {
-            "description": "This version should match with the used Firebolt version",
-            "type": "string"
-        },
         "decisionHandlerConfig": {
             "description": "While transitioning steps, firebolt can execute a middleware called decision handler, with this function the developer can modify the natural flow of the experience, process incoming data...",
             "properties": {

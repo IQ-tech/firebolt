@@ -15,7 +15,7 @@ const lessThan = createValidationRule<IProps, ErrorsType>(
       throw new TypeError("Validator Rule Error. Propertie lessThan must be a number")
     }
 
-    if (Number(value) > maxValue) return action.refuse("numberBigger")
+    if (Number(value) > maxValue) return action.reprove("numberBigger")
     return action.approve()
   },
   errorMessages

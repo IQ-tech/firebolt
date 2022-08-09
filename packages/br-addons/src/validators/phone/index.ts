@@ -13,14 +13,14 @@ const phone = createValidationRule(
       return isANumber || isAParenthesis || isADash || isASpace
     })
 
-    if (!hasInvalidChars) return action.refuse("invalidChars")
+    if (!hasInvalidChars) return action.reprove("invalidChars")
     const onlyNums = stringfied.replace(/\D/g, "")
     if (!(onlyNums.length >= 10 && onlyNums.length <= 11)) {
-      return action.refuse("defaultError")
+      return action.reprove("defaultError")
     }
 
     if (onlyNums.length === 11 && parseInt(onlyNums.substring(2, 3)) !== 9) {
-      return action.refuse("defaultError")
+      return action.reprove("defaultError")
     }
 
     for (let n = 0; n < 10; n++) {
@@ -29,7 +29,7 @@ const phone = createValidationRule(
         onlyNums === new Array(11).join(strN) ||
         onlyNums === new Array(12).join(strN)
       ) {
-        return action.refuse("defaultError")
+        return action.reprove("defaultError")
       }
     }
 
@@ -41,7 +41,7 @@ const phone = createValidationRule(
     ]
 
     if (validDDD.indexOf(parseInt(onlyNums.substring(0, 2))) === -1) {
-      return action.refuse("defaultError")
+      return action.reprove("defaultError")
     }
 
     return action.approve()

@@ -1,8 +1,4 @@
 export interface IExperienceConfig {
-  /** This version should match with the used Firebolt version */
-  "$schema-version"?: string
-  /** The Version of the Experience */
-  "$experience-version"?: string
   /** Name of the JSON form */
   name: string
   /**  Description of the current JSON */

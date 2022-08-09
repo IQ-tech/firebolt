@@ -15,7 +15,7 @@ const moreThan = createValidationRule<IProps, ErrorsType>(
       throw new TypeError("Validator Rule Error. Propertie moreThan must be a number")
     }
 
-    if (Number(value) < minValue) return action.refuse("numberLess")
+    if (Number(value) < minValue) return action.reprove("numberLess")
     return action.approve()
   },
   errorMessages
