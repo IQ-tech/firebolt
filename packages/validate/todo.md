@@ -31,6 +31,12 @@ url
 regra de contribuição:
 como adicionar uma core rule
 
+* Receive  two formats on date validators dd/mm/YY or ISO
+
+
+* improve auto documentation, json schema generation is too slow
+* solve generics problem with create validation rule
+* change "properties" to props
 
 
 
