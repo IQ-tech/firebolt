@@ -11,6 +11,8 @@ describe("name validation", () => {
     "Ruan e",
     "Sr Ruan Berte",
     "Two  Spaces",
+    "batata /tyeste",
+    "asdsadsad\\ dasdsadsa"
   ])("item %p should not pass in name validator", (value) => {
     expect(isValidName.run(value).isValid).toBeFalsy()
   })
