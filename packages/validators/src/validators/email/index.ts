@@ -1,6 +1,6 @@
 import { Validator, ValidationResult } from "../../classes"
 
-const domainSuggestionList = require("./domainSuggestionList.json") // TODO: IMPORT??
+const domainSuggestionList = require("./domainSuggestionList.json")
 
 function isValidEmail(email = "") {
   if (!email) return new ValidationResult(true)

@@ -98,7 +98,6 @@ describe.each([
   })
 })
 
-
 describe.each([
   "lampião@hotmai.com",
   "ojuara@hormail.com",
