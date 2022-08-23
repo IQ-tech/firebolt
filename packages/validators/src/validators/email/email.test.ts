@@ -97,3 +97,26 @@ describe.each([
     expect(isValidEmail.run(value).message).toBe(messageError)
   })
 })
+
+
+describe.each([
+  "lampião@hotmai.com",
+  "ojuara@hormail.com",
+  "descer-para-baixo@hotmil.com",
+  "subir-para-cima@hotmal.com",
+  "38@hitmail.com",
+  "macaxeira@hotmail.con",
+  "barruada@hotmsil.com",
+  "nada@homail.com",
+  "xurupita@hotimail.com",
+  "voadora@hmail.com",
+  "letras@hotmail.co",
+  "chita@htmail.com"
+])("suggestion for hotmail.com domain", (value) => {
+  test(`Email (${value}) must be invalid, you didn't mean hotmail.com?`, () => {
+    const domainEmail = `@${value.split("@")[1]}`
+    const messageError = `Você quis dizer ${value.replace(domainEmail, "<em>@hotmail.com</em>?")}`
+    expect(isValidEmail.run(value).isValid).toBeFalsy()
+    expect(isValidEmail.run(value).message).toBe(messageError)
+  })
+})
