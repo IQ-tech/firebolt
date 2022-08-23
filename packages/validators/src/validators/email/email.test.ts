@@ -58,6 +58,17 @@ describe.each([
 })
 
 describe.each([
+  "lampião@bol.com"
+])("suggestion for bol.com.br domain", (value) => {
+  test(`Email (${value}) must be invalid, you didn't mean bol.com.br?`, () => {
+    const domainEmail = `@${value.split("@")[1]}`
+    const messageError = `Você quis dizer ${value.replace(domainEmail, "<em>@bol.com.br</em>?")}`
+    expect(isValidEmail.run(value).isValid).toBeFalsy()
+    expect(isValidEmail.run(value).message).toBe(messageError)
+  })
+})
+
+describe.each([
   "lampião@gmai.com",
   "ojuara@gmil.com",
   "descer-para-baixo@gamil.com",
@@ -78,13 +89,11 @@ describe.each([
   "nao@gm.com",
   "caracolis@gmail.cm",
   "agora@g.com",
-])("valid email domain", (value) => {
+])("suggestion for gmail.com domain", (value) => {
   test(`Email (${value}) must be invalid, you didn't mean gmail.com?`, () => {
     const domainEmail = `@${value.split("@")[1]}`
     const messageError = `Você quis dizer ${value.replace(domainEmail, "<em>@gmail.com</em>?")}`
-
     expect(isValidEmail.run(value).isValid).toBeFalsy()
     expect(isValidEmail.run(value).message).toBe(messageError)
-
   })
 })
