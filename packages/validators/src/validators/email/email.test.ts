@@ -50,9 +50,72 @@ describe.each([
   "emãil@example.com",
   "emaìl@example.com",
   "emõil@example.com",
-  "emçil@example.com",
+  "emçil@g.com",
 ])("characters email validation", (value) => {
   test(`Email (${value}) must be invalid`, () => {
     expect(isValidEmail.run(value).isValid).toBeFalsy()
+  })
+})
+
+describe.each([
+  "lampião@bol.com"
+])("suggestion for bol.com.br domain", (value) => {
+  test(`Email (${value}) must be invalid, you didn't mean bol.com.br?`, () => {
+    const domainEmail = `@${value.split("@")[1]}`
+    const messageError = `Você quis dizer ${value.replace(domainEmail, "<em>@bol.com.br</em>?")}`
+    expect(isValidEmail.run(value).isValid).toBeFalsy()
+    expect(isValidEmail.run(value).message).toBe(messageError)
+  })
+})
+
+describe.each([
+  "lampião@gmai.com",
+  "ojuara@gmil.com",
+  "descer-para-baixo@gamil.com",
+  "subir-para-cima@gmal.com",
+  "38@gmail.com.br",
+  "macaxeira@gmai.com",
+  "barruada@gmil.com",
+  "nada@gamil.com",
+  "xurupita@gmal.com",
+  "voadora@gemail.com",
+  "letras@gmail.co",
+  "chita@gamail.com",
+  "coala@gmail.con",
+  "porco@gmail.co.com",
+  "aranha@gmsil.com",
+  "acabou@ymail.com",
+  "ainda@email.com",
+  "nao@gm.com",
+  "caracolis@gmail.cm",
+  "agora@g.com",
+])("suggestion for gmail.com domain", (value) => {
+  test(`Email (${value}) must be invalid, you didn't mean gmail.com?`, () => {
+    const domainEmail = `@${value.split("@")[1]}`
+    const messageError = `Você quis dizer ${value.replace(domainEmail, "<em>@gmail.com</em>?")}`
+    expect(isValidEmail.run(value).isValid).toBeFalsy()
+    expect(isValidEmail.run(value).message).toBe(messageError)
+  })
+})
+
+describe.each([
+  "lampião@hotmai.com",
+  "ojuara@hormail.com",
+  "descer-para-baixo@hotmil.com",
+  "subir-para-cima@hotmal.com",
+  "38@hitmail.com",
+  "macaxeira@hotmail.con",
+  "barruada@hotmsil.com",
+  "nada@homail.com",
+  "xurupita@hotimail.com",
+  "voadora@hmail.com",
+  "letras@hotmail.co",
+  "chita@htmail.com"
+])("suggestion for hotmail.com domain", (value) => {
+  test(`Email (${value}) must be invalid, you didn't mean hotmail.com?`, () => {
+    const domainEmail = `@${value.split("@")[1]}`
+    const messageError = `Você quis dizer ${value.replace(domainEmail, "<em>@hotmail.com</em>?")}`
+    expect(isValidEmail.run(value).isValid).toBeFalsy()
+    expect(isValidEmail.run(value).message).toBe(messageError)
   })
 })
