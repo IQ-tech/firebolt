@@ -47,7 +47,7 @@ export interface IWizardHook {
   onConnectionError?(arg0?: object): void
   onFinishForm?(arg0?: object): void
   onBeforeChangeStep?(arg0?: Function, arg1?: IStepProps): void
-  onBeforeProceed?(sendingStepData): void
+  onBeforeProceed?(sendingStep, formPayload): void
 }
 
 export interface IWizardComponent {
@@ -57,7 +57,7 @@ export interface IWizardComponent {
   onConnectionError?(arg0?: object): void
   onFinishForm?(arg0?: object): void
   onBeforeChangeStep?(arg0?: Function, arg1?: IStepProps): void
-  onBeforeProceed?(sendingStepData): void
+  onBeforeProceed?(sendingStep, formPayload): void
 }
 
 export interface IUseFireboltForm {

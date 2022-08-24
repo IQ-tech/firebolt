@@ -138,8 +138,8 @@ const FormDemo = () => {
           console.log({sentStep, currentStep})
           // console.log("changed step:", { sentStep, currentStep });
         }}
-        onBeforeProceed={(currentStep) => {
-          console.log(currentStep)
+        onBeforeProceed={(currentStep, formPayload) => {
+          console.log(currentStep, formPayload)
         }}
       >
         <Wizard.Step match="*" component={DefaultTemplate} />

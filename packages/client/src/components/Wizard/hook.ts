@@ -19,8 +19,8 @@ export default function useWizard({
     commitStepChange,
 
     connectionError,
-    setTriggerOnBeforeProceed,
-    triggerOnBeforeProceed,
+    setBeforeProceedPayload,
+    beforeProceedPayload,
   } = useFirebolt()
 
   useEffect(onStepChangeHandler, [currentStep])
@@ -31,8 +31,7 @@ export default function useWizard({
 
   useEffect(onConnectionErrorHandler, [connectionError])
   useEffect(onFormFinishedCallback, [formFlowHasBeenFinished])
-
-  useEffect(onBeforeProceedHandler, [triggerOnBeforeProceed])
+  useEffect(onBeforeProceedHandler, [beforeProceedPayload])
 
   function onConnectionErrorHandler() {
     if (connectionError && !!onConnectionError) {
@@ -41,11 +40,11 @@ export default function useWizard({
   }
 
   function onBeforeProceedHandler() {
-    if (!!triggerOnBeforeProceed) {
+    if (!!beforeProceedPayload) {
       if (!!onBeforeProceed) {
-        onBeforeProceed(currentStep)
+        onBeforeProceed(currentStep, beforeProceedPayload)
       }
-      setTriggerOnBeforeProceed(false)
+      setBeforeProceedPayload(null)
     }
   }
 
