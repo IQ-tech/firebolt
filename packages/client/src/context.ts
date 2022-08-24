@@ -31,8 +31,8 @@ export interface IFireboltContext {
   clearRemoteFieldError(fieldSlug: string): void
 
   connectionError?: any
-  triggerOnBeforeProceed: boolean
-  setTriggerOnBeforeProceed(arg:boolean): void
+  beforeProceedPayload: boolean
+  setBeforeProceedPayload(arg:boolean): void
 }
 
 const FireboltContext = createContext<IFireboltContext>({} as IFireboltContext)
