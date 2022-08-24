@@ -62,7 +62,7 @@ describe.each([
 ])("suggestion for bol.com.br domain", (value) => {
   test(`Email (${value}) must be invalid, you didn't mean bol.com.br?`, () => {
     const domainEmail = `@${value.split("@")[1]}`
-    const messageError = `Você quis dizer ${value.replace(domainEmail, "<em>@bol.com.br</em>?")}`
+    const messageError = `Você quis dizer ${value.replace(domainEmail, "@bol.com.br?")}`
     expect(isValidEmail.run(value).isValid).toBeFalsy()
     expect(isValidEmail.run(value).message).toBe(messageError)
   })
@@ -92,7 +92,7 @@ describe.each([
 ])("suggestion for gmail.com domain", (value) => {
   test(`Email (${value}) must be invalid, you didn't mean gmail.com?`, () => {
     const domainEmail = `@${value.split("@")[1]}`
-    const messageError = `Você quis dizer ${value.replace(domainEmail, "<em>@gmail.com</em>?")}`
+    const messageError = `Você quis dizer ${value.replace(domainEmail, "@gmail.com?")}`
     expect(isValidEmail.run(value).isValid).toBeFalsy()
     expect(isValidEmail.run(value).message).toBe(messageError)
   })
@@ -114,7 +114,7 @@ describe.each([
 ])("suggestion for hotmail.com domain", (value) => {
   test(`Email (${value}) must be invalid, you didn't mean hotmail.com?`, () => {
     const domainEmail = `@${value.split("@")[1]}`
-    const messageError = `Você quis dizer ${value.replace(domainEmail, "<em>@hotmail.com</em>?")}`
+    const messageError = `Você quis dizer ${value.replace(domainEmail, "@hotmail.com?")}`
     expect(isValidEmail.run(value).isValid).toBeFalsy()
     expect(isValidEmail.run(value).message).toBe(messageError)
   })

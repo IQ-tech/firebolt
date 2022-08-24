@@ -45,7 +45,7 @@ function isValidEmail(email = "") {
   const domainEmail = email.split("@")[1] as DomainKey
 
   if (domainSuggestionList?.[domainEmail]) {
-    const sugestionEmailMessage = `Você quis dizer ${usernameEmail}<em>@${domainSuggestionList[domainEmail]}</em>?`
+    const sugestionEmailMessage = `Você quis dizer ${usernameEmail}@${domainSuggestionList[domainEmail]}?`
     return new ValidationResult(false, sugestionEmailMessage)
   }
 
