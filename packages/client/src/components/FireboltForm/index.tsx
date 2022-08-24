@@ -43,7 +43,7 @@ const FireboltForm = ({
   const ActionsChild = customActionsChild
 
   return (
-    <form className={className} onSubmit={handleSubmit} autoComplete="off">
+    <form className={className} onSubmit={handleSubmit} autoComplete="off" data-fblt="firebolt-form">
       <div className={classes["firebolt-form-wrapper"]}>{formChildren}</div>
 
       {!!customActionsChild ? (
