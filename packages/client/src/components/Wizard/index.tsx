@@ -13,12 +13,14 @@ const Wizard = ({
   onConnectionError,
   onFinishForm,
   onBeforeChangeStep,
+  onBeforeProceed
 }: IWizardComponent) => {
   const { isFormLoading, currentStepSlug } = useWizard({
     onChangeStep,
     onConnectionError,
     onFinishForm,
     onBeforeChangeStep,
+    onBeforeProceed
   });
 
   return (

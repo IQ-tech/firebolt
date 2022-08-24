@@ -32,6 +32,8 @@ function useFireboltProvider({
     setIsFormLoading,
     formFlowHasBeenFinished,
     setFormFlowHasBeenFinished,
+    triggerOnBeforeProceed,
+    setTriggerOnBeforeProceed
   } = useStates()
 
   const {
@@ -103,6 +105,7 @@ function useFireboltProvider({
     { extraRequestsMetaData = {} }: IRequestMetadata = {}
   ): Promise<void | Object> {
     setIsFormLoading(true)
+    setTriggerOnBeforeProceed(true)
     const isLastStep = currentStep?.data?.slug === formflowMetadata?.lastStep
     return formEngine.current
       .nextStep(currentStep.data.slug, stepFieldsPayload, {
@@ -219,7 +222,9 @@ function useFireboltProvider({
     getRequestsMetadata,
     uploadFile,
     clearSession,
-    clearRemoteFieldError
+    clearRemoteFieldError,
+    triggerOnBeforeProceed,
+    setTriggerOnBeforeProceed
   }
 }
 
