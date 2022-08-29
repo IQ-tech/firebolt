@@ -38,10 +38,6 @@ function isValidName(
 
   //have backslash
   if (nameWithoutSpaces.includes("\\")) return new ValidationResult(false)
-  // Have double spaces on name string
-  const noMatchDoubleSpaces = /^.*\s{2,}.*$/gi
-  if (nameWithoutSpaces.match(noMatchDoubleSpaces))
-    return new ValidationResult(false)
 
   // Have any blacklisted word
   const blackListedNames = /^(dr|dra|sr|sra|eng)$/
