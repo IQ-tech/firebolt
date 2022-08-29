@@ -1,0 +1,28 @@
+{
+  "name": "@iq-firebolt/mocks",
+  "version": "0.7.0",
+  "description": "> TODO: description",
+  "author": "iq-team",
+  "homepage": "https://github.com/IQ-tech/firebolt#readme",
+  "license": "Apache-2.0",
+  "publishConfig": {
+    "access": "public"
+  },
+  "sideEffects": false,
+  "main": "./dist/index.js",
+  "types": "./types/index.d.ts",
+  "module": "./es/index.js",
+  "files": [
+    "./"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/IQ-tech/firebolt.git"
+  },
+  "bugs": {
+    "url": "https://github.com/IQ-tech/firebolt/issues"
+  },
+  "dependencies": {
+    "@iq-firebolt/entities": "^0.7.0"
+  }
+}
