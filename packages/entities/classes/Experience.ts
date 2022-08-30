@@ -1,43 +1,63 @@
 import Step from "./Step"
+import Flow from "./Flow"
 import { IExperienceConfig } from "../types"
 
 class Experience {
   private rawConfig: IExperienceConfig
+  private steps: Step[]
+  private flows: Flow[]
 
-  constructor(rawConfig: IExperienceConfig) {}
+  constructor(rawConfig: IExperienceConfig) {
+    this.rawConfig = rawConfig
+    this.steps = rawConfig?.steps?.map((stepRaw) => new Step(stepRaw))
+    this.flows = rawConfig?.flows?.map((flowRaw) => new Flow(flowRaw))
+  }
 
   get raw() {
     return this.rawConfig
   }
 
-  // parse experience json to interactive class
-  // static parse(raw): Experience {
-  //   const parsedSteps = raw.map((item) => Step.parse(item))
-  //   return new Experience({ steps: parsedSteps }, raw)
-  // }
+  get name() {
+    return this.rawConfig.name
+  }
 
-  // getStepBySlug(): Step | undefined {
-  //   return new Step()
-  // }
+  getStepBySlug(slug: string) {
+    return this.steps?.find((step) => step.slug === slug)
+  }
 
-  // getStepByPosition(position: number, flow: string): Step | undefined {
-  //   return new Step()
-  // }
+  getFlow(flowSlug: string) {
+    return this.flows?.find((flow) => flow.slug === flowSlug)
+  }
 
-  // getFlow() {}
+  getFlowSteps(flowSlug: string): Step[] | undefined {
+    const usedFlow = this.getFlow(flowSlug)
+    if (usedFlow) {
+      const usedFlowSlugs = usedFlow.stepList
+      const stepMap = this.steps.reduce((acc, step) => {
+        const stepSlug = step.slug
+        return { ...acc, [stepSlug]: step }
+      }, {} as { [stepKey: string]: Step })
+      return usedFlowSlugs.map((slug) => stepMap[slug])
+    }
+  }
 
-  // get flows() {
-  //   return ""
-  // }
+  getFirstStepFromFlow(flowSlug: string) {
+    const flowSteps = this.getFlowSteps(flowSlug)
+    if (flowSteps) {
+      return flowSteps[0]
+    }
+  }
+
+  getStepByIndex(index: number, flowSlug: string = "default") {
+    const flowSteps = this.getFlowSteps(flowSlug)
+    if (flowSteps) {
+      return flowSteps[index]
+    }
+  }
+
+  getStepByPosition(position: number, flowSlug: string = "default") {
+    return this.getStepByIndex(position - 1, flowSlug)
+  }
 }
 
 export default Experience
-
-// const experience =  Experience.parse(formJson)
-
-// experience.getStepAt(2, "default")
-// const step2 = experience.getFlow('default').stepAt(2)
-// const name = step2.getField('name')
-
-// getStepBySlug
-//
