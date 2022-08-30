@@ -10,6 +10,14 @@ class Field {
   get raw() {
     return this.fieldConfig
   }
+
+  get UIwidget() {
+    return this.fieldConfig["ui:widget"]
+  }
+
+  get slug() {
+    return this.fieldConfig.slug
+  }
 }
 
 export default Field

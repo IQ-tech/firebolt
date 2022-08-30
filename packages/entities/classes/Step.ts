@@ -1,22 +1,18 @@
 import Field from "./Field"
-import { IStepConfig } from "../types"
-
-interface IStepTreeConfig {
-  fields: Field[]
-}
+import { IStepConfig, IFieldConfig } from "../types"
 
 class Step {
   private stepConfig: IStepConfig
-  public fields: Field[]
+  private fields: Field[]
 
   constructor(stepConfig: IStepConfig) {
-    /* this.fields = stepTree.fields */
+    const configFields = stepConfig?.fields || ([] as IFieldConfig[])
     this.stepConfig = stepConfig
+    this.fields = configFields.map((fieldConfig) => new Field(fieldConfig))
   }
 
   getField(fieldSlug: string): Field | undefined {
-    const field = this.raw.fields?.find((f) => f.slug === fieldSlug)
-    return new Field(field)
+    return this.fields.find((field) => field.slug === fieldSlug)
   }
 
   get raw() {
@@ -26,8 +22,6 @@ class Step {
   get slug() {
     return this.stepConfig.slug
   }
-
-  parse(stepConfig: IStepConfig): void {}
 }
 
 export default Step
