@@ -11,7 +11,8 @@
     "json-schema",
     "engine",
     "validate",
-    "br-addons"
+    "br-addons",
+    "mocks"
   ],
   "conventionalCommits.promptFooter": false,
   "conventionalCommits.promptBody": false
