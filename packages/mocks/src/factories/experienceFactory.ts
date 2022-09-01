@@ -1,20 +1,21 @@
-import faker from "faker"
-import Experience from "@iq-firebolt/entities/classes/Experience"
-import { IFlow } from "@iq-firebolt/entities"
-import Flow from "@iq-firebolt/entities/classes/Flow"
-
-import { IMockExperienceOptions } from "../presets/sample"
+import { IExperienceConfig } from "@iq-firebolt/entities"
+import { IMockExperienceOptions } from "../types"
 
 import sampleDefault from "../presets/sample-experience"
+import flowFactory from "./flowFactory"
 
 const experienceFactory = (
   options: IMockExperienceOptions | undefined
-): Experience => {
-  if (!options) return new Experience(sampleDefault)
+): IExperienceConfig => {
+  if (!options) return sampleDefault
 
   const { flows, steps } = options
+  const flowsConfig = flowFactory(flows)
 
-  return new Experience(sampleDefault)
+  return {
+    ...sampleDefault,
+    flows: flowsConfig,
+  }
 }
 
 export default experienceFactory

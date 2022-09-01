@@ -1,20 +1,11 @@
 import { IExperienceConfig } from "@iq-firebolt/entities"
 import Experience from "@iq-firebolt/entities/classes/Experience"
 import experienceFactor from "../../factories/experienceFactory"
+import { IMockExperienceOptions } from "../../types"
 
-export interface IMockExperience {
+interface IMockExperience {
   experience?: IExperienceConfig
   options?: IMockExperienceOptions
-}
-
-export interface IMockExperienceOptions {
-  flows: IMockFlowOption
-  steps: number
-}
-
-export interface IMockFlowOption {
-  quantity: number
-  steps: number[]
 }
 
 class MockExperience {
@@ -22,10 +13,12 @@ class MockExperience {
   constructor({ experience, options }: IMockExperience) {
     this.sample = experience
       ? new Experience(experience)
-      : experienceFactor(options)
+      : new Experience(experienceFactor(options))
   }
 
   get raw() {
     return this.sample.raw
   }
 }
+
+export default MockExperience

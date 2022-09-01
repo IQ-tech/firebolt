@@ -1,18 +1,27 @@
 import faker from "faker"
 
 import { IFlow } from "@iq-firebolt/entities"
-import { IMockFlowOption } from "../presets/sample"
 import { createNumberRange } from "../utils/createNumberRange"
+import { IMockFlowOption, SizeConfig } from "../types"
 
-const flowFactory = (options: IMockFlowOption): IFlow[] => {
+const flowFactory = ({
+  size,
+  keepDefault = true,
+  includeSlugs,
+}: IMockFlowOption): IFlow[] => {
   const rawFlow: IFlow[] = []
+  const { flowSize, stepList } = handleFlowAndStepSize(size)
 
-  const maxSteps = Math.max(...options.steps)
-  const slugsList = createNumberRange(1, maxSteps).map(() => faker.lorem.slug())
+  const maxSteps = Math.max(...stepList)
+  const slugsList = createNumberRange(1, maxSteps).map((_, index) => {
+    if (includeSlugs && includeSlugs[index]) return includeSlugs[index]
+    return faker.lorem.slug()
+  })
 
-  for (let i = 0; i < options.quantity; i++) {
-    const slug = i === 0 ? "default" : faker.lorem.slug()
-    const stepsNumber = options.steps[i]
+  for (let i = 0; i < flowSize; i++) {
+    const fakerSlug = faker.lorem.slug()
+    const slug = i === 0 ? (keepDefault ? "default" : fakerSlug) : fakerSlug
+    const stepsNumber = stepList[i]
     const alreadyUsedSlugs: string[] = []
 
     const stepsSlugs = createNumberRange(1, stepsNumber).map(() => {
@@ -28,6 +37,25 @@ const flowFactory = (options: IMockFlowOption): IFlow[] => {
   }
 
   return rawFlow
+}
+
+const handleFlowAndStepSize = (size: SizeConfig) => {
+  if (Array.isArray(size)) {
+    const flowSize = size.length
+    const stepList = size.map((item) => item)
+
+    return { flowSize, stepList }
+  } else if (typeof size === "number") {
+    const stepList = []
+    for (let i = 0; i <= size; i++) stepList.push(size)
+
+    return { flowSize: size, stepList }
+  } else {
+    const stepList = []
+    for (let i = 0; i <= size.contains; i++) stepList.push(size.contains)
+
+    return { flowSize: size.items, stepList }
+  }
 }
 
 export default flowFactory
