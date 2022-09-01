@@ -8,6 +8,10 @@
   "publishConfig": {
     "access": "public"
   },
+  "scripts": {
+    "test": "jest",
+    "test:coverage": "jest --collect-coverage"
+  },
   "sideEffects": false,
   "main": "./dist/index.js",
   "types": "./types/index.d.ts",
