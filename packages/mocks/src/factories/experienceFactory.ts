@@ -1,5 +1,5 @@
 import { IExperienceConfig } from "@iq-firebolt/entities"
-import { IMockExperienceOptions } from "../types"
+//import { IMockExperienceOptions } from "../types"
 
 import sampleDefault from "../presets/sample-experience"
 import flowFactory from "./flowFactory"

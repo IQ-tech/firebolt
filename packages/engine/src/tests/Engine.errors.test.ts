@@ -98,6 +98,7 @@ describe("should identify JSON Errors", () => {
     const receivedStep = await engine.start()
     expect(receivedStep?.error?.id).toBe("flowWithoutSteps")
   })
+
   test("should return an error when flow step does not exists on JSON config", async () => {
     const engine = new Engine({
       experienceId: "sample",
@@ -115,6 +116,7 @@ describe("should identify JSON Errors", () => {
 
     expect(proceeding.error?.id).toBe("stepNotFound")
   })
+
   test("should return an error when flow does not exists on JSON Config", async () => {
     const engine = new Engine({
       experienceId: "sample",
@@ -157,6 +159,7 @@ describe("should identify resolver errors", () => {
     const start = await engine.start()
     expect(start?.error?.id).toBe("resolverMissing")
   })
+
   test("should return an error when getSession resolves wrong data", async () => {
     localStorage.setItem(
       twoStepsCompletedFlowDefault.sessionId,
@@ -178,6 +181,7 @@ describe("should identify resolver errors", () => {
     const proceedingStep = await engine.proceed()
     expect(proceedingStep?.error?.id).toBe("resolverReturnIsInvalid")
   })
+
   test("should return an error when setSession resolver is missing", async () => {
     const engine = new Engine({
       experienceId: "asd",
@@ -213,6 +217,7 @@ describe("should identify generic errors", () => {
     const receivedStep = await engine.start()
     expect(receivedStep?.error?.id).toBe("externalError")
   })
+
   test("should identify error ocurred inside decision callback", async () => {
     const engine = new Engine({
       experienceId: "sample",

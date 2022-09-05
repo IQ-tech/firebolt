@@ -1,18 +1,12 @@
-export type SizeConfig = number | number[] | { items: number; contains: number }
+export type IMockFlowType =
+  | "default-sample"
+  | "missing-default"
+  | "missing-step"
+  | "missing-step-list"
 
-export interface IMockFlowOption {
-  size: SizeConfig
-  // stops including a default flow on the flows config
-  keepDefault?: boolean
-  includeSlugs?: string[]
-}
+export type IMockStepType = "default-sample" | "without-steps"
 
-export interface IMockStepsOptions {
-  size: SizeConfig | { custom: SizeConfig; form: SizeConfig }
-  useCustom: boolean
-}
-
-export interface IMockExperienceOptions {
-  flows: IMockFlowOption
-  steps: number
+export interface IMockExperienceOption {
+  flowConfig: IMockFlowType
+  stepConfig: IMockStepType
 }

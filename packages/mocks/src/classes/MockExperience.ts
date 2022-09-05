@@ -1,16 +1,28 @@
 import { IExperienceConfig } from "@iq-firebolt/entities"
 import Experience from "@iq-firebolt/entities/classes/Experience"
-import experienceFactory from "../factories/experienceFactory"
-import { IMockExperienceOptions } from "../types"
+import { IMockExperienceOption } from "../types"
+import defaultExperience from "../presets/sample-experience"
+import flowFactory from "../factories/flowFactory"
+import stepFactory from "../factories/stepFactory"
 
 class MockExperience {
   private experience: Experience
-  constructor(experienceConfig: IExperienceConfig) {
-    this.experience = new Experience(experienceConfig)
+  constructor(experienceConfig?: IExperienceConfig) {
+    if (!experienceConfig) this.experience = new Experience(defaultExperience)
+    else this.experience = new Experience(experienceConfig)
   }
 
-  static generateFrom(options: IMockExperienceOptions): MockExperience {
-    const mockedExperience = experienceFactory(options)
+  static generateFrom(options: IMockExperienceOption): MockExperience {
+    const { flowConfig, stepConfig } = options
+    const flows = flowFactory(flowConfig)
+    const steps = stepFactory(stepConfig)
+
+    const mockedExperience = {
+      ...defaultExperience,
+      flows,
+      steps,
+    }
+
     return new MockExperience(mockedExperience)
   }
 
@@ -33,6 +45,18 @@ class MockExperience {
     }
 
     this.updateExperience(new Experience(newRawExperience))
+  }
+
+  get rawExperience() {
+    return this.experience.raw
+  }
+
+  get rawFlows() {
+    return this.experience.raw.flows
+  }
+
+  get rawSteps() {
+    return this.experience.raw.steps
   }
 }
 
