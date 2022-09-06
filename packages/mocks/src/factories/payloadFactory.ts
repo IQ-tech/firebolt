@@ -1,20 +1,16 @@
-// import { IStepFormPayload } from "@iq-firebolt/entities"
-// import { IMockStepType } from "../types"
-// import defaultExperience from "../presets/sample-experience"
+import { IStepFormPayload } from "@iq-firebolt/entities"
+import Experience from "@iq-firebolt/entities/classes/Experience"
+import { IMockPayloadOptions } from "../types"
 
-// const payloadFactory = (payloadOption: IMockStepType): IStepFormPayload[] => {
-//   let payloadConfig: IpayloadConfig[] = []
-//   switch (payloadOption) {
-//     case "without-steps":
-//       payloadConfig = []
-//       break
+const payloadFactory = (
+  payloadOptions: IMockPayloadOptions,
+  experience: Experience
+): IStepFormPayload => {
+  const { stepSlug, validFields } = payloadOptions
+  const payload: IStepFormPayload = {}
+  const flow = experience.getStepBySlug(stepSlug)
 
-//     default:
-//       payloadConfig = defaultExperience.steps
-//       break
-//   }
+  return payload
+}
 
-//   return payloadConfig
-// }
-
-// export default payloadFactory
+export default payloadFactory

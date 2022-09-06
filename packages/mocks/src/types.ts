@@ -10,3 +10,8 @@ export interface IMockExperienceOption {
   flowConfig: IMockFlowType
   stepConfig: IMockStepType
 }
+
+export interface IMockPayloadOptions {
+  stepSlug: string
+  validFields: boolean
+}

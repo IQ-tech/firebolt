@@ -24,18 +24,6 @@ describe("MockExperience", () => {
     expect(flowMock[0].stepsSlugs.includes("missing_step")).toBe(true)
   })
 
-  // test("Factories: Flows(without default flow)", () => {
-  //   const options: IMockFlowOption = { size: 2, keepDefault: false }
-  //   const flowMock = flowFactory(options)
-  //   expect(flowMock[0].slug).not.toBe("default")
-  // })
-
-  // test("fieldFactory", () => {
-  //   //console.log(fieldFactory())
-
-  //   console.log(newField({ chave: "required", valor: false }))
-  // })
-
   // test.todo("Factories: Fields")
   // test.todo("Factories: Steps")
   // test.todo("Factories: Experience")
