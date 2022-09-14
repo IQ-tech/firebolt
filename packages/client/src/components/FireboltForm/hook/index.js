@@ -12,7 +12,8 @@ export default function useFireboltForm({
   remoteErrors,
   onGoBack,
   classes,
-  onFocusField
+  onFocusField,
+  orderFields,
 }) {
   const {
     isFormValid,
@@ -57,7 +58,8 @@ export default function useFireboltForm({
     theme,
     setFieldWarning,
     clearFieldWarning,
-    classes
+    classes,
+    orderFields,
   });
 
   return {

@@ -21,6 +21,7 @@ const FireboltForm = ({
   onGoBack,
   onChange,
   onFocusField,
+  orderFields,
 }) => {
   const { handleSubmit, formChildren, actionsChildData, handleGoBack } =
     useFireboltForm({
@@ -35,6 +36,7 @@ const FireboltForm = ({
       onGoBack,
       classes,
       onFocusField,
+      orderFields,
     })
 
   const ActionsChild = customActionsChild

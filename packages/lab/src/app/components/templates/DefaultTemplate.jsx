@@ -104,6 +104,7 @@ const DefaultTemplate = ({ fireboltStep }) => {
               <button>next bloqueado</button>
             )
           }} */
+          orderFields={['cpf', 'full_name', 'email', 'main_income', 'main_phone', 'bad_credit']}
         >
           <StepForm.Insert after={"last"} render={<p>insert</p>} />
         </StepForm>

@@ -18,8 +18,16 @@ export default function useFormRendering({
   setFieldWarning,
   clearFieldWarning,
   classes,
+  orderFields,
 }) {
+
+  const schemeOrdered = !!orderFields 
+    ? orderFields.map(slug => schema.find((field) => field.slug === slug))
+    : schema
+
   // get correct widgets components
+  console.log('schema', schema)
+  console.log('schemeOrdered', schemeOrdered)
   const fieldsChildren = schema.map((field = {}, index) => {
     const {
       slug,

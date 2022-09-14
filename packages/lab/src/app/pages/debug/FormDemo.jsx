@@ -6,8 +6,8 @@ import { propsPresets } from "@iq-firebolt/br-addons"
 
 const withFirebolt = createFireboltProvider({
   formAccess: {
-    root: "https://btti33t5h5.execute-api.sa-east-1.amazonaws.com/dev",
-    formName: "sample",
+    root: "https://dsv-firebolt-api.iq.com.br/",
+    formName: "iq-marketplace",
   },
   withHistory: true,
   stepQueryParam: "step",
