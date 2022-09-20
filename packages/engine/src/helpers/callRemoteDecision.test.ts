@@ -2,12 +2,8 @@ import axios from "axios"
 import callRemote from "./callRemoteDecision"
 import useMockNavigation from "../mocks/mock-navigation"
 import { oneStepCompletedFlowDefault } from "../mocks/sample-experience-session"
-import {
-  IFireboltSession,
-  IExperienceDecisionPayload,
-  IExperienceProceedPayload,
-} from "../types"
-import { IRemoteDecisionConfig } from "@iq-firebolt/entities"
+import { IExperienceDecisionPayload, IExperienceProceedPayload } from "../types"
+import { IRemoteDecisionConfig, IFireboltSession } from "@iq-firebolt/entities"
 import sampleWithRemoteConfig from "../mocks/sample-experience-with-remote-decision"
 
 const { mockedSetSession, mockedGetSession } = useMockNavigation()

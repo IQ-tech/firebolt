@@ -1,7 +1,5 @@
-import {
-  IFireboltSession,
-  IExperienceProceedPayload,
-} from "../types"
+import { IFireboltSession } from "@iq-firebolt/entities"
+import { IExperienceProceedPayload } from "../types"
 import { equals } from "ramda"
 
 interface IIsFieldsValidationNeeded {

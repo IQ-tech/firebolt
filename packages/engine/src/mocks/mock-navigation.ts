@@ -4,12 +4,12 @@ import {
   IExperienceConfig,
   IStepFormPayload,
   IDecisionHandlerConfig,
+  IFireboltSession,
 } from "@iq-firebolt/entities"
 import {
   IEngineResolvers,
   IExperienceDecisionCallbackFunction,
   IExperienceDecisionOptions,
-  IFireboltSession,
 } from "../types"
 import JSONSample from "../mocks/sample-experience"
 import mockWithDecisionConfig from "../mocks/sample-with-decision-config"

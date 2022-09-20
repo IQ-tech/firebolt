@@ -1,12 +1,12 @@
 import faker from "faker"
 import * as uuid from "uuid"
 import SessionHandler from "./SessionHandler"
-import { IExperienceConfig } from "@iq-firebolt/entities"
 import {
-  IEngineResolvers,
+  IExperienceConfig,
   IFireboltSession,
   IStepSession,
-} from "../types"
+} from "@iq-firebolt/entities"
+import { IEngineResolvers } from "../types"
 import JSONSample from "../mocks/sample-experience"
 import JSONConfig from "../classes/JSONConfig"
 import { oneStepCompletedFlowDefault } from "../mocks/sample-experience-session"

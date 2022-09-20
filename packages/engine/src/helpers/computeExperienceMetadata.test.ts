@@ -1,3 +1,4 @@
+import { IFireboltSession, IExperienceMetadata } from "@iq-firebolt/entities"
 import sampleExperienceSchemaMock from "../mocks/sample-experience"
 import {
   oneStepCompletedFlowDefault,
@@ -10,7 +11,6 @@ import {
 } from "../mocks/sample-experience-session"
 import computeExperienceMetadata from "./computeExperienceMetadata"
 import JSONConfig from "../classes/JSONConfig"
-import { IFireboltSession, IExperienceMetadata } from "../types"
 
 interface ISessionTestCase {
   label: string

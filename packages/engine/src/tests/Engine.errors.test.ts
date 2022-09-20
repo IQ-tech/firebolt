@@ -3,9 +3,8 @@ import faker from "faker"
 import {
   IExperienceDecisionCallbackFunction,
   IExperienceProceedPayload,
-  IFireboltSession,
 } from "../types"
-import { IExperienceConfig } from "@iq-firebolt/entities"
+import { IExperienceConfig, IFireboltSession } from "@iq-firebolt/entities"
 import { twoStepsCompletedFlowDefault } from "../mocks/sample-experience-session"
 import sampleExperienceMock from "../mocks/sample-experience"
 import mockWithDecisionConfig from "../mocks/sample-with-decision-config.js"

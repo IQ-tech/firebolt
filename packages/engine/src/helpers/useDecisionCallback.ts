@@ -4,11 +4,11 @@ import {
   IExperienceDecision,
   IExperienceDecisionAction,
   IExperienceDecisionOptions,
-  IFireboltSession,
 } from "../types"
 import {
   IDecisionHandlerConfig,
   IRemoteDecisionConfig,
+  IFireboltSession,
 } from "@iq-firebolt/entities"
 
 import callRemoteDecision from "./callRemoteDecision"

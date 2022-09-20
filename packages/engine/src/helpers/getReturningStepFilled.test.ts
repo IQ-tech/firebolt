@@ -1,6 +1,6 @@
+import { IFireboltSession } from "@iq-firebolt/entities"
 import getReturningStepFilled from "./getReturningStepFilled"
 import sampleExperience from "../mocks/sample-experience"
-import { IFireboltSession } from "../types"
 
 describe("test autofill work", () => {
   test("Function should return a new step filled", () => {

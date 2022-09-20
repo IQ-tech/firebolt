@@ -1,7 +1,8 @@
 import flowFactory from "./flowFactory"
+import { payloadFactory } from "./payloadFactory"
 
 describe("MockExperience", () => {
-  test("Factories: Flows(with array size)", () => {
+  test("Factories: Flows(default flow)", () => {
     const flow = flowFactory("default-sample")
 
     expect(flow[0].slug).toBe("default")

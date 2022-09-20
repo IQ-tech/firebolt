@@ -1,11 +1,11 @@
 import { v4 } from "uuid"
+import { IEngineResolvers } from "../types"
 import {
-  IEngineResolvers,
   IExperienceMetadata,
   IExperienceState,
   IFireboltSession,
   IStepSession,
-} from "../types"
+} from "@iq-firebolt/entities"
 import JSONConfig from "../classes/JSONConfig"
 import EngineError from "../classes/EngineError"
 

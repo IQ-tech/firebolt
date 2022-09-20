@@ -1,7 +1,8 @@
 import faker from "faker"
+import { IFireboltSession } from "@iq-firebolt/entities"
 import * as validation from "../helpers/validateStep"
 
-import { IExperienceProceedPayload, IFireboltSession } from "../types"
+import { IExperienceProceedPayload } from "../types"
 
 import {
   oneStepCompletedFlowDefault,
