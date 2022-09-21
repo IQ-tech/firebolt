@@ -1,6 +1,3 @@
-import faker from "faker"
-faker.setLocale("pt_BR")
-
 import { IStepForm } from "@iq-firebolt/entities"
 
 type IMockStepSlugs = "personalData" | "address" | "documents"
@@ -24,10 +21,8 @@ export const payloadFactory = ({
 }
 
 const personalDataStep = (validValues: boolean): IStepForm => {
-  const name = validValues
-    ? `${faker.name.findName()} ${faker.name.lastName()}`
-    : "invalidName"
-  const email = validValues ? faker.internet.email() : "@email.com"
+  const name = validValues ? "Teste Cenoura" : "invalidName"
+  const email = validValues ? "teste@cenoura.com" : "@email.com"
   return {
     "fields": {
       "full_name": name,
@@ -37,7 +32,7 @@ const personalDataStep = (validValues: boolean): IStepForm => {
 }
 
 const documentsStep = (validValue: boolean): IStepForm => {
-  const document = validValue ? "asdf123456" : ".-"
+  const document = validValue ? "1234567890" : ".-"
   return {
     "fields": {
       "brazil_id_number": document,

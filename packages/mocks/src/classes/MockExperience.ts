@@ -1,10 +1,12 @@
 import { IExperienceConfig } from "@iq-firebolt/entities"
 import Experience from "@iq-firebolt/entities/classes/Experience"
 import { IMockExperienceOption } from "../types"
-import defaultExperience from "../presets/sample-experience"
+
 import flowFactory from "../factories/flowFactory"
 import stepFactory from "../factories/stepFactory"
+import decisionFactory from "../factories/decisionFactory"
 
+import defaultExperience from "../presets/sample-experience"
 class MockExperience {
   private experience: Experience
   constructor(experienceConfig?: IExperienceConfig) {
@@ -13,14 +15,19 @@ class MockExperience {
   }
 
   static generateFrom(options: IMockExperienceOption): MockExperience {
-    const { flowConfig, stepConfig } = options
+    const { flowConfig, stepConfig, decisionConfig } = options
     const flows = flowFactory(flowConfig)
     const steps = stepFactory(stepConfig)
 
+    const { useDecision, options: decisionOptions } = decisionConfig
+
+    const decision = useDecision ? decisionFactory(decisionOptions) : {}
+
     const mockedExperience = {
       ...defaultExperience,
-      flows,
-      steps,
+      ...flows,
+      ...steps,
+      ...decision,
     }
 
     return new MockExperience(mockedExperience)
@@ -57,6 +64,10 @@ class MockExperience {
 
   get rawSteps() {
     return this.experience.raw.steps
+  }
+
+  get rawDecisionHandler() {
+    return this.experience.raw?.decisionHandlerConfig
   }
 }
 
