@@ -1,3 +1,4 @@
+import { faker } from "@faker-js/faker"
 import Engine from "../index"
 import {
   IExperienceConfig,
@@ -28,8 +29,8 @@ export default function useMockNavigation() {
   })
 
   const getFirstStepCorrectFields = (): IStepFormPayload => ({
-    full_name: "Teste Cenoura",
-    email: "cenoura@email.com",
+    full_name: `${faker.name.firstName()} ${faker.name.lastName()}`,
+    email: faker.internet.email(),
   })
 
   const getFirstStepWrongFields = (): IStepFormPayload => ({
