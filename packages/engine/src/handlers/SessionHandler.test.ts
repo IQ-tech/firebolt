@@ -1,4 +1,4 @@
-import faker from "faker"
+import { faker } from "@faker-js/faker"
 import * as uuid from "uuid"
 import SessionHandler from "./SessionHandler"
 import {
@@ -63,7 +63,7 @@ describe("SessionHandler. Class to handle with experience state", () => {
     const session = new SessionHandler(resolvers)
 
     await session.loadSessionFromStorage(mockedSessionId)
-    const stepSlug = faker.lorem.word()
+    const stepSlug = faker.lorem.word(5)
 
     await session.setVisualizingStepSlug(stepSlug)
     expect(session.current.experienceState.visualizingStepSlug).toBe(stepSlug)
@@ -73,7 +73,7 @@ describe("SessionHandler. Class to handle with experience state", () => {
     const session = new SessionHandler(resolvers)
     await session.loadSessionFromStorage(mockedSessionId)
 
-    const flowSlug = faker.lorem.word()
+    const flowSlug = faker.lorem.word(5)
     await session.changeCurrentFlow(flowSlug)
 
     expect(session.current.experienceState.currentFlow).toBe(flowSlug)
@@ -83,7 +83,7 @@ describe("SessionHandler. Class to handle with experience state", () => {
     const session = new SessionHandler(resolvers)
     await session.loadSessionFromStorage(mockedSessionId)
 
-    const flowSlug = faker.lorem.word()
+    const flowSlug = faker.lorem.word(6)
     await session.completeExperience()
 
     expect(session.current.sessionId).toBe(mockedSessionId)

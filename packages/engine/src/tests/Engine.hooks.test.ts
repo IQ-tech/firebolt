@@ -1,4 +1,4 @@
-import faker from "faker"
+import { faker } from "@faker-js/faker"
 import Engine from "../index"
 
 import { IExperienceConfig } from "@iq-firebolt/entities"

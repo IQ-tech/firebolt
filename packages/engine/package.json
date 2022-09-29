@@ -33,6 +33,7 @@
   },
   "dependencies": {
     "@iq-firebolt/entities": "^0.7.0",
+    "@iq-firebolt/mocks": "^0.7.0",
     "@iq-firebolt/validate": "^0.7.0",
     "ramda": "^0.28.0",
     "uuid": "^8.3.2"

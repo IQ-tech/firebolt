@@ -1,13 +1,9 @@
-import faker from "faker"
 import { IFireboltSession } from "@iq-firebolt/entities"
+import { payloadFactory, sessionFactory } from "@iq-firebolt/mocks"
 import * as validation from "../helpers/validateStep"
 
 import { IExperienceProceedPayload } from "../types"
 
-import {
-  oneStepCompletedFlowDefault,
-  twoStepsCompletedFlowDefault,
-} from "../mocks/sample-experience-session"
 import useMockNavigation from "../mocks/mock-navigation"
 
 const {
@@ -36,16 +32,17 @@ describe("Engine.start handling", () => {
   })
 
   test("should identify an started experience and return the correct step", async () => {
-    mockedSetSession(twoStepsCompletedFlowDefault)
+    const mockedSession = sessionFactory("defaultTwoStepsCompleted")
+    mockedSetSession(mockedSession)
     const fireboltStepper = getStepper()
 
     const nextStep = await fireboltStepper.start({
-      sessionId: twoStepsCompletedFlowDefault.sessionId,
+      sessionId: mockedSession.sessionId,
     })
 
     expect(nextStep?.step?.slug).toBe("address")
     expect(nextStep?.experienceMetadata?.currentPosition).toBe(3)
-    expect(nextStep?.capturedData).toEqual(twoStepsCompletedFlowDefault.steps)
+    expect(nextStep?.capturedData).toEqual(mockedSession.steps)
   })
 })
 
@@ -60,11 +57,24 @@ describe("Engine.proceed handling", () => {
     const fireboltStepper = getStepper()
 
     const firstStepField = getFirstStepWrongFields()
-    const sessionId = faker.datatype.uuid()
+
+    const invalidPayload = payloadFactory({
+      validValues: false,
+      stepSlug: "personalData",
+    })
+    const validPayload = payloadFactory({
+      validValues: true,
+      stepSlug: "personalData",
+    })
+    console.log("invalidPayload: ", invalidPayload)
+    console.log("validPayload: ", validPayload)
+
+    const sessionId = "asdf-1234-asdf-1234"
     const payload: IExperienceProceedPayload = {
       sessionId,
       fields: firstStepField,
     }
+
     const proceed = await fireboltStepper.proceed(payload)
     expect(proceed).toHaveProperty("error")
     expect(proceed?.error?.invalidFields?.length).not.toBe(0)
@@ -94,8 +104,8 @@ describe("Engine.proceed handling", () => {
 
   test("should identify the current step, validate and return the next step info", async () => {
     const validationStepSpy = jest.spyOn(validation, "default")
-
-    mockedSetSession(oneStepCompletedFlowDefault)
+    const mockedSession = sessionFactory("defaultOneStepCompleted")
+    mockedSetSession(mockedSession)
     const fireboltStepper = getStepper()
 
     const payload = {
@@ -103,16 +113,16 @@ describe("Engine.proceed handling", () => {
     }
 
     const proceed = await fireboltStepper.proceed({
-      sessionId: oneStepCompletedFlowDefault.sessionId,
+      sessionId: mockedSession.sessionId,
       fields: payload,
     })
 
     const expectedCaptureData = {
-      ...oneStepCompletedFlowDefault.steps,
+      ...mockedSession.steps,
       documents: { fields: { ...payload } },
     }
 
-    expect(proceed?.sessionId).toBe(oneStepCompletedFlowDefault.sessionId)
+    expect(proceed?.sessionId).toBe(mockedSession.sessionId)
     expect(proceed?.capturedData).toEqual(expectedCaptureData)
     expect(proceed?.step?.slug).toBe("address") //documents
     expect(proceed?.error).toEqual(null)
@@ -121,18 +131,19 @@ describe("Engine.proceed handling", () => {
 
   test("should revalidate a previously filled step and return a error (changes made on fields)", async () => {
     const validationStepSpy = jest.spyOn(validation, "default")
-    mockedSetSession(twoStepsCompletedFlowDefault)
+    const mockedSession = sessionFactory("defaultTwoStepsCompleted")
+    mockedSetSession(mockedSession)
     const fireboltStepper = getStepper()
 
     const firstStepField = getFirstStepWrongFields()
     const payload: IExperienceProceedPayload = {
-      sessionId: twoStepsCompletedFlowDefault.sessionId,
+      sessionId: mockedSession.sessionId,
       fields: firstStepField,
     }
 
     // goBack simulate
     const currentSession = (await mockedGetSession(
-      twoStepsCompletedFlowDefault.sessionId
+      mockedSession.sessionId
     )) as IFireboltSession
 
     const goBackTwoStepsSession: IFireboltSession = {
@@ -155,18 +166,19 @@ describe("Engine.proceed handling", () => {
 
   test("should revalidate a previously filled step (changes made on fields)", async () => {
     const validationStepSpy = jest.spyOn(validation, "default")
-    mockedSetSession(twoStepsCompletedFlowDefault)
+    const mockedSession = sessionFactory("defaultTwoStepsCompleted")
+    mockedSetSession(mockedSession)
     const fireboltStepper = getStepper()
 
     const firstStepField = getFirstStepCorrectFields()
     const payload: IExperienceProceedPayload = {
-      sessionId: twoStepsCompletedFlowDefault.sessionId,
+      sessionId: mockedSession.sessionId,
       fields: firstStepField,
     }
 
     // goBack simulate
     const currentSession = (await mockedGetSession(
-      twoStepsCompletedFlowDefault.sessionId
+      mockedSession.sessionId
     )) as IFireboltSession
 
     const goBackTwoStepsSession: IFireboltSession = {
@@ -190,20 +202,21 @@ describe("Engine.proceed handling", () => {
 
   test("shouldn't validate a previously filled step (no changes made on fields)", async () => {
     const validationStepSpy = jest.spyOn(validation, "default")
-    mockedSetSession(twoStepsCompletedFlowDefault)
+    const mockedSession = sessionFactory("defaultTwoStepsCompleted")
+    mockedSetSession(mockedSession)
     const fireboltStepper = getStepper()
 
     const firstStepField = {
-      ...twoStepsCompletedFlowDefault.steps.personal_data.fields,
+      ...mockedSession.steps.personal_data.fields,
     }
     const payload: IExperienceProceedPayload = {
-      sessionId: twoStepsCompletedFlowDefault.sessionId,
+      sessionId: mockedSession.sessionId,
       fields: firstStepField,
     }
 
     // goBack simulate
     const currentSession = (await mockedGetSession(
-      twoStepsCompletedFlowDefault.sessionId
+      mockedSession.sessionId
     )) as IFireboltSession
 
     const goBackTwoStepsSession: IFireboltSession = {
@@ -234,11 +247,12 @@ describe("Engine.goBack handling", () => {
   })
 
   test("should go back to previous step", async () => {
-    mockedSetSession(twoStepsCompletedFlowDefault)
+    const mockedGetSession = sessionFactory("defaultTwoStepsCompleted")
+    mockedSetSession(mockedGetSession)
     const fireboltStepper = getStepper()
 
     const previousStep = await fireboltStepper.goBackHandler({
-      sessionId: twoStepsCompletedFlowDefault.sessionId,
+      sessionId: mockedGetSession.sessionId,
     })
 
     expect(previousStep?.step?.slug).toBe("documents")

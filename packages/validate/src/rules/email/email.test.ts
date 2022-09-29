@@ -1,5 +1,5 @@
 import email from "./index"
-import faker from "faker"
+import { faker } from "@faker-js/faker"
 
 const checkingValidEmail = ({
   min,
@@ -45,7 +45,7 @@ describe("should correctly validate", () => {
   ])(
     "validate email that has a domain that ends or begins with a hyphen $value",
     ({ value }) => {
-      const { isValid, message } =  email(value)
+      const { isValid, message } = email(value)
       expect(isValid).toBeFalsy()
       expect(message).toBe("Domain must not start or end with a hyphen '-'")
     }
@@ -59,7 +59,7 @@ describe("should correctly validate", () => {
     { value: "email@example.com (Joe Smith)" },
     { value: "Joe Smith <email@example.com>" },
   ])("validating emails with special characters $value", ({ value }) => {
-    const { isValid, message } =  email(value)
+    const { isValid, message } = email(value)
     expect(isValid).toBeFalsy()
     expect(message).toBe("Special characters are not allowed")
   })
@@ -72,7 +72,7 @@ describe("should correctly validate", () => {
     { value: ".email@example.com" },
     { value: "email.@example.com" },
   ])("invalid email test $value", ({ value }) => {
-    const { isValid, message } =  email(value)
+    const { isValid, message } = email(value)
     expect(isValid).toBeFalsy()
     expect(message).toBe("Invalid email")
   })

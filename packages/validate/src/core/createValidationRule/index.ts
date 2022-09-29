@@ -8,7 +8,10 @@ import {
 import { actionFactory } from "./helpers"
 
 type U<EM> = EM extends EM ? EM : {}
-export default function createValidationRule<P = IGenericObject, EM = {}>(
+export default function createValidationRule<
+  P extends { [key: string]: any } | undefined = IGenericObject,
+  EM = {}
+>(
   creatorFunction: CreatorFunction<EM, P>,
   defaultErrorsMap: EM
 ): GenericValidationFunc<EM, P> {

@@ -1,5 +1,5 @@
 import Engine from "../index"
-import faker from "faker"
+import { faker } from "@faker-js/faker"
 import {
   IExperienceDecisionCallbackFunction,
   IExperienceProceedPayload,

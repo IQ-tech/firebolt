@@ -20,7 +20,6 @@ class MockExperience {
     const steps = stepFactory(stepConfig)
 
     const { useDecision, options: decisionOptions } = decisionConfig
-
     const decision = useDecision ? decisionFactory(decisionOptions) : {}
 
     const mockedExperience = {
