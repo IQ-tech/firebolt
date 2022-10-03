@@ -1,20 +1,11 @@
 import Engine from "../index"
-import faker from "faker"
+import { faker } from "@faker-js/faker"
 import {
   IExperienceDecisionCallbackFunction,
   IExperienceProceedPayload,
-  IFireboltSession,
 } from "../types"
-import { IExperienceConfig } from "@iq-firebolt/entities"
-import { twoStepsCompletedFlowDefault } from "../mocks/sample-experience-session"
-import sampleExperienceMock from "../mocks/sample-experience"
-import mockWithDecisionConfig from "../mocks/sample-with-decision-config.js"
-import {
-  sampleWithoutDefaultFlow,
-  defaultFlowWithoutSteps,
-  experienceWithoutSteps,
-} from "../mocks/invalid/sample-without-default-flow"
-import { sampleWithMissingStep } from "../mocks/invalid/sample-with-missing-step"
+import { IExperienceConfig, IFireboltSession } from "@iq-firebolt/entities"
+import { MockExperience, sessionFactory } from "@iq-firebolt/mocks"
 
 const localStorage = global.localStorage
 
@@ -57,9 +48,15 @@ describe("should identify JSON Errors", () => {
   })
 
   test("should return an error when JSON config don't have default flow", async () => {
+    const sampleWithoutDefaultFlow = MockExperience.generateFrom({
+      stepConfig: "default-sample",
+      flowConfig: "missing-default",
+      decisionConfig: { useDecision: false },
+    }).rawExperience
+
     const engine = new Engine({
       experienceId: "asd",
-      experienceJSONConfig: { ...sampleWithoutDefaultFlow },
+      experienceJSONConfig: sampleWithoutDefaultFlow,
       resolvers: {
         getSession: async () => ({} as IFireboltSession),
         setSession: async () => {},
@@ -72,6 +69,12 @@ describe("should identify JSON Errors", () => {
   })
 
   test("should return an error when flow does not have steps", async () => {
+    const experienceWithoutSteps = MockExperience.generateFrom({
+      stepConfig: "default-sample",
+      flowConfig: "missing-step-list",
+      decisionConfig: { useDecision: false },
+    }).rawExperience
+
     const engine = new Engine({
       experienceId: "asd",
       experienceJSONConfig: experienceWithoutSteps,
@@ -82,13 +85,19 @@ describe("should identify JSON Errors", () => {
     })
 
     const receivedStep = await engine.start()
-    expect(receivedStep?.error?.id).toBe("stepListNotProvided")
+    expect(receivedStep?.error?.id).toBe("flowWithoutSteps")
   })
 
   test("should return an error when JSON config does not have steps", async () => {
+    const defaultFlowWithoutSteps = MockExperience.generateFrom({
+      stepConfig: "without-steps",
+      flowConfig: "default-sample",
+      decisionConfig: { useDecision: false },
+    }).rawExperience
+
     const engine = new Engine({
       experienceId: "asd",
-      experienceJSONConfig: { ...defaultFlowWithoutSteps },
+      experienceJSONConfig: defaultFlowWithoutSteps,
       resolvers: {
         getSession: async () => ({} as IFireboltSession),
         setSession: async () => {},
@@ -96,9 +105,16 @@ describe("should identify JSON Errors", () => {
     })
 
     const receivedStep = await engine.start()
-    expect(receivedStep?.error?.id).toBe("flowWithoutSteps")
+    expect(receivedStep?.error?.id).toBe("stepListNotProvided")
   })
+
   test("should return an error when flow step does not exists on JSON config", async () => {
+    const sampleWithMissingStep = MockExperience.generateFrom({
+      decisionConfig: { useDecision: false },
+      flowConfig: "missing-step",
+      stepConfig: "default-sample",
+    }).rawExperience
+
     const engine = new Engine({
       experienceId: "sample",
       experienceJSONConfig: sampleWithMissingStep,
@@ -108,17 +124,30 @@ describe("should identify JSON Errors", () => {
       },
     })
 
-    const start = await engine.start()
+    await engine.start()
     const proceeding = await engine.proceed({
       fields: { full_name: "mock name", email: "test@test.com" },
     })
 
     expect(proceeding.error?.id).toBe("stepNotFound")
   })
+
   test("should return an error when flow does not exists on JSON Config", async () => {
+    const sampleWithDecisionConfig = MockExperience.generateFrom({
+      flowConfig: "default-sample",
+      stepConfig: "default-sample",
+      decisionConfig: {
+        useDecision: true,
+        options: {
+          saveProcessedData: "all",
+          strategy: "local",
+          triggers: "all",
+        },
+      },
+    }).rawExperience
     const engine = new Engine({
       experienceId: "sample",
-      experienceJSONConfig: mockWithDecisionConfig({ strategy: "local" }),
+      experienceJSONConfig: sampleWithDecisionConfig,
       resolvers: {
         getSession: mockedGetSession,
         setSession: mockedSetSession,
@@ -148,7 +177,7 @@ describe("should identify resolver errors", () => {
   test("should return an error when getSession resolver is missing", async () => {
     const engine = new Engine({
       experienceId: "asd",
-      experienceJSONConfig: sampleExperienceMock,
+      experienceJSONConfig: new MockExperience().rawExperience,
       /** @ts-ignore */
       resolvers: {
         setSession: async () => {},
@@ -157,14 +186,18 @@ describe("should identify resolver errors", () => {
     const start = await engine.start()
     expect(start?.error?.id).toBe("resolverMissing")
   })
+
   test("should return an error when getSession resolves wrong data", async () => {
+    const twoStepsCompletedFlowDefault = sessionFactory(
+      "defaultTwoStepsCompleted"
+    )
     localStorage.setItem(
       twoStepsCompletedFlowDefault.sessionId,
       JSON.stringify(twoStepsCompletedFlowDefault)
     )
     const engine = new Engine({
       experienceId: twoStepsCompletedFlowDefault.sessionId,
-      experienceJSONConfig: sampleExperienceMock,
+      experienceJSONConfig: new MockExperience().rawExperience,
       resolvers: {
         getSession: async () => {
           /** @ts-ignore */
@@ -178,10 +211,11 @@ describe("should identify resolver errors", () => {
     const proceedingStep = await engine.proceed()
     expect(proceedingStep?.error?.id).toBe("resolverReturnIsInvalid")
   })
+
   test("should return an error when setSession resolver is missing", async () => {
     const engine = new Engine({
       experienceId: "asd",
-      experienceJSONConfig: sampleExperienceMock,
+      experienceJSONConfig: new MockExperience().rawExperience,
       /** @ts-ignore */
       resolvers: {
         getSession: async () => ({} as IFireboltSession),
@@ -213,14 +247,23 @@ describe("should identify generic errors", () => {
     const receivedStep = await engine.start()
     expect(receivedStep?.error?.id).toBe("externalError")
   })
+
   test("should identify error ocurred inside decision callback", async () => {
+    const sampleWithDecisionConfig = MockExperience.generateFrom({
+      flowConfig: "default-sample",
+      stepConfig: "default-sample",
+      decisionConfig: {
+        useDecision: true,
+        options: {
+          saveProcessedData: "all",
+          strategy: "local",
+          triggers: "all",
+        },
+      },
+    }).rawExperience
     const engine = new Engine({
       experienceId: "sample",
-      experienceJSONConfig: mockWithDecisionConfig({
-        strategy: "local",
-        triggers: "all",
-        saveProcessedData: "all",
-      }),
+      experienceJSONConfig: sampleWithDecisionConfig,
       resolvers: {
         getSession: mockedGetSession,
         setSession: async () => {},

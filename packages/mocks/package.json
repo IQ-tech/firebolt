@@ -1,35 +1,32 @@
 {
-  "name": "@iq-firebolt/validators",
+  "name": "@iq-firebolt/mocks",
   "version": "0.7.0",
   "description": "> TODO: description",
-  "author": "iq team",
+  "author": "iq-team",
   "homepage": "https://github.com/IQ-tech/firebolt#readme",
   "license": "Apache-2.0",
   "publishConfig": {
     "access": "public"
   },
+  "scripts": {
+    "test": "jest",
+    "test:coverage": "jest --collect-coverage"
+  },
+  "sideEffects": false,
   "main": "./dist/index.js",
-  "types": "./dist/index.d.ts",
+  "types": "./types/index.d.ts",
+  "module": "./es/index.js",
   "files": [
-    "/dist"
+    "./"
   ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/IQ-tech/firebolt.git"
   },
-  "scripts": {
-    "clear-dist": "rimraf dist",
-    "test": "jest",
-    "test:coverage": "jest --collect-coverage",
-    "test:watch": "NODE_ENV=test jest --watchAll",
-    "build": "yarn clear-dist && tsc",
-    "clear-jest": "jest --clearCache"
-  },
   "bugs": {
     "url": "https://github.com/IQ-tech/firebolt/issues"
   },
   "dependencies": {
-    "cpf-cnpj-validator": "^1.0.3",
-    "simple-evaluate": "^1.4.3"
+    "@iq-firebolt/entities": "^0.7.0"
   }
 }

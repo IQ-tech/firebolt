@@ -43,7 +43,6 @@
     "simple-evaluate": "1.4.5"
   },
   "devDependencies": {
-    "faker": "6.6.6",
     "rollup": "^2.76.0",
     "rollup-plugin-dts": "^4.2.2",
     "rollup-plugin-esbuild": "^4.9.1",

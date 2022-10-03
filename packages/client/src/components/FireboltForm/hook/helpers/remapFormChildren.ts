@@ -9,46 +9,48 @@ export default function remapFormChildren({
   fieldsChildren = [],
   insertsChildren = [],
 }) {
-  
   const insertsChildrenArray = React.Children.toArray(insertsChildren)
 
-  const slugInsertsMap = insertsChildrenArray.reduce((acc: React.ReactElement, insertComponent: React.ReactElement) => {
-    const componentProps = insertComponent?.props
-    const insertBefore = componentProps?.before
-    const insertAfter = componentProps?.after
-    const usedInsert = insertBefore || insertAfter
-    const insertRelativeToFirstField = usedInsert === "first"
-    const insertRelativeToLastField = usedInsert === "last"
-    const getUsedInsertReference = () => {
-      if (insertRelativeToFirstField || insertRelativeToLastField) {
-        return usedInsert
-      } else return usedInsert?.fieldSlug
-    }
-    const usedInsertReference = getUsedInsertReference()
+  const slugInsertsMap = insertsChildrenArray.reduce(
+    (acc: React.ReactElement, insertComponent: React.ReactElement) => {
+      const componentProps = insertComponent?.props
+      const insertBefore = componentProps?.before
+      const insertAfter = componentProps?.after
+      const usedInsert = insertBefore || insertAfter
+      const insertRelativeToFirstField = usedInsert === "first"
+      const insertRelativeToLastField = usedInsert === "last"
+      const getUsedInsertReference = () => {
+        if (insertRelativeToFirstField || insertRelativeToLastField) {
+          return usedInsert
+        } else return usedInsert?.fieldSlug
+      }
+      const usedInsertReference = getUsedInsertReference()
 
-    const componentRefs = {
-      after: !!insertAfter ? [insertComponent] : [],
-      before: !!insertBefore ? [insertComponent] : [],
-    }
+      const componentRefs = {
+        after: !!insertAfter ? [insertComponent] : [],
+        before: !!insertBefore ? [insertComponent] : [],
+      }
 
-    return {
-      ...acc,
-      [usedInsertReference]: {
-        before: acc?.[usedInsertReference]?.before
-          ? [...acc?.[usedInsertReference]?.before, ...componentRefs?.before]
-          : componentRefs?.before,
-        after: acc?.[usedInsertReference]?.after
-          ? [...acc?.[usedInsertReference]?.after, ...componentRefs?.after]
-          : componentRefs?.after,
-      },
-    }
-  }, {})
+      return {
+        ...acc,
+        [usedInsertReference]: {
+          before: acc?.[usedInsertReference]?.before
+            ? [...acc?.[usedInsertReference]?.before, ...componentRefs?.before]
+            : componentRefs?.before,
+          after: acc?.[usedInsertReference]?.after
+            ? [...acc?.[usedInsertReference]?.after, ...componentRefs?.after]
+            : componentRefs?.after,
+        },
+      }
+    },
+    {} as any
+  )
 
   const remapedChildren = fieldsChildren.reduce((acc, field, index) => {
     const isFirstItem = index === 0
     const isLastItem = index === fieldsChildren?.length - 1
     const isDefinedSpot = isFirstItem || isLastItem
-    const fieldSlug = field?.props?.["data-fieldslug"];
+    const fieldSlug = field?.props?.["data-fieldslug"]
 
     const beforeInserts = slugInsertsMap?.[fieldSlug]?.before || []
     const afterInserts = slugInsertsMap?.[fieldSlug]?.after || []

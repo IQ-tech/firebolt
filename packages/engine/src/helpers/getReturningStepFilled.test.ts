@@ -1,6 +1,6 @@
+import { IFireboltSession } from "@iq-firebolt/entities"
+import { MockExperience } from "@iq-firebolt/mocks"
 import getReturningStepFilled from "./getReturningStepFilled"
-import sampleExperience from "../mocks/sample-experience"
-import { IFireboltSession } from "../types"
 
 describe("test autofill work", () => {
   test("Function should return a new step filled", () => {
@@ -22,6 +22,7 @@ describe("test autofill work", () => {
       },
     }
 
+    const sampleExperience = new MockExperience().rawExperience
     const mockStep = sampleExperience.steps[0]
     const newStep = getReturningStepFilled(mockStep, mockSession)
 
@@ -30,26 +31,15 @@ describe("test autofill work", () => {
     expect(newStep.slug).toBe("personal_data")
   })
   test("Should return the same step, if no session is provided", () => {
+    const sampleExperience = new MockExperience().rawExperience
     const mockStep = sampleExperience.steps[0]
     const newStep = getReturningStepFilled(mockStep)
 
     expect(mockStep).toBe(newStep)
   })
+
   test("Should return the same step, if empty session is provided", () => {
-    const mockSession: IFireboltSession = {
-      sessionId: "sdsfs",
-      experienceState: {
-        lastCompletedStepSlug: "",
-        visualizingStepSlug: "",
-        currentFlow: "default",
-        completedExperience: false,
-      },
-      steps: {
-        "personal_data": {
-          "fields": {},
-        },
-      },
-    }
+    const sampleExperience = new MockExperience().rawExperience
     const mockStep = sampleExperience.steps[0]
     const newStep = getReturningStepFilled(mockStep)
     expect(mockStep).toBe(newStep)

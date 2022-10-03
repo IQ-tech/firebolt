@@ -1,11 +1,11 @@
-import faker from "faker"
+import { faker } from "@faker-js/faker"
 import Engine from "../index"
 
 import { IExperienceConfig } from "@iq-firebolt/entities"
 import { IExperienceProceedPayload } from "../types"
 
-import JSONSample from "../mocks/sample-experience"
 import useMockNavigation from "../mocks/mock-navigation"
+import { MockExperience } from "@iq-firebolt/mocks"
 
 const {
   localStorage,
@@ -15,7 +15,7 @@ const {
 } = useMockNavigation()
 
 // //#region MOCKS
-
+const JSONSample = new MockExperience().rawExperience
 const getStepper = ({
   experienceJSONConfig = JSONSample,
   action,

@@ -1,7 +1,7 @@
 import JSONConfig from "../classes/JSONConfig"
 import EngineError from "../classes/EngineError"
-import { IExperienceConfig } from "@iq-firebolt/entities"
-import { IEngineResolvers, IFireboltSession } from "../types"
+import { IExperienceConfig, IFireboltSession } from "@iq-firebolt/entities"
+import { IEngineResolvers } from "../types"
 import validateJSON from "../helpers/validateJSON"
 
 class JSONHandler {

@@ -1,18 +1,18 @@
-import faker from "faker"
+import { faker } from "@faker-js/faker"
 import Engine from "../index"
 import {
   IExperienceConfig,
   IStepFormPayload,
   IDecisionHandlerConfig,
+  IFireboltSession,
 } from "@iq-firebolt/entities"
 import {
   IEngineResolvers,
   IExperienceDecisionCallbackFunction,
   IExperienceDecisionOptions,
-  IFireboltSession,
 } from "../types"
-import JSONSample from "../mocks/sample-experience"
-import mockWithDecisionConfig from "../mocks/sample-with-decision-config"
+
+import { MockExperience } from "@iq-firebolt/mocks"
 
 export default function useMockNavigation() {
   const localStorage = global.localStorage
@@ -57,14 +57,24 @@ export default function useMockNavigation() {
       triggers: "all",
     }
   ) => {
-    const sample = withDecision
-      ? mockWithDecisionConfig({
+    // replace here
+    const mockDecisionConfig = MockExperience.generateFrom({
+      flowConfig: "default-sample",
+      stepConfig: "default-sample",
+      decisionConfig: {
+        useDecision: true,
+        options: {
           strategy,
           saveProcessedData,
           triggers,
           remoteConfig,
-        })
-      : JSONSample
+        },
+      },
+    })
+
+    const sample = withDecision
+      ? mockDecisionConfig.rawExperience
+      : new MockExperience().rawExperience
 
     return new Engine({
       experienceId: "sample",

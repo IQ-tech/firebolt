@@ -1,5 +1,4 @@
-import { IStepConfig } from "@iq-firebolt/entities"
-import { IFireboltSession } from "../types"
+import { IStepConfig, IFireboltSession } from "@iq-firebolt/entities"
 
 export default function getReturningStepFilled(
   stepDefinition: IStepConfig,
