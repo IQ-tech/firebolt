@@ -6,15 +6,6 @@ import {
 } from "../types"
 import { IExperienceConfig, IFireboltSession } from "@iq-firebolt/entities"
 import { MockExperience, sessionFactory } from "@iq-firebolt/mocks"
-// import { twoStepsCompletedFlowDefault } from "../mocks/sample-experience-session"
-// import sampleExperienceMock from "../mocks/sample-experience"
-// import mockWithDecisionConfig from "../mocks/sample-with-decision-config.js"
-// import {
-//   sampleWithoutDefaultFlow,
-//   defaultFlowWithoutSteps,
-//   experienceWithoutSteps,
-// } from "../mocks/invalid/sample-without-default-flow"
-// import { sampleWithMissingStep } from "../mocks/invalid/sample-with-missing-step"
 
 const localStorage = global.localStorage
 
@@ -62,8 +53,6 @@ describe("should identify JSON Errors", () => {
       flowConfig: "missing-default",
       decisionConfig: { useDecision: false },
     }).rawExperience
-
-    console.log("sampleWithoutDefaultFlow: ", sampleWithoutDefaultFlow)
 
     const engine = new Engine({
       experienceId: "asd",

@@ -58,17 +58,6 @@ describe("Engine.proceed handling", () => {
 
     const firstStepField = getFirstStepWrongFields()
 
-    const invalidPayload = payloadFactory({
-      validValues: false,
-      stepSlug: "personalData",
-    })
-    const validPayload = payloadFactory({
-      validValues: true,
-      stepSlug: "personalData",
-    })
-    console.log("invalidPayload: ", invalidPayload)
-    console.log("validPayload: ", validPayload)
-
     const sessionId = "asdf-1234-asdf-1234"
     const payload: IExperienceProceedPayload = {
       sessionId,
