@@ -1,9 +1,12 @@
 import axios from "axios"
 import { IDecisionHandlerConfig, IFireboltSession } from "@iq-firebolt/entities"
 import { IExperienceProceedPayload, IExperienceDecision } from "../types"
-import sampleWithDecisionHandler from "../mocks/sample-experience-with-remote-decision"
-import { oneStepCompletedFlowDefault } from "../mocks/sample-experience-session"
 import useMockNavigation from "../mocks/mock-navigation"
+import {
+  MockExperience,
+  payloadFactory,
+  sessionFactory,
+} from "@iq-firebolt/mocks"
 
 const {
   getFirstStepCorrectFields,
@@ -133,25 +136,34 @@ describe("Engine.decision handler", () => {
     ;(axios.post as jest.Mock).mockImplementation(() =>
       Promise.resolve("cenoura")
     )
-    const remoteDecision = sampleWithDecisionHandler({})
-      .decisionHandlerConfig as IDecisionHandlerConfig
+    const remoteDecision = MockExperience.generateFrom({
+      flowConfig: "default-sample",
+      stepConfig: "default-sample",
+      decisionConfig: {
+        useDecision: true,
+        options: {
+          strategy: "remote",
+          saveProcessedData: "all",
+          triggers: "all",
+        },
+      },
+    }).rawDecisionHandler
 
-    mockedSetSession(oneStepCompletedFlowDefault)
+    const session = sessionFactory("defaultOneStepCompleted")
+
+    mockedSetSession(session)
 
     const payload: IExperienceProceedPayload = {
-      sessionId: oneStepCompletedFlowDefault.sessionId,
+      sessionId: session.sessionId,
       fields: { brazil_id_number: "1234567890" },
     }
 
-    const fireboltStepper = getStepper(true, {
-      strategy: "remote",
-      saveProcessedData: "all",
-      triggers: "all",
-    })
+    const fireboltStepper = getStepper(true, remoteDecision)
+
     await fireboltStepper.proceed(payload)
 
     expect(axios.post).toHaveBeenCalledWith(
-      remoteDecision.remoteConfig?.url,
+      remoteDecision!.remoteConfig?.url,
       {
         "receivingStepData": {
           "fields": { "brazil_id_number": "1234567890" },

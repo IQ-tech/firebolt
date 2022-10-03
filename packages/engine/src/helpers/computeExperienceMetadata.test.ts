@@ -1,22 +1,34 @@
 import { IFireboltSession, IExperienceMetadata } from "@iq-firebolt/entities"
-import sampleExperienceSchemaMock from "../mocks/sample-experience"
-import {
-  oneStepCompletedFlowDefault,
-  twoStepsCompletedFlowDefault,
-  threeStepsCompletedFlowDefault,
-  defaultFlowMetadataStepsList,
-  mediumFlowMetadataStepsList,
-  oneStepCompletedFlowMedium,
-  twoStepsCompletedFlowMedium,
-} from "../mocks/sample-experience-session"
 import computeExperienceMetadata from "./computeExperienceMetadata"
 import JSONConfig from "../classes/JSONConfig"
 
+import { MockExperience, sessionFactory } from "@iq-firebolt/mocks"
 interface ISessionTestCase {
   label: string
   item: IFireboltSession
   expectedResult: IExperienceMetadata
 }
+const sampleExperienceSchemaMock = new MockExperience().rawExperience
+const oneStepCompletedFlowDefault = sessionFactory("defaultOneStepCompleted")
+const twoStepsCompletedFlowDefault = sessionFactory("defaultTwoStepsCompleted")
+const threeStepsCompletedFlowDefault = sessionFactory(
+  "defaultThreeStepsCompleted"
+)
+const oneStepCompletedFlowMedium = sessionFactory("mediumOneStepCompleted")
+const twoStepsCompletedFlowMedium = sessionFactory("mediumTwoStepCompleted")
+
+const defaultFlowMetadataStepsList = [
+  { position: 1, slug: "personal_data", friendlyName: "Vamos começar" },
+  { position: 2, slug: "documents", friendlyName: "Documentos" },
+  { position: 3, slug: "address", friendlyName: "Endereço" },
+  { position: 4, slug: "bills", friendlyName: "Adicionar Contas" },
+]
+
+const mediumFlowMetadataStepsList = [
+  { position: 1, slug: "personal_data", friendlyName: "Vamos começar" },
+  { position: 2, slug: "documents", friendlyName: "Documentos" },
+  { position: 3, slug: "token", friendlyName: "Token" },
+]
 
 const sessionTestCasesDefaultFlow: ISessionTestCase[] = [
   {

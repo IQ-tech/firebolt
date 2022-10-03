@@ -1,10 +1,13 @@
 import axios from "axios"
 import callRemote from "./callRemoteDecision"
 import useMockNavigation from "../mocks/mock-navigation"
-import { oneStepCompletedFlowDefault } from "../mocks/sample-experience-session"
 import { IExperienceDecisionPayload, IExperienceProceedPayload } from "../types"
 import { IRemoteDecisionConfig, IFireboltSession } from "@iq-firebolt/entities"
-import sampleWithRemoteConfig from "../mocks/sample-experience-with-remote-decision"
+import {
+  MockExperience,
+  payloadFactory,
+  sessionFactory,
+} from "@iq-firebolt/mocks"
 
 const { mockedSetSession, mockedGetSession } = useMockNavigation()
 
@@ -12,9 +15,22 @@ jest.mock("axios")
 
 describe("callRemote", () => {
   test("axios post request", async () => {
-    const remoteConfig = sampleWithRemoteConfig()!.decisionHandlerConfig!
-      .remoteConfig as IRemoteDecisionConfig
+    const remoteDecision = MockExperience.generateFrom({
+      flowConfig: "default-sample",
+      stepConfig: "default-sample",
+      decisionConfig: {
+        useDecision: true,
+        options: {
+          strategy: "remote",
+          saveProcessedData: "all",
+          triggers: "all",
+        },
+      },
+    }).rawDecisionHandler
 
+    const oneStepCompletedFlowDefault = sessionFactory(
+      "defaultOneStepCompleted"
+    )
     mockedSetSession(oneStepCompletedFlowDefault)
     const currentSession = (await mockedGetSession(
       oneStepCompletedFlowDefault.sessionId
@@ -34,7 +50,7 @@ describe("callRemote", () => {
       data: "Result request callWebhook",
     })
     const requestCallWebhook = await callRemote(
-      String(remoteConfig.url),
+      String(remoteDecision!.remoteConfig?.url),
       {},
       data
     )
