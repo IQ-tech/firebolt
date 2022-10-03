@@ -34,7 +34,7 @@ const decisionFactory = (
 
   const decisionHandlerConfig = strategy === "local" ? local : remote
 
-  return { decisionHandlerConfig }
+  return decisionHandlerConfig
 }
 
 export default decisionFactory

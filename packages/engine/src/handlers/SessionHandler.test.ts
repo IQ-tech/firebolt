@@ -7,9 +7,8 @@ import {
   IStepSession,
 } from "@iq-firebolt/entities"
 import { IEngineResolvers } from "../types"
-import JSONSample from "../mocks/sample-experience"
 import JSONConfig from "../classes/JSONConfig"
-import { oneStepCompletedFlowDefault } from "../mocks/sample-experience-session"
+import { MockExperience, sessionFactory } from "@iq-firebolt/mocks"
 jest.mock("uuid")
 
 const localStorage = global.localStorage
@@ -26,8 +25,8 @@ const mockedSetSession = jest.fn(async (stepData: IFireboltSession) => {
 })
 
 describe("SessionHandler. Class to handle with experience state", () => {
-  const sample = JSONSample
-  const mockedSessionId = oneStepCompletedFlowDefault.sessionId
+  const sample = new MockExperience().rawExperience
+  const mockedSessionId = sessionFactory("defaultOneStepCompleted").sessionId
   const resolvers: IEngineResolvers = {
     getExperienceJSON: mockedGetFormJSONSchema,
     getSession: mockedGetSession,
@@ -36,7 +35,7 @@ describe("SessionHandler. Class to handle with experience state", () => {
 
   beforeEach(() => {
     localStorage.clear()
-    mockedSetSession(oneStepCompletedFlowDefault)
+    mockedSetSession(sessionFactory("defaultOneStepCompleted"))
   })
 
   test("SessionHandler.createSession and SessionHandler.loadSessionFromStorage", async () => {

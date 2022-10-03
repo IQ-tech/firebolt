@@ -1,4 +1,7 @@
-import { IExperienceConfig } from "@iq-firebolt/entities"
+import {
+  IExperienceConfig,
+  IDecisionHandlerConfig,
+} from "@iq-firebolt/entities"
 import Experience from "@iq-firebolt/entities/classes/Experience"
 import { IMockExperienceOption } from "../types"
 
@@ -20,13 +23,15 @@ class MockExperience {
     const steps = stepFactory(stepConfig)
 
     const { useDecision, options: decisionOptions } = decisionConfig
-    const decision = useDecision ? decisionFactory(decisionOptions) : {}
+    const decision: IDecisionHandlerConfig = useDecision
+      ? decisionFactory(decisionOptions)
+      : ({} as IDecisionHandlerConfig)
 
-    const mockedExperience = {
+    const mockedExperience: IExperienceConfig = {
       ...defaultExperience,
-      ...flows,
-      ...steps,
-      ...decision,
+      flows: flows,
+      steps: steps,
+      decisionHandlerConfig: decision,
     }
 
     return new MockExperience(mockedExperience)
