@@ -33,7 +33,7 @@ function useFireboltProvider({
     formFlowHasBeenFinished,
     setFormFlowHasBeenFinished,
     beforeProceedPayload,
-    setBeforeProceedPayload
+    setBeforeProceedPayload,
   } = useStates()
 
   const {
@@ -51,7 +51,7 @@ function useFireboltProvider({
     setStagedStep,
     lastVisitedStep,
     setLastVisitedStep,
-    clearRemoteFieldError
+    clearRemoteFieldError,
   } = useData()
 
   useBrowserNavigation({
@@ -193,6 +193,22 @@ function useFireboltProvider({
       setIsFormLoading(false)
 
       return { errors: invalidFields }
+    } else {
+      const unexpectedError = [
+        {
+          "slug": "unexpected_error",
+          "validationResults": [
+            {
+              "isValid": false,
+              "message": "Erro inesperado, por favor tente novamente",
+            },
+          ],
+        },
+      ]
+      setRemoteErrors(unexpectedError)
+      setIsFormLoading(false)
+
+      return { errors: unexpectedError }
     }
   }
 
@@ -224,7 +240,7 @@ function useFireboltProvider({
     clearSession,
     clearRemoteFieldError,
     beforeProceedPayload,
-    setBeforeProceedPayload
+    setBeforeProceedPayload,
   }
 }
 
