@@ -3,6 +3,27 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.9.0](https://github.com/IQ-tech/firebolt/compare/v0.8.2...v0.9.0) (2022-10-19)
+
+
+### Bug Fixes
+
+* **validators:** :bug: fix CI ([1a6db61](https://github.com/IQ-tech/firebolt/commit/1a6db61093a68728532512f7070b05e6a1b4c342))
+* **validators:** :bug: fix do fix kkkk ([99406c3](https://github.com/IQ-tech/firebolt/commit/99406c3b08a2eb56b3f0803127c56c25d839bb62))
+* **validators:** :bug: fixed validators label ([dd18c66](https://github.com/IQ-tech/firebolt/commit/dd18c66fec11204c48c9310cb9f17a64d38d1d6a))
+* **validators:** :sparkles: added backslash filter to name validator ([c1a32c3](https://github.com/IQ-tech/firebolt/commit/c1a32c3a3842dad985b68403be12a07fdeab9ba5))
+* **validators:** 🩹 add accents validator on email ([701adba](https://github.com/IQ-tech/firebolt/commit/701adba3b38754c1bd7eb5b91b11db17b5f578f2))
+
+
+### Features
+
+* **validators:** :sparkles: adding a parameter to ignore spaces to the nonRepeatedChars validator ([ed31f80](https://github.com/IQ-tech/firebolt/commit/ed31f803fdfa22f21ff4fa2900dff762de84d286))
+* **validators:** :sparkles: email suggestion implementation ([5e2d372](https://github.com/IQ-tech/firebolt/commit/5e2d372e6c9b64dc68f735b817849b2cede27d39))
+
+
+
+
+
 ## [0.8.2](https://github.com/IQ-tech/firebolt/compare/v0.8.1...v0.8.2) (2022-07-04)
 
 
