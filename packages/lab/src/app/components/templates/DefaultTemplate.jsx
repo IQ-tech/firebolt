@@ -8,27 +8,27 @@ const mockFields = [
     "slug": "choosen_card",
     "ui:widget": "hidden",
     "ui:props": {},
-    "validators": [{ "type": "required" }]
+    "validators": [{ "type": "required" }],
   },
   {
     "slug": "full_name",
     "ui:widget": "Text",
     "ui:props": {
       "label": "Nome completo",
-      "placeholder": "Nome completo"
+      "placeholder": "Nome completo",
     },
     "validators": [{ "type": "required" }, { "type": "name" }],
-    "meta": {}
+    "meta": {},
   },
   {
     "slug": "email",
     "ui:widget": "Email",
     "ui:props": {
       "label": "Email",
-      "placeholder": "contato@email.com"
+      "placeholder": "contato@email.com",
     },
     "validators": [{ "type": "required" }, { "type": "email" }],
-    "meta": {}
+    "meta": {},
   },
   {
     "slug": "cpf",
@@ -36,36 +36,36 @@ const mockFields = [
     "ui:props-preset": "br-cpf",
     "ui:props": {},
     "ui:styles": {
-      "size": "half"
+      "size": "half",
     },
     "validators": [{ "type": "required" }, { "type": "cpf" }],
-    "meta": {}
+    "meta": {},
   },
   {
     "slug": "main_income",
     "ui:widget": "Text",
     "ui:props-preset": "br-currency",
     "ui:props": {
-      "label": "Renda mensal"
+      "label": "Renda mensal",
     },
     "ui:styles": {
-      "size": "half"
+      "size": "half",
     },
     "validators": [{ "type": "required" }],
-    "meta": {}
+    "meta": {},
   },
   {
     "slug": "main_phone",
     "ui:widget": "Text",
     "ui:props-preset": "br-phone",
     "ui:props": {
-      "label": "Celular com DDD"
+      "label": "Celular com DDD",
     },
     "ui:styles": {
-      "size": "half"
+      "size": "half",
     },
     "validators": [{ "type": "required" }, { "type": "phone" }],
-    "meta": {}
+    "meta": {},
   },
   {
     "slug": "bad_credit",
@@ -75,20 +75,19 @@ const mockFields = [
       "options": [
         {
           "value": "true",
-          "label": "Sim"
+          "label": "Sim",
         },
         {
           "value": "false",
-          "label": "Não"
-        }
-      ]
+          "label": "Não",
+        },
+      ],
     },
     "ui:styles": {
-      "size": "half"
+      "size": "half",
     },
     "validators": [{ "type": "required" }],
-    
-  }
+  },
 ]
 
 const DefaultTemplate = ({ fireboltStep }) => {
@@ -101,7 +100,9 @@ const DefaultTemplate = ({ fireboltStep }) => {
           onFocusField={(field) => {
             // console.log(field)
           }}
-          onChange={(test) => {console.log(test)}}
+          onChange={(test) => {
+            console.log(test)
+          }}
           onSubmit={(payload) => fireboltStep.goNextStep(payload)}
           onGoBack={fireboltStep.goPreviousStep}
           /*           customActionsChild={({ formData }) => {
@@ -111,10 +112,7 @@ const DefaultTemplate = ({ fireboltStep }) => {
               <button>next bloqueado</button>
             )
           }} */
-          orderFields={['cpf', 'full_name', 'email', 'main_income', 'main_phone', 'bad_credit']}
-        >
-        </StepForm>
-        
+        ></StepForm>
       </div>
     </div>
   )

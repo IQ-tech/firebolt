@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef } from "react"
-// import { createFireboltForm, createPropsPreset } from "@iq-firebolt/client-core"
+// import { createFireboltForm, createPropsPreset } from "@iq-firebolt/client-core/lib"
 import { createFireboltForm } from "@iq-firebolt/client-core/lib"
 import * as S from "./styles.js"
 import transmorphersPropsPresets from "../../constants/transmorphers-props-presets"

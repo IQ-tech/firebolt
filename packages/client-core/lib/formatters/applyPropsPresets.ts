@@ -3,7 +3,7 @@ import {
   IFormResponseData,
   IPropsPresetCollection,
   IStepConfigField,
-} from "lib/types"
+} from "../types"
 import UIPropsPresets from "../constants/ui-props-presets"
 
 interface ICollectionsMap {
