@@ -5,6 +5,7 @@ import {
   FormPayload,
   ValidationContext,
   InvalidField,
+  ValidateFBTStepResult
 } from '../../types';
 
 /** Firebolt fields defined on json data */
@@ -12,11 +13,6 @@ interface ValidateFBTStepArgs {
   stepFields: FieldConfig[];
   formPayload: FormPayload;
   context?: ValidationContext;
-}
-
-export interface ValidateFBTStepResult {
-  isValid: boolean;
-  invalidFields: InvalidField[];
 }
 
 export default function validateFBTStep({
