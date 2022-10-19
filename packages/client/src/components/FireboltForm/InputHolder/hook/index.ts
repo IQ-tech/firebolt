@@ -22,11 +22,16 @@ export interface IUseInputHolder {
     message: string,
     manualSetError?: boolean
   ) => void
-  onFocusField: (field: IStepConfigField) => void
-  onBlurField?: (field: IStepConfigField, value: string) => void
+  onFocusField: (field: IStepConfigField, formPayload?: Object) => void
+  onBlurField?: (
+    field: IStepConfigField,
+    value: string,
+    formPayload?: Object
+  ) => void
   onChangeField?: (
     field: IStepConfigField,
-    values: { value: any; previousValue: any }
+    values: { value: any; previousValue: any },
+    formPayload?: Object
   ) => void
   classes: any
   fieldValidationErrors: IFieldsObject
@@ -130,7 +135,7 @@ export default function useInputHolder({
     }
     if (!hasFormChanged) setHasFormChanged(true)
     if (onChangeField)
-      onChangeField(fieldConfig, { value, previousValue: currentValue })
+      onChangeField(fieldConfig, { value, previousValue: currentValue }, formPayload)
   }
 
   function onBlurFieldHandler(value: string) {
@@ -142,20 +147,26 @@ export default function useInputHolder({
       formPayload,
     })
     const isValueValid = fieldValidation.isValid
+    const checkSpaces = /( )+/g
 
     if (isValueValid) {
       clearFieldWarning(fieldSlug)
     } else {
-      const errorMessage = fieldValidation?.invalidValidations?.[0]?.message || ""
+      const errorMessage =
+        fieldValidation?.invalidValidations?.[0]?.message || ""
       setFieldWarning(fieldSlug, errorMessage)
     }
 
-    if (onBlurField) onBlurField(fieldConfig, value)
+    if (checkSpaces.test(value)) {
+      modifyPayloadKeys({ [fieldSlug]: value.replace(checkSpaces, " ").trim() })
+    }
+
+    if (onBlurField) onBlurField(fieldConfig, value, formPayload)
   }
 
   function onFocusFieldHandler() {
     if (!!onFocusField) {
-      onFocusField(fieldConfig)
+      onFocusField(fieldConfig, formPayload)
     }
   }
 

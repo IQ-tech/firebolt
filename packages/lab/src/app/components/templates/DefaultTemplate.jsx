@@ -1,7 +1,7 @@
 import { StepForm, FireboltForm } from "@iq-firebolt/client/src"
-import Theme from "@iq-firebolt/blueberry-theme"
+/* import Theme from "@iq-firebolt/blueberry-theme" */
 import { CheckboxGroup } from "iq-blueberry"
-/* import Theme from "@iq-firebolt/material-theme" */
+import Theme from "@iq-firebolt/material-theme"
 
 const mockFields = [
   {
@@ -16,6 +16,7 @@ const mockFields = [
     "ui:props": {
       "label": "Nome completo",
       "placeholder": "Nome completo",
+      "mask": ["/\\d/", "-", "/\\d/"],
     },
     "validators": [{ "type": "required" }, { "type": "name" }],
     "meta": {},
@@ -97,8 +98,18 @@ const DefaultTemplate = ({ fireboltStep }) => {
         <p>{fireboltStep?.friendlyName}</p>
         <StepForm
           theme={Theme}
-          onFocusField={(field) => {
-            // console.log(field)
+          schema={mockFields}
+          onFocusField={(fieldConfig, formPayload) => {
+            console.log("focus")
+            console.log({ fieldConfig, formPayload })
+          }}
+          onChangeField={(fieldConfig, value, formPayload) => {
+            console.log("change")
+            console.log({ fieldConfig, value, formPayload })
+          }}
+          onBlurField={(fieldConfig, value, formPayload) => {
+            console.log("blur")
+            console.log({ fieldConfig, value, formPayload })
           }}
           onChange={(test) => {
             console.log(test)
