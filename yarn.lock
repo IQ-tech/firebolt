@@ -6819,17 +6819,17 @@ iq-blueberry@^0.0.18:
     react-text-mask "^5.4.3"
     staw "^0.3.0"
 
-iq-blueberry@^0.0.31:
-  version "0.0.31"
-  resolved "https://registry.yarnpkg.com/iq-blueberry/-/iq-blueberry-0.0.31.tgz#80bb6f13427852d082a4d7a9660978a650d4c266"
-  integrity sha512-6FQJK9U4qeJQs4UAgxAGt+Rw0lGs/ZfD0/kFMNo7kmBISknXe5l9OZMwQAJ/qtMc3FiRCbu0yM6kELwbnhGdXg==
+iq-blueberry@^0.0.39:
+  version "0.0.39"
+  resolved "https://registry.yarnpkg.com/iq-blueberry/-/iq-blueberry-0.0.39.tgz#ce5994f9dab65e63b361bf40426c51e62f960795"
+  integrity sha512-ZzmZ4S4VzP39hSMYWHNdTeShHDobHXso31fIJXnuHEXvtxoJPXjDlD4nIrm5UsGkBk7qG0ABfsLqmENDlekvdw==
   dependencies:
     fast-levenshtein "^3.0.0"
     jails-js "^4.2.1"
     rc-tooltip "^5.1.1"
     react "16.8.6"
     react-dom "16.8.6"
-    react-text-mask "^5.4.3"
+    react-text-mask "5.4.3"
 
 is-arrayish@^0.2.1:
   version "0.2.1"
@@ -9733,7 +9733,7 @@ react-router@5.2.1:
     tiny-invariant "^1.0.2"
     tiny-warning "^1.0.0"
 
-react-text-mask@^5.4.3:
+react-text-mask@5.4.3, react-text-mask@^5.4.3:
   version "5.4.3"
   resolved "https://registry.yarnpkg.com/react-text-mask/-/react-text-mask-5.4.3.tgz#991efb4299e30c2e6c2c46d13f617169463e0d2d"
   integrity sha1-mR77QpnjDC5sLEbRP2FxaUY+DS0=
