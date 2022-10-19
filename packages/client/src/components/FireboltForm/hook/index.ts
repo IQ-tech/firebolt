@@ -15,7 +15,8 @@ export default function useFireboltForm({
   classes,
   onFocusField,
   addons,
-  clearRemoteFieldError
+  clearRemoteFieldError,
+  orderFields,
 }: IUseFireboltForm) {
 
   const {
@@ -70,7 +71,8 @@ export default function useFireboltForm({
     setFieldWarning,
     clearFieldWarning,
     classes,
-    standalonePropsPresets
+    standalonePropsPresets,
+    orderFields,
   })
 
   const actionsChildData: IActionsChildData = {

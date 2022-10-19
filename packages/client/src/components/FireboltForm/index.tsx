@@ -22,7 +22,8 @@ const FireboltForm = ({
   onGoBack,
   onFocusField,
   addons,
-  clearRemoteFieldError
+  clearRemoteFieldError,
+  orderFields,
 }: IFireboltForm) => {
   const { handleSubmit, formChildren, actionsChildData, handleGoBack } =
     useFireboltForm({
@@ -37,13 +38,14 @@ const FireboltForm = ({
       classes,
       onFocusField,
       addons,
-      clearRemoteFieldError
+      clearRemoteFieldError,
+      orderFields,
     })
 
   const ActionsChild = customActionsChild
 
   return (
-    <form className={className} onSubmit={handleSubmit} autoComplete="off">
+    <form className={className} onSubmit={handleSubmit} autoComplete="off" data-fblt="firebolt-form">
       <div className={classes["firebolt-form-wrapper"]}>{formChildren}</div>
 
       {!!customActionsChild ? (

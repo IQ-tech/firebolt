@@ -1,5 +1,5 @@
-import { useEffect } from "react";
-import { useFirebolt } from "../../hooks/useFirebolt";
+import { useEffect } from "react"
+import { useFirebolt } from "../../hooks/useFirebolt"
 import { IWizardHook } from "../../types"
 
 export default function useWizard({
@@ -7,7 +7,8 @@ export default function useWizard({
   onConnectionError,
   onFinishForm,
   onBeforeChangeStep,
-}: IWizardHook) { 
+  onBeforeProceed,
+}: IWizardHook) {
   const {
     isFormLoading,
     currentStep,
@@ -18,52 +19,64 @@ export default function useWizard({
     commitStepChange,
 
     connectionError,
-  } = useFirebolt(); 
+    setBeforeProceedPayload,
+    beforeProceedPayload,
+  } = useFirebolt()
 
-  useEffect(onStepChangeHandler, [currentStep]);
+  useEffect(onStepChangeHandler, [currentStep])
 
   useEffect(() => {
-    if (!!stagedStep) onBeforeStepChangeHandler();
-  }, [stagedStep]);
+    if (!!stagedStep) onBeforeStepChangeHandler()
+  }, [stagedStep])
 
-  useEffect(onConnectionErrorHandler, [connectionError]);
-  useEffect(onFormFinishedCallback, [formFlowHasBeenFinished]);
+  useEffect(onConnectionErrorHandler, [connectionError])
+  useEffect(onFormFinishedCallback, [formFlowHasBeenFinished])
+  useEffect(onBeforeProceedHandler, [beforeProceedPayload])
 
   function onConnectionErrorHandler() {
     if (connectionError && !!onConnectionError) {
-      onConnectionError();
+      onConnectionError()
+    }
+  }
+
+  function onBeforeProceedHandler() {
+    if (!!beforeProceedPayload) {
+      if (!!onBeforeProceed) {
+        onBeforeProceed(currentStep, beforeProceedPayload)
+      }
+      setBeforeProceedPayload(null)
     }
   }
 
   function onBeforeStepChangeHandler() {
-    const proceedCallback = () => commitStepChange();
+    const proceedCallback = () => commitStepChange()
 
     if (!!onBeforeChangeStep) {
       onBeforeChangeStep(proceedCallback, {
         leavingStep: currentStep,
         enteringStep: stagedStep,
-      });
+      })
     } else {
-      proceedCallback();
+      proceedCallback()
     }
   }
 
   function onStepChangeHandler() {
-    const notIsFirstStepRendered = !!lastVisitedStep?.position;
+    const notIsFirstStepRendered = !!lastVisitedStep?.position
     if (notIsFirstStepRendered && !!onChangeStep) {
-      onChangeStep({ sentStep: lastVisitedStep, currentStep });
+      onChangeStep({ sentStep: lastVisitedStep, currentStep })
     }
   }
 
   function onFormFinishedCallback() {
     if (!!formFlowHasBeenFinished && !!onFinishForm) {
-      const payload = formEndPayload || {};
-      onFinishForm(payload);
+      const payload = formEndPayload || {}
+      onFinishForm(payload)
     }
   }
 
   return {
     isFormLoading,
     currentStepSlug: currentStep?.data?.slug,
-  };
+  }
 }

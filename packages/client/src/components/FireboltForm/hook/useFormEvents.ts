@@ -48,12 +48,17 @@ export default function useFieldsEvents({
     return (value: string) => {
       const fieldValidation = validateField(field, value)
       const isValueValid = fieldValidation.isValid
+      const checkSpaces = /( )+/g
 
       if (isValueValid) {
         clearFieldWarning(fieldSlug)
       } else {
         const errorMessage = fieldValidation?.invalidValidations[0]?.message
         setFieldWarning(fieldSlug, errorMessage)
+      }
+
+      if(checkSpaces.test(value)){
+        modifyPayloadKeys({ [fieldSlug]: value.replace(checkSpaces, ' ').trim() })
       }
     }
   }

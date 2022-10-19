@@ -32,6 +32,8 @@ function useFireboltProvider({
     setIsFormLoading,
     formFlowHasBeenFinished,
     setFormFlowHasBeenFinished,
+    beforeProceedPayload,
+    setBeforeProceedPayload,
   } = useStates()
 
   const {
@@ -49,7 +51,7 @@ function useFireboltProvider({
     setStagedStep,
     lastVisitedStep,
     setLastVisitedStep,
-    clearRemoteFieldError
+    clearRemoteFieldError,
   } = useData()
 
   useBrowserNavigation({
@@ -103,6 +105,7 @@ function useFireboltProvider({
     { extraRequestsMetaData = {} }: IRequestMetadata = {}
   ): Promise<void | Object> {
     setIsFormLoading(true)
+    setBeforeProceedPayload(stepFieldsPayload)
     const isLastStep = currentStep?.data?.slug === formflowMetadata?.lastStep
     return formEngine.current
       .nextStep(currentStep.data.slug, stepFieldsPayload, {
@@ -190,6 +193,22 @@ function useFireboltProvider({
       setIsFormLoading(false)
 
       return { errors: invalidFields }
+    } else {
+      const unexpectedError = [
+        {
+          "slug": "unexpected_error",
+          "validationResults": [
+            {
+              "isValid": false,
+              "message": "Erro inesperado, por favor tente novamente",
+            },
+          ],
+        },
+      ]
+      setRemoteErrors(unexpectedError)
+      setIsFormLoading(false)
+
+      return { errors: unexpectedError }
     }
   }
 
@@ -219,7 +238,9 @@ function useFireboltProvider({
     getRequestsMetadata,
     uploadFile,
     clearSession,
-    clearRemoteFieldError
+    clearRemoteFieldError,
+    beforeProceedPayload,
+    setBeforeProceedPayload,
   }
 }
 
