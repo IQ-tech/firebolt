@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { File as FbFile } from "@iq-firebolt/client-core";
+
 import useFirebolt from "../useFirebolt";
 
 export default function useFilesUpload({

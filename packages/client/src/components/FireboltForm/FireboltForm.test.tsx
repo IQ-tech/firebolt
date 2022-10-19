@@ -1,8 +1,9 @@
+import React from "react"
 import { render, fireEvent, screen } from "@testing-library/react"
 import "@testing-library/jest-dom"
 import axios from "axios"
 
-import { createFireboltForm } from "@iq-firebolt/client-core"
+import { createFireboltForm } from "@iq-firebolt/client-core/lib"
 import { clearAllFormSessions } from "@iq-firebolt/client-core/lib/helpers/session/clearFormSession"
 import startFormResponse from "@iq-firebolt/client-core/lib/__mocks__/startFormResponse"
 import materialTheme from "@iq-firebolt/material-theme"
@@ -34,7 +35,7 @@ jest.mock("./hook/useFormEvents", () => {
 //#endregion
 
 describe("firebolt form test", () => {
-  const fields = []
+  const fields: any[] = []
   const textField = {
     "slug": "full_name",
     "ui:widget": "Text",
@@ -183,7 +184,7 @@ describe("firebolt form test", () => {
     const button = container.querySelector(
       `#firebolt-form-field-${selectField.slug}`
     )
-    fireEvent.mouseDown(button)
+    fireEvent.mouseDown(button as any)
 
     expect(getByText("Test1")).toBeInTheDocument()
     expect(getByText("Test2")).toBeInTheDocument()
