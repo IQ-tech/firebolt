@@ -3,6 +3,19 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.9.0](https://github.com/IQ-tech/firebolt/compare/v0.8.2...v0.9.0) (2022-10-19)
+
+
+### Features
+
+* **client:** :sparkles: added new hook to wizard to run callback before request a new step ([15dfc69](https://github.com/IQ-tech/firebolt/commit/15dfc69f7a2e4ad682bbc6fe74b582d3a6adcd46))
+* **client:** added payload to new hook ([693fb12](https://github.com/IQ-tech/firebolt/commit/693fb123f279aa4dc5a2a77852dfbdaf7057b273))
+* **fieds:** order fields by prop array value ([e806cae](https://github.com/IQ-tech/firebolt/commit/e806caef1bd422823777044983df0205a50bd0ed))
+
+
+
+
+
 ## [0.8.2](https://github.com/IQ-tech/firebolt/compare/v0.8.1...v0.8.2) (2022-07-04)
 
 

@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.9.0](https://github.com/IQ-tech/firebolt/compare/v0.8.2...v0.9.0) (2022-10-19)
+
+
+### Features
+
+* **blueberry-theme:** :sparkles: added maxLength ([9b2d1bf](https://github.com/IQ-tech/firebolt/commit/9b2d1bfb878e84b84f4533af829a56850ff96644))
+
+
+
+
+
 ## [0.8.2](https://github.com/IQ-tech/firebolt/compare/v0.8.1...v0.8.2) (2022-07-04)
 
 **Note:** Version bump only for package @iq-firebolt/blueberry-theme

@@ -3,6 +3,27 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.9.0](https://github.com/IQ-tech/firebolt/compare/v0.8.2...v0.9.0) (2022-10-19)
+
+
+### Bug Fixes
+
+* **types:** adding prop types ([5d7820e](https://github.com/IQ-tech/firebolt/commit/5d7820e5bfb0688e7593ce1e4a64e5eca3894b20))
+
+
+### Features
+
+* **client:** :sparkles: added data attr to fireboltform ([9727ea9](https://github.com/IQ-tech/firebolt/commit/9727ea96570cb8e3b9c13094b0f6749759d9bd97))
+* **client:** :sparkles: added new hook to wizard to run callback before request a new step ([15dfc69](https://github.com/IQ-tech/firebolt/commit/15dfc69f7a2e4ad682bbc6fe74b582d3a6adcd46))
+* **client:** ✨ add unexpected error handler on api response ([7b2a119](https://github.com/IQ-tech/firebolt/commit/7b2a119293adaa62ce6d41c15c2ffca54ebd3309))
+* **client:** added payload to new hook ([693fb12](https://github.com/IQ-tech/firebolt/commit/693fb123f279aa4dc5a2a77852dfbdaf7057b273))
+* **fieds:** order fields by prop array value ([e806cae](https://github.com/IQ-tech/firebolt/commit/e806caef1bd422823777044983df0205a50bd0ed))
+* **validators:** :sparkles: removing repeated spaces from the payload field ([184ba26](https://github.com/IQ-tech/firebolt/commit/184ba26ae973354857d53cfdd44eeadebc439ca2))
+
+
+
+
+
 ## [0.8.2](https://github.com/IQ-tech/firebolt/compare/v0.8.1...v0.8.2) (2022-07-04)
 
 

@@ -3,6 +3,37 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.9.0](https://github.com/IQ-tech/firebolt/compare/v0.8.2...v0.9.0) (2022-10-19)
+
+
+### Bug Fixes
+
+* **types:** adding prop types ([5d7820e](https://github.com/IQ-tech/firebolt/commit/5d7820e5bfb0688e7593ce1e4a64e5eca3894b20))
+* **validators:** :bug: fix CI ([1a6db61](https://github.com/IQ-tech/firebolt/commit/1a6db61093a68728532512f7070b05e6a1b4c342))
+* **validators:** :bug: fix do fix kkkk ([99406c3](https://github.com/IQ-tech/firebolt/commit/99406c3b08a2eb56b3f0803127c56c25d839bb62))
+* **validators:** :bug: fixed validators label ([dd18c66](https://github.com/IQ-tech/firebolt/commit/dd18c66fec11204c48c9310cb9f17a64d38d1d6a))
+* **validators:** :sparkles: added backslash filter to name validator ([c1a32c3](https://github.com/IQ-tech/firebolt/commit/c1a32c3a3842dad985b68403be12a07fdeab9ba5))
+* **validators:** 🩹 add accents validator on email ([701adba](https://github.com/IQ-tech/firebolt/commit/701adba3b38754c1bd7eb5b91b11db17b5f578f2))
+
+
+### Features
+
+* :sparkles: added new generic account number preset ([8cf6bd6](https://github.com/IQ-tech/firebolt/commit/8cf6bd613897f71be4f98497ded5c4958ae9b063))
+* :sparkles: adding two news generic account preset ([291dc1d](https://github.com/IQ-tech/firebolt/commit/291dc1de0b25804da325e140c880c02d3e0c9237))
+* **blueberry-theme:** :sparkles: added maxLength ([9b2d1bf](https://github.com/IQ-tech/firebolt/commit/9b2d1bfb878e84b84f4533af829a56850ff96644))
+* **client:** :sparkles: added data attr to fireboltform ([9727ea9](https://github.com/IQ-tech/firebolt/commit/9727ea96570cb8e3b9c13094b0f6749759d9bd97))
+* **client:** :sparkles: added new hook to wizard to run callback before request a new step ([15dfc69](https://github.com/IQ-tech/firebolt/commit/15dfc69f7a2e4ad682bbc6fe74b582d3a6adcd46))
+* **client:** ✨ add unexpected error handler on api response ([7b2a119](https://github.com/IQ-tech/firebolt/commit/7b2a119293adaa62ce6d41c15c2ffca54ebd3309))
+* **client:** added payload to new hook ([693fb12](https://github.com/IQ-tech/firebolt/commit/693fb123f279aa4dc5a2a77852dfbdaf7057b273))
+* **fieds:** order fields by prop array value ([e806cae](https://github.com/IQ-tech/firebolt/commit/e806caef1bd422823777044983df0205a50bd0ed))
+* **validators:** :sparkles: adding a parameter to ignore spaces to the nonRepeatedChars validator ([ed31f80](https://github.com/IQ-tech/firebolt/commit/ed31f803fdfa22f21ff4fa2900dff762de84d286))
+* **validators:** :sparkles: email suggestion implementation ([5e2d372](https://github.com/IQ-tech/firebolt/commit/5e2d372e6c9b64dc68f735b817849b2cede27d39))
+* **validators:** :sparkles: removing repeated spaces from the payload field ([184ba26](https://github.com/IQ-tech/firebolt/commit/184ba26ae973354857d53cfdd44eeadebc439ca2))
+
+
+
+
+
 ## [0.8.2](https://github.com/IQ-tech/firebolt/compare/v0.8.1...v0.8.2) (2022-07-04)
 
 
