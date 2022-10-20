@@ -1,5 +1,5 @@
 import { useEffect } from "react"
-import { getUrlParams } from "@iq-firebolt/client-core/lib"
+import { getUrlParams } from "@iq-firebolt/client-core"
 import getDebugStepName from "../../../helpers/getDebugStepName"
 import { IBrowserNavigation } from "../../../types"
 /**

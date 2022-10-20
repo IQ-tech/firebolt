@@ -1,7 +1,7 @@
 import { useRef } from "react"
 import classNames from "classnames"
 import useMaskedInput from "./useMask"
-import { getFieldProps, IStepConfigField } from "@iq-firebolt/client-core/lib"
+import { getFieldProps, IStepConfigField } from "@iq-firebolt/client-core"
 import { IgetFormattedPropsPresets } from "@iq-firebolt/client-core/lib/formatters/applyPropsPresets"
 import { IFieldsObject } from "../../../../types"
 import { getConditionalProps, validateField } from "./helpers"

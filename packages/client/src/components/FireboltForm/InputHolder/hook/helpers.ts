@@ -1,6 +1,6 @@
 import createNumberMask from "text-mask-addons/dist/createNumberMask"
-import { validateFBTField } from "@iq-firebolt/validators/src"
-import { IStepConfigField } from "@iq-firebolt/client-core/lib"
+import { validateFBTField } from "@iq-firebolt/validators"
+import { IStepConfigField } from "@iq-firebolt/client-core"
 import evaluate from "simple-evaluate"
 import regexParser from "regex-parser"
 

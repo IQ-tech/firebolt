@@ -6,7 +6,7 @@ import {
   IFormMetadata,
   IRequestMetadata,
   IStepData,
-} from "@iq-firebolt/client-core/lib"
+} from "@iq-firebolt/client-core"
 import React from "react"
 
 export interface IFireboltProvider {

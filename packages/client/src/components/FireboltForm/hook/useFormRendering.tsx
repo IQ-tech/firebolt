@@ -1,6 +1,6 @@
 import React from "react"
 import evaluate from "simple-evaluate"
-import { IStepConfigField } from "@iq-firebolt/client-core/lib"
+import { IStepConfigField } from "@iq-firebolt/client-core"
 import getFieldComponent from "./helpers/getFieldComponent"
 import remapFormChildren from "./helpers/remapFormChildren"
 import InputHolder from "../InputHolder"
