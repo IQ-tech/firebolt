@@ -43,7 +43,7 @@ const TextWidget = ({
       resize={resize}
       minLength={minLength}
       maxLength={maxLength}
-      ref={inputRef}
+      inputRef={inputRef}
     />
   )
 }

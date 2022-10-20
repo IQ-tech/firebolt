@@ -40,7 +40,7 @@ const TextWidget = ({
       mask={mask}
       useNumericKeyboard={useNumericKeyboard}
       maxLength={maxLength}
-      ref={inputRef}
+      inputRef={inputRef}
     />
   )
 }
