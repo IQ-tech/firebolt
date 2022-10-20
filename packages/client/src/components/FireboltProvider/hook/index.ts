@@ -1,12 +1,12 @@
 import { useRef, useEffect } from "react"
-import { createFireboltForm } from "@iq-firebolt/client-core/lib"
+import { createFireboltForm } from "@iq-firebolt/client-core"
 import getDebugStepName from "../../../helpers/getDebugStepName"
 
 import useStates from "./useStates"
 import useData from "./useData"
 import useBrowserNavigation from "./useBrowserNavigation"
 import { IFireboltProvider, IFieldsObject } from "../../../types"
-import { IRequestMetadata } from "@iq-firebolt/client-core/lib"
+import { IRequestMetadata } from "@iq-firebolt/client-core"
 
 function useFireboltProvider({
   formAccess,

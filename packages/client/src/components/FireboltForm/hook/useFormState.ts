@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react"
-import { validateFBTStep } from "@iq-firebolt/validators/src"
+import { validateFBTStep } from "@iq-firebolt/validators"
 import { IFieldsObject, IFormState } from "../../../types"
-import { getFormattedPropsPresets } from "@iq-firebolt/client-core/lib"
+import { getFormattedPropsPresets } from "@iq-firebolt/client-core"
 import { IgetFormattedPropsPresets } from "@iq-firebolt/client-core/lib/formatters/applyPropsPresets"
 
 export default function useFormState({

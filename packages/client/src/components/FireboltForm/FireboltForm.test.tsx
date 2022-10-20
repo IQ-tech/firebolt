@@ -3,7 +3,7 @@ import { render, fireEvent } from "@testing-library/react"
 import "@testing-library/jest-dom"
 import axios from "axios"
 
-import { createFireboltForm } from "@iq-firebolt/client-core/lib"
+import { createFireboltForm } from "@iq-firebolt/client-core"
 import startFormResponse from "@iq-firebolt/client-core/lib/__mocks__/startFormResponse"
 import materialTheme from "@iq-firebolt/material-theme"
 
