@@ -79,7 +79,7 @@ export function getFieldProps(
   return fullfieldWithPropsPreset
 }
 
-export interface IgetFormttedPropsPresets {
+export interface IgetFormattedPropsPresets {
   propsPresetsCollections: IPropsPresetCollection[]
   collectionsMap: IgetCollectionsMapReturn
   allCustomPresetsMap: {}

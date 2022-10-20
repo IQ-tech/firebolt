@@ -2,7 +2,7 @@ import { useRef } from "react"
 import classNames from "classnames"
 import useMaskedInput from "./useMask"
 import { getFieldProps, IStepConfigField } from "@iq-firebolt/client-core/lib"
-import { IgetFormttedPropsPresets } from "@iq-firebolt/client-core/lib/formatters/applyPropsPresets"
+import { IgetFormattedPropsPresets } from "@iq-firebolt/client-core/lib/formatters/applyPropsPresets"
 import { IFieldsObject } from "../../../../types"
 import { getConditionalProps, validateField } from "./helpers"
 
@@ -37,7 +37,7 @@ export interface IUseInputHolder {
   fieldValidationErrors: IFieldsObject
   fieldManuallySetErrors: IFieldsObject
   isRequiredField: boolean
-  standalonePropsPresets: IgetFormttedPropsPresets | undefined
+  standalonePropsPresets: IgetFormattedPropsPresets | undefined
   clearRemoteFieldError?: (fieldSlug: string) => void
   remoteErrors: IFieldsObject[]
 }

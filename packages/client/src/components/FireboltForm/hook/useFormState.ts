@@ -2,7 +2,7 @@ import { useState, useEffect } from "react"
 import { validateFBTStep } from "@iq-firebolt/validators/src"
 import { IFieldsObject, IFormState } from "../../../types"
 import { getFormattedPropsPresets } from "@iq-firebolt/client-core/lib"
-import { IgetFormttedPropsPresets } from "@iq-firebolt/client-core/lib/formatters/applyPropsPresets"
+import { IgetFormattedPropsPresets } from "@iq-firebolt/client-core/lib/formatters/applyPropsPresets"
 
 export default function useFormState({
   schema,
@@ -14,7 +14,7 @@ export default function useFormState({
   const [formPayload, setFormPayload] = useState<IFieldsObject>({})
   const [hasFormChanged, setHasFormChanged] = useState(false)
   const [standalonePropsPresets, setStandalonePropsPresets] = useState<
-    IgetFormttedPropsPresets | undefined
+    IgetFormattedPropsPresets | undefined
   >()
   const [isHavingInternaLoading, setIsHavingInternalLoading] = useState(false)
   const [fieldValidationErrors, setFieldValidationErrors] =
