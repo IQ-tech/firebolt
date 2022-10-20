@@ -79,6 +79,13 @@ export function getFieldProps(
   return fullfieldWithPropsPreset
 }
 
+export interface IgetFormattedPropsPresets {
+  propsPresetsCollections: IPropsPresetCollection[]
+  collectionsMap: IgetCollectionsMapReturn
+  allCustomPresetsMap: {}
+  allPresetsMap: {}
+}
+
 export function getFormattedPropsPresets(
   propsPresetsCollections: IPropsPresetCollection[]
 ) {
@@ -93,7 +100,14 @@ export function getFormattedPropsPresets(
   }
 }
 
-function getCollectionsMap(propsPresetsCollections: IPropsPresetCollection[]) {
+interface IgetCollectionsMapReturn {
+  [presetName: string]: {
+    [key: string]: any
+  }
+}
+function getCollectionsMap(
+  propsPresetsCollections: IPropsPresetCollection[]
+): IgetCollectionsMapReturn {
   return propsPresetsCollections.reduce((acc, { name, presets }) => {
     return { ...acc, [name]: presets }
   }, {})

@@ -20,7 +20,8 @@ const EmailWidget = ({
   // events
   onChange,
   onBlur,
-  onFocus
+  onFocus,
+  inputRef
 }) => {
   const { autoSuggestionOptions } = useEmailWidget({
     formPayload: payload,
@@ -41,6 +42,7 @@ const EmailWidget = ({
           <TextField
             {...params}
             label={label}
+            inputRef={inputRef}
             error={hasError}
             required={isRequired}
             helperText={hasError ? errorMessage : ""}

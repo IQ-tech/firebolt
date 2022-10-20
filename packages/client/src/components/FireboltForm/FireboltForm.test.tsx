@@ -1,10 +1,9 @@
 import React from "react"
-import { render, fireEvent, screen } from "@testing-library/react"
+import { render, fireEvent } from "@testing-library/react"
 import "@testing-library/jest-dom"
 import axios from "axios"
 
 import { createFireboltForm } from "@iq-firebolt/client-core/lib"
-import { clearAllFormSessions } from "@iq-firebolt/client-core/lib/helpers/session/clearFormSession"
 import startFormResponse from "@iq-firebolt/client-core/lib/__mocks__/startFormResponse"
 import materialTheme from "@iq-firebolt/material-theme"
 
@@ -13,22 +12,14 @@ import FireboltForm from "./index"
 jest.mock("axios")
 
 //#region MOCKS
-const mockBlur = jest.fn(() => () => {})
-const mockChange = jest.fn(() => () => {})
 const mockSubmit = jest.fn((e) => e.preventDefault())
 const mockGoBack = jest.fn(() => {})
-const mockFocus = jest.fn()
 
 jest.mock("./hook/useFormEvents", () => {
   return jest.fn().mockImplementation(() => {
     return {
       handleSubmit: mockSubmit,
       handleGoBack: mockGoBack,
-      getFieldEvent: {
-        onBlur: mockBlur,
-        onChange: mockChange,
-        onFocus: mockFocus,
-      },
     }
   })
 })
@@ -42,6 +33,7 @@ describe("firebolt form test", () => {
     "ui:props": {
       "placeholder": "Name",
     },
+    "value": "John Doe",
     "validators": [{ "type": "required" }, { "type": "name" }],
     "meta": {},
   }
@@ -61,7 +53,6 @@ describe("firebolt form test", () => {
 
     fireEvent.blur(input, { target: { value: value } })
     expect(input).toHaveValue(value)
-    expect(mockBlur).toHaveBeenCalled()
   })
 
   it("able to call the submit function", () => {
@@ -183,8 +174,8 @@ describe("firebolt form test", () => {
 
     const button = container.querySelector(
       `#firebolt-form-field-${selectField.slug}`
-    )
-    fireEvent.mouseDown(button as any)
+    ) as Element
+    fireEvent.mouseDown(button)
 
     expect(getByText("Test1")).toBeInTheDocument()
     expect(getByText("Test2")).toBeInTheDocument()
@@ -291,7 +282,7 @@ describe("autofilled fields test", () => {
   beforeEach(() => {
     // clearAllFormSessions()
 
-    (axios.get as jest.Mock).mockResolvedValue({ data: startFormResponse })
+    ;(axios.get as jest.Mock).mockResolvedValue({ data: startFormResponse })
 
     Object.defineProperty(window, "location", {
       writable: true,
@@ -318,3 +309,91 @@ describe("autofilled fields test", () => {
     expect(emailField).toHaveValue("berte.ruan@gmail.com")
   })
 })
+
+describe("firebolt form callbacks run correctly", () => {
+  const mockFields = [
+    {
+      "slug": "name",
+      "ui:widget": "Text",
+      "ui:props": {
+        "label": "Nome",
+        "placeholder": "Digite seu nome",
+      },
+      "validators": [{ "type": "required" }, { "type": "name" }],
+      "meta": {},
+    },
+    {
+      "slug": "email",
+      "ui:widget": "Email",
+      "ui:props": {
+        "label": "E-mail",
+        "placeholder": "Type your e-mail",
+      },
+      "validators": [{ "type": "email" }],
+      "meta": {},
+    },
+  ]
+  const onFocusFieldCallback = jest.fn(() => console.log("onFocusField"))
+  const onBlurFieldCallback = jest.fn(() => console.log("onBlurField"))
+  const onChangeFieldCallback = jest.fn(() => console.log("onChangeField"))
+  const onChangeFormStep = jest.fn(() => console.log("form changed"))
+
+  test("onFocusField run correctly", () => {
+    const { getByPlaceholderText } = render(
+      <FireboltForm
+        theme={materialTheme}
+        schema={mockFields as any}
+        onFocusField={onFocusFieldCallback}
+        onChangeField={onChangeFieldCallback}
+        onBlurField={onBlurFieldCallback}
+        onChange={onChangeFormStep}
+      />
+    )
+
+    const input = getByPlaceholderText("Digite seu nome")
+    fireEvent.focus(input)
+    expect(onFocusFieldCallback).toBeCalled()
+    expect(onBlurFieldCallback).toBeCalledTimes(0)
+    expect(onChangeFieldCallback).toBeCalledTimes(0)
+    expect(onChangeFormStep).toBeCalledTimes(0)
+  })
+  test("onBlurField run correctly", () => {
+    const { getByPlaceholderText } = render(
+      <FireboltForm
+        theme={materialTheme}
+        schema={mockFields as any}
+        onFocusField={onFocusFieldCallback}
+        onChangeField={onChangeFieldCallback}
+        onBlurField={onBlurFieldCallback}
+        onChange={onChangeFormStep}
+      />
+    )
+
+    const input = getByPlaceholderText("Digite seu nome")
+    fireEvent.blur(input)
+    expect(onFocusFieldCallback).toBeCalledTimes(0)
+    expect(onBlurFieldCallback).toBeCalledTimes(1)
+    expect(onChangeFieldCallback).toBeCalledTimes(0)
+    expect(onChangeFormStep).toBeCalledTimes(0)
+  })
+  test("onChangeField run correctly", () => {
+    const { getByPlaceholderText } = render(
+      <FireboltForm
+        theme={materialTheme}
+        schema={mockFields as any}
+        onFocusField={onFocusFieldCallback}
+        onChangeField={onChangeFieldCallback}
+        onBlurField={onBlurFieldCallback}
+        onChange={onChangeFormStep}
+      />
+    )
+
+    const input = getByPlaceholderText("Digite seu nome")
+    fireEvent.change(input, {target: {value: "test"}})
+    expect(onFocusFieldCallback).toBeCalledTimes(0)
+    expect(onBlurFieldCallback).toBeCalledTimes(0)
+    expect(onChangeFieldCallback).toBeCalledTimes(1)
+  })
+  test.todo("onChange run correctly")
+})
+

@@ -18,7 +18,8 @@ const TextWidget = ({
   isRequired,
   meta,
   useNumericKeyboard,
-  maxLength
+  maxLength,
+  inputRef,
 }) => {
 
   return (
@@ -39,6 +40,7 @@ const TextWidget = ({
       mask={mask}
       useNumericKeyboard={useNumericKeyboard}
       maxLength={maxLength}
+      inputRef={inputRef}
     />
   )
 }

@@ -1,24 +1,29 @@
 import useFormState from "./useFormState"
 import useFormEvents from "./useFormEvents"
 import useFormRendering from "./useFormRendering"
-import { IActionsChildData, IUseFireboltForm } from "../../../types"
+import {
+  IActionsChildData,
+  IUseFireboltForm
+} from "../../../types"
 
-export default function useFireboltForm({
-  schema,
-  children,
-  onChange,
-  onSubmit,
-  theme,
-  autoFill,
-  remoteErrors,
-  onGoBack,
-  classes,
-  onFocusField,
-  addons,
-  clearRemoteFieldError,
-  orderFields,
-}: IUseFireboltForm) {
-
+export default function useFireboltForm(
+  {
+    schema,
+    children,
+    onChange,
+    onSubmit,
+    theme,
+    autoFill,
+    remoteErrors,
+    onGoBack,
+    onFocusField,
+    onChangeField,
+    onBlurField,
+    addons,
+    classes,
+    clearRemoteFieldError
+  }: IUseFireboltForm,
+) {
   const {
     isFormValid,
     formPayload,
@@ -37,26 +42,20 @@ export default function useFireboltForm({
     schema,
     autoFill,
     remoteErrors,
-    addons
+    addons,
   })
 
-  const { getFieldEvent, handleSubmit, handleGoBack } = useFormEvents({
+  const { handleSubmit, handleGoBack } = useFormEvents({
     onChange,
     onSubmit,
     formPayload,
-    modifyPayloadKeys,
     isFormValid,
     hasFormChanged,
-    setHasFormChanged,
-    setFieldWarning,
-    clearFieldWarning,
     markAllInvalidFields,
     onGoBack,
-    onFocusField,
     requiredFieldsSlugs,
     remoteErrors,
     setRemoteErrors,
-    clearRemoteFieldError
   })
 
   const { formChildren } = useFormRendering({
@@ -64,15 +63,20 @@ export default function useFireboltForm({
     modifyPayloadKeys,
     children,
     formPayload,
-    getFieldEvent,
     fieldValidationErrors,
     fieldManuallySetErrors,
     theme,
     setFieldWarning,
     clearFieldWarning,
-    classes,
     standalonePropsPresets,
-    orderFields,
+    hasFormChanged,
+    setHasFormChanged,
+    onFocusField,
+    onChangeField,
+    onBlurField,
+    classes,
+    clearRemoteFieldError,
+    remoteErrors
   })
 
   const actionsChildData: IActionsChildData = {

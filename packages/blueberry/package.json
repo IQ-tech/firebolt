@@ -23,7 +23,7 @@
   },
   "devDependencies": {
     "@iq-firebolt/validators": "0.9.0",
-    "iq-blueberry": "^0.0.31",
+    "iq-blueberry": "^0.0.39",
     "react": "^16.12.0",
     "react-dom": "^16.12.0"
   },
@@ -50,5 +50,6 @@
   },
   "browserslist": [
     "last 1 Chrome version"
-  ]
+  ],
+  "dependencies": {}
 }

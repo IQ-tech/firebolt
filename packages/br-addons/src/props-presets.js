@@ -79,10 +79,19 @@ const UIPropsPresetsList = {
     })),
   },
   "generic-account-with-four-numbers": {
-    mask: [/\d/, /\d/, /\d/, /\d/],
+    mask: ["/\\d/", "/\\d/", "/\\d/", "/\\d/"],
   },
   "generic-account-with-eight-numbers": {
-    mask: [/\d/, /\d/, /\d/, /\d/, /\d/, /\d/, /\d/, /\d/],
+    mask: [
+      "/\\d/",
+      "/\\d/",
+      "/\\d/",
+      "/\\d/",
+      "/\\d/",
+      "/\\d/",
+      "/\\d/",
+      "/\\d/",
+    ],
   },
 }
 

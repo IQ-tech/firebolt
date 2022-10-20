@@ -63,16 +63,26 @@ export interface IWizardComponent {
 export interface IUseFireboltForm {
   schema: Array<IStepConfigField>
   children?: Object[]
-  onChange?: React.ChangeEvent<HTMLInputElement>
+  onChange?: (formPayload: IFieldsObject) => void
   onSubmit?(): void
   theme?: Object
   autoFill?: IFieldsObject
   remoteErrors?: Array<IFieldsObject>
   onGoBack?(): void
   classes: Object
-  onFocusField?: Event
+  onFocusField?: (field: IStepConfigField, formPayload?: Object) => void
+  onBlurField?: (
+    field: IStepConfigField,
+    value: string,
+    formPayload?: Object
+  ) => void
+  onChangeField?: (
+    field: IStepConfigField,
+    values: { value: any; previousValue: any },
+    formPayload?: Object
+  ) => void
   addons?: IAddonsConfig
-  clearRemoteFieldError?:(fieldSlug: string) => void
+  clearRemoteFieldError?: (fieldSlug: string) => void
   orderFields?: Object[]
 }
 
@@ -113,13 +123,23 @@ export interface IFireboltForm {
   addons?: IAddonsConfig
   schema: Array<IStepConfigField>
   children?: Object[]
-  onChange?: React.ChangeEvent<HTMLInputElement>
+  onChange?: (formPayload: IFieldsObject) => void
   onSubmit?(): void
   theme?: Object
   autoFill?: IFieldsObject
   remoteErrors?: Array<IFieldsObject>
   onGoBack?(): void
-  onFocusField?: Event
-  clearRemoteFieldError?:(fieldSlug: string) => void
+  onFocusField?: (field: IStepConfigField, formPayload?: Object) => void
+  onBlurField?: (
+    field: IStepConfigField,
+    value: string,
+    formPayload?: Object
+  ) => void
+  onChangeField?: (
+    field: IStepConfigField,
+    values: { value: any; previousValue: any },
+    formPayload?: Object
+  ) => void
+  clearRemoteFieldError?: (fieldSlug: string) => void
   orderFields?: Object[]
 }
