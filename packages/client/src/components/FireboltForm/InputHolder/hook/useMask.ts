@@ -38,7 +38,7 @@ export default function useMaskedInput({
     }
 
     if (typeof onChange === "function") {
-      onChange(input.current.value)
+      onChange(input?.current?.value)
     }
   }
 }
