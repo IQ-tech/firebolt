@@ -4,6 +4,9 @@ import { IFieldsObject, IFormState } from "../../../types"
 import { getFormattedPropsPresets } from "@iq-firebolt/client-core"
 import { IgetFormattedPropsPresets } from "@iq-firebolt/client-core/lib/formatters/applyPropsPresets"
 
+
+
+
 export default function useFormState({
   schema,
   autoFill,
@@ -56,14 +59,18 @@ export default function useFormState({
     }
   }
 
+
+function getNewRemoteErrors(){
+  return remoteErrors.reduce((acc, nxtItem) => {
+    const safeNextObj = nxtItem || {}
+    const validatorResult = safeNextObj["validationResults"] || []
+    return { ...acc, [nxtItem?.slug]: validatorResult[0]?.message }
+  }, {})
+}
+
   function setRemoteErrors() {
     if (remoteErrors?.length) {
-      const newErrorModel = remoteErrors.reduce((acc, nxtItem) => {
-        const safeNextObj = nxtItem || {}
-        const validatorResult = safeNextObj["validationResults"] || []
-        return { ...acc, [nxtItem?.slug]: validatorResult[0]?.message }
-      }, {})
-
+      const newErrorModel = getNewRemoteErrors()
       setFieldValidationErrors({ ...fieldValidationErrors, ...newErrorModel })
     }
   }
@@ -158,8 +165,10 @@ export default function useFormState({
         [fieldSlug]: errorMessage,
       }
     }, {})
+    const remoteErrorsObject = getNewRemoteErrors()
 
-    setFieldValidationErrors(errorsObject)
+    setFieldValidationErrors({...errorsObject, ...remoteErrorsObject})
+
   }
 
   function modifyPayloadKeys(newData: IFieldsObject = {}) {
