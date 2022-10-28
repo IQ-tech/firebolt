@@ -154,9 +154,9 @@ export default function useInputHolder({
       const hasRemoteError = safeRemoteErrors?.find(
         (item) => item.slug === fieldConfig.slug
       )
-      clearFieldWarning(fieldSlug)
-      if (hasRemoteError && clearRemoteFieldError) {
-        clearRemoteFieldError(fieldConfig.slug)
+      
+      if(!hasRemoteError){
+        clearFieldWarning(fieldSlug)
       }
     } else {
       const errorMessage =
