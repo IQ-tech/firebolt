@@ -8,7 +8,6 @@ const mockFields = [
   {
     "slug": "full_name",
     "ui:widget": "Text",
-    "value": "test batata",
     "ui:props": {
       "label": "Nome completo",
       "placeholder": "Nome completo",
@@ -19,7 +18,6 @@ const mockFields = [
   {
     "slug": "name",
     "ui:widget": "Text",
-    "value":"potato chip",
     "ui:props": {
       "label": "Nome completo",
       "placeholder": "Nome completo",
@@ -30,7 +28,6 @@ const mockFields = [
   {
     "slug": "cpf",
     "ui:widget": "Text",
-    "value": "012.345.678-90",
     "ui:props": {
       "label": "teste",
       "mask": [
@@ -60,13 +57,12 @@ const mockFields = [
   },
   {
     "slug": "hehe",
-    "ui:widget": "Text",
-    "value": "teste@cenoura.com",
+    "ui:widget": "Check",
     "ui:props": {
       "label": "Email",
       "placeholder": "contato@email.com",
     },
-    "validators": [{ "type": "required" }, {"type": "email"}],
+    "validators": [{ "type": "required" }],
     "meta": {},
   },
 ]
