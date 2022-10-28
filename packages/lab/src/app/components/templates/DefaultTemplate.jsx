@@ -1,41 +1,57 @@
-import { StepForm, FireboltForm } from "@iq-firebolt/client/src"
+import { useEffect } from "react"
+import { StepForm, FireboltForm, useFirebolt } from "@iq-firebolt/client/src"
 import Theme from "@iq-firebolt/blueberry-theme"
 import { CheckboxGroup } from "iq-blueberry"
 /* import Theme from "@iq-firebolt/material-theme" */
 
 const mockFields = [
   {
-    "slug": "choosen_card",
-    "ui:widget": "hidden",
-    "ui:props": {},
-    "validators": [{ "type": "required" }],
-  },
-  {
     "slug": "full_name",
     "ui:widget": "Text",
+    "value": "test batata",
     "ui:props": {
       "label": "Nome completo",
       "placeholder": "Nome completo",
-      "mask": ["/\\d/", "-", "/\\d/"],
+    },
+    "validators": [{ "type": "required" }],
+    "meta": {},
+  },
+  {
+    "slug": "name",
+    "ui:widget": "Text",
+    "value":"potato chip",
+    "ui:props": {
+      "label": "Nome completo",
+      "placeholder": "Nome completo",
     },
     "validators": [{ "type": "required" }, { "type": "name" }],
     "meta": {},
   },
   {
-    "slug": "email",
-    "ui:widget": "Email",
-    "ui:props": {
-      "label": "Email",
-      "placeholder": "contato@email.com",
-    },
-    "validators": [{ "type": "required" }, { "type": "email" }],
-    "meta": {},
-  },
-  {
     "slug": "cpf",
     "ui:widget": "Text",
-    "ui:props-preset": "br-cpf",
-    "ui:props": {},
+    "value": "012.345.678-90",
+    "ui:props": {
+      "label": "teste",
+      "mask": [
+        "/\\d/",
+        "/\\d/",
+        "/\\d/",
+        ".",
+        "/\\d/",
+        "/\\d/",
+        "/\\d/",
+        ".",
+        "/\\d/",
+        "/\\d/",
+        "/\\d/",
+        "-",
+        "/\\d/",
+        "/\\d/",
+      ]
+      
+
+    },
     "ui:styles": {
       "size": "half",
     },
@@ -43,63 +59,32 @@ const mockFields = [
     "meta": {},
   },
   {
-    "slug": "main_income",
+    "slug": "hehe",
     "ui:widget": "Text",
-    "ui:props-preset": "br-currency",
+    "value": "teste@cenoura.com",
     "ui:props": {
-      "label": "Renda mensal",
+      "label": "Email",
+      "placeholder": "contato@email.com",
     },
-    "ui:styles": {
-      "size": "half",
-    },
-    "validators": [{ "type": "required" }],
+    "validators": [{ "type": "required" }, {"type": "email"}],
     "meta": {},
-  },
-  {
-    "slug": "main_phone",
-    "ui:widget": "Text",
-    "ui:props-preset": "br-phone",
-    "ui:props": {
-      "label": "Celular com DDD",
-    },
-    "ui:styles": {
-      "size": "half",
-    },
-    "validators": [{ "type": "required" }, { "type": "phone" }],
-    "meta": {},
-  },
-  {
-    "slug": "bad_credit",
-    "ui:widget": "Radio",
-    "ui:props": {
-      "label": "Está negativado?",
-      "options": [
-        {
-          "value": "true",
-          "label": "Sim",
-        },
-        {
-          "value": "false",
-          "label": "Não",
-        },
-      ],
-    },
-    "ui:styles": {
-      "size": "half",
-    },
-    "validators": [{ "type": "required" }],
   },
 ]
 
 const DefaultTemplate = ({ fireboltStep }) => {
+  const { remoteErrors } = useFirebolt()
+  useEffect(() => {
+    console.log(remoteErrors)
+  }, [remoteErrors])
+
   return (
     <div className="tooltip-wrapper">
       <div style={{ maxWidth: "600px", margin: "0 auto" }}>
         <p>{fireboltStep?.friendlyName}</p>
         <StepForm
           theme={Theme}
-          //schema={mockFields}
-          onFocusField={(fieldConfig, formPayload) => {
+          /* schema={mockFields} */
+/*           onFocusField={(fieldConfig, formPayload) => {
             console.log("focus")
             console.log({ fieldConfig, formPayload })
           }}
@@ -113,16 +98,16 @@ const DefaultTemplate = ({ fireboltStep }) => {
           }}
           onChange={(test) => {
             console.log(test)
-          }}
+          }} */
           onSubmit={(payload) => fireboltStep.goNextStep(payload)}
           onGoBack={fireboltStep.goPreviousStep}
-          /*           customActionsChild={({ formData }) => {
-            return formData.isFormValid ? (
-              <button>next liberado</button>
-            ) : (
-              <button>next bloqueado</button>
-            )
-          }} */
+        /*           customActionsChild={({ formData }) => {
+          return formData.isFormValid ? (
+            <button>next liberado</button>
+          ) : (
+            <button>next bloqueado</button>
+          )
+        }} */
         ></StepForm>
       </div>
     </div>

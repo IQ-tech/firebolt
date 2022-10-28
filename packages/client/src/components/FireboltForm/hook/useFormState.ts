@@ -60,14 +60,14 @@ export default function useFormState({
   }
 
 
-function getNewRemoteErrors(){
-  const safeRemoteErrors = remoteErrors || []
-  return safeRemoteErrors.reduce((acc, nxtItem) => {
-    const safeNextObj = nxtItem || {}
-    const validatorResult = safeNextObj["validationResults"] || []
-    return { ...acc, [nxtItem?.slug]: validatorResult[0]?.message }
-  }, {})
-}
+  function getNewRemoteErrors() {
+    const safeRemoteErrors = remoteErrors || []
+    return safeRemoteErrors.reduce((acc, nxtItem) => {
+      const safeNextObj = nxtItem || {}
+      const validatorResult = safeNextObj["validationResults"] || []
+      return { ...acc, [nxtItem?.slug]: validatorResult[0]?.message }
+    }, {})
+  }
 
   function setRemoteErrors() {
     if (remoteErrors?.length) {
@@ -82,8 +82,8 @@ function getNewRemoteErrors(){
       const { slug, value } = field
       const autoFillObj = value
         ? {
-            [slug]: value,
-          }
+          [slug]: value,
+        }
         : {}
 
       return { ...acc, ...autoFillObj }
@@ -111,10 +111,6 @@ function getNewRemoteErrors(){
   }
 
   function clearFieldWarning(fieldSlug: string, manualSetError = false) {
-    const { invalidFields } = getFormValidation()
-    const invalidFieldsList = (invalidFields || []).map(
-      (invalidField) => invalidField.slug
-    )
     const usedState = manualSetError
       ? fieldManuallySetErrors
       : fieldValidationErrors
@@ -124,7 +120,6 @@ function getNewRemoteErrors(){
 
     const erroredFieldsSlugs = Object.keys(usedState)
     const filteredSlugs = erroredFieldsSlugs
-      .filter((errorSlug: any) => invalidFieldsList.includes(errorSlug))
       .filter((slug) => slug !== fieldSlug)
     const newErroredFields = filteredSlugs.reduce((acc, slug) => {
       return {
@@ -168,7 +163,7 @@ function getNewRemoteErrors(){
     }, {})
     const remoteErrorsObject = getNewRemoteErrors()
 
-    setFieldValidationErrors({...errorsObject, ...remoteErrorsObject})
+    setFieldValidationErrors({ ...errorsObject, ...remoteErrorsObject })
 
   }
 
