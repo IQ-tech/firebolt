@@ -61,7 +61,8 @@ export default function useFormState({
 
 
 function getNewRemoteErrors(){
-  return remoteErrors.reduce((acc, nxtItem) => {
+  const safeRemoteErrors = remoteErrors || []
+  return safeRemoteErrors.reduce((acc, nxtItem) => {
     const safeNextObj = nxtItem || {}
     const validatorResult = safeNextObj["validationResults"] || []
     return { ...acc, [nxtItem?.slug]: validatorResult[0]?.message }
