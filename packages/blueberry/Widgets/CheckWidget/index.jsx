@@ -1,6 +1,7 @@
 import React from "react"
 import { CheckboxField } from "iq-blueberry"
 
+
 const CheckWidget = ({
   hasError,
   label,
@@ -16,7 +17,7 @@ const CheckWidget = ({
       required={isRequired}
       label={label}
       onChange={onChange}
-      onBlur={onBlur}
+      /* onBlur={(e) => onBlur(e?.target?.value)} */
     />
   )
 }
