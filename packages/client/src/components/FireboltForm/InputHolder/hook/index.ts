@@ -150,7 +150,14 @@ export default function useInputHolder({
     const checkSpaces = /( )+/g
 
     if (isValueValid) {
+      const safeRemoteErrors = remoteErrors || []
+      const hasRemoteError = safeRemoteErrors?.find(
+        (item) => item.slug === fieldConfig.slug
+      )
       clearFieldWarning(fieldSlug)
+      if (hasRemoteError && clearRemoteFieldError) {
+        clearRemoteFieldError(fieldConfig.slug)
+      }
     } else {
       const errorMessage =
         fieldValidation?.invalidValidations?.[0]?.message || ""
