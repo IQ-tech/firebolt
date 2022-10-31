@@ -63,7 +63,7 @@ export function parseMask(rawMask: ParseMaskArg): ParseMaskReturn | undefined {
     }
   } else if (Array.isArray(rawMask)) {
     return rawMask.map((item) => {
-      const isEncodedRegex = typeof item === "string" && item.startsWith("/")
+      const isEncodedRegex = typeof item === "string" && item.startsWith("/") && item.endsWith("/") && item !== "/"
       const isRegex = item instanceof RegExp
       if (isRegex) {
         return item
