@@ -48,7 +48,7 @@ export default function remapFormChildren({
     const isFirstItem = index === 0
     const isLastItem = index === fieldsChildren?.length - 1
     const isDefinedSpot = isFirstItem || isLastItem
-    const fieldSlug = field?.props?.["data-fieldslug"];
+    const fieldSlug = field?.props?.fieldSlug;
 
     const beforeInserts = slugInsertsMap?.[fieldSlug]?.before || []
     const afterInserts = slugInsertsMap?.[fieldSlug]?.after || []
@@ -70,8 +70,8 @@ export default function remapFormChildren({
         }
       } else {
         return {
-          after: [...beforeInserts],
-          before: [...afterInserts],
+          after: [...afterInserts],
+          before: [...beforeInserts],
         }
       }
     }

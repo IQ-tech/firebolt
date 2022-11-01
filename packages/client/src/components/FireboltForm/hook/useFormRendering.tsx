@@ -48,6 +48,7 @@ export default function useFormRendering({
         return (
           <InputHolder
             fieldConfig={field}
+            fieldSlug={field.slug}
             formPayload={formPayload}
             FieldComponent={FieldComponent}
             key={`form-item-${index}`}
