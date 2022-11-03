@@ -79,6 +79,12 @@ const DefaultTemplate = ({ fireboltStep }) => {
         <p>{fireboltStep?.friendlyName}</p>
         <StepForm
           theme={Theme}
+/*           autoFill={{
+            "cpf": "01234567890",
+            "full_name": "carrot top",
+            "email": "teste@teste.com",
+
+          }} */
           /* schema={mockFields} */
 /*           onFocusField={(fieldConfig, formPayload) => {
             console.log("focus")

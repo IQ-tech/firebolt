@@ -1,13 +1,7 @@
-import { conformToMask } from "text-mask-core"
-
 import UIPropsPresets from "../constants/ui-props-presets"
 
 export default function applyAutofill(stepData, autoFillData) {
-  const maskValue = (value, mask) => {
-    return mask ? conformToMask(value, mask, {}).conformedValue : value
-  }
-
-  if (!!autoFillData) {
+   if (!!autoFillData) {
     const fieldsFromAPI = stepData?.step?.data?.fields
 
     const mappedFields = fieldsFromAPI.map((field) => {
@@ -22,7 +16,7 @@ export default function applyAutofill(stepData, autoFillData) {
       const autofillValue = autoFillData?.[fieldSlug]?.value
       return {
         ...field,
-        ...(autofillValue ? { value: maskValue(autofillValue, mask) } : {}),
+        ...(autofillValue ? { value: autofillValue } : {}),
       }
     })
 
