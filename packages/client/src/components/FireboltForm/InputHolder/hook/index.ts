@@ -10,6 +10,7 @@ export interface IUseInputHolder {
   FieldComponent?: any
   fieldProps?: any
   fieldConfig: IStepConfigField
+  fieldSlug: string
   formPayload: {
     [fieldSlug: string]: any
   }
