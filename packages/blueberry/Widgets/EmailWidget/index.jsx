@@ -18,6 +18,7 @@ const EmailWidget = ({
 }) => {
   return (
     <EmailField
+      autoComplete="none"
       required={isRequired}
       optional={isOptional}
       invalid={hasError}
