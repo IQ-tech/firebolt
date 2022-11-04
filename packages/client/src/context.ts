@@ -33,6 +33,7 @@ export interface IFireboltContext {
   connectionError?: any
   beforeProceedPayload: boolean
   setBeforeProceedPayload(arg:boolean): void
+  addFieldRemoteError(fieldSlug: string, errorMessage: string)
 }
 
 const FireboltContext = createContext<IFireboltContext>({} as IFireboltContext)

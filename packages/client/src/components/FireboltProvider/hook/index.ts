@@ -212,6 +212,19 @@ function useFireboltProvider({
     }
   }
 
+  function addFieldRemoteError(fieldSlug: string, errorMessage: string) {
+    const newRemoteError = {
+      "slug": fieldSlug,
+      "validationResults": [
+        {
+          "isValid": false,
+          "message": errorMessage,
+        },
+      ],
+    }
+    setRemoteErrors([...remoteErrors, newRemoteError])
+  }
+
   function uploadFile(file, fileName: string) {
     return formEngine.current.uploadFile(file, fileName)
   }
@@ -241,6 +254,7 @@ function useFireboltProvider({
     clearRemoteFieldError,
     beforeProceedPayload,
     setBeforeProceedPayload,
+    addFieldRemoteError
   }
 }
 
