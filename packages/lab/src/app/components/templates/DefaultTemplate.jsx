@@ -68,10 +68,14 @@ const mockFields = [
 ]
 
 const DefaultTemplate = ({ fireboltStep }) => {
-  const { remoteErrors } = useFirebolt()
+  const { remoteErrors, addFieldRemoteError } = useFirebolt()
   useEffect(() => {
     console.log(remoteErrors)
   }, [remoteErrors])
+
+  useEffect(() => {
+    addFieldRemoteError("full_name", "cebola")
+  }, [])
 
   return (
     <div className="tooltip-wrapper">
