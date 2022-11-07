@@ -112,7 +112,9 @@ function useFireboltProvider({
         extraRequestsMetaData,
       })
       .then((data) => {
-        if (isLastStep) {
+        const changedTrack = data?.step?.webhookResult?.['newTrackSlug']
+        
+        if (isLastStep && !changedTrack) {
           setFormEndPayload({
             webhookResult: data?.step?.webhookResult,
             capturedData: data?.capturedData,
