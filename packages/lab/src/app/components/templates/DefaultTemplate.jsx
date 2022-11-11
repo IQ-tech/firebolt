@@ -83,6 +83,9 @@ const DefaultTemplate = ({ fireboltStep }) => {
         <p>{fireboltStep?.friendlyName}</p>
         <StepForm
           theme={Theme}
+          onChangeField={(inputConfig, { value, isValid }, formPayload) => {
+            console.log(formPayload)
+          }}
 /*           autoFill={{
             "cpf": "01234567890",
             "full_name": "carrot top",
