@@ -16,7 +16,7 @@ export interface IUseInputHolder {
   }
   hasFormChanged: boolean
   setHasFormChanged: React.Dispatch<React.SetStateAction<boolean>>
-  modifyPayloadKeys: (newData?: IFieldsObject) => void
+  modifyPayloadKeys: (newData?: IFieldsObject) => Object
   clearFieldWarning: (fieldSlug: string, manualSetError?: boolean) => void
   setFieldWarning: (
     fieldSlug: string,
@@ -124,7 +124,7 @@ export default function useInputHolder({
       value,
       formPayload,
     }).isValid
-    modifyPayloadKeys({ [fieldSlug]: value })
+    const newFormPayload = modifyPayloadKeys({ [fieldSlug]: value })
     if (isValueValid) {
       const safeRemoteErrors = remoteErrors || []
       const hasRemoteError = safeRemoteErrors?.find(
@@ -137,7 +137,7 @@ export default function useInputHolder({
     }
     if (!hasFormChanged) setHasFormChanged(true)
     if (onChangeField)
-      onChangeField(fieldConfig, { value, previousValue: currentValue, isValid: isValueValid }, formPayload)
+      onChangeField(fieldConfig, { value, previousValue: currentValue, isValid: isValueValid }, newFormPayload)
   }
 
   function onBlurFieldHandler(value: string) {
