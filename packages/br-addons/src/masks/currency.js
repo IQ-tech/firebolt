@@ -9,4 +9,5 @@ export default {
   integerLimit: 7, // limit length of integer numbers
   allowNegative: false,
   allowLeadingZeroes: false,
+  requireDecimal: true,
 }
