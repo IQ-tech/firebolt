@@ -8,7 +8,6 @@ import RadioWidget from "./Widgets/RadioWidget"
 import CheckboxGroupWidget from "./Widgets/CheckboxGroupWidget"
 import CheckWidget from "./Widgets/CheckWidget"
 import TextAreaWidget from "./Widgets/TextAreaWidget"
-import CurrencyWidget from "./Widgets/CurrencyWidget"
 
 const defaultTheme = {
   "Email": EmailWidget,
@@ -21,7 +20,6 @@ const defaultTheme = {
   "Check": CheckWidget,
   "CheckboxGroup": CheckboxGroupWidget,
   "Radio": RadioWidget,
-  "Currency": CurrencyWidget,
 }
 
 export default defaultTheme
