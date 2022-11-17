@@ -112,7 +112,9 @@ function useFireboltProvider({
         extraRequestsMetaData,
       })
       .then((data) => {
-        if (isLastStep) {
+        const changedTrack = data?.step?.webhookResult?.['newTrackSlug']
+        
+        if (isLastStep && !changedTrack) {
           setFormEndPayload({
             webhookResult: data?.step?.webhookResult,
             capturedData: data?.capturedData,
@@ -212,6 +214,19 @@ function useFireboltProvider({
     }
   }
 
+  function addFieldRemoteError(fieldSlug: string, errorMessage: string) {
+    const newRemoteError = {
+      "slug": fieldSlug,
+      "validationResults": [
+        {
+          "isValid": false,
+          "message": errorMessage,
+        },
+      ],
+    }
+    setRemoteErrors([...remoteErrors, newRemoteError])
+  }
+
   function uploadFile(file, fileName: string) {
     return formEngine.current.uploadFile(file, fileName)
   }
@@ -241,6 +256,7 @@ function useFireboltProvider({
     clearRemoteFieldError,
     beforeProceedPayload,
     setBeforeProceedPayload,
+    addFieldRemoteError
   }
 }
 

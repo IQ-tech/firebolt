@@ -16,7 +16,7 @@ export interface IUseInputHolder {
   }
   hasFormChanged: boolean
   setHasFormChanged: React.Dispatch<React.SetStateAction<boolean>>
-  modifyPayloadKeys: (newData?: IFieldsObject) => void
+  modifyPayloadKeys: (newData?: IFieldsObject) => Object
   clearFieldWarning: (fieldSlug: string, manualSetError?: boolean) => void
   setFieldWarning: (
     fieldSlug: string,
@@ -27,11 +27,12 @@ export interface IUseInputHolder {
   onBlurField?: (
     field: IStepConfigField,
     value: string,
-    formPayload?: Object
+    formPayload: Object,
+    isValueValid: boolean
   ) => void
   onChangeField?: (
     field: IStepConfigField,
-    values: { value: any; previousValue: any },
+    values: { value: any; previousValue: any, isValid: boolean },
     formPayload?: Object
   ) => void
   classes: any
@@ -123,7 +124,7 @@ export default function useInputHolder({
       value,
       formPayload,
     }).isValid
-    modifyPayloadKeys({ [fieldSlug]: value })
+    const newFormPayload = modifyPayloadKeys({ [fieldSlug]: value })
     if (isValueValid) {
       const safeRemoteErrors = remoteErrors || []
       const hasRemoteError = safeRemoteErrors?.find(
@@ -136,7 +137,7 @@ export default function useInputHolder({
     }
     if (!hasFormChanged) setHasFormChanged(true)
     if (onChangeField)
-      onChangeField(fieldConfig, { value, previousValue: currentValue }, formPayload)
+      onChangeField(fieldConfig, { value, previousValue: currentValue, isValid: isValueValid }, newFormPayload)
   }
 
   function onBlurFieldHandler(value: string) {
@@ -169,7 +170,7 @@ export default function useInputHolder({
       modifyPayloadKeys({ [fieldSlug]: value.replace(checkSpaces, " ").trim() })
     }
 
-    if (onBlurField) onBlurField(fieldConfig, value, formPayload)
+    if (onBlurField) onBlurField(fieldConfig, value, formPayload, isValueValid)
   }
 
   function onFocusFieldHandler() {

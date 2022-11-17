@@ -4,9 +4,6 @@ import { IFieldsObject, IFormState } from "../../../types"
 import { getFormattedPropsPresets } from "@iq-firebolt/client-core"
 import { IgetFormattedPropsPresets } from "@iq-firebolt/client-core/lib/formatters/applyPropsPresets"
 
-
-
-
 export default function useFormState({
   schema,
   autoFill,
@@ -59,7 +56,6 @@ export default function useFormState({
     }
   }
 
-
   function getNewRemoteErrors() {
     const safeRemoteErrors = remoteErrors || []
     return safeRemoteErrors.reduce((acc, nxtItem) => {
@@ -82,8 +78,8 @@ export default function useFormState({
       const { slug, value } = field
       const autoFillObj = value
         ? {
-          [slug]: value,
-        }
+            [slug]: value,
+          }
         : {}
 
       return { ...acc, ...autoFillObj }
@@ -119,8 +115,9 @@ export default function useFormState({
       : setFieldValidationErrors
 
     const erroredFieldsSlugs = Object.keys(usedState)
-    const filteredSlugs = erroredFieldsSlugs
-      .filter((slug) => slug !== fieldSlug)
+    const filteredSlugs = erroredFieldsSlugs.filter(
+      (slug) => slug !== fieldSlug
+    )
     const newErroredFields = filteredSlugs.reduce((acc, slug) => {
       return {
         ...acc,
@@ -164,14 +161,12 @@ export default function useFormState({
     const remoteErrorsObject = getNewRemoteErrors()
 
     setFieldValidationErrors({ ...errorsObject, ...remoteErrorsObject })
-
   }
 
   function modifyPayloadKeys(newData: IFieldsObject = {}) {
-    setFormPayload({
-      ...formPayload,
-      ...newData,
-    })
+    const newPayload = { ...formPayload, ...newData }
+    setFormPayload(newPayload)
+    return newPayload
   }
 
   return {

@@ -68,10 +68,14 @@ const mockFields = [
 ]
 
 const DefaultTemplate = ({ fireboltStep }) => {
-  const { remoteErrors } = useFirebolt()
+  const { remoteErrors, addFieldRemoteError } = useFirebolt()
   useEffect(() => {
     console.log(remoteErrors)
   }, [remoteErrors])
+
+  useEffect(() => {
+    addFieldRemoteError("full_name", "cebola")
+  }, [])
 
   return (
     <div className="tooltip-wrapper">
@@ -79,6 +83,9 @@ const DefaultTemplate = ({ fireboltStep }) => {
         <p>{fireboltStep?.friendlyName}</p>
         <StepForm
           theme={Theme}
+          onChangeField={(inputConfig, { value, isValid }, formPayload) => {
+            console.log(formPayload)
+          }}
 /*           autoFill={{
             "cpf": "01234567890",
             "full_name": "carrot top",
