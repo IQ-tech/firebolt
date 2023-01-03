@@ -34,11 +34,10 @@ function isPhoneValid(value = ''): ValidationResult {
     }
   }
 
-  const validationString = onlyNums
-  const regexValidation = /^\d{3}(\d)\1{7}$/;
-  const validationResult = regexValidation.test(validationString);
+  const regexEightEqualDigits = /^\d{3}(\d)\1{7}$/;
+  const hasEightEqualDigits = regexEightEqualDigits.test(onlyNums);
 
-  if (onlyNums.length === 11 && validationResult) {
+  if (onlyNums.length === 11 && hasEightEqualDigits) {
     return invalidObj;
   }
 
