@@ -34,6 +34,14 @@ function isPhoneValid(value = ''): ValidationResult {
     }
   }
 
+  const validationString = onlyNums
+  const regexValidation = /^\d{3}(\d)\1{7}$/;
+  const validationResult = regexValidation.test(validationString);
+
+  if (onlyNums.length === 11 && validationResult) {
+    return invalidObj;
+  }
+
   const validDDD = [
     11, 12, 13, 14, 15, 16, 17, 18, 19, 21, 22, 24, 27, 28, 31, 32, 33, 34, 35,
     37, 38, 41, 42, 43, 44, 45, 46, 47, 48, 49, 51, 53, 54, 55, 61, 62, 64, 63,
