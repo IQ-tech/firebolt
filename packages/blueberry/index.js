@@ -10,6 +10,7 @@ import RadioWidget from "./Widgets/RadioWidget"
 import CheckWidget from "./Widgets/CheckWidget"
 import BRCityWidget from "./Widgets/BRCityWidget"
 import TextareaWidget from "./Widgets/TextareaWidget"
+import UploadWidget from "./Widgets/UploadWidget"
 
 // fields
 const blueberryTheme = {
@@ -27,6 +28,7 @@ const blueberryTheme = {
   "Radio": RadioWidget,
   "Textarea": TextareaWidget,
   "Currency": CurrencyWidget,
+  "Upload": UploadWidget,
 }
 
 export default blueberryTheme
