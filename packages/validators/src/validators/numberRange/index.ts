@@ -1,4 +1,5 @@
 import { Validator, ValidationResult } from '../../classes';
+import replaceAll from "../../utils/replaceAll"
 
 interface INumberRangeArgs {
   minNumber?: number;
@@ -26,9 +27,13 @@ function numberRange(
 
   const onlyNumbers = stringfiedValue.replace(/[^0-9,.]/g, '');
   const withoutThousandSeparator = !!thousandsSeparatorSymbol // 1000000
-    ? onlyNumbers.replaceAll(thousandsSeparatorSymbol, '')
+    ? replaceAll(onlyNumbers, thousandsSeparatorSymbol, '')
     : onlyNumbers;
-  const withDecimalPoint = withoutThousandSeparator.replaceAll(decimalSymbol, '.');
+  const withDecimalPoint = replaceAll(
+    withoutThousandSeparator,
+    decimalSymbol,
+    "."
+  )
   const formatted = Number(withDecimalPoint);
 
   if (

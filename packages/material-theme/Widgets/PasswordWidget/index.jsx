@@ -17,6 +17,7 @@ const PasswordWidget = ({
   isRequired,
   fieldId,
   hasError,
+  inputRef,
 }) => {
   const [showPassword, setShowPassword] = useState(false)
 
@@ -30,6 +31,7 @@ const PasswordWidget = ({
           type={showPassword ? "text" : "password"}
           value={value}
           autoComplete="off"
+          inputRef={inputRef}
           required={isRequired}
           onChange={(e) => onChange(e?.target?.value)}
           onBlur={(e) => onBlur(e?.target?.value)}

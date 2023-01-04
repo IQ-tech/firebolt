@@ -7,7 +7,7 @@ import { propsPresets } from "@iq-firebolt/br-addons"
 
 const withFirebolt = createFireboltProvider({
   formAccess: {
-    root: "https://btti33t5h5.execute-api.sa-east-1.amazonaws.com/dev",
+    root: "https://dsv-firebolt-api.iq.com.br/",
     formName: "sample",
   },
   withHistory: true,
@@ -135,7 +135,11 @@ const FormDemo = () => {
           proceed()
         }}
         onChangeStep={({ sentStep, currentStep }) => {
+          console.log({sentStep, currentStep})
           // console.log("changed step:", { sentStep, currentStep });
+        }}
+        onBeforeProceed={(currentStep, formPayload) => {
+          console.log(currentStep, formPayload)
         }}
       >
         <Wizard.Step match="*" component={DefaultTemplate} />

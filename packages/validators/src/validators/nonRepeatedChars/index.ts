@@ -1,39 +1,44 @@
-import { Validator, ValidationResult } from '../../classes';
+import { Validator, ValidationResult } from "../../classes"
 
 interface NonRepeatedCharsProperties {
   /** Check if a given string has a substring of repeated chars */
-  subStr?: number;
+  subStr?: number
+  ignoreSpace?: boolean
 }
 
 function nonRepeatedChars(
   value: string | number,
-  { subStr }: NonRepeatedCharsProperties = {},
+  { subStr, ignoreSpace }: NonRepeatedCharsProperties = {}
 ) {
-  const isString = typeof value === 'string';
-  const isNumber = typeof value === 'number';
-  const hasValue = !!value;
+  
+  const isString = typeof value === "string"
+  const isNumber = typeof value === "number"
+  const hasValue = !!value
 
-  const isValidType = !hasValue || !isString || !isNumber;
-  if (!isValidType) return new ValidationResult(true);
-  const stringfied = String(value);
+  const isValidType = !hasValue || !isString || !isNumber
+  if (!isValidType) return new ValidationResult(true)
+  const stringfied = String(value)
 
   const shouldCheckSubstr =
-    !!subStr && !Number.isNaN(Number(subStr)) && subStr !== 1;
+    !!subStr && !Number.isNaN(Number(subStr)) && subStr > 1
 
   if (shouldCheckSubstr && !!subStr) {
-    const regexToCheck = new RegExp(`(.)\\1{${subStr - 1},}`);
-    const charRepeats = regexToCheck.test(stringfied);
-    const isValid = !charRepeats;
+    const stringFieldWithoutExtraSpaces = stringfied.replace(/( )+/g, " ").trim()
+    const regexToCheck = new RegExp(`(.)\\1{${subStr - 1},}`)
+    const charRepeats = regexToCheck.test(ignoreSpace ? stringFieldWithoutExtraSpaces : stringfied )
+    const isValid = !charRepeats
 
-    return new ValidationResult(isValid);
+    return new ValidationResult(isValid)
   }
 
-  const repeatedCharsRegex = /^(.)\1+$/;
-  const hasOnlyTheSameChar = repeatedCharsRegex.test(stringfied);
-  const isValid = !hasOnlyTheSameChar;
-  const message = isValid ? '' : 'O campo não deve conter caracteres repetidos';
+  const repeatedCharsRegex = /^(.)\1+$/
+  const hasOnlyTheSameChar = repeatedCharsRegex.test(stringfied)
+ 
 
-  return new ValidationResult(isValid, message);
+  const isValid = !hasOnlyTheSameChar
+  const message = isValid ? "" : "O campo não deve conter caracteres repetidos"
+
+  return new ValidationResult(isValid, message)
 }
 
-export default new Validator(nonRepeatedChars);
+export default new Validator(nonRepeatedChars)

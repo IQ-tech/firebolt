@@ -11,7 +11,8 @@ const RadioWidget = ({
   isRequired,
   options,
   slug,
-  meta
+  meta,
+  onBlur
 }) => {
   return (
     <RadioField
@@ -24,6 +25,7 @@ const RadioWidget = ({
       invalid={hasError}
       errorMessage={errorMessage}
       onChange={onChange}
+      onBlur={onBlur}
     />
   )
 }

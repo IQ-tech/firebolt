@@ -1,7 +1,7 @@
 import isPhoneValid from './index';
 
 describe('isPhoneValid validation', () => {
-  test.each(['geroge', '(__)1___-____', 1, '11,951234123', '+11951234123'])(
+  test.each(['geroge', '(__)1___-____', 1, '11,951234123', '+11951234123', '21955555555'])(
     'test %p should not pass in phone validator',
     (value) => {
       expect(isPhoneValid.run(value).isValid).toBeFalsy();

@@ -28,8 +28,12 @@ export interface IFireboltContext {
   getRequestsMetadata?: object
   uploadFile?: any
   clearSession?(): void
+  clearRemoteFieldError(fieldSlug: string): void
 
   connectionError?: any
+  beforeProceedPayload: boolean
+  setBeforeProceedPayload(arg:boolean): void
+  addFieldRemoteError(fieldSlug: string, errorMessage: string)
 }
 
 const FireboltContext = createContext<IFireboltContext>({} as IFireboltContext)

@@ -2,10 +2,9 @@ import {
   IDefaultStep,
   IFormMetadata,
   IFormStep,
-  IStepConfigField
 } from "@iq-firebolt/client-core"
 import { IFormEndPayload } from "../../../types"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 
 const defaultStep: IDefaultStep = {
   data: {
@@ -19,6 +18,7 @@ const defaultStep: IDefaultStep = {
 }
 
 export default function useData() {
+
   const [currentStep, setCurrentStep] = useState<IDefaultStep>(defaultStep)
 
   // holds the form data before updating state, this is used by the wizard in the beforeChangeStep callback
@@ -37,6 +37,12 @@ export default function useData() {
     {} as IFormEndPayload
   ) //step, meta, capturedData
 
+  function clearRemoteFieldError(fieldSlug: string){
+    const safeRemote = remoteErrors || []
+    const filtered = safeRemote.filter(error => error.slug !== fieldSlug)
+    setRemoteErrors(filtered)
+  }
+
   return {
     capturedData,
     setCapturedData,
@@ -52,5 +58,6 @@ export default function useData() {
     setStagedStep,
     lastVisitedStep,
     setLastVisitedStep,
+    clearRemoteFieldError
   }
 }

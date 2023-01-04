@@ -2,13 +2,14 @@ import TextWidget from "./Widgets/TextWidget"
 import SelectWidget from "./Widgets/SelectWidget"
 import PasswordWidget from "./Widgets/PasswordWidget"
 import CEPWidget from "./Widgets/CEPWidget"
+import CurrencyWidget from "./Widgets/CurrencyWidget"
 import NumberWidget from "./Widgets/NumberWidget"
 import EmailWidget from "./Widgets/EmailWidget"
 import CheckboxGroupWidget from "./Widgets/CheckboxGroupWidget"
 import RadioWidget from "./Widgets/RadioWidget"
 import CheckWidget from "./Widgets/CheckWidget"
 import BRCityWidget from "./Widgets/BRCityWidget"
-import TextareaWidget from './Widgets/TextareaWidget'
+import TextareaWidget from "./Widgets/TextareaWidget"
 
 // fields
 const blueberryTheme = {
@@ -24,7 +25,8 @@ const blueberryTheme = {
   "Check": CheckWidget,
   "CheckboxGroup": CheckboxGroupWidget,
   "Radio": RadioWidget,
-  "Textarea": TextareaWidget
+  "Textarea": TextareaWidget,
+  "Currency": CurrencyWidget,
 }
 
 export default blueberryTheme
@@ -39,4 +41,5 @@ export {
   CheckboxGroupWidget,
   RadioWidget,
   TextareaWidget,
+  CurrencyWidget,
 }
