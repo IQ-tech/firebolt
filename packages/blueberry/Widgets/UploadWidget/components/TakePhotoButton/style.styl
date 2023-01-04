@@ -1,0 +1,58 @@
+.bb-take-photo
+  display flex
+  width 100%
+  min-width 100%
+  min-height 70px
+  align-items center
+  justify-content space-between
+  padding 17px 16px 17px 16px
+  border 1px solid #969696
+  color $bb-blue-100
+  font-weight 700
+  text-align left
+  border-radius 4px
+  background-color transparent
+  font-family inherit
+  cursor pointer
+
+  &:not(&--uploaded)
+    animation fadeIn .3s ease
+
+
+  &.-uploaded 
+    background-color $bb-green-20
+    border 2px solid $bb-green-20
+
+    & > img
+      display none
+  
+  &__content 
+    width 100%
+    align-items center
+    justify-content space-between
+    display flex
+    font-size 14px
+    line-height 22px
+
+    &-first
+      display flex
+      align-items center
+      gap 24px
+
+
+  &__del-file
+    border-left 1px solid gray-50
+    height 32px
+    padding-left 18px
+    display flex
+    align-items center
+    justify-content center
+
+
+@keyframes fadeIn
+  from
+    opacity 0
+    color white
+  
+  to
+    opacity 1
