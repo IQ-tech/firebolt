@@ -1,6 +1,6 @@
 import React from "react"
 
-import Img from "../Img"
+import Img from "../../Img"
 
 import "./style.styl"
 
