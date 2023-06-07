@@ -23,7 +23,6 @@ const TextWidget = ({
 }) => {
   return (
     <InputField
-      autoComplete="none"
       tooltipConfig={getTooltipConfig(meta)}
       required={isRequired}
       optional={isOptional}
