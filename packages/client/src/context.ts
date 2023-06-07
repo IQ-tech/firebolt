@@ -10,6 +10,7 @@ export interface IFireboltContext {
   //states
   isFormLoading?: boolean
   formFlowHasBeenFinished?: boolean
+  lastSentPayload?: Object
   //data
   currentStep?: IDefaultStep
   stagedStep?: IFormStep

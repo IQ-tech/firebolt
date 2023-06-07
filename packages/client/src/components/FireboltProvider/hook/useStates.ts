@@ -4,6 +4,7 @@ export default function useStates() {
   const [isFormLoading, setIsFormLoading] = useState<boolean>(true);
   const [formFlowHasBeenFinished, setFormFlowHasBeenFinished] = useState<boolean>(false);
   const [beforeProceedPayload, setBeforeProceedPayload] = useState<any>(null)
+  const [lastSentPayload, setLastSentPayload] = useState<any>(null)
 
   return {
     isFormLoading,
@@ -11,6 +12,8 @@ export default function useStates() {
     formFlowHasBeenFinished,
     setFormFlowHasBeenFinished,
     beforeProceedPayload,
-    setBeforeProceedPayload
+    setBeforeProceedPayload,
+    lastSentPayload,
+    setLastSentPayload,
   };
 }
