@@ -1,7 +1,11 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 
-export default function useCurrencyWidget() {
+export default function useCurrencyWidget({value}) {
   const [fieldValue, setFieldValue] = useState("")
+
+  useEffect(() => {
+    moneyMask(value)
+  }, [value])
 
   const moneyMask = (rawValue) => {
     if (rawValue === null) rawValue = ""
