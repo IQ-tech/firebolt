@@ -3,7 +3,8 @@ import useCurrencyWidget from "../../hooks/useCurrencyWidget"
 import TextWidget from "../TextWidget"
 
 const CurrencyWidget = (props) => {
-  const { moneyMask, fieldValue } = useCurrencyWidget()
+  const { value } = props
+  const { moneyMask, fieldValue } = useCurrencyWidget({value})
 
   return <TextWidget {...props} onChange={moneyMask} value={fieldValue} />
 }
