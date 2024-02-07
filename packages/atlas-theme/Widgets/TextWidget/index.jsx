@@ -1,6 +1,4 @@
 import React from "react"
-import FormControl from "@material-ui/core/FormControl"
-import TextField from "@material-ui/core/TextField"
 import FieldHolder from "../../FieldHolder"
 
 const TextWidget = ({
@@ -24,26 +22,39 @@ const TextWidget = ({
   inputRef,
 }) => {
   return (
-    <FieldHolder my="30px">
-      <FormControl fullWidth>
-        <TextField
-          required={isRequired}
-          id={fieldId}
-          error={hasError}
-          label={label}
-          type={htmlType}
-          helperText={hasError ? errorMessage : ""}
-          name={slug}
-          value={value}
-          inputRef={inputRef}
-          placeholder={placeholder}
-          onChange={(e) => onChange(e?.target?.value)}
-          onBlur={(e) => onBlur(e?.target?.value)}
-          onFocus={(e) => onFocus(e?.target?.value)}
-          autoComplete="off"
-          variant="outlined"
+    <FieldHolder inputName="teste" label="Label">
+      <input
+        className="ac-input"
+        onChange={(e) => onChange(e?.target?.value)}
+        onFocus={(e) => onFocus(e?.target?.value)}
+        onBlur={(e) => onBlur(e?.target?.value)}
+        value={value}
+        ref={inputRef}
+        name={slug}
+        // maxlength="this.maxLength"
+        // required="this.required"
+        // inputmode="this.inputmode"
+        // placeholder="this.placeholder"
+        // disabled="this.disabled"
+        // ngClass="{
+        //   'ac-input-fail': this.formErrors.includes(this.controlName) && checkInputTouch()
+        // }"
+        // textMask="{ mask: this.inputMasksthis.type, guide: false }"
+        // formControlName="this.controlName"
         />
-      </FormControl>
+
+    {/* <div class="option-label-container">
+      <label class="option-label">{{ this.floatLabel }}</label>
+    </div> */}
+
+      <span
+        // *ngIf="this.formErrors.includes(this.controlName) && checkInputTouch()"
+        className="ac-input-error-message"
+        >
+          {/* {
+            genericErrorMessage[controlName] || partnerErrorMessage[controlName]
+          } */}
+      </span>
     </FieldHolder>
   )
 }

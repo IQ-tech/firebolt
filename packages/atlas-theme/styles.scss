@@ -1,0 +1,93 @@
+* {
+  box-sizing: border-box;
+}
+
+.input-container {
+
+	label {
+		font-size: 16px;
+		color: black;
+		font-weight: 600;
+		margin-bottom: 24px;
+	}
+
+	.min-max-info-container {
+		margin-top: 8px;
+
+		p {
+			color: black;
+			font-size: 14px;
+			font-weight: 400;
+		}
+	}
+}
+
+.ac-input-error-message {
+  pointer-events: none;
+  display: block;
+  font-weight: 400;
+  font-size: 16px;
+  color: red;
+  margin-top: 8px;
+}
+
+.float-label {
+  position: relative;
+  height: 64px;
+
+	.option-label-container {
+		position: absolute;
+
+		.option-label {
+			display: block;
+			font-size: 14px;
+			font-weight: 600;
+			line-height: 24px;
+			color: black;
+			position: relative;
+			top: -75px;
+			left: 18px;
+			text-align: center;
+			background: white;
+			padding: 0 8px;
+			pointer-events: none;
+
+			label {
+				transition: all .3s ease-out;
+			}
+		}
+	}
+
+  input {
+    width: 100%;
+    height: 100%;
+    border: 1px solid gray;
+    border-radius: 8px;
+    padding: 0 24px;
+    transition: all .3s ease-out;
+    -webkit-appearance: none;
+		font-size: 18px;
+		color: black;
+
+    &:focus {
+      border-color: blue;
+
+      & + div label {
+        color: blue;
+				font-weight: 600;
+				transition: all .3s ease-out;
+      }
+		}
+  }
+
+	input.ac-input-fail {
+		border-color: red;
+		color: red;
+
+		& + div label {
+			color: red;
+			font-weight: 600;
+			transition: all .3s ease-out;
+		}
+	}
+}

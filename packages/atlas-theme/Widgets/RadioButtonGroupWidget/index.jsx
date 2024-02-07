@@ -7,7 +7,7 @@ import Radio from "@material-ui/core/Radio"
 import FormHelperText from "@material-ui/core/FormHelperText"
 import FieldHolder from "../../FieldHolder"
 
-const RadioWidget = ({
+const RadioButtonGroupWidget = ({
   options = [],
   fieldId,
   label = "Choose value",
@@ -54,4 +54,4 @@ const RadioWidget = ({
   )
 }
 
-export default RadioWidget
+export default RadioButtonGroupWidget
