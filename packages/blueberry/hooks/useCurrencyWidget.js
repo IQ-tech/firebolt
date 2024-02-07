@@ -27,9 +27,10 @@ export default function useCurrencyWidget({ value, onChange }) {
       rawValue = rawValue.replace(/(\d)(\d{2})$/, "$1,$2")
     }
 
-    onChange(rawValue.length === 0 ? "" : "R$ " + rawValue)
+    const finalValue = rawValue.length === 0 ? "" : "R$ " + rawValue
 
-    setFieldValue(rawValue.length === 0 ? "" : "R$ " + rawValue)
+    onChange(finalValue)
+    setFieldValue(finalValue)
   }
 
   return { moneyMask, fieldValue }
