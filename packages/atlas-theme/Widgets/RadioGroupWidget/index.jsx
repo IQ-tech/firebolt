@@ -7,6 +7,8 @@ import Radio from "@material-ui/core/Radio"
 import FormHelperText from "@material-ui/core/FormHelperText"
 import FieldHolder from "../../FieldHolder"
 
+import "./styles.scss"
+
 const RadioGroupWidget = ({
   options = [],
   fieldId,
@@ -17,39 +19,24 @@ const RadioGroupWidget = ({
   hasError,
   errorMessage,
   isRequired,
-  onFocus
+  onFocus,
 }) => {
   return (
-    <FieldHolder>
-      <FormControl
-        required={isRequired}
-        component="fieldset"
-        fullWidth
-        error={hasError}
-      >
-        <FormLabel component="legend">{label}</FormLabel>
-        <RadioGroup
-          name={fieldId}
-          onBlur={(e) => onBlur(e?.target?.value)}
-          value={value}
-          onChange={(e) => onChange(e?.target?.value)}
-          onFocus={(e) => onFocus(e?.target?.value)}
-        >
-          {options.map(({ value, label }, index) => (
-            <FormControlLabel
-              key={`${fieldId}-option-${index}`}
-              value={value}
-              control={<Radio />}
-              label={label}
-            />
-          ))}
-        </RadioGroup>
-        {hasError && (
-          <FormHelperText error id={`${fieldId}--error-internal`}>
-            {errorMessage}
-          </FormHelperText>
-        )}
-      </FormControl>
+    <FieldHolder label={label} useLabel fieldName={fieldId}>
+      {options.map((option) => (
+        <fieldset className="radio__option" key={option.value}>
+          <input
+            type="radio"
+            checked={value === option.value}
+            onBlur={(e) => onBlur(e?.target?.value)}
+            value={option.value}
+            onChange={(e) => onChange(e?.target?.value)}
+            onFocus={(e) => onFocus(e?.target?.value)}
+          />
+
+          <label>{option.label}</label>
+        </fieldset>
+      ))}
     </FieldHolder>
   )
 }
