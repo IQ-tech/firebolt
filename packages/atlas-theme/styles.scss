@@ -4,11 +4,12 @@
 }
 
 .form-item {
-	h4 {
+	h4, .field__label {
 		font-size: 16px;
 		color: #16181D;
 		font-weight: 600;
-		margin-bottom: 24px;
+		margin: 24px 0;
+    display: block;
 	}
 
 	.min-max-info-container {
@@ -35,7 +36,6 @@
   position: relative;
   height: 64px;
 
-  
   input {
     width: 100%;
     height: 100%;
@@ -68,7 +68,7 @@
     font-size: 14px;
     font-weight: 600;
     line-height: 24px;
-    color: #5E6573;
+    color: #454A54;
     text-align: center;
     background: white;
     padding: 0 8px;

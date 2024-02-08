@@ -2,14 +2,12 @@ import React from "react";
 
 import "./styles.scss";
 
-const FieldHolder = ({ inputName, label, children }) => {
+const FieldHolder = ({ useLabel = false, fieldName, label, children }) => {
   return (
     <div className="form-item">
-      <h4 htmlFor={inputName}>{label}</h4>
+      {useLabel ? <label className="field__label" htmlFor={fieldName}>{ label }</label> : <h4>{label}</h4>}
 
-      <div className="input-container">
-        {children}
-      </div>
+      {children}
     </div>
 
   //<div

@@ -1,11 +1,7 @@
 import React from "react"
-import FormControl from "@material-ui/core/FormControl"
-import FormLabel from "@material-ui/core/FormLabel"
-import RadioGroup from "@material-ui/core/RadioGroup"
-import FormControlLabel from "@material-ui/core/FormControlLabel"
-import Radio from "@material-ui/core/Radio"
-import FormHelperText from "@material-ui/core/FormHelperText"
 import FieldHolder from "../../FieldHolder"
+
+import "./styles.scss"
 
 const RadioButtonGroupWidget = ({
   options = [],
@@ -20,36 +16,25 @@ const RadioButtonGroupWidget = ({
   onFocus
 }) => {
   return (
-    <FieldHolder>
-      <FormControl
-        required={isRequired}
-        component="fieldset"
-        fullWidth
-        error={hasError}
-      >
-        <FormLabel component="legend">{label}</FormLabel>
-        <RadioGroup
-          name={fieldId}
-          onBlur={(e) => onBlur(e?.target?.value)}
-          value={value}
-          onChange={(e) => onChange(e?.target?.value)}
-          onFocus={(e) => onFocus(e?.target?.value)}
-        >
-          {options.map(({ value, label }, index) => (
-            <FormControlLabel
-              key={`${fieldId}-option-${index}`}
-              value={value}
-              control={<Radio />}
-              label={label}
-            />
-          ))}
-        </RadioGroup>
-        {hasError && (
-          <FormHelperText error id={`${fieldId}--error-internal`}>
-            {errorMessage}
-          </FormHelperText>
-        )}
-      </FormControl>
+    <FieldHolder label={label} useLabel={true} fieldName={fieldId}>
+      <div className="options-container">
+        {
+          options.map((option) => (
+            <label className="radio__option" key={option.value}>
+              <input
+                type="checkbox"
+                checked={value === option.value}
+                onBlur={(e) => onBlur(e?.target?.value)}
+                value={option.value}
+                onChange={(e) => onChange(e?.target?.value)}
+                onFocus={(e) => onFocus(e?.target?.value)}
+              />
+
+              <span>{option.label}</span>
+          </label>
+          ))
+        }
+      </div>
     </FieldHolder>
   )
 }
