@@ -4,10 +4,10 @@ import "./styles.scss";
 
 const FieldHolder = ({ inputName, label, children }) => {
   return (
-    <div className="input-container">
-      <label htmlFor={inputName}>{label}</label>
+    <div className="form-item">
+      <h4 htmlFor={inputName}>{label}</h4>
 
-      <div className="float-label">
+      <div className="input-container">
         {children}
       </div>
     </div>

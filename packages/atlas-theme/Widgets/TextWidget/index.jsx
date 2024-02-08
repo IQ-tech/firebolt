@@ -7,6 +7,7 @@ const TextWidget = ({
   value,
   placeholder,
   isRequired,
+  className,
 
   // custom props
   slug,
@@ -24,12 +25,13 @@ const TextWidget = ({
   return (
     <FieldHolder inputName="teste" label="Label">
       <input
-        className="ac-input"
+        className={className}
         onChange={(e) => onChange(e?.target?.value)}
         onFocus={(e) => onFocus(e?.target?.value)}
         onBlur={(e) => onBlur(e?.target?.value)}
         value={value}
         ref={inputRef}
+        id={slug}
         name={slug}
         // maxlength="this.maxLength"
         // required="this.required"
@@ -41,15 +43,16 @@ const TextWidget = ({
         // }"
         // textMask="{ mask: this.inputMasksthis.type, guide: false }"
         // formControlName="this.controlName"
-        />
+      />
 
-    {/* <div class="option-label-container">
-      <label class="option-label">{{ this.floatLabel }}</label>
-    </div> */}
+      <label htmlFor={slug} class="float-label">Label no input</label>
+
+      {/* <div class="option-label-container">
+      </div> */}
 
       <span
         // *ngIf="this.formErrors.includes(this.controlName) && checkInputTouch()"
-        className="ac-input-error-message"
+        className="input-error-message"
         >
           {/* {
             genericErrorMessage[controlName] || partnerErrorMessage[controlName]
