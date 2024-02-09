@@ -89,16 +89,6 @@ const SelectWidget = ({
 
       <div className={classSelect}>
       <div className="ac-select__wrap">
-        {/* <label htmlFor="option-selected" className="ac-select__label">
-          {label}
-        </label> */}
-
-        {/* <input
-          type="checkbox"
-          id="option-selected"
-          className="ac-select__field"
-        /> */}  
-
         <label htmlFor={slug} className="float-label">
           {placeholder}
         </label>
