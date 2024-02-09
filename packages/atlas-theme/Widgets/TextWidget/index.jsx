@@ -46,7 +46,7 @@ const TextWidget = ({
           // formControlName="this.controlName"
         />
 
-        <label htmlFor={slug} class="float-label">
+        <label htmlFor={slug} className="float-label">
           {placeholder}
         </label>
 
