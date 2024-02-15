@@ -10,6 +10,9 @@
   "publishConfig": {
     "access": "public"
   },
+  "engines": {
+    "node": "20.x"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/IQ-tech/firebolt.git"
