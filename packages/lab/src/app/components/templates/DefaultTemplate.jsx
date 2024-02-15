@@ -1,8 +1,9 @@
 import { useEffect } from "react"
 import { StepForm, FireboltForm, useFirebolt } from "@iq-firebolt/client/src"
-import Theme from "@iq-firebolt/blueberry-theme"
+// import Theme from "@iq-firebolt/blueberry-theme"
 import { CheckboxGroup } from "iq-blueberry"
 /* import Theme from "@iq-firebolt/material-theme" */
+import Theme from "../../../../../atlas-theme/index"
 
 const mockFields = [
   {
@@ -74,7 +75,8 @@ const DefaultTemplate = ({ fireboltStep }) => {
   }, [remoteErrors])
 
   useEffect(() => {
-    addFieldRemoteError("full_name", "cebola")
+    console.log(fireboltStep)
+    // addFieldRemoteError("full_name", "cebola")
   }, [])
 
   return (
@@ -84,6 +86,7 @@ const DefaultTemplate = ({ fireboltStep }) => {
         <StepForm
           theme={Theme}
           onChangeField={(inputConfig, { value, isValid }, formPayload) => {
+            console.log("mudou")
             console.log(formPayload)
           }}
 /*           autoFill={{

@@ -8,7 +8,7 @@ import { propsPresets } from "@iq-firebolt/br-addons"
 const withFirebolt = createFireboltProvider({
   formAccess: {
     root: "https://dsv-firebolt-api.iq.com.br/",
-    formName: "sample",
+    formName: "unified-loans-ac",
   },
   withHistory: true,
   stepQueryParam: "step",

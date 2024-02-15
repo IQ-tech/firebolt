@@ -1,9 +1,14 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 
-export default function useCurrencyWidget() {
+export default function useCurrencyWidget({ value, onChange }) {
   const [fieldValue, setFieldValue] = useState("")
 
+  useEffect(() => {
+    moneyMask(value)
+  }, [value])
+
   const moneyMask = (rawValue) => {
+    console.log(rawValue)
     if (rawValue === null) rawValue = ""
     if (typeof rawValue === "number") rawValue += ""
     rawValue = rawValue.replace(/\D/g, "")
@@ -22,7 +27,10 @@ export default function useCurrencyWidget() {
       rawValue = rawValue.replace(/(\d)(\d{2})$/, "$1,$2")
     }
 
-    setFieldValue(rawValue.length === 0 ? "" : "R$ " + rawValue)
+    const finalValue = rawValue.length === 0 ? "" : "R$ " + rawValue
+
+    onChange(finalValue)
+    setFieldValue(finalValue)
   }
 
   return { moneyMask, fieldValue }

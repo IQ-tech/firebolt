@@ -1,0 +1,90 @@
+* {
+  box-sizing: border-box;
+  font-family: 'Source Sans Pro';
+}
+
+.form-item {
+	h4, .field__label {
+		font-size: 16px;
+		color: #16181D;
+		font-weight: 600;
+		margin: 24px 0;
+    display: block;
+	}
+
+	.min-max-info-container {
+		margin-top: 8px;
+
+		p {
+			color: #454A54;
+			font-size: 14px;
+			font-weight: 400;
+		}
+	}
+}
+
+.input-error-message {
+  pointer-events: none;
+  display: block;
+  font-weight: 400;
+  font-size: 16px;
+  color: #E52222;
+  margin-top: 8px;
+}
+
+.input-container {
+  position: relative;
+  height: 64px;
+
+  input {
+    width: 100%;
+    height: 100%;
+    border: 1px solid #C4C9D4;
+    border-radius: 8px;
+    padding: 0 24px;
+    transition: all .3s ease-out;
+		color: #454A54;
+    appearance: none;
+    padding: 12px 24px;
+    outline-color: transparent;
+    font-size: 16px;
+    font-weight: 400;
+    outline: none;
+    
+    &:focus {
+      transition: all .3s ease-out;
+      border: 1px solid #0048DB;
+
+      & + label {
+        color: #0048DB;
+        font-weight: 600;
+        transition: all .3s ease-out;
+      }
+		}
+  }
+  
+  .float-label {
+    display: inline-block;
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 24px;
+    color: #454A54;
+    text-align: center;
+    background: white;
+    padding: 0 8px;
+    pointer-events: none;
+    transition: all .3s ease-out;
+    transform: translate(16px, -86px);
+  }
+
+	input.input-fail {
+		border-color: #E52222;
+		color: #E52222;
+
+		& + label {
+			color: #E52222;
+			font-weight: 600;
+			transition: all .3s ease-out;
+		}
+	}
+}
