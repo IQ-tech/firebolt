@@ -1,0 +1,39 @@
+{
+  "name": "@iq-firebolt/atlas-theme",
+  "version": "0.0.1",
+  "description": "> TODO: description",
+  "author": "iq team",
+  "homepage": "https://github.com/IQ-tech/firebolt#readme",
+  "license": "Apache-2.0",
+  "sideEffects": false,
+  "main": "./index.js",
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/IQ-tech/firebolt.git"
+  },
+  "scripts": {
+    "test": "jest",
+    "test:watch": "jest --watch"
+  },
+  "bugs": {
+    "url": "https://github.com/IQ-tech/firebolt/issues"
+  },
+  "dependencies": {
+    "classnames": "^2.5.1",
+    "sass": "^1.70.0"
+  },
+  "devDependencies": {
+    "react": "^16.12.0",
+    "react-dom": "^16.12.0"
+  },
+  "peerDependencies": {
+    "react": "^16.12.0",
+    "react-dom": "^16.12.0"
+  },
+  "browserslist": [
+    "last 1 Chrome version"
+  ]
+}

@@ -1,120 +1,126 @@
-import { StepForm, FireboltForm } from "@iq-firebolt/client/src"
-import Theme from "@iq-firebolt/blueberry-theme"
+import { useEffect } from "react"
+import { StepForm, FireboltForm, useFirebolt } from "@iq-firebolt/client/src"
+// import Theme from "@iq-firebolt/blueberry-theme"
 import { CheckboxGroup } from "iq-blueberry"
 /* import Theme from "@iq-firebolt/material-theme" */
+import Theme from "../../../../../atlas-theme/index"
 
 const mockFields = [
-  {
-    "slug": "choosen_card",
-    "ui:widget": "hidden",
-    "ui:props": {},
-    "validators": [{ "type": "required" }]
-  },
   {
     "slug": "full_name",
     "ui:widget": "Text",
     "ui:props": {
       "label": "Nome completo",
-      "placeholder": "Nome completo"
+      "placeholder": "Nome completo",
     },
-    "validators": [{ "type": "required" }, { "type": "name" }],
-    "meta": {}
+    "validators": [{ "type": "required" }],
+    "meta": {},
   },
   {
-    "slug": "email",
-    "ui:widget": "Email",
+    "slug": "name",
+    "ui:widget": "Text",
     "ui:props": {
-      "label": "Email",
-      "placeholder": "contato@email.com"
+      "label": "Nome completo",
+      "placeholder": "Nome completo",
     },
-    "validators": [{ "type": "required" }, { "type": "email" }],
-    "meta": {}
+    "validators": [{ "type": "required" }, { "type": "name" }],
+    "meta": {},
   },
   {
     "slug": "cpf",
     "ui:widget": "Text",
-    "ui:props-preset": "br-cpf",
-    "ui:props": {},
+    "ui:props": {
+      "label": "teste",
+      "mask": [
+        "/\\d/",
+        "/\\d/",
+        "/\\d/",
+        ".",
+        "/\\d/",
+        "/\\d/",
+        "/\\d/",
+        ".",
+        "/\\d/",
+        "/\\d/",
+        "/\\d/",
+        "-",
+        "/\\d/",
+        "/\\d/",
+      ]
+      
+
+    },
     "ui:styles": {
-      "size": "half"
+      "size": "half",
     },
     "validators": [{ "type": "required" }, { "type": "cpf" }],
-    "meta": {}
+    "meta": {},
   },
   {
-    "slug": "main_income",
-    "ui:widget": "Text",
-    "ui:props-preset": "br-currency",
+    "slug": "hehe",
+    "ui:widget": "Check",
     "ui:props": {
-      "label": "Renda mensal"
-    },
-    "ui:styles": {
-      "size": "half"
+      "label": "Email",
+      "placeholder": "contato@email.com",
     },
     "validators": [{ "type": "required" }],
-    "meta": {}
+    "meta": {},
   },
-  {
-    "slug": "main_phone",
-    "ui:widget": "Text",
-    "ui:props-preset": "br-phone",
-    "ui:props": {
-      "label": "Celular com DDD"
-    },
-    "ui:styles": {
-      "size": "half"
-    },
-    "validators": [{ "type": "required" }, { "type": "phone" }],
-    "meta": {}
-  },
-  {
-    "slug": "bad_credit",
-    "ui:widget": "Radio",
-    "ui:props": {
-      "label": "Está negativado?",
-      "options": [
-        {
-          "value": "true",
-          "label": "Sim"
-        },
-        {
-          "value": "false",
-          "label": "Não"
-        }
-      ]
-    },
-    "ui:styles": {
-      "size": "half"
-    },
-    "validators": [{ "type": "required" }],
-    
-  }
 ]
 
 const DefaultTemplate = ({ fireboltStep }) => {
+  const { remoteErrors, addFieldRemoteError } = useFirebolt()
+  useEffect(() => {
+    console.log(remoteErrors)
+  }, [remoteErrors])
+
+  useEffect(() => {
+    console.log(fireboltStep)
+    // addFieldRemoteError("full_name", "cebola")
+  }, [])
+
   return (
     <div className="tooltip-wrapper">
       <div style={{ maxWidth: "600px", margin: "0 auto" }}>
         <p>{fireboltStep?.friendlyName}</p>
         <StepForm
           theme={Theme}
-          onFocusField={(field) => {
-            // console.log(field)
+          onChangeField={(inputConfig, { value, isValid }, formPayload) => {
+            console.log("mudou")
+            console.log(formPayload)
           }}
-          onChange={(test) => {console.log(test)}}
+/*           autoFill={{
+            "cpf": "01234567890",
+            "full_name": "carrot top",
+            "email": "teste@teste.com",
+
+          }} */
+          /* schema={mockFields} */
+/*           onFocusField={(fieldConfig, formPayload) => {
+            console.log("focus")
+            console.log({ fieldConfig, formPayload })
+          }}
+          onChangeField={(fieldConfig, value, formPayload) => {
+            console.log("change")
+            console.log({ fieldConfig, value, formPayload })
+          }}
+          onBlurField={(fieldConfig, value, formPayload) => {
+            console.log("blur")
+            console.log({ fieldConfig, value, formPayload })
+          }}
+          onChange={(test) => {
+            console.log(test)
+          }} */
           onSubmit={(payload) => fireboltStep.goNextStep(payload)}
           onGoBack={fireboltStep.goPreviousStep}
-          /*           customActionsChild={({ formData }) => {
-            return formData.isFormValid ? (
-              <button>next liberado</button>
-            ) : (
-              <button>next bloqueado</button>
-            )
-          }} */
-          orderFields={['cpf', 'full_name', 'email', 'main_income', 'main_phone', 'bad_credit']}
-        >
-        </StepForm>
-        
+        /*           customActionsChild={({ formData }) => {
+          return formData.isFormValid ? (
+            <button>next liberado</button>
+          ) : (
+            <button>next bloqueado</button>
+          )
+        }} */
+        ></StepForm>
       </div>
     </div>
   )

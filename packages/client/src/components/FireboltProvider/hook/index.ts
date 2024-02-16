@@ -34,6 +34,8 @@ function useFireboltProvider({
     setFormFlowHasBeenFinished,
     beforeProceedPayload,
     setBeforeProceedPayload,
+    lastSentPayload,
+    setLastSentPayload,
   } = useStates()
 
   const {
@@ -106,13 +108,17 @@ function useFireboltProvider({
   ): Promise<void | Object> {
     setIsFormLoading(true)
     setBeforeProceedPayload(stepFieldsPayload)
+    setLastSentPayload(stepFieldsPayload)
+
     const isLastStep = currentStep?.data?.slug === formflowMetadata?.lastStep
     return formEngine.current
       .nextStep(currentStep.data.slug, stepFieldsPayload, {
         extraRequestsMetaData,
       })
       .then((data) => {
-        if (isLastStep) {
+        const changedTrack = data?.step?.webhookResult?.['newTrackSlug']
+        
+        if (isLastStep && !changedTrack) {
           setFormEndPayload({
             webhookResult: data?.step?.webhookResult,
             capturedData: data?.capturedData,
@@ -212,6 +218,19 @@ function useFireboltProvider({
     }
   }
 
+  function addFieldRemoteError(fieldSlug: string, errorMessage: string) {
+    const newRemoteError = {
+      "slug": fieldSlug,
+      "validationResults": [
+        {
+          "isValid": false,
+          "message": errorMessage,
+        },
+      ],
+    }
+    setRemoteErrors([...remoteErrors, newRemoteError])
+  }
+
   function uploadFile(file, fileName: string) {
     return formEngine.current.uploadFile(file, fileName)
   }
@@ -241,6 +260,9 @@ function useFireboltProvider({
     clearRemoteFieldError,
     beforeProceedPayload,
     setBeforeProceedPayload,
+    addFieldRemoteError,
+    lastSentPayload,
+    setLastSentPayload,
   }
 }
 

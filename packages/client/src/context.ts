@@ -10,6 +10,7 @@ export interface IFireboltContext {
   //states
   isFormLoading?: boolean
   formFlowHasBeenFinished?: boolean
+  lastSentPayload?: Object
   //data
   currentStep?: IDefaultStep
   stagedStep?: IFormStep
@@ -33,6 +34,7 @@ export interface IFireboltContext {
   connectionError?: any
   beforeProceedPayload: boolean
   setBeforeProceedPayload(arg:boolean): void
+  addFieldRemoteError(fieldSlug: string, errorMessage: string)
 }
 
 const FireboltContext = createContext<IFireboltContext>({} as IFireboltContext)

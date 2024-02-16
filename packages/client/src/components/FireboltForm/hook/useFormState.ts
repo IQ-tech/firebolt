@@ -2,6 +2,7 @@ import { useState, useEffect } from "react"
 import { validateFBTStep } from "@iq-firebolt/validators"
 import { IFieldsObject, IFormState } from "../../../types"
 import { getFormattedPropsPresets } from "@iq-firebolt/client-core"
+import { IgetFormattedPropsPresets } from "@iq-firebolt/client-core/lib/formatters/applyPropsPresets"
 
 export default function useFormState({
   schema,
@@ -12,13 +13,15 @@ export default function useFormState({
   const [isFormValid, setIsFormValid] = useState(false)
   const [formPayload, setFormPayload] = useState<IFieldsObject>({})
   const [hasFormChanged, setHasFormChanged] = useState(false)
-  const [standalonePropsPresets, setStandalonePropsPresets] = useState<Object | undefined>()
+  const [standalonePropsPresets, setStandalonePropsPresets] = useState<
+    IgetFormattedPropsPresets | undefined
+  >()
   const [isHavingInternaLoading, setIsHavingInternalLoading] = useState(false)
   const [fieldValidationErrors, setFieldValidationErrors] =
     useState<IFieldsObject>({})
   const [fieldManuallySetErrors, setFieldManuallySetErrors] =
     useState<IFieldsObject>({})
-    const [ requiredFieldsSlugs, setRequiredFieldsSlugs ]= useState<string[]>([])
+  const [requiredFieldsSlugs, setRequiredFieldsSlugs] = useState<string[]>([])
 
   useEffect(validateForm, [formPayload, fieldManuallySetErrors])
   useEffect(autoFillFromProp, [autoFill])
@@ -26,12 +29,14 @@ export default function useFormState({
   useEffect(setRemoteErrors, [remoteErrors])
   useEffect(setupStandalonePropsPresets, [addons])
 
-  useEffect(()=>{
-    const requiredFields = schema.filter((field) => field?.validators?.find(validator => validator.type === "required"))
+  useEffect(() => {
+    const requiredFields = schema.filter((field) =>
+      field?.validators?.find((validator) => validator.type === "required")
+    )
     const slugs = requiredFields.map((field) => field.slug)
 
     setRequiredFieldsSlugs(slugs)
-    }, [schema])
+  }, [schema])
 
   function setupStandalonePropsPresets() {
     if (addons?.uiPropsPresets) {
@@ -43,7 +48,7 @@ export default function useFormState({
       setStandalonePropsPresets(undefined)
     }
   }
- // Autofill FormPayload from autofill prop
+  // Autofill FormPayload from autofill prop
   function autoFillFromProp() {
     const newPayload = { ...formPayload, ...autoFill }
     if (!!autoFill) {
@@ -51,14 +56,18 @@ export default function useFormState({
     }
   }
 
+  function getNewRemoteErrors() {
+    const safeRemoteErrors = remoteErrors || []
+    return safeRemoteErrors.reduce((acc, nxtItem) => {
+      const safeNextObj = nxtItem || {}
+      const validatorResult = safeNextObj["validationResults"] || []
+      return { ...acc, [nxtItem?.slug]: validatorResult[0]?.message }
+    }, {})
+  }
+
   function setRemoteErrors() {
     if (remoteErrors?.length) {
-      const newErrorModel = remoteErrors.reduce((acc, nxtItem) => {
-        const safeNextObj = nxtItem || {}
-        const validatorResult = safeNextObj["validationResults"] || []
-        return { ...acc, [nxtItem?.slug]: validatorResult[0]?.message }
-      }, {})
-
+      const newErrorModel = getNewRemoteErrors()
       setFieldValidationErrors({ ...fieldValidationErrors, ...newErrorModel })
     }
   }
@@ -98,10 +107,6 @@ export default function useFormState({
   }
 
   function clearFieldWarning(fieldSlug: string, manualSetError = false) {
-    const { invalidFields } = getFormValidation()
-    const invalidFieldsList = (invalidFields || []).map(
-      (invalidField) => invalidField.slug
-    )
     const usedState = manualSetError
       ? fieldManuallySetErrors
       : fieldValidationErrors
@@ -110,9 +115,9 @@ export default function useFormState({
       : setFieldValidationErrors
 
     const erroredFieldsSlugs = Object.keys(usedState)
-    const filteredSlugs = erroredFieldsSlugs
-      .filter((errorSlug: any) => invalidFieldsList.includes(errorSlug))
-      .filter((slug) => slug !== fieldSlug)
+    const filteredSlugs = erroredFieldsSlugs.filter(
+      (slug) => slug !== fieldSlug
+    )
     const newErroredFields = filteredSlugs.reduce((acc, slug) => {
       return {
         ...acc,
@@ -153,15 +158,15 @@ export default function useFormState({
         [fieldSlug]: errorMessage,
       }
     }, {})
+    const remoteErrorsObject = getNewRemoteErrors()
 
-    setFieldValidationErrors(errorsObject)
+    setFieldValidationErrors({ ...errorsObject, ...remoteErrorsObject })
   }
 
   function modifyPayloadKeys(newData: IFieldsObject = {}) {
-    setFormPayload({
-      ...formPayload,
-      ...newData,
-    })
+    const newPayload = { ...formPayload, ...newData }
+    setFormPayload(newPayload)
+    return newPayload
   }
 
   return {
@@ -179,6 +184,6 @@ export default function useFormState({
     markAllInvalidFields,
     standalonePropsPresets,
     requiredFieldsSlugs,
-    setRemoteErrors
+    setRemoteErrors,
   }
 }
