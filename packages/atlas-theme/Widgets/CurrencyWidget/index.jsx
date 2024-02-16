@@ -1,7 +1,7 @@
 import React from "react"
 
-import useCurrencyWidget from "../../hooks/useCurrencyWidget"
 import TextWidget from "../TextWidget"
+import useCurrencyWidget from "../../hooks/useCurrencyWidget"
 
 const CurrencyWidget = (props) => {
   const { value, onChange } = props
