@@ -1,5 +1,6 @@
 import React from "react"
-import useCurrencyWidget from "../../../blueberry/hooks/useCurrencyWidget"
+
+import useCurrencyWidget from "../../hooks/useCurrencyWidget"
 import TextWidget from "../TextWidget"
 
 const CurrencyWidget = (props) => {
