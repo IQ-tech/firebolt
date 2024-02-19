@@ -1,3 +1,7 @@
+* {
+  font-family: 'Source Sans Pro';
+}
+
 .options-container {
   display: flex;
   gap: 16px;
@@ -25,8 +29,8 @@
     font-size: 16px;
     line-height: 24px;
     font-weight: 400;
-    background: #E2E4E9;
-    color: #5E6573;
+    background: #EAEAEA;
+    color: #585858;
     transition: all 0.3s ease-in-out;
   }
   
