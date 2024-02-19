@@ -18,7 +18,7 @@ const RadioGroupWidget = ({
   return (
     <FieldHolder label={label} useLabel fieldName={fieldId}>
       {options.map((option) => (
-        <fieldset className="radio__option" key={option.value}>
+        <label className="radio__option" key={option.value}>
           <input
             type="radio"
             checked={value === option.value}
@@ -28,8 +28,8 @@ const RadioGroupWidget = ({
             onFocus={(e) => onFocus(e?.target?.value)}
           />
 
-          <label>{option.label}</label>
-        </fieldset>
+          {option.label}
+        </label>
       ))}
     </FieldHolder>
   )
