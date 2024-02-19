@@ -46,21 +46,21 @@ const TextWidget = ({
           // formControlName="this.controlName"
         />
 
-        <label htmlFor={slug} className="float-label">
+        <label htmlFor={slug}>
           {placeholder}
         </label>
 
         {/* <div class="option-label-container">
       </div> */}
 
-        <span
+        {errorMessage ? <span
           // *ngIf="this.formErrors.includes(this.controlName) && checkInputTouch()"
           className="input-error-message"
         >
           {/* {
             genericErrorMessage[controlName] || partnerErrorMessage[controlName]
           } */}
-        </span>
+        </span> : null}
       </div>
     </FieldHolder>
   )
