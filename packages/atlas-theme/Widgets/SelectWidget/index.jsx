@@ -130,6 +130,7 @@ const SelectWidget = ({
                 data-label={option.label}
                 onClick={onClickOption}
                 onKeyDown={onClickOption}
+                checked={selectedValue === option.value}
               />
 
               <span className="ac-select__option-label">{option.label}</span>
