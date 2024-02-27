@@ -7,6 +7,7 @@ const RadioGroupWidget = ({
   options = [],
   fieldId,
   label = "Choose value",
+  sublabel,
   onChange,
   value,
   onBlur,
@@ -17,6 +18,8 @@ const RadioGroupWidget = ({
 }) => {
   return (
     <FieldHolder label={label} useLabel fieldName={fieldId}>
+      <p>{sublabel}</p>
+
       {options.map((option) => (
         <label className="radio__option" key={option.value}>
           <input

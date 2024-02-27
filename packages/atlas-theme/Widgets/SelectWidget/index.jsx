@@ -11,6 +11,7 @@ import "./styles.scss"
 
 const SelectWidget = ({
   slug,
+  version,
   options = [],
   label,
   placeholder,
@@ -85,14 +86,8 @@ const SelectWidget = ({
 
   return (
     <FieldHolder label={label}>
-      {/* <h3>{ label }</h3> */}
-
       <div className={classSelect}>
       <div className="ac-select__wrap">
-        <label htmlFor={slug} className="float-label">
-          {placeholder}
-        </label>
-
         <div 
           className="ac-select__button" 
           onClick={onClickSelect}
@@ -100,7 +95,7 @@ const SelectWidget = ({
           id={slug}
         >
           {
-            isOpenSelect ? 
+            (isOpenSelect && version === "search") ? 
             <input 
               type="text" 
               placeholder="Digite ou selecione" 
@@ -115,7 +110,18 @@ const SelectWidget = ({
           </div>
         </div>
 
-        
+        <label htmlFor={slug}>
+          {placeholder}
+        </label>
+
+        {errorMessage ? <span
+          // *ngIf="this.formErrors.includes(this.controlName) && checkInputTouch()"
+          className="input-error-message"
+        >
+          {/* {
+            genericErrorMessage[controlName] || partnerErrorMessage[controlName]
+          } */}
+        </span> : null}
       </div>
 
       {isOpenSelect ? 
@@ -130,6 +136,7 @@ const SelectWidget = ({
                 data-label={option.label}
                 onClick={onClickOption}
                 onKeyDown={onClickOption}
+                checked={selectedValue === option.value}
               />
 
               <span className="ac-select__option-label">{option.label}</span>

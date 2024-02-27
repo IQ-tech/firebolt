@@ -14,6 +14,7 @@ const TextWidget = ({
   errorMessage,
   hasError,
   label,
+  sublabel,
   fieldId,
 
   // events
@@ -34,6 +35,8 @@ const TextWidget = ({
           ref={inputRef}
           id={slug}
           name={slug}
+          placeholder={placeholder}
+          type={htmlType}
           // maxlength="this.maxLength"
           // required="this.required"
           // inputmode="this.inputmode"
@@ -47,7 +50,7 @@ const TextWidget = ({
         />
 
         <label htmlFor={slug}>
-          {placeholder}
+          {sublabel}
         </label>
 
         {/* <div class="option-label-container">
