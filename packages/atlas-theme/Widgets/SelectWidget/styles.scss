@@ -5,6 +5,7 @@
 .ac-select {
   & {
     position: relative;
+    margin-top: 40px;
   }
 
   &__wrap {
@@ -63,18 +64,14 @@
     }
   }
 
-  .float-label {
-    display: inline-block;
+  label {
     font-size: 14px;
     font-weight: 600;
     line-height: 24px;
     color: #454A54;
-    text-align: center;
-    background: white;
-    padding: 0 8px;
-    pointer-events: none;
     transition: all .3s ease-out;
-    transform: translate(16px, 18px);
+    transform: translate(0px, -90px);
+    display: block;
   }
 
   &__button {
@@ -94,7 +91,6 @@
       height: 58px;
       width: 75%;
       z-index: 10;
-      padding-left: 8px;
       font-size: 16px;
       outline: none;
       border: 0;
@@ -211,12 +207,19 @@
 }
 
 .is-open {
-
   .float-label {
     color: #0048DB;
   }
 
   .ac-select__button {
     border: 1px solid #0048DB;
+  }
+
+  .ac-select__wrap {
+    label {
+      color: #0048DB;
+      font-weight: 600;
+      transition: all .3s ease-out;
+    }
   }
 }

@@ -85,14 +85,8 @@ const SelectWidget = ({
 
   return (
     <FieldHolder label={label}>
-      {/* <h3>{ label }</h3> */}
-
       <div className={classSelect}>
       <div className="ac-select__wrap">
-        <label htmlFor={slug} className="float-label">
-          {placeholder}
-        </label>
-
         <div 
           className="ac-select__button" 
           onClick={onClickSelect}
@@ -115,7 +109,18 @@ const SelectWidget = ({
           </div>
         </div>
 
-        
+        <label htmlFor={slug}>
+          {placeholder}
+        </label>
+
+        {errorMessage ? <span
+          // *ngIf="this.formErrors.includes(this.controlName) && checkInputTouch()"
+          className="input-error-message"
+        >
+          {/* {
+            genericErrorMessage[controlName] || partnerErrorMessage[controlName]
+          } */}
+        </span> : null}
       </div>
 
       {isOpenSelect ? 
