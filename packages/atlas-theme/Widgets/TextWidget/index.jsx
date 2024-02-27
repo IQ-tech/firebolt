@@ -36,6 +36,7 @@ const TextWidget = ({
           id={slug}
           name={slug}
           placeholder={placeholder}
+          type={htmlType}
           // maxlength="this.maxLength"
           // required="this.required"
           // inputmode="this.inputmode"
