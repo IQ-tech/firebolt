@@ -11,6 +11,7 @@ import "./styles.scss"
 
 const SelectWidget = ({
   slug,
+  version,
   options = [],
   label,
   placeholder,
@@ -94,7 +95,7 @@ const SelectWidget = ({
           id={slug}
         >
           {
-            isOpenSelect ? 
+            (isOpenSelect && version === "search") ? 
             <input 
               type="text" 
               placeholder="Digite ou selecione" 
