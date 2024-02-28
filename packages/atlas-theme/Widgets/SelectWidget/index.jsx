@@ -114,13 +114,10 @@ const SelectWidget = ({
           {placeholder}
         </label>
 
-        {errorMessage ? <span
-          // *ngIf="this.formErrors.includes(this.controlName) && checkInputTouch()"
+        {hasError && errorMessage ? <span
           className="input-error-message"
         >
-          {/* {
-            genericErrorMessage[controlName] || partnerErrorMessage[controlName]
-          } */}
+          {errorMessage}
         </span> : null}
       </div>
 
@@ -136,7 +133,7 @@ const SelectWidget = ({
                 data-label={option.label}
                 onClick={onClickOption}
                 onKeyDown={onClickOption}
-                checked={selectedValue === option.value}
+                defaultChecked={selectedValue === option.value}
               />
 
               <span className="ac-select__option-label">{option.label}</span>

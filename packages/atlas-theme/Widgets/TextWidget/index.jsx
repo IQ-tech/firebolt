@@ -8,6 +8,7 @@ const TextWidget = ({
   placeholder,
   isRequired,
   className,
+  maxLength,
 
   // custom props
   slug,
@@ -23,6 +24,7 @@ const TextWidget = ({
   onFocus,
   inputRef,
 }) => {
+
   return (
     <FieldHolder label={label}>
       <div className="input-container">
@@ -37,8 +39,8 @@ const TextWidget = ({
           name={slug}
           placeholder={placeholder}
           type={htmlType}
-          // maxlength="this.maxLength"
-          // required="this.required"
+          maxLength={maxLength}
+          required={isRequired}
           // inputmode="this.inputmode"
           // placeholder="this.placeholder"
           // disabled="this.disabled"
@@ -53,16 +55,10 @@ const TextWidget = ({
           {sublabel}
         </label>
 
-        {/* <div class="option-label-container">
-      </div> */}
-
-        {errorMessage ? <span
-          // *ngIf="this.formErrors.includes(this.controlName) && checkInputTouch()"
+        {hasError && errorMessage ? <span
           className="input-error-message"
         >
-          {/* {
-            genericErrorMessage[controlName] || partnerErrorMessage[controlName]
-          } */}
+          {errorMessage}
         </span> : null}
       </div>
     </FieldHolder>
