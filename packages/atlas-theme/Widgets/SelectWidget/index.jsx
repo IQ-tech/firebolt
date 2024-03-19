@@ -18,15 +18,10 @@ const SelectWidget = ({
 
   hasError,
   errorMessage,
-  value = "",
   fieldId,
-  isRequired,
   disabled = false,
-  optional = false,
 
   onChange,
-  onBlur,
-  onFocus,
 }) => {
   const selectRef = useRef(null)
   const [isOpenSelect, setIsOpenSelect] = useState(false)

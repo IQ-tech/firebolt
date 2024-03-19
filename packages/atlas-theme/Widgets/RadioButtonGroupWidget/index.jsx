@@ -10,9 +10,6 @@ const RadioButtonGroupWidget = ({
   onChange,
   value,
   onBlur,
-  hasError,
-  errorMessage,
-  isRequired,
   onFocus
 }) => {
   return (
