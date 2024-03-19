@@ -41,14 +41,6 @@ const TextWidget = ({
           type={htmlType}
           maxLength={maxLength}
           required={isRequired}
-          // inputmode="this.inputmode"
-          // placeholder="this.placeholder"
-          // disabled="this.disabled"
-          // ngClass="{
-          //   'ac-input-fail': this.formErrors.includes(this.controlName) && checkInputTouch()
-          // }"
-          // textMask="{ mask: this.inputMasksthis.type, guide: false }"
-          // formControlName="this.controlName"
         />
 
         <label htmlFor={slug}>
