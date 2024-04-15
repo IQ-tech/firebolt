@@ -18,22 +18,24 @@ const RadioGroupWidget = ({
 }) => {
   return (
     <FieldHolder label={label} useLabel fieldName={fieldId}>
-      <p>{sublabel}</p>
+      <div className="radio-group">
+        <p>{sublabel}</p>
 
-      {options.map((option) => (
-        <label className="radio__option" key={option.value}>
-          <input
-            type="radio"
-            checked={value === option.value}
-            onBlur={(e) => onBlur(e?.target?.value)}
-            value={option.value}
-            onChange={(e) => onChange(e?.target?.value)}
-            onFocus={(e) => onFocus(e?.target?.value)}
-          />
+        {options.map((option) => (
+          <label className="radio__option" key={option.value}>
+            <input
+              type="radio"
+              checked={value === option.value}
+              onBlur={(e) => onBlur(e?.target?.value)}
+              value={option.value}
+              onChange={(e) => onChange(e?.target?.value)}
+              onFocus={(e) => onFocus(e?.target?.value)}
+            />
 
-          {option.label}
-        </label>
-      ))}
+            {option.label}
+          </label>
+        ))}
+      </div>
     </FieldHolder>
   )
 }
