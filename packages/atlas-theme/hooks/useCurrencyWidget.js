@@ -8,7 +8,6 @@ export default function useCurrencyWidget({ value, onChange }) {
   }, [value])
 
   const moneyMask = (rawValue) => {
-    console.log(rawValue)
     if (rawValue === null) rawValue = ""
     if (typeof rawValue === "number") rawValue += ""
     rawValue = rawValue.replace(/\D/g, "")
