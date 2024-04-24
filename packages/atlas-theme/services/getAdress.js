@@ -1,7 +1,7 @@
 import STATE_FORMATS from "../constants/state-formats"
 
 export default async function getAddress(cep, stateFormat) {
-  const safeStateFormat = stateFormat || "default"
+  const safeStateFormat = stateFormat || "br"
   const cleanCEP = cep.split("-").join("")
   const apiRoute = `https://viacep.com.br/ws/${cleanCEP}/json/`
   const data = await fetch(apiRoute).then((data) => data.json())
