@@ -5,6 +5,7 @@ import RadioGroupWidget from "./Widgets/RadioGroupWidget"
 import RadioButtonGroupWidget from "./Widgets/RadioButtonGroupWidget"
 import CurrencyWidget from "./Widgets/CurrencyWidget"
 import CEPWidget from "./Widgets/CEPWidget"
+import BRCityWidget from "./Widgets/BRCityWidget"
 
 const defaultTheme = {
   "Text": TextWidget,
@@ -14,6 +15,7 @@ const defaultTheme = {
   "Radio-Unified": RadioButtonGroupWidget,
   "Currency": CurrencyWidget,
   "CEP": CEPWidget,
+  "BRCity": BRCityWidget,
 }
 
 export default defaultTheme
