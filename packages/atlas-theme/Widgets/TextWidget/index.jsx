@@ -20,6 +20,7 @@ const TextWidget = ({
 
   // events
   onChange,
+  
   onBlur,
   onFocus,
   inputRef,
