@@ -22,10 +22,12 @@ const SelectWidget = ({
   disabled = false,
 
   onChange,
+  value
+  
 }) => {
   const selectRef = useRef(null)
   const [isOpenSelect, setIsOpenSelect] = useState(false)
-  const [selectedValue, setSelectedValue] = useState("")
+  const [selectedValue, setSelectedValue] = useState("")  
   const [selectedLabel, setSelectedLabel] = useState("Selecione")
 
   const [optionsState, setOptionsState] = useState(options)
@@ -36,6 +38,14 @@ const SelectWidget = ({
     setIsOpenSelect((prevState) => !prevState)
     setOptionsState(backupOptions)
   }
+  
+  useEffect(() => {
+    if(value) {
+      setSelectedValue(value)
+      const autofilledLabel = options.find((option) => option.value === value)
+      setSelectedLabel(autofilledLabel?.label)
+    }
+  }, [value])
 
   function onClickOption(e) {
     if (disabled) return
