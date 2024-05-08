@@ -55,6 +55,7 @@ export interface IFormEngineOptions {
   requestsMetadata?: Object
   debug?: boolean
   addons?: IAddonsConfig
+  enforceNewSession?: boolean
   mockStep?: IStepData // provisional way to mock step response - remove on albus version
 }
 export interface IDefaultStep {

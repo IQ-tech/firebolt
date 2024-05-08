@@ -11,6 +11,7 @@ const createFireboltProvider =
     withHistory,
     addons,
     mockStep,
+    enforceNewSession
   }: IFireboltProvider) =>
   (Component: React.FunctionComponent) =>
   (props?: object) =>
@@ -23,6 +24,7 @@ const createFireboltProvider =
         withHistory={withHistory}
         addons={addons}
         mockStep={mockStep}
+        enforceNewSession={enforceNewSession}
       >
         <Component {...props} />
       </FireboltProvider>

@@ -17,6 +17,7 @@ function useFireboltProvider({
   stepQueryParam = "step",
   addons = {},
   mockStep,
+  enforceNewSession = false
 }: IFireboltProvider) {
   const formEngine = useRef(
     createFireboltForm(formAccess, {
@@ -24,6 +25,7 @@ function useFireboltProvider({
       debug,
       addons,
       mockStep,
+      enforceNewSession
     })
   )
 
