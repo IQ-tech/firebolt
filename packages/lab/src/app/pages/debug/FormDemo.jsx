@@ -12,6 +12,7 @@ const withFirebolt = createFireboltProvider({
   },
   withHistory: true,
   stepQueryParam: "step",
+  enforceNewSession: true,
   debug: true,
   addons: { uiPropsPresets: [propsPresets] },
   // mockStep: {

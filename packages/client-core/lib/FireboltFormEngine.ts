@@ -12,7 +12,7 @@ import {
   IRequestMetadata,
   IFormResponseData,
   IFormStep,
-  IStepData
+  IStepData,
 } from "./types"
 
 class FireboltFormEngine {
@@ -21,6 +21,7 @@ class FireboltFormEngine {
   debug?: boolean
   addons?: IAddonsConfig
   APIService: APIService
+  enforceNewSession = false
   private mockStep?: IStepData
 
   constructor(
@@ -30,6 +31,7 @@ class FireboltFormEngine {
       debug = false,
       addons = {},
       mockStep,
+      enforceNewSession = false,
     }: IFormEngineOptions = {}
   ) {
     this.requestsMetadata = requestsMetadata
@@ -38,6 +40,7 @@ class FireboltFormEngine {
     this.addons = addons
     this.APIService = new APIService({ formAccess, debug })
     this.mockStep = mockStep
+    this.enforceNewSession = enforceNewSession
   }
 
   private decideStepResponse(
@@ -50,7 +53,7 @@ class FireboltFormEngine {
         ...safeResponse,
         step: {
           ...safeStep,
-          data: this.mockStep
+          data: this.mockStep,
         },
       }
     }
@@ -66,9 +69,13 @@ class FireboltFormEngine {
       //TODO to avaliate
       this.clearSession()
     }
-
     const sessionId = urlParams?.session_id
-    const formSessionKey = sessionId ? sessionId : getFormSession(this.formName)
+
+    const formSessionKey = (() => {
+      if (this.enforceNewSession) return ""
+      else if (sessionId) return sessionId
+      else return getFormSession(this.formName)
+    })()
 
     if (formSessionKey) {
       createFormSession(this.formName, formSessionKey)

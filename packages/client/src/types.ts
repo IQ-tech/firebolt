@@ -19,6 +19,7 @@ export interface IFireboltProvider {
   theme?: Object
   addons?: IAddonsConfig
   mockStep?: IStepData
+  enforceNewSession?: boolean
 }
 
 export interface IFieldsObject {
