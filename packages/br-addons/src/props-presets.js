@@ -10,6 +10,7 @@ import {
   BRPhoneResidentialMask,
   BRPhoneHybridMask,
 } from "./masks/phone"
+import RGMask from "./masks/RG"
 import MonthYearMask from "./masks/date/month-year"
 import DayMonthYearMask from "./masks/date/day-month-year"
 
@@ -38,6 +39,11 @@ const UIPropsPresetsList = {
   "br-nationalities": {
     label: "Nacionalidade",
     options: NATIONALITIES,
+  },
+  "br-rg": {
+    placeholder: "000.000.000-00",
+    label: "RG",
+    mask: RGMask,
   },
   "br-phone": {
     htmlType: "tel",
