@@ -41,7 +41,7 @@ const UIPropsPresetsList = {
     options: NATIONALITIES,
   },
   "br-rg": {
-    placeholder: "000.000.000-00",
+    placeholder: "00.000.000-00",
     label: "RG",
     mask: RGMask,
   },
