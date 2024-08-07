@@ -55,14 +55,7 @@ const SelectWidget = ({
     setSelectedLabel((prevState) => labelSelected ?? prevState)
     onChange(valueSelected)
 
-    const pointerType = e.nativeEvent.pointerType
-    const codeType = e.nativeEvent.code
-    if (
-      ["mouse", "touch"].includes(pointerType) ||
-      ["Enter", "Space"].includes(codeType)
-    ) {
-      selectRef.current?.click()
-    }
+    selectRef.current.dispatchEvent(new MouseEvent('click', { bubbles: true }));
   }
 
   function removeAccents(value) {
