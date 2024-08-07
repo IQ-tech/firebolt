@@ -15,7 +15,7 @@ const SelectWidget = ({
   options = [],
   label,
   placeholder,
-
+  sublabel,
   hasError,
   errorMessage,
   fieldId,
@@ -116,7 +116,7 @@ const SelectWidget = ({
         </div>
 
         <label htmlFor={slug}>
-          {placeholder}
+          {sublabel}
         </label>
 
         {hasError && errorMessage ? <span
