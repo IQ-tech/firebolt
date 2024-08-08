@@ -30,7 +30,7 @@ function isDate(
 
   if (
     year > currentYear ||
-    year < 1900 ||
+    year < 1915 ||
     (year === currentYear && month > currentMonth) ||
     (year === currentYear && month === currentMonth && day > currentDay)
   ) {
