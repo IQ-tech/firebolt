@@ -9,6 +9,8 @@ const TextWidget = ({
   isRequired,
   className,
   maxLength,
+  min,
+  max,
 
   // custom props
   slug,
@@ -42,6 +44,8 @@ const TextWidget = ({
           type={htmlType}
           maxLength={maxLength}
           required={isRequired}
+          min={min}
+          max={max}
         />
 
         <label htmlFor={slug}>
