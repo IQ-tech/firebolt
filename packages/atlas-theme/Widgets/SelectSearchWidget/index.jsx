@@ -61,7 +61,7 @@ const SelectSearchWidget = ({
       document.removeEventListener("keydown", escPress, false)
       document.removeEventListener("click", outsideClick)
     }
-  }, [])
+  }, [escPress, outsideClick])
 
   useEffect(() => {
     if (value) {
