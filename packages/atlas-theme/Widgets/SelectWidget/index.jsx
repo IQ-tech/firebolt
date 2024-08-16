@@ -2,7 +2,6 @@ import React, { useState, useRef, useEffect } from "react"
 import FieldHolder from "../../FieldHolder"
 import classNames from "classnames"
 
-import IconSlash from "./icons/IconSlash.svg"
 import IconChevronDown from "./icons/icon-chevron-down.svg"
 import IconChevronUp from "./icons/icon-chevron-up.svg"
 import IconCheck from "./icons/icon-check.svg"
@@ -26,10 +25,12 @@ const SelectWidget = ({
 }) => {
   const selectRef = useRef(null)
   const [isOpenSelect, setIsOpenSelect] = useState(false)
-  const [selectedValue, setSelectedValue] = useState("")
-  const [selectedLabel, setSelectedLabel] = useState("Selecione")
 
   const [optionsState, setOptionsState] = useState(options)
+  const [selectedOption, setSelectedOption] = useState({
+    label: "Selecione",
+    value: "",
+  })
 
   const backupOptions = options
 
@@ -72,9 +73,8 @@ const SelectWidget = ({
 
   useEffect(() => {
     if (value) {
-      setSelectedValue(value)
-      const autofilledLabel = options.find((option) => option.value === value)
-      setSelectedLabel(autofilledLabel?.label)
+      const optionSelected = options.find((option) => option.value === value)
+      setSelectedOption(optionSelected)
     }
   }, [value])
 
@@ -82,8 +82,7 @@ const SelectWidget = ({
     if (disabled) return
     const valueSelected = e.currentTarget.value
     const labelSelected = e.currentTarget.dataset.label
-    setSelectedValue((prevState) => valueSelected ?? prevState)
-    setSelectedLabel((prevState) => labelSelected ?? prevState)
+    setSelectedOption({ value: valueSelected, label: labelSelected })
     onChange(valueSelected)
 
     selectRef.current.dispatchEvent(new MouseEvent("click", { bubbles: true }))
@@ -134,7 +133,9 @@ const SelectWidget = ({
                 onChange={(e) => filterOptions(e.target.value)}
               />
             ) : (
-              <div className="ac-select__selected-value">{selectedLabel}</div>
+              <div className="ac-select__selected-value">
+                {selectedOption?.label || ""}
+              </div>
             )}
 
             <div className="ac-select__icons">
@@ -165,11 +166,11 @@ const SelectWidget = ({
                   data-label={option.label}
                   onClick={onClickOption}
                   onKeyDown={onClickOption}
-                  defaultChecked={selectedValue === option.value}
+                  defaultChecked={selectedOption.value === option.value}
                 />
 
                 <span className="ac-select__option-label">{option.label}</span>
-                {selectedValue === option.value ? (
+                {selectedOption.value === option.value ? (
                   <img src={IconCheck} />
                 ) : null}
               </div>
