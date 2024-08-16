@@ -66,7 +66,9 @@ const SelectSearchWidget = ({
 
   useEffect(() => {
     if (value) {
-      const optionSelected = options.find((option) => option.value === value)
+      const optionSelected = options.find(
+        (option) => option.value.toString() === value
+      )
       setSelectedOption(optionSelected)
     }
   }, [])
@@ -159,11 +161,11 @@ const SelectSearchWidget = ({
                   data-label={option.label}
                   onClick={onClickOption}
                   onKeyDown={onClickOption}
-                  defaultChecked={selectedOption.value === option.value}
+                  defaultChecked={selectedOption?.value === option.value}
                 />
 
                 <span className="ac-select__option-label">{option.label}</span>
-                {selectedOption.value === option.value ? (
+                {selectedOption?.value === option.value ? (
                   <img src={IconCheck} />
                 ) : null}
               </div>
