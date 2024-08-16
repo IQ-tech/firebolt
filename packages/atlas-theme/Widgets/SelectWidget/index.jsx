@@ -76,7 +76,7 @@ const SelectWidget = ({
       const optionSelected = options.find((option) => option.value === value)
       setSelectedOption(optionSelected)
     }
-  }, [value])
+  }, [])
 
   function onClickOption(e) {
     if (disabled) return
