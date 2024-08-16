@@ -8,112 +8,147 @@ import { propsPresets } from "@iq-firebolt/br-addons"
 const withFirebolt = createFireboltProvider({
   formAccess: {
     root: "https://dsv-firebolt-api.iq.com.br/",
-    formName: "unified-loans-ac",
+    formName: "caixa",
   },
   withHistory: true,
   stepQueryParam: "step",
   enforceNewSession: true,
   debug: true,
   addons: { uiPropsPresets: [propsPresets] },
-  // mockStep: {
-  //   friendlyName: "Cebola",
-  //   fields: [
-  //     {
-  //       slug: "name",
-  //       "ui:widget": "Text",
-  //       "ui:props": {
-  //         label: "Nomes completo",
-  //         placeholder: "Nome completo",
-  //       },
-  //       "ui:styles": {
-  //         size: "half",
-  //       },
-  //       validators: [{ type: "required" }, { type: "name" }],
-  //       meta: {},
-  //     },
-  //     {
-  //       slug: "cpf",
-  //       "ui:widget": "Text",
-  //       "ui:props-preset": "br-cpf",
-  //       "ui:props": {},
-  //       validators: [{ "type": "required" }, { "type": "cpf" }],
-  //       meta: {},
-  //     },
-  //     {
-  //       slug: "income",
-  //       "ui:props-preset": "br-currency",
-  //       "ui:widget": "Text",
-  //       "ui:props": {
-  //         label: "Renda Principal",
-  //       },
-  //       validators: [{ "type": "required" }],
-  //     },
-  //     {
-  //       slug: "phone",
-  //       "ui:widget": "Text",
-  //       "ui:props-preset": "br-phone",
-  //       "ui:props": {
-  //         label: "Celular com DDD",
-  //       },
-  //       validators: [{ "type": "required" }, { "type": "phone" }],
-  //       meta: {},
-  //     },
-  //     {
-  //       slug: "email",
-  //       "ui:widget": "Email",
-  //       "ui:props": {
-  //         label: "Email",
-  //         placeholder: "contato@email.com",
-  //       },
-  //       "ui:styles": {
-  //         size: "full",
-  //       },
-  //       validators: [{ type: "required" }, { type: "email" }],
-  //       meta: {},
-  //     },
-  //     {
-  //       "slug": "emergencial_limit_check",
-  //       "ui:widget": "CheckboxGroup",
-  //       "ui:props": {
-  //         "label": "Limite emergencial",
-  //         "columns": 1,
-  //         "options": [
-  //           {
-  //             "label": "Permite avaliação emergencial para aprovação de transações acima do limite."
-  //           }
-  //         ]
-  //       },
-  //       "meta": {
-  //         "tooltip_text": "Para a sua comodidade, o Banco PAN oferece o serviço de Avaliação Emergencial de Crédito. Com este serviço, caso você realize compras acima do limite definido do seu cartão, o Banco PAN irá avaliar a aprovação dessas compras. Somente haverá cobrança de tarifa no valor de R$18,90 no mês em que o serviço for utilizado. Caso você opte por não contratar o serviço, eventuais transações que ultrapassem o limite do seu cartão não serão analisadas e consequentemente recusadas."
-  //       }
-  //     },
-  //     {
-  //       "slug": "bad_credit",
-  //       "ui:widget": "Radio",
-  //       "ui:props": {
-  //         "label": "Está negativado?",
-  //         "options": [
-  //           {
-  //             "value": "true",
-  //             "label": "Sim"
-  //           },
-  //           {
-  //             "value": "false",
-  //             "label": "Não"
-  //           }
-  //         ]
-  //       },
-  //       "ui:styles": { 
-  //         "size":"half"
-  //       },
-  //       "validators": [{ "type": "required" }],
-  //       "meta": {
-  //         "tooltip_text": "Popularmente, o termo negativado significa “ter o nome sujo”. Está negativado(a) quem tem uma dívida em atraso e com o nome registrado em um órgão de proteção de crédito.",
-  //         "tooltip_container": ".tooltip-wrapper"
-  //       }
-  //     }
-  //   ]
-  // }
+  mockStep: {
+    "slug": "address",
+    "type": "form",
+    "friendlyname": "Endereço",
+    "fields": [
+      {
+        "slug": "zipcode",
+        "ui:widget": "CEP",
+        "ui:props-preset": "br-cep",
+        "ui:props": {
+          "sublabel": "CEP *",
+          "placeholder": "00000-000",
+          "relatedFieldsSlugs": {
+            "cityFieldSlug": "city",
+            "stateFieldSlug": "state",
+            "streetFieldSlug": "street_address",
+            "additionalAddressFieldSlug": "additional_info",
+            "neighborhoodFieldSlug": "neighborhood",
+          },
+        },
+        "validators": [{ "type": "required" }, { "type": "cep" }],
+      },
+      {
+        "slug": "address_type",
+        "ui:widget": "SelectSearch",
+        "ui:props": {
+          "sublabel": "Tipo de logradouro *",
+          "placeholder": "Tipo de logradouro *",
+          "options": [
+            { "value": "AL", "label": "Alameda" },
+            { "value": "A", "label": "Área" },
+            { "value": "AV", "label": "Avenida" },
+            { "value": "CPO", "label": "Campo" },
+            { "value": "CH", "label": "Chácara" },
+            { "value": "EST", "label": "Estrada" },
+            { "value": "Q", "label": "Quadra" },
+            { "value": "RES", "label": "Residencial" },
+            { "value": "R", "label": "Rua" },
+            { "value": "ST", "label": "Setor" },
+            { "value": "TV", "label": "Travessa" },
+            { "value": "ACA", "label": "Acampamento" },
+            { "value": "BC", "label": "Beco" },
+            { "value": "BVD", "label": "Boulevard" },
+            { "value": "NUC", "label": "Núcleo" },
+            { "value": "Praça", "label": "PC" },
+            { "value": "Sítio", "label": "SIT" },
+            { "value": "Via", "label": "V" },
+          ],
+        },
+        "validators": [
+          {
+            "type": "required",
+          },
+        ],
+        "meta": {},
+      },
+      {
+        "slug": "street_address",
+        "ui:widget": "Text",
+        "ui:props": {
+          "sublabel": "Logradouro *",
+          "placeholder": "Ex.: Rua das Graças",
+          "readonly": true,
+        },
+        "validators": [{ "type": "required" }],
+      },
+      {
+        "slug": "street_number",
+        "ui:widget": "Number",
+        "ui:props": { "sublabel": "Número *", "placeholder": "Ex.: 123" },
+        "validators": [
+          { "type": "required" },
+          {
+            "type": "numberRange",
+            "properties": {
+              "minNumber": 0,
+              "underPermitedValueMessage": "O valor deve ser maior que 0",
+            },
+          },
+        ],
+        "meta": {},
+      },
+      {
+        "slug": "additional_info",
+        "ui:widget": "Text",
+        "ui:props": {
+          "sublabel": "Complemento",
+          "placeholder": "Ex.: Apto 25 bl C",
+        },
+        "meta": {},
+      },
+      {
+        "slug": "neighborhood",
+        "ui:widget": "Text",
+        "ui:props": {
+          "sublabel": "Bairro *",
+          "placeholder": "Ex.: Jardins",
+          "readonly": true,
+        },
+        "validators": [{ "type": "required" }],
+        "meta": {},
+      },
+      {
+        "slug": "city",
+        "ui:widget": "Text",
+        "ui:props": {
+          "sublabel": "Cidade *",
+          "placeholder": "Digite o nome da sua cidade",
+          "readonly": true,
+        },
+        "validators": [
+          {
+            "type": "required",
+          },
+          {
+            "type": "nonNumeric",
+          },
+        ],
+        "meta": {},
+      },
+      {
+        "slug": "state",
+        "ui:widget": "Select",
+        "ui:props-preset": "br-states",
+        "ui:props": {
+          "label": "",
+          "sublabel": "Estado *",
+          "placeholder": "Estado",
+        },
+        "validators": [{ "type": "required" }],
+        "meta": {},
+      },
+    ],
+  },
 })
 
 const FormDemo = () => {
@@ -136,7 +171,7 @@ const FormDemo = () => {
           proceed()
         }}
         onChangeStep={({ sentStep, currentStep }) => {
-          console.log({sentStep, currentStep})
+          console.log({ sentStep, currentStep })
           // console.log("changed step:", { sentStep, currentStep });
         }}
         onBeforeProceed={(currentStep, formPayload) => {
