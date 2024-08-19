@@ -13,6 +13,7 @@ const SelectWidget = ({
   version,
   options = [],
   label,
+  sublabel,
   placeholder,
 
   hasError,
@@ -27,10 +28,7 @@ const SelectWidget = ({
   const [isOpenSelect, setIsOpenSelect] = useState(false)
 
   const [optionsState, setOptionsState] = useState(options)
-  const [selectedOption, setSelectedOption] = useState({
-    label: "Selecione",
-    value: "",
-  })
+  const [selectedOption, setSelectedOption] = useState(null)
 
   const backupOptions = options
 
@@ -116,6 +114,10 @@ const SelectWidget = ({
     "is-open": isOpenSelect,
   })
 
+  const valueClass = classNames("ac-select__selected-value", {
+    "value-placeholder": !selectedOption?.label,
+  })
+
   return (
     <FieldHolder label={label}>
       <div className={classSelect}>
@@ -129,14 +131,16 @@ const SelectWidget = ({
             {isOpenSelect && version === "search" ? (
               <input
                 type="text"
-                placeholder="Digite ou selecione"
+                placeholder={
+                  selectedOption?.label || placeholder || "Digite ou selecione"
+                }
                 className="input__search"
                 autoFocus
                 onChange={(e) => filterOptions(e.target.value)}
               />
             ) : (
-              <div className="ac-select__selected-value">
-                {selectedOption?.label || ""}
+              <div className={valueClass}>
+                {selectedOption?.label || placeholder}
               </div>
             )}
 
@@ -149,7 +153,7 @@ const SelectWidget = ({
             </div>
           </div>
 
-          <label htmlFor={slug}>{placeholder}</label>
+          <label htmlFor={slug}>{sublabel}</label>
 
           {hasError && errorMessage ? (
             <span className="input-error-message">{errorMessage}</span>
