@@ -5,7 +5,6 @@ import RadioGroupWidget from "./Widgets/RadioGroupWidget"
 import RadioButtonGroupWidget from "./Widgets/RadioButtonGroupWidget"
 import CurrencyWidget from "./Widgets/CurrencyWidget"
 import CEPWidget from "./Widgets/CEPWidget"
-import BRCityWidget from "./Widgets/BRCityWidget"
 import InputCheckbox from "./Widgets/CheckWidget"
 import SelectSearchWidget from "./Widgets/SelectSearchWidget"
 
@@ -19,7 +18,6 @@ const defaultTheme = {
   "Currency": CurrencyWidget,
   "CEP": CEPWidget,
   "Check": InputCheckbox,
-  "BRCity": BRCityWidget,
 }
 
 export default defaultTheme
