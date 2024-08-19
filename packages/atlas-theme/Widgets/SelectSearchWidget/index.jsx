@@ -71,7 +71,7 @@ const SelectSearchWidget = ({
       )
       setSelectedOption(optionSelected)
     }
-  }, [])
+  }, [value])
 
   function onClickOption(e) {
     if (disabled) return
