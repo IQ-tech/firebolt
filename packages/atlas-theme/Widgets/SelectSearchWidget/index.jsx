@@ -13,6 +13,7 @@ const SelectSearchWidget = ({
   version = "search",
   options = [],
   label,
+  sublabel,
   placeholder,
 
   hasError,
@@ -26,10 +27,7 @@ const SelectSearchWidget = ({
   const selectRef = useRef(null)
   const [isOpenSelect, setIsOpenSelect] = useState(false)
   const [optionsState, setOptionsState] = useState(options)
-  const [selectedOption, setSelectedOption] = useState({
-    label: "Digite ou selecione",
-    value: "",
-  })
+  const [selectedOption, setSelectedOption] = useState(null)
 
   const backupOptions = options
 
@@ -109,6 +107,10 @@ const SelectSearchWidget = ({
     "is-open": isOpenSelect,
   })
 
+  const valueClass = classNames("ac-select__selected-value", {
+    "value-placeholder": !selectedOption?.label,
+  })
+
   return (
     <FieldHolder label={label}>
       <div className={classSelect}>
@@ -122,14 +124,17 @@ const SelectSearchWidget = ({
             {isOpenSelect && version === "search" ? (
               <input
                 type="text"
-                placeholder="Digite ou selecione"
+                placeholder={
+                  selectedOption?.label || placeholder || "Digite ou selecione"
+                }
                 className="input__search"
                 autoFocus
                 onChange={(e) => filterOptions(e.target.value)}
+                onClick={onClickSelect}
               />
             ) : (
-              <div className="ac-select__selected-value">
-                {selectedOption?.label || ""}
+              <div className={valueClass}>
+                {selectedOption?.label || placeholder}
               </div>
             )}
 
@@ -142,7 +147,7 @@ const SelectSearchWidget = ({
             </div>
           </div>
 
-          <label htmlFor={slug}>{placeholder}</label>
+          <label htmlFor={slug}>{sublabel}</label>
 
           {hasError && errorMessage ? (
             <span className="input-error-message">{errorMessage}</span>
@@ -151,6 +156,14 @@ const SelectSearchWidget = ({
 
         {isOpenSelect ? (
           <div className="ac-select__options">
+            {optionsState.length === 0 ? (
+              <div className="ac-select__option">
+                <span className="ac-select__option-label">
+                  Nenhum resultado encontrado
+                </span>
+              </div>
+            ) : null}
+
             {optionsState.map((option) => (
               <div className="ac-select__option" key={option.value}>
                 <input

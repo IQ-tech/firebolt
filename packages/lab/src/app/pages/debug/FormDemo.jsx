@@ -39,8 +39,8 @@ const withFirebolt = createFireboltProvider({
         "slug": "brazil_id_org",
         "ui:widget": "Select",
         "ui:props": {
-          "sublabel": "Órgão Emissor",
-          "placeholder": "Órgão Emissor *",
+          "sublabel": "Órgão Emissor *",
+          "placeholder": "Selecione o Órgão Emissor",
           "options": [
             {
               "value": "SSP",
@@ -120,8 +120,8 @@ const withFirebolt = createFireboltProvider({
         "slug": "profession_group",
         "ui:widget": "SelectSearch",
         "ui:props": {
-          "sublabel": "Profissão",
-          "placeholder": "Profissão *",
+          "sublabel": "Profissão *",
+          "placeholder": "Profissão",
           "options": [
             { "label": "ACOUGUEIRO", "value": 187689 },
             { "label": "ACUPUNTURISTA", "value": 72980821 },
