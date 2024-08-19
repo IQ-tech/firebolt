@@ -133,7 +133,7 @@ const SelectSearchWidget = ({
                 onClick={onClickSelect}
               />
             ) : (
-              <div className={valueClass} onClick={onClickSelect}>
+              <div className={valueClass}>
                 {selectedOption?.label || placeholder}
               </div>
             )}
