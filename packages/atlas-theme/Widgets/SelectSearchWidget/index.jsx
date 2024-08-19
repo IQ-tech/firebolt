@@ -130,10 +130,9 @@ const SelectSearchWidget = ({
                 className="input__search"
                 autoFocus
                 onChange={(e) => filterOptions(e.target.value)}
-                onClick={onClickSelect}
               />
             ) : (
-              <div className={valueClass} onClick={onClickSelect}>
+              <div className={valueClass}>
                 {selectedOption?.label || placeholder}
               </div>
             )}
