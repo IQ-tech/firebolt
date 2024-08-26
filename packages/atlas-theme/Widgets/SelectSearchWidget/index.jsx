@@ -15,6 +15,7 @@ const SelectSearchWidget = ({
   label,
   sublabel,
   placeholder,
+  isRequired,
 
   hasError,
   errorMessage,
@@ -146,7 +147,7 @@ const SelectSearchWidget = ({
             </div>
           </div>
 
-          <label htmlFor={slug}>{sublabel}</label>
+          <label htmlFor={slug} className={classNames({ required: isRequired })}>{sublabel}</label>
 
           {hasError && errorMessage ? (
             <span className="input-error-message">{errorMessage}</span>

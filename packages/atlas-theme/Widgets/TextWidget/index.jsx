@@ -1,5 +1,6 @@
 import React from "react"
 import FieldHolder from "../../FieldHolder"
+import classNames from "classnames";
 
 const TextWidget = ({
   // html attributtes
@@ -48,7 +49,7 @@ const TextWidget = ({
           max={max}
         />
 
-        <label htmlFor={slug}>
+        <label htmlFor={slug} className={classNames({ required: isRequired })}>
           {sublabel}
         </label>
 
