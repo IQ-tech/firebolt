@@ -71,6 +71,11 @@
     transition: all 0.3s ease-out;
     transform: translate(0px, -90px);
     display: block;
+    &.required::after {
+      content: " *";
+      color: #E52222; 
+      font-weight: bold;
+    }
   }
 
   &__button {

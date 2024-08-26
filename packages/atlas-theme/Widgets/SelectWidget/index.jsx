@@ -20,9 +20,9 @@ const SelectWidget = ({
   errorMessage,
   fieldId,
   disabled = false,
-
   onChange,
   value,
+  isRequired
 }) => {
   const selectRef = useRef(null)
   const [isOpenSelect, setIsOpenSelect] = useState(false)
@@ -152,8 +152,7 @@ const SelectWidget = ({
               )}
             </div>
           </div>
-
-          <label htmlFor={slug}>{sublabel}</label>
+          <label htmlFor={slug} className={classNames({ required: isRequired })}>{sublabel}</label>
 
           {hasError && errorMessage ? (
             <span className="input-error-message">{errorMessage}</span>
