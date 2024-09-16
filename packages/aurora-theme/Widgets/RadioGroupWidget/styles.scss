@@ -1,0 +1,38 @@
+* {
+  font-family: 'Source Sans Pro';
+}
+
+.radio-group {
+  margin-bottom: 32px;
+}
+
+p {
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 21px;
+  color: #454A54;
+  margin: 16px 0;
+}
+
+.radio__option {
+  display: flex;
+  align-items: center;
+  border: 0;
+  margin-bottom: 16px;
+  font-size: 16px;
+  line-height: 24px;
+  font-weight: 400;
+  color: #5E6573;
+
+  input[type="radio"] {
+    min-width: 24px;
+    min-height: 24px;
+    max-width: 24px;
+    max-height: 24px;
+    background-color: #fff;
+    border-radius: 4px;
+    border: 1px solid #C6C6C6;
+    margin: 0 8px 0 0;
+    accent-color: #0048DB;
+  }
+}
