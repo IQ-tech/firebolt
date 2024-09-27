@@ -27,7 +27,7 @@
   "devDependencies": {
     "@commitlint/cli": "^16.1.0",
     "@commitlint/config-conventional": "^16.0.0",
-    "@consumidor-positivo/aurora": "0.0.38",
+    "@consumidor-positivo/aurora": "0.0.59",
     "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/react": "^12.1.2",
     "@types/faker": "^5.5.8",
