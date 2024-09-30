@@ -12,7 +12,7 @@ const defaultTheme = {
   "Currency": CurrencyWidget,
   "CEP": CEPWidget,
   "Select": SelectWidget,
-  "Checkbox": CheckboxWidget,
+  "Check": CheckboxWidget,
   "Radio": RadioGroupWidget,
 }
 

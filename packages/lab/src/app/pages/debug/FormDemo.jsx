@@ -193,7 +193,7 @@ const withFirebolt = createFireboltProvider({
       },
       {
         "slug": "responsability_check",
-        "ui:widget": "Checkbox",
+        "ui:widget": "Check",
         "ui:props": {
           "label":
             "Declaro que nasci no Brasil; que possuo domicílio fiscal somente no Brasil; que sou responsável pelos meus atos; que NÃO sou Pessoa Politicamente Exposta.",
@@ -207,7 +207,7 @@ const withFirebolt = createFireboltProvider({
       },
       {
         "slug": "authorization_check",
-        "ui:widget": "Checkbox",
+        "ui:widget": "Check",
         "ui:props": {
           "label":
             "Autorizo a consulta SCR/BACEN e autorizo o compartilhamento dos meus dados cadastrais.",
