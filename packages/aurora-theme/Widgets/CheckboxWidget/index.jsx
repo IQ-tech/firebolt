@@ -8,7 +8,7 @@ const CheckboxWidget = ({
   isRequired,
   checked = false,
   label,
-  error,
+  hasError,
   errorMessage,
   disabled = false,
   onChange,
@@ -21,7 +21,7 @@ const CheckboxWidget = ({
       required={isRequired}
       defaultChecked={checked}
       label={label}
-      error={error}
+      error={hasError}
       errorMessage={errorMessage}
       disabled={disabled}
       onChange={onChange}
