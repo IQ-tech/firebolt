@@ -46,8 +46,6 @@ jobs:
         run: yarn install
       - name: Build libs
         run: yarn build:libs
-      - name: Stash changes
-        run: git stash --include-untracked
       - name: Bump versions and publish packages
         run: |
           yarn publish:canary
