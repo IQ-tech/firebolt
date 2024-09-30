@@ -1,5 +1,6 @@
 import React from "react"
 import { InputField } from "@consumidor-positivo/aurora"
+import FieldHolder from "../../wrappers/FieldHolder"
 
 const TextWidget = ({
   // html attributtes
@@ -18,7 +19,6 @@ const TextWidget = ({
   hasError,
   label,
   sublabel,
-  fieldId,
 
   // events
   onChange,
@@ -27,26 +27,28 @@ const TextWidget = ({
   inputRef,
 }) => {
   return (
-    <InputField
-      value={value}
-      id={slug}
-      name={slug}
-      ref={inputRef}
-      label={label}
-      placeholder={placeholder}
-      required={isRequired}
-      requiredInput={isRequired}
-      error={hasError}
-      errorMessage={errorMessage}
-      className={className}
-      type={htmlType}
-      maxLength={maxLength}
-      min={min}
-      max={max}
-      onChange={(e) => onChange(e?.target?.value)}
-      onFocus={(e) => onFocus(e?.target?.value)}
-      onBlur={(e) => onBlur(e?.target?.value)}
-    />
+    <FieldHolder title={label}>
+      <InputField
+        value={value}
+        id={slug}
+        name={slug}
+        inputRef={inputRef}
+        label={sublabel}
+        placeholder={placeholder}
+        required={isRequired}
+        requiredInput={isRequired}
+        error={hasError}
+        errorMessage={errorMessage}
+        className={className}
+        type={htmlType}
+        maxLength={maxLength}
+        min={min}
+        max={max}
+        onChange={(e) => onChange(e?.target?.value)}
+        onFocus={(e) => onFocus(e?.target?.value)}
+        onBlur={(e) => onBlur(e?.target?.value)}
+      />
+    </FieldHolder>
   )
 }
 

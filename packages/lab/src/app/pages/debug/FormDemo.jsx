@@ -29,7 +29,9 @@ const withFirebolt = createFireboltProvider({
         "slug": "id_number",
         "ui:widget": "Text",
         "ui:props": {
-          "sublabel": "Número do RG *",
+          "requiredInput": "true",
+          "label": "Qual seu RG?",
+          "sublabel": "Número do RG",
           "placeholder": "Digite o número do seu RG",
         },
         "validators": [{ "type": "required" }],
@@ -39,7 +41,7 @@ const withFirebolt = createFireboltProvider({
         "slug": "brazil_id_org",
         "ui:widget": "Select",
         "ui:props": {
-          "sublabel": "Órgão Emissor *",
+          "sublabel": "Órgão Emissor",
           "placeholder": "Selecione o Órgão Emissor",
           "options": [
             {
@@ -88,8 +90,9 @@ const withFirebolt = createFireboltProvider({
         "slug": "educational_level",
         "ui:widget": "Select",
         "ui:props": {
-          "sublabel": "Nível de Escolaridade *",
-          "placeholder": "Nível de Escolaridade *",
+          "label": "Qual seu nível de escolaridade?",
+          "sublabel": "Nível de Escolaridade",
+          "placeholder": "Nível de Escolaridade",
           "options": [
             {
               "value": 4,
@@ -118,9 +121,10 @@ const withFirebolt = createFireboltProvider({
       },
       {
         "slug": "profession_group",
-        "ui:widget": "SelectSearch",
+        "ui:widget": "Select",
         "ui:props": {
-          "sublabel": "Profissão *",
+          "label": "Qual sua profissão?",
+          "sublabel": "Profissão",
           "placeholder": "Profissão",
           "options": [
             { "label": "ACOUGUEIRO", "value": 187689 },
@@ -173,7 +177,8 @@ const withFirebolt = createFireboltProvider({
         "ui:widget": "Text",
         "ui:props-preset": "day-month-year",
         "ui:props": {
-          "sublabel": "Data de início da profissão *",
+          "requiredInput": "true",
+          "sublabel": "Data de início da profissão",
           "placeholder": "Ex: 01/12/2009",
         },
         "validators": [
@@ -188,28 +193,28 @@ const withFirebolt = createFireboltProvider({
       },
       {
         "slug": "responsability_check",
-        "ui:widget": "CustomResponsabilityCheckbox",
+        "ui:widget": "Check",
         "ui:props": {
           "label":
             "Declaro que nasci no Brasil; que possuo domicílio fiscal somente no Brasil; que sou responsável pelos meus atos; que NÃO sou Pessoa Politicamente Exposta.",
         },
         "validators": [
           {
-            "type": "required",
+            "type": "requiredboolean",
           },
         ],
         "meta": {},
       },
       {
         "slug": "authorization_check",
-        "ui:widget": "CustomAuthorizationCheckbox",
+        "ui:widget": "Check",
         "ui:props": {
           "label":
             "Autorizo a consulta SCR/BACEN e autorizo o compartilhamento dos meus dados cadastrais.",
         },
         "validators": [
           {
-            "type": "required",
+            "type": "requiredboolean",
           },
         ],
         "meta": {},

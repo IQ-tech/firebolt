@@ -1,5 +1,5 @@
 import React from "react"
-import FieldHolder from "../../FieldHolder"
+import FieldHolder from "../../wrappers/FieldHolder"
 
 import "./styles.scss"
 
@@ -17,7 +17,7 @@ const RadioGroupWidget = ({
   onFocus,
 }) => {
   return (
-    <FieldHolder label={label} useLabel fieldName={fieldId}>
+    <FieldHolder title={label}>
       <div className="radio-group">
         <p>{sublabel}</p>
 
