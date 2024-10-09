@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useEffect, useState } from "react"
 import FieldHolder from "../../FieldHolder"
 import classNames from "classnames";
 
@@ -28,6 +28,13 @@ const TextWidget = ({
   onFocus,
   inputRef,
 }) => {
+  const [inputValue, setInputValue] = useState()
+
+  useEffect(() => {
+    if(value) {
+      setInputValue(value)
+    }
+  }, [value])
 
   return (
     <FieldHolder label={label}>
@@ -37,7 +44,7 @@ const TextWidget = ({
           onChange={(e) => onChange(e?.target?.value)}
           onFocus={(e) => onFocus(e?.target?.value)}
           onBlur={(e) => onBlur(e?.target?.value)}
-          value={value}
+          value={inputValue}
           ref={inputRef}
           id={slug}
           name={slug}
