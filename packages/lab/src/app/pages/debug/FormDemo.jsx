@@ -87,6 +87,34 @@ const withFirebolt = createFireboltProvider({
         "meta": {},
       },
       {
+        "slug": "gender",
+        "ui:widget": "Radio",
+        "ui:props": {
+          "label": "Sexo",
+          "sublabel": "Selecione",
+          "options": [
+            {
+              "value": "male",
+              "label": "Masculino"
+            },
+            {
+              "value": "female",
+              "label": "Feminino"
+            },
+            {
+              "value": "other",
+              "label": "Outro"
+            }
+          ]
+        },
+        "validators": [
+          {
+            "type": "required"
+          }
+        ],
+        "meta": {}
+      },
+      {
         "slug": "educational_level",
         "ui:widget": "Select",
         "ui:props": {
@@ -123,9 +151,10 @@ const withFirebolt = createFireboltProvider({
         "slug": "profession_group",
         "ui:widget": "Select",
         "ui:props": {
+          "autocomplete": true,
           "label": "Qual sua profissão?",
           "sublabel": "Profissão",
-          "placeholder": "Profissão",
+          "placeholder": "Digite ou selecione...",
           "options": [
             { "label": "ACOUGUEIRO", "value": 187689 },
             { "label": "ACUPUNTURISTA", "value": 72980821 },
@@ -189,6 +218,18 @@ const withFirebolt = createFireboltProvider({
             "type": "date",
           },
         ],
+        "meta": {},
+      },
+      {
+        "slug": "functions",
+        "ui:widget": "TextArea",
+        "ui:props": {
+          "isRequired": "true",
+          "sublabel": "Descreva suas funções",
+          "placeholder": "Digite...",
+          "maxLength": 100,
+        },
+        "validators": [{ "type": "required" }],
         "meta": {},
       },
       {
