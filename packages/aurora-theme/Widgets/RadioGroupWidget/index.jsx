@@ -1,41 +1,41 @@
 import React from "react"
+import { Radio } from "@consumidor-positivo/aurora"
 import FieldHolder from "../../wrappers/FieldHolder"
-
-import "./styles.scss"
 
 const RadioGroupWidget = ({
   options = [],
   fieldId,
-  label = "Choose value",
+  label,
   sublabel,
-  onChange,
   value,
-  onBlur,
   hasError,
   errorMessage,
   isRequired,
+  onChange,
   onFocus,
 }) => {
   return (
     <FieldHolder title={label}>
-      <div className="radio-group">
-        <p>{sublabel}</p>
-
-        {options.map((option) => (
-          <label className="radio__option" key={option.value}>
-            <input
-              type="radio"
-              checked={value === option.value}
-              onBlur={(e) => onBlur(e?.target?.value)}
+      <Radio.Group
+        name={fieldId}
+        label={sublabel}
+        defaultValue={value}
+        error={hasError}
+        errorMessage={errorMessage}
+        required={isRequired}
+        onChange={(e) => onChange(e?.target?.value)}
+        onFocus={(e) => onFocus(e?.target?.value)}
+      >
+        {options.map((option) => {
+          return (
+            <Radio.Field
+              key={option.value}
               value={option.value}
-              onChange={(e) => onChange(e?.target?.value)}
-              onFocus={(e) => onFocus(e?.target?.value)}
+              label={option.label}
             />
-
-            {option.label}
-          </label>
-        ))}
-      </div>
+          )
+        })}
+      </Radio.Group>
     </FieldHolder>
   )
 }

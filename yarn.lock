@@ -1200,10 +1200,10 @@
   dependencies:
     chalk "^4.0.0"
 
-"@consumidor-positivo/aurora@0.0.60":
-  version "0.0.60"
-  resolved "https://registry.yarnpkg.com/@consumidor-positivo/aurora/-/aurora-0.0.60.tgz#058e5e3ad31ccef09dc776b8bf0d32ac5e844962"
-  integrity sha512-CocC7E6faynlOMmGEi1swqzOGWDgFJy7q/ran+joiV1Ewaba+ItGLHwilBcogwC4Pe41ih9K5qr65PhJERArmw==
+"@consumidor-positivo/aurora@0.0.71":
+  version "0.0.71"
+  resolved "https://registry.yarnpkg.com/@consumidor-positivo/aurora/-/aurora-0.0.71.tgz#40f732e3cea729d3a5dad8e57a049b88082b2bbd"
+  integrity sha512-VugZA69Vf4qTkgggjPV4RUbrr5kWd+ecRisfaIBh//ilHGVVQcxTKkbXQL7V+fmYcRsIWSecnlEm7hXR1m0Fqg==
   dependencies:
     dotenv "16.4.5"
     react-aria-components "1.3.3"
