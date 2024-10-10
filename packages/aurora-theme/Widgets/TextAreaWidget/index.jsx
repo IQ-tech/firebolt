@@ -34,13 +34,14 @@ const TextAreaWidget = ({
         label={sublabel}
         onBlur={(e) => onBlur(e?.target?.value)}
         onFocus={(e) => onFocus(e?.target?.value)}
-        onChange={onChange}
+        onChange={(e) => onChange(e?.target?.value)}
         placeholder={placeholder}
+        id={slug}
         name={slug}
         value={value}
         rows={rows}
         cols={cols}
-        spellcheck={spellcheck}
+        spellCheck={spellcheck}
         resize={resize}
         minLength={minLength}
         maxLength={maxLength}
