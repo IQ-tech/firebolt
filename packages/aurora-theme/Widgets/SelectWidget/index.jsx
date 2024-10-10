@@ -6,6 +6,7 @@ const SelectWidget = ({
   slug,
   options = [],
   value,
+  autocomplete = false,
   placeholder,
   label,
   sublabel,
@@ -21,6 +22,7 @@ const SelectWidget = ({
         id={slug}
         options={options}
         value={value}
+        autocomplete={autocomplete}
         placeholder={placeholder}
         label={sublabel}
         required={isRequired}
