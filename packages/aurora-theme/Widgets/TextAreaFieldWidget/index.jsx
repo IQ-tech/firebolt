@@ -2,7 +2,7 @@ import React from "react"
 import { TextAreaField } from "@consumidor-positivo/aurora"
 import FieldHolder from "../../wrappers/FieldHolder"
 
-const TextAreaWidget = ({
+const TextAreaFieldWidget = ({
   hasError,
   errorMessage,
   label,
@@ -52,4 +52,4 @@ const TextAreaWidget = ({
   )
 }
 
-export default TextAreaWidget
+export default TextAreaFieldWidget
