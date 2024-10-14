@@ -24,7 +24,7 @@ const CheckboxWidget = ({
       error={hasError}
       errorMessage={errorMessage}
       disabled={disabled}
-      onChange={onChange}
+      onChange={(e) => onChange(e.target.checked)}
     />
   )
 }
