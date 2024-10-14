@@ -5,14 +5,14 @@ import CEPWidget from "./Widgets/CEPWidget"
 import SelectWidget from "./Widgets/SelectWidget"
 import CheckboxWidget from "./Widgets/CheckboxWidget"
 import RadioGroupWidget from "./Widgets/RadioGroupWidget"
-import TextAreaWidget from "./Widgets/TextareaWidget"
+import TextAreaFieldWidget from "./Widgets/TextAreaFieldWidget"
 
 const defaultTheme = {
   "Text": TextWidget,
   "Number": NumberWidget,
   "Currency": CurrencyWidget,
   "CEP": CEPWidget,
-  "TextArea": TextAreaWidget,
+  "TextArea": TextAreaFieldWidget,
   "Select": SelectWidget,
   "Check": CheckboxWidget,
   "Radio": RadioGroupWidget,
