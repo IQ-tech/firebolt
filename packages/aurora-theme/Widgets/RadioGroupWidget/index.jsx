@@ -26,10 +26,10 @@ const RadioGroupWidget = ({
         onChange={(e) => onChange(e?.target?.value)}
         onFocus={(e) => onFocus(e?.target?.value)}
       >
-        {options.map((option) => {
+        {options.map((option, index) => {
           return (
             <Radio.Field
-              key={option.value}
+              key={index}
               value={option.value}
               label={option.label}
             />
