@@ -5,7 +5,7 @@ import CEPWidget from "./Widgets/CEPWidget"
 import SelectWidget from "./Widgets/SelectWidget"
 import CheckboxWidget from "./Widgets/CheckboxWidget"
 import RadioGroupWidget from "./Widgets/RadioGroupWidget"
-import TextAreaWidget from "./Widgets/TextareaWidget"
+import TextAreaWidget from "./Widgets/TextAreaFieldWidget"
 
 const defaultTheme = {
   "Text": TextWidget,
