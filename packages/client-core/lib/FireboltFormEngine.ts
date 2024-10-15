@@ -66,7 +66,6 @@ class FireboltFormEngine {
     const urlParams = getUrlParams()
 
     if (autofillData) {
-      //TODO to avaliate
       this.clearSession()
     }
     const sessionId = urlParams?.session_id
