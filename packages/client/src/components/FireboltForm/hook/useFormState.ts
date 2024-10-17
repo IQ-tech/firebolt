@@ -31,7 +31,7 @@ export default function useFormState({
 
   useEffect(() => {
     const requiredFields = schema.filter((field) =>
-      field?.validators?.find((validator) => validator.type === "required")
+      field?.validators?.find((validator) => validator.type === "required" || validator.type === "requiredboolean")
     )
     const slugs = requiredFields.map((field) => field.slug)
 
