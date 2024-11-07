@@ -12,6 +12,7 @@ const CheckboxWidget = ({
   errorMessage,
   disabled = false,
   onChange,
+  onBlur,
 }) => {
   return (
     <CheckboxField
@@ -24,6 +25,7 @@ const CheckboxWidget = ({
       error={hasError}
       errorMessage={errorMessage}
       disabled={disabled}
+      onBlur={(e) => onBlur(e.target.checked)}
       onChange={(e) => onChange(e.target.checked)}
     />
   )
