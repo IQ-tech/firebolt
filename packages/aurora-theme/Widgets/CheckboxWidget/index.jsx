@@ -1,5 +1,5 @@
 import React from "react"
-import { CheckboxField } from "@consumidor-positivo/aurora"
+import { Checkbox } from "@consumidor-positivo/aurora"
 
 const CheckboxWidget = ({
   id,
@@ -15,7 +15,7 @@ const CheckboxWidget = ({
   onBlur,
 }) => {
   return (
-    <CheckboxField
+    <Checkbox.Field
       id={id}
       name={name}
       value={value}
