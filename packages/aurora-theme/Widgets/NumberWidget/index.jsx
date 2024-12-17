@@ -1,8 +1,11 @@
 import React from "react"
 import TextWidget from "../TextWidget"
 
-const NumberWidget = ({ min = "0", max, ...rest }) => {
+const NumberWidget = ({ min = "0", max, maxLength, ...rest }) => {
   const handleChange = (value) => {
+    if (maxLength && value.length > maxLength) {
+      value = value.slice(0, maxLength)
+    }
     rest.onChange(value);
   }
 
