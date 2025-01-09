@@ -24,6 +24,7 @@ import isFileValid from './file';
 import nonRepeatedChars from './nonRepeatedChars';
 import nonSequential from './nonSequential';
 import numberRange from './numberRange';
+import onlyValidOption from './onlyValidOption';
 
 const validators: Record<string, Validator> = {
   'required': isRequired,
@@ -42,6 +43,7 @@ const validators: Record<string, Validator> = {
   'phone': isPhoneValid,
   'noSpecialCaracteres': noSpecialCaracteres,
   'nonSequentialCharacters': nonSequential,
+  'onlyValidOption': onlyValidOption,
 
   // complex validators
   'minAge': isMinAge,
