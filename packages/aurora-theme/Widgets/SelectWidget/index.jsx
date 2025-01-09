@@ -15,6 +15,7 @@ const SelectWidget = ({
   errorMessage,
   disabled = false,
   onChange,
+  onBlur
 }) => {
   return (
     <FieldHolder title={label}>
@@ -30,6 +31,7 @@ const SelectWidget = ({
         errorMessage={errorMessage}
         disabled={disabled}
         onChange={onChange}
+        onBlur={onBlur}
       />
     </FieldHolder>
   )

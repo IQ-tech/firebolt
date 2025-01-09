@@ -118,6 +118,7 @@ const withFirebolt = createFireboltProvider({
         "slug": "educational_level",
         "ui:widget": "Select",
         "ui:props": {
+          "autocomplete": true,
           "label": "Qual seu nível de escolaridade?",
           "sublabel": "Nível de Escolaridade",
           "placeholder": "Nível de Escolaridade",
@@ -144,6 +145,10 @@ const withFirebolt = createFireboltProvider({
           {
             "type": "required",
           },
+          {
+            "type": "onlyValidOption",
+            "properties": {"options": "prop-value:options"},
+          }
         ],
         "meta": {},
       },
