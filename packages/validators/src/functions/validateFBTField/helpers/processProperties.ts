@@ -1,30 +1,38 @@
-import { FormPayload } from '../../../types';
+import { FieldConfig, FormPayload } from "../../../types"
 
 export default function processProperties(
   properties: { [key: string]: any },
-  formPayload: FormPayload,
+  field: FieldConfig,
+  formPayload: FormPayload
 ) {
-  return Object.keys(properties).reduce((acc, key: string) => {
-    const value = properties[key];
-    const referenceBase = 'field-value:';
-    const referenceAnotherField =
-      typeof value === 'string' && value.indexOf(referenceBase) === 0;
+  const referenceBase = {
+    field: "field-value:",
+    prop: "prop-value:",
+  }
 
-    if (referenceAnotherField) {
-      const refFieldSlug = value.replace(referenceBase, '');
-      const hasRefField = Object.keys(formPayload).includes(refFieldSlug);
-      if (!hasRefField) return {...acc}
-      const referencedValue = formPayload[refFieldSlug];
+  const resolveValue = (value: string) => {
+    if (typeof value !== "string") return value
 
-      return {
-        ...acc,
-        [key]: referencedValue,
-      };
-    } else {
-      return {
-        ...acc,
-        [key]: value,
-      };
+    if (value.startsWith(referenceBase.field)) {
+      const refFieldSlug = value.replace(referenceBase.field, "")
+      const hasRefField = Object.keys(formPayload).includes(refFieldSlug)
+      if (!hasRefField) return null
+      return formPayload[refFieldSlug]
     }
-  }, {});
+
+    if (value.startsWith(referenceBase.prop)) {
+      const refPropSlug = value.replace(referenceBase.prop, "")
+      const referencedValue = field["ui:props"][refPropSlug]
+      if (!referencedValue) return null
+      return referencedValue
+    }
+
+    return value
+  }
+
+  return Object.entries(properties).reduce((acc, [key]) => {
+    const resolvedValue = resolveValue(properties[key])
+    if (resolvedValue === null) return { ...acc }
+    return { ...acc, [key]: resolvedValue }
+  }, {})
 }
