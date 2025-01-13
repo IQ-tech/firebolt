@@ -31,7 +31,7 @@ const SelectWidget = ({
         errorMessage={errorMessage}
         disabled={disabled}
         onChange={onChange}
-        onBlur={onBlur}
+        onBlur={() => setTimeout(() => onBlur(), 100)}
       />
     </FieldHolder>
   )
