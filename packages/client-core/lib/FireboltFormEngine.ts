@@ -70,6 +70,7 @@ class FireboltFormEngine {
       this.clearSession()
     }
     const sessionId = urlParams?.session_id
+    const fireboltId = urlParams?.firebolt_id
 
     const formSessionKey = (() => {
       if (this.enforceNewSession) return ""
@@ -77,20 +78,18 @@ class FireboltFormEngine {
       else return getFormSession(this.formName)
     })()
 
-    if (formSessionKey) {
-      createFormSession(this.formName, formSessionKey)
-    }
-    const firstStepData = await this.APIService.getStartForm(formSessionKey)
+    const firstStepData = await this.APIService.getStartForm(
+      formSessionKey,
+      fireboltId
+    )
+
     const usedStepData = this.decideStepResponse(firstStepData)
     const formattedData = formatFormOutput(usedStepData, {
       autofillData,
       addons: this.addons,
     })
 
-    if (!formSessionKey) {
-      createFormSession(this.formName, formattedData?.auth)
-    }
-
+    createFormSession(this.formName, formattedData?.auth)
     return formattedData
   }
 

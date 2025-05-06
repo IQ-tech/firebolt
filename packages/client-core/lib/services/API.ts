@@ -18,14 +18,24 @@ class APIService {
     }
   }
 
-  async getStartForm(sessionKey?: string): Promise<IFormResponseData> {
-    const userHasLocalSession = !!sessionKey
-    const headersConfig = userHasLocalSession
-      ? { authorization: `Bearer ${sessionKey}` }
-      : {}
+  async getStartForm(
+    sessionKey?: string,
+    fireboltId?: string
+  ): Promise<IFormResponseData> {
+    const headers = {}
+    if (fireboltId) {
+      headers["x-firebolt-id"] = fireboltId
+    }
+
+    if (sessionKey) {
+      headers["Authorization"] = `Bearer ${sessionKey}`
+    }
+
+    // TODO: REMOVE LOG
+    console.log("headers: ", headers)
 
     return await axios
-      .get(this.endpoints.base, { headers: headersConfig })
+      .get(this.endpoints.base, { headers })
       .then((res) => formatStepResponseData(res?.data?.formData))
   }
 
