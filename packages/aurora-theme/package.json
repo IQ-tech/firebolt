@@ -22,7 +22,7 @@
     "url": "https://github.com/IQ-tech/firebolt/issues"
   },
   "dependencies": {
-    "@consumidor-positivo/aurora": "0.0.103",
+    "@consumidor-positivo/aurora": "0.0.149",
     "classnames": "^2.5.1",
     "sass": "^1.70.0"
   },
