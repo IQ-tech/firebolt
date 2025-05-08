@@ -7,7 +7,7 @@ const SelectWidget = ({
   options = [],
   value,
   autocomplete = false,
-  fullScreenOptions = true,
+  fullScreenOptions = false,
   placeholder,
   label,
   sublabel,
