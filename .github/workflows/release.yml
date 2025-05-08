@@ -23,7 +23,7 @@ jobs:
           fetch-depth: 0
           token: ${{ secrets.IQ_ADM_TIM_TOKEN }}
       - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
           cache: "yarn"
