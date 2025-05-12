@@ -31,9 +31,6 @@ class APIService {
       headers["Authorization"] = `Bearer ${sessionKey}`
     }
 
-    // TODO: REMOVE LOG
-    console.log("headers: ", headers)
-
     return await axios
       .get(this.endpoints.base, { headers })
       .then((res) => formatStepResponseData(res?.data?.formData))
