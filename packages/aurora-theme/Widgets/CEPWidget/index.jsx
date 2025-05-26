@@ -22,7 +22,7 @@ const CEPWidget = ({
     clearManuallySetError,
     payload
   })
-  return <TextWidget {...props} value={value} payload={payload} />
+  return <TextWidget {...props} value={value} payload={payload} htmlType='number' />
 }
 
 export default CEPWidget

@@ -3,6 +3,7 @@ import { SelectField } from "@consumidor-positivo/aurora"
 import FieldHolder from "../../wrappers/FieldHolder"
 
 const SelectWidget = ({
+  htmlType = "text",
   slug,
   options = [],
   value,
@@ -25,6 +26,7 @@ const SelectWidget = ({
         options={options}
         value={value}
         autocomplete={autocomplete}
+        htmlType={htmlType}
         fullScreenOptions={fullScreenOptions}
         placeholder={placeholder}
         label={sublabel}
