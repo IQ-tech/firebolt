@@ -7,7 +7,7 @@ const CurrencyWidget = (props) => {
   const { value, onChange } = props
   const { moneyMask, fieldValue } = useCurrencyWidget({value, onChange})
 
-  return <TextWidget {...props} onChange={moneyMask} value={fieldValue} />
+  return <TextWidget {...props} onChange={moneyMask} value={fieldValue} htmlType="number" />
 }
 
 export default CurrencyWidget
