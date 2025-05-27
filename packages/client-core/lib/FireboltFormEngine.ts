@@ -90,6 +90,15 @@ class FireboltFormEngine {
     })
 
     createFormSession(this.formName, formattedData?.auth)
+    if (fireboltId) {
+      const urlParams = new URLSearchParams(window.location.search)
+      urlParams.delete("firebolt_id")
+      window.history.replaceState(
+        {},
+        document.title,
+        `${window.location.pathname}?${urlParams.toString()}`
+      )
+    }
     return formattedData
   }
 
