@@ -84,6 +84,8 @@ export default function useInputHolder({
 
   const computedClasses = classNames(classes["firebolt-input"], {
     [classes["firebolt-input--half"]]: propsStyles?.size === "half",
+    [classes["firebolt-input--half-2"]]: propsStyles?.size === "half" && propsStyles?.grow === '2',
+    [classes["firebolt-input--half-3"]]: propsStyles?.size === "half" && propsStyles?.grow === '3',
   })
 
   // props from 'ui:props-conditional json key

@@ -125,6 +125,8 @@ export interface IStepConfigField {
   }[]
   "ui:styles"?: {
     size: "full" | "half"
+    grow?: "1" | "2" | "3"
+
   }
   meta: Object
   component: string
