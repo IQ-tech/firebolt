@@ -1,11 +1,11 @@
 # `client-core`
 
-> TODO: description
+This Firebolt package gather helpers, formatters and entities used to improve Firebolt forms experience.
 
 ## Usage
 
 ```
 const clientCore = require('client-core');
 
-// TODO: DEMONSTRATE API
+
 ```
