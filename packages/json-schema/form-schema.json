@@ -454,6 +454,13 @@
                                   "title": "field size",
                                   "enum": ["half", "full"],
                                   "type": "string"
+                                },
+                                "grow": {
+                                  "$id": "#/properties/steps/items/anyOf/0/properties/step/properties/fields/items/anyOf/0/properties/ui%3Astyles/grow",
+                                  "description": "Set size half field",
+                                  "title": "field size when its half",
+                                  "enum": ["1", "2", "3"],
+                                  "type": "number"
                                 }
                               }
                             },
