@@ -25,9 +25,11 @@
 
   .firebolt-input.firebolt-input--half-2 {
     flex: 2;
+    min-width: 50%;
   }
 
   .firebolt-input.firebolt-input--half-3 {
     flex: 3;
+    min-width: 50%;
   }
 }
