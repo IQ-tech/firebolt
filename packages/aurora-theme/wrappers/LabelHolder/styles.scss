@@ -1,0 +1,17 @@
+.label-holder {
+  &__with-tooltip {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+
+    .au-icon {
+      width: 20px;
+      height: 20px;
+    }
+
+    .tooltip-container {
+      font-size: 14px;
+      font-weight: 400;
+    }
+  }
+}
