@@ -1,6 +1,6 @@
-import React from "react"
 import { SelectField } from "@consumidor-positivo/aurora"
 import FieldHolder from "../../wrappers/FieldHolder"
+import { LabelHolder } from "../../wrappers/LabelHolder"
 
 const SelectWidget = ({
   htmlType = "text",
@@ -17,7 +17,8 @@ const SelectWidget = ({
   errorMessage,
   disabled = false,
   onChange,
-  onBlur
+  onBlur,
+  tooltipText
 }) => {
   return (
     <FieldHolder title={label}>
@@ -29,7 +30,7 @@ const SelectWidget = ({
         htmlType={htmlType}
         fullScreenOptions={fullScreenOptions}
         placeholder={placeholder}
-        label={sublabel}
+        label={<LabelHolder label={sublabel} tooltipText={tooltipText} />}
         required={isRequired}
         error={hasError}
         errorMessage={errorMessage}
