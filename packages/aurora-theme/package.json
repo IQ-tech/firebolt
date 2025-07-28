@@ -1,6 +1,6 @@
 {
   "name": "@iq-firebolt/aurora-theme",
-  "version": "0.0.19",
+  "version": "0.0.20",
   "description": "> AURORA Theme",
   "author": "iq team",
   "homepage": "https://github.com/IQ-tech/firebolt#readme",
@@ -22,7 +22,7 @@
     "url": "https://github.com/IQ-tech/firebolt/issues"
   },
   "dependencies": {
-    "@consumidor-positivo/aurora": "0.0.175",
+    "@consumidor-positivo/aurora": "0.0.181",
     "classnames": "^2.5.1",
     "sass": "^1.70.0"
   },

@@ -1,6 +1,6 @@
-import React from "react"
 import { TextAreaField } from "@consumidor-positivo/aurora"
 import FieldHolder from "../../wrappers/FieldHolder"
+import { LabelHolder } from "../../wrappers/LabelHolder"
 
 const TextAreaFieldWidget = ({
   hasError,
@@ -23,6 +23,7 @@ const TextAreaFieldWidget = ({
   minLength,
   maxLength,
   inputRef,
+  tooltipText,
 }) => {
   return (
     <FieldHolder title={label}>
@@ -31,7 +32,7 @@ const TextAreaFieldWidget = ({
         optional={isOptional}
         error={hasError}
         errorMessage={errorMessage}
-        label={sublabel}
+        label={<LabelHolder label={sublabel} tooltipText={tooltipText} />}
         onBlur={(e) => onBlur(e?.target?.value)}
         onFocus={(e) => onFocus(e?.target?.value)}
         onChange={(e) => onChange(e?.target?.value)}

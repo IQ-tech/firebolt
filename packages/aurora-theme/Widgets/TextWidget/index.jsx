@@ -1,6 +1,6 @@
-import React from "react"
 import { InputField } from "@consumidor-positivo/aurora"
 import FieldHolder from "../../wrappers/FieldHolder"
+import { LabelHolder } from "../../wrappers/LabelHolder"
 
 const TextWidget = ({
   // html attributtes
@@ -19,6 +19,7 @@ const TextWidget = ({
   hasError,
   label,
   sublabel,
+  tooltipText,
 
   // events
   onChange,
@@ -33,7 +34,7 @@ const TextWidget = ({
         id={slug}
         name={slug}
         inputRef={inputRef}
-        label={sublabel}
+        label={<LabelHolder label={sublabel} tooltipText={tooltipText} />}
         placeholder={placeholder}
         required={isRequired}
         requiredInput={isRequired}
