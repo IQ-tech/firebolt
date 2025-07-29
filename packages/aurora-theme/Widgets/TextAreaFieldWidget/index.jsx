@@ -1,3 +1,4 @@
+import React from "react"
 import { TextAreaField } from "@consumidor-positivo/aurora"
 import FieldHolder from "../../wrappers/FieldHolder"
 import { LabelHolder } from "../../wrappers/LabelHolder"
