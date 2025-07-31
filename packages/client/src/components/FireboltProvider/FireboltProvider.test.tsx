@@ -69,7 +69,7 @@ describe("FireboltProvider component", () => {
     })
 
     await waitForNextUpdate()
-    expect(result.current.stagedStep.data.fields).toEqual(secondStepData)
+    expect(result?.current?.stagedStep?.data.fields).toEqual(secondStepData)
 
     act(() => {
       result.current.commitStepChange()
@@ -121,5 +121,4 @@ describe("FireboltProvider component - testes relacionados ao modo de debug", ()
   })
 
   it.todo("to test addons")
-  // TODO: TEST
 })

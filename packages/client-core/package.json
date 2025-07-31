@@ -1,7 +1,7 @@
 {
   "name": "@iq-firebolt/client-core",
   "version": "0.9.0",
-  "description": "> TODO: description",
+  "description": "Firebolt Client Core",
   "author": "iq team",
   "homepage": "https://github.com/IQ-tech/firebolt#readme",
   "license": "Apache-2.0",

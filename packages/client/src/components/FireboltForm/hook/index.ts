@@ -82,8 +82,8 @@ export default function useFireboltForm(
   const actionsChildData: IActionsChildData = {
     isFormValid,
     handleSubmit,
-    payload: formPayload, // #TODO
-    currentStep: 1, //#TODO
+    payload: formPayload, 
+    currentStep: 1, 
   }
 
   return {
