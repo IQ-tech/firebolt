@@ -1,6 +1,8 @@
 export interface IFormAccess {
   /** Firebolt root endpoint */
   root: string
+  /** Firebolt api key */
+  apiKey?: string
   /** Identifier to find form on endpoint */
   formName: string
 }
