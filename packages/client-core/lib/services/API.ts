@@ -2,10 +2,12 @@ import axios, { AxiosRequestConfig } from "axios"
 import { formatStepResponseData, formatReqPayload } from "../helpers/formatData"
 import { IApiService, IFormResponseData } from "../types"
 
+const X_API_KEY = "x-api-key"
+
 class APIService {
   debug?: boolean
   formName?: string
-  endpoints?: { root: string; base: string }
+  endpoints?: { root: string; base: string; apiKey?: string }
 
   constructor({ formAccess, debug }: IApiService) {
     const rootEndpoint = this.formatRoot(formAccess?.root)
@@ -15,6 +17,7 @@ class APIService {
     this.endpoints = {
       root: rootEndpoint,
       base: `${rootEndpoint}/form/${formAccess?.formName}`,
+      apiKey: formAccess?.apiKey,
     }
   }
 
@@ -31,6 +34,10 @@ class APIService {
       headers["Authorization"] = `Bearer ${sessionKey}`
     }
 
+    if (this.endpoints?.apiKey) {
+      headers[X_API_KEY] = this.endpoints.apiKey
+    }
+
     return await axios
       .get(this.endpoints.base, { headers })
       .then((res) => formatStepResponseData(res?.data?.formData))
@@ -41,6 +48,14 @@ class APIService {
     currentStepSlug: string,
     { stepFieldsPayload, requestsMetadata }
   ) {
+    const headers = {
+      authorization: `Bearer ${sessionKey}`,
+    }
+
+    if (this.endpoints?.apiKey) {
+      headers[X_API_KEY] = this.endpoints.apiKey
+    }
+
     const endpoint = `${this.endpoints.base}/next`
     const dataToSend = formatReqPayload({
       stepSlug: currentStepSlug,
@@ -49,35 +64,47 @@ class APIService {
     })
 
     return await axios
-      .post(endpoint, dataToSend, {
-        headers: {
-          authorization: `Bearer ${sessionKey}`,
-        },
-      })
+      .post(endpoint, dataToSend, { headers })
       .then((res) => formatStepResponseData(res?.data?.formData))
   }
 
   async getPreviousStep(sessionKey, currentStepSlug) {
+    const headers = {
+      authorization: `Bearer ${sessionKey}`,
+    }
+    if (this.endpoints?.apiKey) {
+      headers[X_API_KEY] = this.endpoints.apiKey
+    }
+
     const endpoint = `${this.endpoints.base}/${currentStepSlug}/previous`
 
     return await axios
-      .get(endpoint, {
-        headers: {
-          authorization: `Bearer ${sessionKey}`,
-        },
-      })
+      .get(endpoint, { headers })
       .then((res) => formatStepResponseData(res?.data?.formData)) // #V2-TODO
   }
 
   async getDebugStep(stepSlug) {
+    const headers = {}
+    if (this.endpoints?.apiKey) {
+      headers[X_API_KEY] = this.endpoints.apiKey
+    }
+
     const endpoint = `${this.endpoints.root}/debug/${this.formName}/${stepSlug}`
 
     return await axios
-      .get(endpoint)
+      .get(endpoint, { headers })
       .then((res) => formatStepResponseData(res?.data?.formData))
   }
 
   async upload(sessionKey, file, fileName) {
+    const headers = {
+      Authorization: `Bearer ${sessionKey}`,
+      "Content-Type": "multipart/form-data",
+    }
+    if (this.endpoints?.apiKey) {
+      headers[X_API_KEY] = this.endpoints.apiKey
+    }
+
     const formData = new FormData()
     formData.append("file", file)
     formData.append("filename", fileName)
@@ -86,10 +113,7 @@ class APIService {
     const config: AxiosRequestConfig = {
       method: "post",
       url: endpoint,
-      headers: {
-        Authorization: `Bearer ${sessionKey}`,
-        "Content-Type": "multipart/form-data",
-      },
+      headers,
       data: formData,
     }
 
