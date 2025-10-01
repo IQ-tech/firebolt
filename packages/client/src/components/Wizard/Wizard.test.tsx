@@ -1,5 +1,3 @@
-// TODO: Fix JSX compilation issues
-/*
 import React from "react"
 import { vi, type MockedFunction } from "vitest"
 import { render, fireEvent, waitFor } from "@testing-library/react"
@@ -13,7 +11,7 @@ vi.mock("axios")
 
 describe("Wizard component", () => {
   const fallback = <div>Fallback</div>
-  
+
   (axios.get as MockedFunction<typeof axios.get>).mockResolvedValue({ data: {} })
 
   const formInfo = {
@@ -65,4 +63,3 @@ describe("Wizard component", () => {
     })
   })
 })
-*/

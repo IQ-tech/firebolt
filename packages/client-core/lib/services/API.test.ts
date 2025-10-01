@@ -41,13 +41,17 @@ describe("Navigation requests receive correct data", () => {
   })
 
   test("start form return correct data", async () => {
-    ;(axios.get as MockedFunction<typeof axios.get>).mockResolvedValue({ data: startFormResponse })
+    ;(axios.get as MockedFunction<typeof axios.get>).mockResolvedValue({
+      data: startFormResponse,
+    })
     const response = await serviceInstance.getStartForm()
     expect(response).toEqual(expectedNewStep)
   })
 
   test("next step return correct data", async () => {
-    ;(axios.post as MockedFunction<typeof axios.post>).mockResolvedValue({ data: nextStepFormResponse })
+    ;(axios.post as MockedFunction<typeof axios.post>).mockResolvedValue({
+      data: nextStepFormResponse,
+    })
     const response = await serviceInstance.getNextStep(
       "sessionKey",
       "personal_data",

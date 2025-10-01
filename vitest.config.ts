@@ -2,15 +2,20 @@
 import { defineConfig } from "vite"
 
 export default defineConfig({
+  // ESBuild configuration for JSX handling
+  esbuild: {
+    jsx: "automatic",
+    jsxImportSource: "react",
+  },
   test: {
     // Use jsdom environment for DOM tests
     environment: "jsdom",
-    
+
     // Configurações para React 18 compatibility
     environmentOptions: {
       jsdom: {
-        resources: "usable"
-      }
+        resources: "usable",
+      },
     },
 
     // Global test setup

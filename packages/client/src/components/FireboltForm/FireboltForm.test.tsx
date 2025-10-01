@@ -22,7 +22,7 @@ vi.mock("./hook/useFormEvents", () => ({
       handleSubmit: mockSubmit,
       handleGoBack: mockGoBack,
     }
-  })
+  }),
 }))
 //#endregion
 
@@ -42,7 +42,7 @@ describe("firebolt form test", () => {
   beforeEach(() => {
     fields.splice(0, fields.length)
     fields.push(textField)
-    
+
     // Reset mocks para cada teste
     vi.clearAllMocks()
     mockSubmit.mockClear()
@@ -78,7 +78,7 @@ describe("firebolt form test", () => {
     )
 
     const button = getByText("Previous Step")
-    
+
     await act(async () => {
       fireEvent.click(button)
     })
@@ -293,7 +293,9 @@ describe("autofilled fields test", () => {
   beforeEach(() => {
     // clearAllFormSessions()
 
-    ;(axios.get as MockedFunction<typeof axios.get>).mockResolvedValue({ data: startFormResponse })
+    ;(axios.get as MockedFunction<typeof axios.get>).mockResolvedValue({
+      data: startFormResponse,
+    })
 
     Object.defineProperty(window, "location", {
       writable: true,
@@ -389,7 +391,7 @@ describe("firebolt form callbacks run correctly", () => {
     )
 
     const input = getByPlaceholderText("Digite seu nome")
-    
+
     await act(async () => {
       fireEvent.blur(input)
     })
@@ -397,7 +399,7 @@ describe("firebolt form callbacks run correctly", () => {
     await waitFor(() => {
       expect(onBlurFieldCallback).toBeCalledTimes(1)
     })
-    
+
     // React 18 pode disparar focus antes do blur - aguarda estabilização
     await waitFor(() => {
       expect(onChangeFieldCallback).toBeCalledTimes(0)
@@ -417,15 +419,15 @@ describe("firebolt form callbacks run correctly", () => {
     )
 
     const input = getByPlaceholderText("Digite seu nome")
-    
+
     await act(async () => {
-      fireEvent.change(input, {target: {value: "test"}})
+      fireEvent.change(input, { target: { value: "test" } })
     })
 
     await waitFor(() => {
       expect(onChangeFieldCallback).toBeCalledTimes(1)
     })
-    
+
     // React 18 pode disparar focus antes do change - aguarda estabilização
     await waitFor(() => {
       expect(onBlurFieldCallback).toBeCalledTimes(0)
@@ -433,4 +435,3 @@ describe("firebolt form callbacks run correctly", () => {
   })
   test.todo("onChange run correctly")
 })
-

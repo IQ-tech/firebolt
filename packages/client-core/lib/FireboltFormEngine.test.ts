@@ -36,7 +36,9 @@ describe("start form tests", () => {
   })
 
   test("start form correctly creates session key on localStorage", async () => {
-    ;(axios.get as MockedFunction<typeof axios.get>).mockResolvedValue({ data: startFormResponse })
+    ;(axios.get as MockedFunction<typeof axios.get>).mockResolvedValue({
+      data: startFormResponse,
+    })
 
     // get first step
     await form.start()
@@ -62,7 +64,9 @@ describe("tests about the form autofill by base64 at URL", () => {
     "autofill=JTdCJTI3bmFtZSUyNyUzQSU3QiUyN3ZhbHVlJTI3JTNBJTI3UnVhbiUyMEJlcnQlQzMlQTklMjclMkMlMjdtYXNrJTI3JTNBJTI3JTI3JTdEJTJDJTI3Y3BmJTI3JTNBJTdCJTI3dmFsdWUlMjclM0ElMjc0NTAuNTkyLjczOC01NyUyNyUyQyUyN21hc2slMjclM0ElMjdjcGYlMjclN0QlMkMlMjdlbWFpbCUyNyUzQSU3QiUyN3ZhbHVlJTI3JTNBJTI3YmVydGUucnVhbiU0MGdtYWlsLmNvbSUyNyUyQyUyN21hc2slMjclM0ElMjclMjclN0QlMkMlMjdpbmNvbWUlMjclM0ElN0IlMjd2YWx1ZSUyNyUzQSUyNzYwMDAlMjclMkMlMjdtYXNrJTI3JTNBJTI3bW9uZXklMjclN0QlMkMlMjdwaG9uZSUyNyUzQSU3QiUyN3ZhbHVlJTI3JTNBJTI3NDI5OTk4ODM3NjglMjclMkMlMjdtYXNrJTI3JTNBJTI3cGhvbmVfbnVtYmVyJTI3JTdEJTdE"
 
   test("form.start() must autofill value prop of the field email at the fields array", async () => {
-    ;(axios.get as MockedFunction<typeof axios.get>).mockResolvedValue({ data: startFormResponse })
+    ;(axios.get as MockedFunction<typeof axios.get>).mockResolvedValue({
+      data: startFormResponse,
+    })
 
     Object.defineProperty(window, "location", {
       writable: true,

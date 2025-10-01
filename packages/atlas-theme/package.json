@@ -16,7 +16,6 @@
   },
   "scripts": {
     "test": "echo 'No tests for theme package'"
-
   },
   "bugs": {
     "url": "https://github.com/IQ-tech/firebolt/issues"

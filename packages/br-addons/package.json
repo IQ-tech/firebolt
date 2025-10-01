@@ -17,7 +17,6 @@
   },
   "scripts": {
     "test": "echo 'No tests for br-addons package'"
-
   },
   "bugs": {
     "url": "https://github.com/IQ-tech/firebolt/issues"

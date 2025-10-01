@@ -46,14 +46,14 @@ describe("FireboltProvider component", () => {
     )
 
     // Simula que o form já foi carregado
-    expect(typeof result.current.goNextStep).toBe('function')
+    expect(typeof result.current.goNextStep).toBe("function")
 
     act(() => {
       result.current.goNextStep({})
     })
 
     // Verifica que a função foi chamada sem erro
-    expect(typeof result.current.goNextStep).toBe('function')
+    expect(typeof result.current.goNextStep).toBe("function")
   })
 
   it('Deve setar o estado "isLoading" como "true" ao chamar a função "goPreviousStep"', () => {
@@ -63,13 +63,13 @@ describe("FireboltProvider component", () => {
       })
     )
 
-    expect(typeof result.current.goPreviousStep).toBe('function')
+    expect(typeof result.current.goPreviousStep).toBe("function")
 
     act(() => {
       result.current.goPreviousStep()
     })
 
-    expect(typeof result.current.goPreviousStep).toBe('function')
+    expect(typeof result.current.goPreviousStep).toBe("function")
   })
 
   it("Deve fazer a transição de step após chamar a função commitStepChange", () => {
@@ -79,8 +79,8 @@ describe("FireboltProvider component", () => {
       })
     )
 
-    expect(typeof result.current.goNextStep).toBe('function')
-    expect(typeof result.current.commitStepChange).toBe('function')
+    expect(typeof result.current.goNextStep).toBe("function")
+    expect(typeof result.current.commitStepChange).toBe("function")
 
     act(() => {
       result.current.goNextStep({})
@@ -91,7 +91,7 @@ describe("FireboltProvider component", () => {
     })
 
     // Verifica que as funções existem
-    expect(typeof result.current.commitStepChange).toBe('function')
+    expect(typeof result.current.commitStepChange).toBe("function")
   })
 })
 
@@ -129,7 +129,7 @@ describe("FireboltProvider component - testes relacionados ao modo de debug", ()
     )
 
     // Verifica que o hook foi executado com debug ativo
-    expect(typeof result.current.goNextStep).toBe('function')
+    expect(typeof result.current.goNextStep).toBe("function")
   })
 
   it.todo("to test addons")

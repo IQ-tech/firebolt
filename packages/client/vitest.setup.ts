@@ -16,22 +16,22 @@ const localStorageMock = (() => {
     }),
     clear: vi.fn(() => {
       store = {}
-    })
+    }),
   }
 })()
 
-Object.defineProperty(window, 'localStorage', {
-  value: localStorageMock
+Object.defineProperty(window, "localStorage", {
+  value: localStorageMock,
 })
 
-Object.defineProperty(window, 'sessionStorage', {
-  value: localStorageMock
+Object.defineProperty(window, "sessionStorage", {
+  value: localStorageMock,
 })
 
 // Mock window.matchMedia
-Object.defineProperty(window, 'matchMedia', {
+Object.defineProperty(window, "matchMedia", {
   writable: true,
-  value: vi.fn().mockImplementation(query => ({
+  value: vi.fn().mockImplementation((query) => ({
     matches: false,
     media: query,
     onchange: null,
@@ -45,8 +45,8 @@ Object.defineProperty(window, 'matchMedia', {
 
 // Configurar React 18 para usar legacy root (sem Concurrent Mode)
 // para evitar double-firing nos testes
-vi.mock('react-dom/client', () => {
-  const ReactDOM = vi.importActual('react-dom')
+vi.mock("react-dom/client", () => {
+  const ReactDOM = vi.importActual("react-dom")
   return {
     ...ReactDOM,
     createRoot: undefined, // Força usar legacy ReactDOM.render
