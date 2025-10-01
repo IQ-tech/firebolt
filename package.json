@@ -39,7 +39,7 @@
     "@testing-library/user-event": "^14.6.1",
     "@types/faker": "^5.5.8",
     "@vitest/ui": "^3.2.4",
-    "eslint": "^7.32.0",
+    "eslint": "^8.0.0",
     "husky": "^7.0.0",
     "identity-obj-proxy": "^3.0.0",
     "jsdom": "^27.0.0",
@@ -62,5 +62,9 @@
     "cross-spawn": "^7.0.5",
     "regex-parser": "^2.3.1",
     "sass": "^1.93.2"
+  },
+  "resolutions": {
+    "cross-spawn": "^7.0.5",
+    "semver": "^7.5.2"
   }
 }
