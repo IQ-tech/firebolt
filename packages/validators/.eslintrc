@@ -3,7 +3,7 @@
     "browser": true,
     "commonjs": true,
     "es2021": true,
-    "jest/globals": true
+    "node": true
   },
   "ignorePatterns": ["/dist/**/*"],
   "extends": ["airbnb-base"],
@@ -17,6 +17,5 @@
     "arrow-body-style": "off",
     "no-multiple-empty-lines": "off",
     "padded-blocks": "off"
-  },
-  "plugins": ["jest"]
+  }
 }

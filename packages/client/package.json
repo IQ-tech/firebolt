@@ -26,9 +26,9 @@
     "url": "git+https://github.com/IQ-tech/firebolt.git"
   },
   "scripts": {
-    "test": "jest",
-    "test:coverage": "jest --collect-coverage",
-    "test:watch": "jest --watch",
+    "test": "vitest run",
+    "test:coverage": "vitest run --coverage", 
+    "test:watch": "vitest",
     "build": "rollup -c"
   },
   "bugs": {

@@ -15,8 +15,7 @@
     "url": "git+https://github.com/IQ-tech/firebolt.git"
   },
   "scripts": {
-    "test": "jest",
-    "test:watch": "jest --watch"
+    "test": "echo 'No tests for theme package'"
   },
   "bugs": {
     "url": "https://github.com/IQ-tech/firebolt/issues"
@@ -32,21 +31,6 @@
     "iq-blueberry": "0.0.x",
     "react": "^16.12.0",
     "react-dom": "^16.12.0"
-  },
-  "jest": {
-    "setupFiles": [
-      "<rootDir>/__jest__/browserMocks.js"
-    ],
-    "setupFilesAfterEnv": [
-      "<rootDir>/__jest__/setup.js"
-    ],
-    "moduleNameMapper": {
-      "\\.(css|less)$": "<rootDir>/__jest__/styleMock.js"
-    },
-    "testEnvironment": "jsdom",
-    "transform": {
-      "^.+\\.(ts|tsx|js|jsx)$": "babel-jest"
-    }
   },
   "browserslist": [
     "last 1 Chrome version"

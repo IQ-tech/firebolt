@@ -19,11 +19,10 @@
   },
   "scripts": {
     "clear-dist": "rimraf dist",
-    "test": "jest",
-    "test:coverage": "jest --collect-coverage",
-    "test:watch": "NODE_ENV=test jest --watchAll",
-    "build": "yarn clear-dist && tsc",
-    "clear-jest": "jest --clearCache"
+    "test": "vitest run",
+    "test:coverage": "vitest run --coverage", 
+    "test:watch": "vitest",
+    "build": "yarn clear-dist && tsc"
   },
   "bugs": {
     "url": "https://github.com/IQ-tech/firebolt/issues"

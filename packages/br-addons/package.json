@@ -16,8 +16,8 @@
     "url": "git+https://github.com/IQ-tech/firebolt.git"
   },
   "scripts": {
-    "test": "jest",
-    "test:watch": "jest --watch"
+    "test": "echo 'No tests for br-addons package'"
+
   },
   "bugs": {
     "url": "https://github.com/IQ-tech/firebolt/issues"

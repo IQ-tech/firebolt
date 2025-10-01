@@ -1,0 +1,77 @@
+/// <reference types="vitest" />
+import { defineConfig } from "vite"
+
+export default defineConfig({
+  test: {
+    // Use jsdom environment for DOM tests
+    environment: "jsdom",
+
+    // Global test setup
+    setupFiles: ["./vitest.setup.ts"],
+
+    // Test file patterns
+    include: [
+      "**/*.{test,spec}.{js,ts,jsx,tsx}",
+      "**/__tests__/**/*.{js,ts,jsx,tsx}",
+    ],
+
+    // Exclude patterns
+    exclude: [
+      "**/node_modules/**",
+      "**/dist/**",
+      "**/build/**",
+      "**/.{idea,git,cache,output,temp}/**",
+    ],
+
+    // Coverage configuration
+    coverage: {
+      provider: "v8",
+      reporter: ["text", "json", "html", "lcov"],
+      exclude: [
+        "coverage/**",
+        "dist/**",
+        "packages/*/test{,s}/**",
+        "**/*.d.ts",
+        "cypress/**",
+        "test{,s}/**",
+        "test{,-*}.{js,cjs,mjs,ts,tsx,jsx}",
+        "**/*{.,-}test.{js,cjs,mjs,ts,tsx,jsx}",
+        "**/*{.,-}spec.{js,cjs,mjs,ts,tsx,jsx}",
+        "**/__tests__/**",
+        "**/{karma,rollup,webpack,vite,vitest,jest,ava,babel,nyc,cypress,tsup,build}.config.*",
+        "**/.{eslint,mocha,prettier}rc.{js,cjs,yml}",
+      ],
+      thresholds: {
+        statements: 35,
+        branches: 35,
+        functions: 35,
+        lines: 35,
+      },
+    },
+
+    // Global variables (similar to Jest's globals)
+    globals: true,
+
+    // CSS modules handling
+    css: {
+      modules: {
+        classNameStrategy: "non-scoped",
+      },
+    },
+  },
+
+  // Resolve configuration for better module resolution
+  resolve: {
+    alias: {
+      // Add any path aliases if needed
+    },
+  },
+
+  // Define configuration for CSS handling
+  css: {
+    modules: {
+      // CSS modules configuration
+      generateScopedName: "[name]__[local]___[hash:base64:5]",
+    },
+  },
+})

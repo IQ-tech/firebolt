@@ -1,3 +1,4 @@
+import { vi, type MockedFunction } from "vitest"
 import React from "react"
 import { render, fireEvent } from "@testing-library/react"
 import "@testing-library/jest-dom"
@@ -9,20 +10,20 @@ import materialTheme from "@iq-firebolt/material-theme"
 
 import FireboltForm from "./index"
 
-jest.mock("axios")
+vi.mock("axios")
 
 //#region MOCKS
-const mockSubmit = jest.fn((e) => e.preventDefault())
-const mockGoBack = jest.fn(() => {})
+const mockSubmit = vi.fn((e) => e.preventDefault())
+const mockGoBack = vi.fn(() => {})
 
-jest.mock("./hook/useFormEvents", () => {
-  return jest.fn().mockImplementation(() => {
+vi.mock("./hook/useFormEvents", () => ({
+  default: vi.fn().mockImplementation(() => {
     return {
       handleSubmit: mockSubmit,
       handleGoBack: mockGoBack,
     }
   })
-})
+}))
 //#endregion
 
 describe("firebolt form test", () => {
@@ -242,8 +243,8 @@ describe("firebolt form test", () => {
         <button onClick={goNext}>TestNext</button>
       </>
     )
-    const mockNext = jest.fn()
-    const mockBack = jest.fn()
+    const mockNext = vi.fn()
+    const mockBack = vi.fn()
 
     const { getByText } = render(
       <FireboltForm
@@ -282,7 +283,7 @@ describe("autofilled fields test", () => {
   beforeEach(() => {
     // clearAllFormSessions()
 
-    ;(axios.get as jest.Mock).mockResolvedValue({ data: startFormResponse })
+    ;(axios.get as MockedFunction<typeof axios.get>).mockResolvedValue({ data: startFormResponse })
 
     Object.defineProperty(window, "location", {
       writable: true,
@@ -333,10 +334,10 @@ describe("firebolt form callbacks run correctly", () => {
       "meta": {},
     },
   ]
-  const onFocusFieldCallback = jest.fn(() => console.log("onFocusField"))
-  const onBlurFieldCallback = jest.fn(() => console.log("onBlurField"))
-  const onChangeFieldCallback = jest.fn(() => console.log("onChangeField"))
-  const onChangeFormStep = jest.fn(() => console.log("form changed"))
+  const onFocusFieldCallback = vi.fn(() => console.log("onFocusField"))
+  const onBlurFieldCallback = vi.fn(() => console.log("onBlurField"))
+  const onChangeFieldCallback = vi.fn(() => console.log("onChangeField"))
+  const onChangeFormStep = vi.fn(() => console.log("form changed"))
 
   test("onFocusField run correctly", () => {
     const { getByPlaceholderText } = render(
