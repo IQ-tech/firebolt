@@ -43,12 +43,11 @@ Object.defineProperty(window, "matchMedia", {
   })),
 })
 
-// Configurar React 18 para usar legacy root (sem Concurrent Mode)
-// para evitar double-firing nos testes
-vi.mock("react-dom/client", () => {
-  const ReactDOM = vi.importActual("react-dom")
-  return {
-    ...ReactDOM,
-    createRoot: undefined, // Força usar legacy ReactDOM.render
-  }
+// Configurar React 18 com createRoot para testes
+import { configure } from "@testing-library/react"
+
+// Configurar testing-library para React 18
+configure({
+  // Configurações básicas para testes
+  testIdAttribute: "data-testid",
 })

@@ -1,4 +1,12 @@
-import { vi, type MockedFunction } from "vitest"
+import {
+  vi,
+  type MockedFunction,
+  describe,
+  it,
+  expect,
+  beforeEach,
+  test,
+} from "vitest"
 import React from "react"
 import { render, fireEvent, waitFor, act } from "@testing-library/react"
 import "@testing-library/jest-dom"
@@ -247,6 +255,7 @@ describe("firebolt form test", () => {
   })
 
   it("able to render customActionsChild", () => {
+    //@ts-ignore
     const ActionButtons = ({ goNext, goBack }) => (
       <>
         <button onClick={goBack}>TestBack</button>

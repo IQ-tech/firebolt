@@ -1,5 +1,5 @@
 import React from "react"
-import { vi, type MockedFunction } from "vitest"
+import { vi, type MockedFunction, describe, it, expect } from "vitest"
 import { render, fireEvent, waitFor } from "@testing-library/react"
 import "@testing-library/jest-dom"
 import axios from "axios"
@@ -12,7 +12,9 @@ vi.mock("axios")
 describe("Wizard component", () => {
   const fallback = <div>Fallback</div>
 
-  (axios.get as MockedFunction<typeof axios.get>).mockResolvedValue({ data: {} })
+  ;(axios.get as MockedFunction<typeof axios.get>).mockResolvedValue({
+    data: {},
+  })
 
   const formInfo = {
     root: "http://api.com.br/",
@@ -25,6 +27,7 @@ describe("Wizard component", () => {
         <Wizard fallback={fallback}>
           <Wizard.Step
             match="*"
+            // @ts-ignore
             component={({ fireboltStep }) => (
               <button onClick={() => fireboltStep.goNextStep()}>proceed</button>
             )}
