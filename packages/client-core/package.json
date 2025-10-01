@@ -35,7 +35,7 @@
     "url": "https://github.com/IQ-tech/firebolt/issues"
   },
   "dependencies": {
-    "axios": "^0.21.4",
+    "axios": "^1.12.2",
     "simple-evaluate": "^1.4.3",
     "text-mask-addons": "^3.8.0",
     "text-mask-core": "^5.1.2"

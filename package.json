@@ -50,6 +50,7 @@
     "@emotion/babel-plugin": "^11.13.5",
     "@emotion/react": "^11.14.0",
     "autoprefixer": "^10.4.21",
+    "axios": "^1.12.2",
     "regex-parser": "^2.3.1",
     "sass": "^1.93.2"
   }

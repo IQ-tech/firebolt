@@ -6,4 +6,9 @@ module.exports = {
   testEnvironment: "jsdom",
   setupFiles: ["<rootDir>/__jest__/browserMocks.js"],
   setupFilesAfterEnv: ["<rootDir>/__jest__/setup.js"],
+  
+  // Configuração para lidar com axios ESM
+  transformIgnorePatterns: [
+    "node_modules/(?!(axios)/)"
+  ],
 }
