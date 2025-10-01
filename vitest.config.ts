@@ -5,6 +5,13 @@ export default defineConfig({
   test: {
     // Use jsdom environment for DOM tests
     environment: "jsdom",
+    
+    // Configurações para React 18 compatibility
+    environmentOptions: {
+      jsdom: {
+        resources: "usable"
+      }
+    },
 
     // Global test setup
     setupFiles: ["./vitest.setup.ts"],
