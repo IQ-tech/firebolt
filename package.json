@@ -41,8 +41,8 @@
     "@types/node": "^24.6.2",
     "@types/react": "^19.2.0",
     "@vitest/ui": "^3.2.4",
-    "esbuild": "^0.24.0",
-    "eslint": "^8.0.0",
+    "esbuild": "^0.25.10",
+    "eslint": "^9.36.0",
     "husky": "^9.1.7",
     "identity-obj-proxy": "^3.0.0",
     "jsdom": "^27.0.0",
@@ -73,6 +73,7 @@
   },
   "resolutions": {
     "cross-spawn": "^7.0.5",
-    "semver": "^7.5.2"
+    "semver": "^7.5.2",
+    "vue-template-compiler": "npm:vue@^3.4.0"
   }
 }

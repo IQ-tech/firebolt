@@ -21,7 +21,7 @@ const EmailWidget = ({
   onChange,
   onBlur,
   onFocus,
-  inputRef
+  inputRef,
 }) => {
   const { autoSuggestionOptions } = useEmailWidget({
     formPayload: payload,
