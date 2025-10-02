@@ -50,7 +50,7 @@
     "@babel/preset-env": "^7.15.6",
     "@babel/preset-react": "^7.14.5",
     "@iq-firebolt/material-theme": "0.9.0",
-    "@rollup/plugin-node-resolve": "^13.1.3",
+    "@rollup/plugin-node-resolve": "^16.0.1",
     "@testing-library/react-hooks": "^7.0.2",
     "autoprefixer": "^10.4.2",
     "babel-loader": "^8.2.2",
