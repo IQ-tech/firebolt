@@ -1,6 +1,6 @@
 {
   "name": "@iq-firebolt/blueberry-theme",
-  "version": "0.8.3-next.146+0323768",
+  "version": "0.8.3-next.147+bb2cae7",
   "description": "> TODO: description",
   "author": "iq team",
   "homepage": "https://github.com/IQ-tech/firebolt#readme",
@@ -24,7 +24,7 @@
     "iq-blueberry": "^0.0.88"
   },
   "devDependencies": {
-    "@iq-firebolt/validators": "0.8.3-next.146+0323768",
+    "@iq-firebolt/validators": "0.8.3-next.147+bb2cae7",
     "react": "18.2.0",
     "react-dom": "18.2.0"
   },
@@ -36,5 +36,5 @@
   "browserslist": [
     "last 1 Chrome version"
   ],
-  "gitHead": "0323768aa0ee603d170bd560a64fc18ec296d94d"
+  "gitHead": "bb2cae728daaf4a7a04f0fea827c60bcabfe9170"
 }
