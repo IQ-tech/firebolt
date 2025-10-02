@@ -1,6 +1,6 @@
 {
   "name": "@iq-firebolt/aurora-theme",
-  "version": "0.0.20",
+  "version": "0.8.3-next.145+242653d",
   "description": "> AURORA Theme",
   "author": "iq team",
   "homepage": "https://github.com/IQ-tech/firebolt#readme",
@@ -35,5 +35,6 @@
   },
   "browserslist": [
     "last 1 Chrome version"
-  ]
+  ],
+  "gitHead": "242653d6e80e6ebfbc6e4e573c5c21d3f6f7c376"
 }

@@ -1,6 +1,6 @@
 {
   "name": "@iq-firebolt/validators",
-  "version": "0.9.0",
+  "version": "0.8.3-next.145+242653d",
   "description": "> TODO: description",
   "author": "iq team",
   "homepage": "https://github.com/IQ-tech/firebolt#readme",
@@ -31,5 +31,6 @@
     "@faker-js/faker": "^9.3.0",
     "cpf-cnpj-validator": "^1.0.3",
     "simple-evaluate": "^1.4.3"
-  }
+  },
+  "gitHead": "242653d6e80e6ebfbc6e4e573c5c21d3f6f7c376"
 }

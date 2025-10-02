@@ -1,6 +1,6 @@
 {
   "name": "@iq-firebolt/client-core",
-  "version": "0.9.0",
+  "version": "0.8.3-next.145+242653d",
   "description": "> TODO: description",
   "author": "iq team",
   "homepage": "https://github.com/IQ-tech/firebolt#readme",
@@ -46,5 +46,6 @@
     "rollup": "^2.67.1",
     "rollup-plugin-dts": "^6.2.3",
     "rollup-plugin-esbuild": "^6.2.1"
-  }
+  },
+  "gitHead": "242653d6e80e6ebfbc6e4e573c5c21d3f6f7c376"
 }
