@@ -1,7 +1,7 @@
 import React from "react"
 import useEmailWidget from "./useEmailWidget"
-import TextField from "@material-ui/core/TextField"
-import Autocomplete from "@material-ui/lab/Autocomplete"
+import TextField from "@mui/material/TextField"
+import Autocomplete from "@mui/material/Autocomplete"
 import FieldHolder from "../../FieldHolder"
 
 const EmailWidget = ({
