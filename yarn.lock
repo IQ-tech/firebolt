@@ -1900,6 +1900,64 @@
   dependencies:
     "@swc/helpers" "^0.5.0"
 
+"@iq-firebolt/blueberry-theme@workspace:*":
+  version "0.8.3-next.148"
+  resolved "https://registry.yarnpkg.com/@iq-firebolt/blueberry-theme/-/blueberry-theme-0.8.3-next.148.tgz#e7e2810191e90ec9f2371a9ed647e54ea4eb580e"
+  integrity sha512-PufF6Am2p2xDe4kN4+uyH0qpavPECMelkbZZ5iwdPB+Zm1vddu20JJ1dp8He9Ix/vqPuE/nBe8y95SNLhrhQFg==
+  dependencies:
+    iq-blueberry "^0.0.88"
+
+"@iq-firebolt/br-addons@workspace:*":
+  version "0.8.3-next.148"
+  resolved "https://registry.yarnpkg.com/@iq-firebolt/br-addons/-/br-addons-0.8.3-next.148.tgz#0037cb1cd13de185239010071ab60699d76364b7"
+  integrity sha512-3fi8Av9dxotk6GchUsMFSTxK5f3kSdFudOWxxGfAYl5Bquzd72l0gkRWSxUwiScNzBHguffCr+GcSX/yWaayAw==
+  dependencies:
+    text-mask-addons "^3.8.0"
+
+"@iq-firebolt/client-core@0.8.3-next.148+c49b7a7", "@iq-firebolt/client-core@workspace:*":
+  version "0.8.3-next.148"
+  resolved "https://registry.yarnpkg.com/@iq-firebolt/client-core/-/client-core-0.8.3-next.148.tgz#1cce7b3d576b3994c2a245b8de47154a7530b692"
+  integrity sha512-QilyhefAHfhEUbUBGhwVTUMXHSFgOgIHMGGe2tfzFVPqVeWRu2YWLzdKVP15PNqVgxDPZRBMzueXgOYp7dQ3LA==
+  dependencies:
+    axios "^1.12.2"
+    simple-evaluate "^1.4.3"
+    text-mask-addons "^3.8.0"
+    text-mask-core "^5.1.2"
+
+"@iq-firebolt/client@workspace:*":
+  version "0.8.3-next.148"
+  resolved "https://registry.yarnpkg.com/@iq-firebolt/client/-/client-0.8.3-next.148.tgz#f11fc05fac2dc29a70c265e69f505f1863808dde"
+  integrity sha512-s/qgbUFHjAy4FVo2+bpQe5yOBT3aTbeKXZtsGbA3KXjWhpvHRokBuX1b4NjBtsI9qdeaYFcE5Kab/l9bHRpXcQ==
+  dependencies:
+    "@babel/runtime" "^7.16.3"
+    "@iq-firebolt/client-core" "0.8.3-next.148+c49b7a7"
+    "@iq-firebolt/validators" "0.8.3-next.148+c49b7a7"
+    classnames "^2.3.1"
+    fast-levenshtein "^3.0.0"
+    regex-parser "^2.2.11"
+    simple-evaluate "^1.4.3"
+    text-mask-addons "^3.8.0"
+
+"@iq-firebolt/material-theme@workspace:*":
+  version "0.8.3-next.148"
+  resolved "https://registry.yarnpkg.com/@iq-firebolt/material-theme/-/material-theme-0.8.3-next.148.tgz#b8260c5990295a80c89157303773636b524bfb24"
+  integrity sha512-pyLMAp9rezcgYguSTqPpv2oNyjutQkzN5IXLa14Ce78e/65A/pFRc/XQmgj3P7qxgUY7evUfoG4QTG3nQ+w4wg==
+  dependencies:
+    "@emotion/react" "^11.14.0"
+    "@emotion/styled" "^11.14.0"
+    "@mui/icons-material" "^6.0.0"
+    "@mui/lab" "^6.0.0-beta.12"
+    "@mui/material" "^6.0.0"
+
+"@iq-firebolt/validators@0.8.3-next.148+c49b7a7":
+  version "0.8.3-next.148"
+  resolved "https://registry.yarnpkg.com/@iq-firebolt/validators/-/validators-0.8.3-next.148.tgz#7cb7cbf72e1f5bfd12891cb9eafcc26e4b58b451"
+  integrity sha512-C9jspyEHoyjZrQLFH2qjSS4DXR+bMBsuSBO34dgC7xMwdr2aCdUnWRxRqx4AwyBS+RrIWLQ00JD9uTk9rNzohg==
+  dependencies:
+    "@faker-js/faker" "^9.3.0"
+    cpf-cnpj-validator "^1.0.3"
+    simple-evaluate "^1.4.3"
+
 "@isaacs/balanced-match@^4.0.1":
   version "4.0.1"
   resolved "https://registry.npmjs.org/@isaacs/balanced-match/-/balanced-match-4.0.1.tgz"
@@ -5270,7 +5328,7 @@ autoprefixer@^10.4.2, autoprefixer@^10.4.21:
 
 axios@^1.12.2, axios@^1.8.3:
   version "1.12.2"
-  resolved "https://registry.npmjs.org/axios/-/axios-1.12.2.tgz"
+  resolved "https://registry.yarnpkg.com/axios/-/axios-1.12.2.tgz#6c307390136cf7a2278d09cec63b136dfc6e6da7"
   integrity sha512-vMJzPewAlRyOgxV2dU0Cuz2O8zzzx9VYtbJOaBgXFeLc4IV/Eg50n4LowmehOOR61S8ZMpc2K5Sa7g6A4jfkUw==
   dependencies:
     follow-redirects "^1.15.6"
