@@ -1,4 +1,5 @@
 import axios from "axios"
+import { vi, type MockedFunction } from "vitest"
 
 import FireboltFormEngine from "./FireboltFormEngine"
 
@@ -10,7 +11,7 @@ import startFormResponse from "./__mocks__/startFormResponse"
 import nextStepFormResponse from "./__mocks__/nextStepFormResponse"
 import * as presetsMock from "./__mocks__/props-presets-steps"
 
-jest.mock("axios")
+vi.mock("axios")
 
 const formName = "partnerFormPotato"
 
@@ -35,7 +36,9 @@ describe("start form tests", () => {
   })
 
   test("start form correctly creates session key on localStorage", async () => {
-    ;(axios.get as jest.Mock).mockResolvedValue({ data: startFormResponse })
+    ;(axios.get as MockedFunction<typeof axios.get>).mockResolvedValue({
+      data: startFormResponse,
+    })
 
     // get first step
     await form.start()
@@ -61,7 +64,9 @@ describe("tests about the form autofill by base64 at URL", () => {
     "autofill=JTdCJTI3bmFtZSUyNyUzQSU3QiUyN3ZhbHVlJTI3JTNBJTI3UnVhbiUyMEJlcnQlQzMlQTklMjclMkMlMjdtYXNrJTI3JTNBJTI3JTI3JTdEJTJDJTI3Y3BmJTI3JTNBJTdCJTI3dmFsdWUlMjclM0ElMjc0NTAuNTkyLjczOC01NyUyNyUyQyUyN21hc2slMjclM0ElMjdjcGYlMjclN0QlMkMlMjdlbWFpbCUyNyUzQSU3QiUyN3ZhbHVlJTI3JTNBJTI3YmVydGUucnVhbiU0MGdtYWlsLmNvbSUyNyUyQyUyN21hc2slMjclM0ElMjclMjclN0QlMkMlMjdpbmNvbWUlMjclM0ElN0IlMjd2YWx1ZSUyNyUzQSUyNzYwMDAlMjclMkMlMjdtYXNrJTI3JTNBJTI3bW9uZXklMjclN0QlMkMlMjdwaG9uZSUyNyUzQSU3QiUyN3ZhbHVlJTI3JTNBJTI3NDI5OTk4ODM3NjglMjclMkMlMjdtYXNrJTI3JTNBJTI3cGhvbmVfbnVtYmVyJTI3JTdEJTdE"
 
   test("form.start() must autofill value prop of the field email at the fields array", async () => {
-    ;(axios.get as jest.Mock).mockResolvedValue({ data: startFormResponse })
+    ;(axios.get as MockedFunction<typeof axios.get>).mockResolvedValue({
+      data: startFormResponse,
+    })
 
     Object.defineProperty(window, "location", {
       writable: true,
@@ -85,7 +90,7 @@ describe("testing props:preset", () => {
   })
 
   test("form.start() should apply props:preset without collection", async () => {
-    ;(axios.get as jest.Mock).mockResolvedValue({
+    ;(axios.get as MockedFunction<typeof axios.get>).mockResolvedValue({
       data: presetsMock.getRequestMock("bat"),
     })
     const formStartResult = await form.start()
@@ -95,7 +100,7 @@ describe("testing props:preset", () => {
   })
 
   test("form.start() should apply props:preset with collection", async () => {
-    ;(axios.get as jest.Mock).mockResolvedValue({
+    ;(axios.get as MockedFunction<typeof axios.get>).mockResolvedValue({
       data: presetsMock.getRequestMock("cod:second-preset-collection"),
     })
     const formStartResult = await form.start()
@@ -105,7 +110,7 @@ describe("testing props:preset", () => {
   })
 
   test("form.start() should overwrite props:preset", async () => {
-    ;(axios.get as jest.Mock).mockResolvedValue({
+    ;(axios.get as MockedFunction<typeof axios.get>).mockResolvedValue({
       data: presetsMock.getRequestMock("bat"),
     })
     const formStartResult = await form.start()

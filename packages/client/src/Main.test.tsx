@@ -1,4 +1,4 @@
-import React from "react"
+import { vi, type MockedFunction } from "vitest"
 import { render, waitFor, screen } from "@testing-library/react"
 import axios from "axios"
 import { StepForm, Wizard, clearFormSession, FireboltProvider } from "./index"
@@ -7,7 +7,7 @@ import * as propsPresetsMock from "../__mocks__/props-presets-steps" // TODO - c
 
 import { IFormAccess, IPropsPresetCollection } from "@iq-firebolt/client-core"
 
-jest.mock("axios")
+vi.mock("axios")
 
 const formAccess: IFormAccess = {
   root: "http://api.com.br/",
@@ -36,7 +36,7 @@ describe("testing props-presets render", () => {
   })
 
   it("should render field with props:preset without collection", async () => {
-    (axios.get as jest.Mock).mockResolvedValue({
+    ;(axios.get as MockedFunction<typeof axios.get>).mockResolvedValue({
       data: propsPresetsMock.getRequestMock("cod"),
     })
 
@@ -48,7 +48,7 @@ describe("testing props-presets render", () => {
   })
 
   it("should render field with props:preset with collection", async () => {
-    (axios.get as jest.Mock).mockResolvedValue({
+    ;(axios.get as MockedFunction<typeof axios.get>).mockResolvedValue({
       data: propsPresetsMock.getRequestMock("cod:second-preset-collection"),
     })
 
@@ -64,7 +64,7 @@ describe("testing props-presets render", () => {
   })
 
   it("should render field with overwritten props:preset", async () => {
-    (axios.get as jest.Mock).mockResolvedValue({
+    ;(axios.get as MockedFunction<typeof axios.get>).mockResolvedValue({
       data: propsPresetsMock.getRequestMock("bat", true),
     })
 

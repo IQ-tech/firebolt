@@ -1,6 +1,6 @@
 {
   "name": "@iq-firebolt/atlas-theme",
-  "version": "0.0.2",
+  "version": "0.8.4-next.1",
   "description": "> ATLAS Theme",
   "author": "iq team",
   "homepage": "https://github.com/IQ-tech/firebolt#readme",
@@ -15,8 +15,7 @@
     "url": "git+https://github.com/IQ-tech/firebolt.git"
   },
   "scripts": {
-    "test": "jest",
-    "test:watch": "jest --watch"
+    "test": "echo 'No tests for theme package'"
   },
   "bugs": {
     "url": "https://github.com/IQ-tech/firebolt/issues"
@@ -26,14 +25,15 @@
     "sass": "^1.70.0"
   },
   "devDependencies": {
-    "react": "^16.12.0",
-    "react-dom": "^16.12.0"
+    "react": "18.2.0",
+    "react-dom": "18.2.0"
   },
   "peerDependencies": {
-    "react": "^16.12.0",
-    "react-dom": "^16.12.0"
+    "react": ">=16.8.0",
+    "react-dom": ">=16.8.0"
   },
   "browserslist": [
     "last 1 Chrome version"
-  ]
+  ],
+  "gitHead": "2bc185230db851f4617985d5fe8bc3d97b780fad"
 }

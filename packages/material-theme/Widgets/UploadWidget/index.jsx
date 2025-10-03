@@ -1,8 +1,8 @@
 import React from "react"
-import Button from "@material-ui/core/Button";
-import InputLabel from "@material-ui/core/InputLabel";
-import FormControl from "@material-ui/core/FormControl";
-import FormHelperText from "@material-ui/core/FormHelperText";
+import Button from "@mui/material/Button";
+import InputLabel from "@mui/material/InputLabel";
+import FormControl from "@mui/material/FormControl";
+import FormHelperText from "@mui/material/FormHelperText";
 import useUploadWidget from "../../../../hooks/widgetsBehavior/useUploadWidget";
 import FieldHolder from "../../FieldHolder";
 

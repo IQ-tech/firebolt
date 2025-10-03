@@ -9,6 +9,7 @@ const withFirebolt = createFireboltProvider({
   formAccess: {
     root: "https://dsv-firebolt-api.iq.com.br/",
     formName: "bb-npf",
+    apiKey: "KzCy1mVdeHKt6eEPrW16zw5upn8LaeI5",
   },
   withHistory: true,
   stepQueryParam: "passo",
