@@ -29,9 +29,9 @@
     "react-dom": "18.2.0"
   },
   "peerDependencies": {
-    "@iq-firebolt/validators": "0.8.3-next.148",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "@iq-firebolt/validators": ">=0.8.0",
+    "react": ">=16.8.0",
+    "react-dom": ">=16.8.0"
   },
   "browserslist": [
     "last 1 Chrome version"
