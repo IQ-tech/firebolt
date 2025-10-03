@@ -34,34 +34,38 @@ jobs:
             clientCore:
               - 'packages/client-core/lib/**'
 
-      - name: test client Core
+      - name: test client core
         if: steps.changes.outputs.clientCore == 'true'
-        uses: mattallty/jest-github-action@v1.0.3
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          test-command: "yarn test:client-core"
+        run: yarn test:client-core:coverage
 
-      - name: test client core (with client)
+      - name: Report Client Core Coverage
         if: steps.changes.outputs.clientCore == 'true'
-        uses: mattallty/jest-github-action@v1.0.3
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        uses: davelosert/vitest-coverage-report-action@v2
         with:
-          test-command: "yarn test:client"
+          name: client-core
+          json-summary-path: coverage/coverage-summary.json
+          json-final-path: coverage/coverage-final.json
 
       - name: test client
         if: steps.changes.outputs.client == 'true'
-        uses: mattallty/jest-github-action@v1.0.3
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: yarn test:client:coverage
+
+      - name: Report Client Coverage
+        if: steps.changes.outputs.client == 'true'
+        uses: davelosert/vitest-coverage-report-action@v2
         with:
-          test-command: "yarn test:client"
+          name: client
+          json-summary-path: coverage/coverage-summary.json
+          json-final-path: coverage/coverage-final.json
 
       - name: test validators
         if: steps.changes.outputs.validators == 'true'
-        uses: mattallty/jest-github-action@v1.0.3
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: yarn test:validators:coverage
+
+      - name: Report Validators Coverage
+        if: steps.changes.outputs.validators == 'true'
+        uses: davelosert/vitest-coverage-report-action@v2
         with:
-          test-command: "yarn test:validators"
+          name: validators
+          json-summary-path: coverage/coverage-summary.json
+          json-final-path: coverage/coverage-final.json
