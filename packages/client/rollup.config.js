@@ -3,7 +3,6 @@ import esbuild from "rollup-plugin-esbuild"
 import postcss from "rollup-plugin-postcss"
 import autoprefixer from "autoprefixer"
 import { nodeResolve } from "@rollup/plugin-node-resolve"
-
 import packageConfig from "./package.json"
 const input = "src/index.ts"
 
@@ -50,10 +49,7 @@ const esBundle = {
       ...commonOutputConfig,
     },
   ],
-  plugins: [
-    postcss({ inject: false }),
-    esbuildPluginConfig,
-  ],
+  plugins: [postcss({ inject: false }), esbuildPluginConfig],
   external,
 }
 

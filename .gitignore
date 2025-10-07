@@ -87,6 +87,9 @@ typings/
 # Optional npm cache directory
 .npm
 
+# NPM token configuration (contains sensitive tokens)
+.npmrc
+
 # Optional eslint cache
 .eslintcache
 

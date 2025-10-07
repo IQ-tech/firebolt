@@ -1,6 +1,6 @@
 {
   "name": "@iq-firebolt/client-core",
-  "version": "0.9.0",
+  "version": "0.8.4-next.1",
   "description": "> TODO: description",
   "author": "iq team",
   "homepage": "https://github.com/IQ-tech/firebolt#readme",
@@ -26,16 +26,16 @@
     "url": "git+https://github.com/IQ-tech/firebolt.git"
   },
   "scripts": {
-    "test": "jest",
-    "test:coverage": "jest --collect-coverage",
-    "test:watch": "jest --watch",
+    "test": "vitest run",
+    "test:coverage": "vitest run --coverage",
+    "test:watch": "vitest",
     "build": "rollup -c"
   },
   "bugs": {
     "url": "https://github.com/IQ-tech/firebolt/issues"
   },
   "dependencies": {
-    "axios": "^0.21.4",
+    "axios": "^1.12.2",
     "simple-evaluate": "^1.4.3",
     "text-mask-addons": "^3.8.0",
     "text-mask-core": "^5.1.2"
@@ -43,9 +43,9 @@
   "devDependencies": {
     "@babel/core": "^7.15.5",
     "@babel/preset-env": "^7.15.6",
-    "babel-jest": "^27.2.4",
     "rollup": "^2.67.1",
-    "rollup-plugin-dts": "^4.1.0",
-    "rollup-plugin-esbuild": "^4.8.2"
-  }
+    "rollup-plugin-dts": "^6.2.3",
+    "rollup-plugin-esbuild": "^6.2.1"
+  },
+  "gitHead": "2bc185230db851f4617985d5fe8bc3d97b780fad"
 }
