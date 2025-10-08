@@ -6,9 +6,7 @@ on:
 
 jobs:
   test:
-    # Nome atualizado para incluir a versão do Node; se branch protection exigir o nome antigo
-    # ajuste as regras para este novo identificador ou reverta este rename.
-    name: Test specific packages (Node ${{ matrix.node-version }})
+    name: Test specific packages
     runs-on: ubuntu-latest
     strategy:
       matrix:
