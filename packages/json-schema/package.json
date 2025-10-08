@@ -1,6 +1,6 @@
 {
   "name": "@iq-firebolt/json-schema",
-  "version": "0.10.0",
+  "version": "0.10.1-next.0",
   "description": "json schema lib",
   "author": "iq team",
   "homepage": "https://github.com/IQ-tech/firebolt#readme",
