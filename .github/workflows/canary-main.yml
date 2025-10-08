@@ -1,0 +1,69 @@
+name: Canary (PR -> main)
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
+    branches:
+      - main
+
+permissions:
+  contents: write
+  pull-requests: write
+  packages: write
+
+concurrency:
+  group: canary-main-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  canary:
+    name: Canary publish next
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 20
+          cache: yarn
+      - name: Git identity
+        run: |
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+      - name: Setup npm auth
+        run: |
+          echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > .npmrc
+          npm whoami || true
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - name: Install
+        run: yarn install --frozen-lockfile
+      - name: Build (optional)
+        run: yarn build:libs
+      - name: Test (optional)
+        run: yarn test:run
+      - name: Canary version & publish
+        id: canary
+        run: |
+          yarn publish:canary
+          VERSION=$(node -p 'require("./lerna.json").version')
+          echo "CURRENT_VERSION=$VERSION" >> $GITHUB_ENV
+          echo "PREVIOUS_TAG=$(git describe --tags --abbrev=0 --exclude $VERSION 2>/dev/null || echo '')" >> $GITHUB_ENV
+      - name: PR Comment
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const prev = process.env.PREVIOUS_TAG;
+            const curr = `v${process.env.CURRENT_VERSION}`;
+            const diff = prev ? `\nDiff: https://github.com/${context.repo.owner}/${context.repo.repo}/compare/${prev}...${curr}` : '';
+            const body = `Canary publicado: ${curr} (dist-tag next)${diff}`;
+            github.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body
+            });
