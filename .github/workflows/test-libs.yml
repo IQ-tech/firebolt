@@ -1,8 +1,9 @@
-name: Jest test validators
+name: Packages tests (vitest)
 
 on:
   pull_request:
     branches: [main, latest]
+  workflow_dispatch: {}
 
 jobs:
   test:
@@ -34,11 +35,12 @@ jobs:
             clientCore:
               - 'packages/client-core/lib/**'
 
-      # Executa sempre todos os testes (ifs removidos para diagnosticar branch protection)
       - name: test client core
+        if: steps.changes.outputs.clientCore == 'true'
         run: yarn test:client-core:coverage
 
       - name: Report Client Core Coverage
+        if: steps.changes.outputs.clientCore == 'true'
         uses: davelosert/vitest-coverage-report-action@v2
         with:
           name: client-core
@@ -46,9 +48,11 @@ jobs:
           json-final-path: coverage/coverage-final.json
 
       - name: test client
+        if: steps.changes.outputs.client == 'true'
         run: yarn test:client:coverage
 
       - name: Report Client Coverage
+        if: steps.changes.outputs.client == 'true'
         uses: davelosert/vitest-coverage-report-action@v2
         with:
           name: client
@@ -56,9 +60,11 @@ jobs:
           json-final-path: coverage/coverage-final.json
 
       - name: test validators
+        if: steps.changes.outputs.validators == 'true'
         run: yarn test:validators:coverage
 
       - name: Report Validators Coverage
+        if: steps.changes.outputs.validators == 'true'
         uses: davelosert/vitest-coverage-report-action@v2
         with:
           name: validators

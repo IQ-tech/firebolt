@@ -52,10 +52,8 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            const prev = process.env.PREVIOUS_TAG;
             const curr = `v${process.env.CURRENT_VERSION}`;
-            const diff = prev ? `\nDiff: https://github.com/${context.repo.owner}/${context.repo.repo}/compare/${prev}...${curr}` : '';
-            const body = `Minor release publicado: ${curr}${diff}`;
+            const body = `Minor release publicado: ${curr}`;
             if (!context.issue.number) {
               core.warning('Sem issue/PR number detectado para comentar.');
             } else {
