@@ -56,9 +56,13 @@ jobs:
             const curr = `v${process.env.CURRENT_VERSION}`;
             const diff = prev ? `\nDiff: https://github.com/${context.repo.owner}/${context.repo.repo}/compare/${prev}...${curr}` : '';
             const body = `Minor release publicado: ${curr}${diff}`;
-            github.issues.createComment({
-              issue_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              body
-            });
+            if (!context.issue.number) {
+              core.warning('Sem issue/PR number detectado para comentar.');
+            } else {
+              await github.rest.issues.createComment({
+                issue_number: context.issue.number,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                body
+              });
+            }
