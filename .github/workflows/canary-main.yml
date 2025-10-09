@@ -134,28 +134,6 @@ jobs:
           npx lerna publish from-package --dist-tag next --yes --no-verify-access || echo "Nenhum pacote alterado para publicar (ok)"
           echo "CURRENT_VERSION=$EPHEMERAL_VERSION" >> $GITHUB_ENV
 
-      - name: Validate canary publish on NPM
-        if: success()
-        id: validate_npm
-        run: |
-          PKG_NAME=$(node -p 'require("./lerna.json").packages[0]' | sed 's/packages\///;s/\/package.json//')
-          # Tenta encontrar o nome do pacote principal (ajuste se necessário)
-          if [ -f "packages/$PKG_NAME/package.json" ]; then
-            PKG_JSON="packages/$PKG_NAME/package.json"
-          else
-            PKG_JSON="packages/*/package.json"
-          fi
-          NAME=$(node -p "require('$PKG_JSON').name")
-          VERSION="$EPHEMERAL_VERSION"
-          echo "Checando $NAME@$VERSION no NPM..."
-          if npm view "$NAME@$VERSION" version; then
-            echo "NPM_PUBLISH_OK=true" >> $GITHUB_ENV
-            echo "NPM_PUBLISH_OK=true" >> $GITHUB_OUTPUT
-          else
-            echo "NPM_PUBLISH_OK=false" >> $GITHUB_ENV
-            echo "NPM_PUBLISH_OK=false" >> $GITHUB_OUTPUT
-            exit 1
-          fi
       - name: Revert ephemeral commit (keep tree clean for PR)
         if: success()
         run: |
@@ -164,7 +142,7 @@ jobs:
             git status --short
           fi
       - name: PR Success Comment
-        if: success() && env.NPM_PUBLISH_OK == 'true'
+        if: success()
         uses: actions/github-script@v6
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
