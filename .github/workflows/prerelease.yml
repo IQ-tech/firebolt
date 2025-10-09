@@ -5,6 +5,7 @@ on:
     types: [closed]
     branches:
       - main
+  workflow_dispatch: {}
 
 permissions:
   contents: write # for checkout and tag
@@ -12,43 +13,8 @@ permissions:
   packages: write # for publish
 
 jobs:
-  publish:
-    if: github.event.pull_request.merged == true
-    name: Pre-release
+  disabled:
     runs-on: ubuntu-latest
+    if: false
     steps:
-      - name: "Checkout"
-        uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
-      - name: "Setup do nodejs"
-        uses: actions/setup-node@v3
-        with:
-          node-version: 20
-          cache: "yarn"
-
-      - name: Git Identity
-        run: |
-          git config --global user.name 'github-actions[bot]'
-          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
-          git remote set-url origin https://x-access-token:${GITHUB_TOKEN}@github.com/$GITHUB_REPOSITORY
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Setup npm env
-        run: |
-          echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > .npmrc
-          npm whoami
-        env:
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-
-      - name: Install
-        run: yarn install
-      - name: Build libs
-        run: yarn build:libs
-      - name: Bump versions and publish packages
-        run: |
-          yarn publish:canary
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - run: echo "Workflow legacy desativado. Use canary-main.yml / patch-release-main.yml / minor-release-latest.yml"

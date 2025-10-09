@@ -1,5 +1,12 @@
-import { vi, type MockedFunction } from "vitest"
-import { render, waitFor, screen } from "@testing-library/react"
+import {
+  vi,
+  type MockedFunction,
+  it,
+  describe,
+  beforeEach,
+  expect,
+} from "vitest"
+import { render, screen } from "@testing-library/react"
 import axios from "axios"
 import { StepForm, Wizard, clearFormSession, FireboltProvider } from "./index"
 import Theme from "@iq-firebolt/material-theme"
@@ -14,7 +21,7 @@ const formAccess: IFormAccess = {
   formName: "testing",
 }
 
-const DefaultTemplate = (firebolt) => <StepForm theme={Theme} />
+const DefaultTemplate = (firebolt: any) => <StepForm theme={Theme} />
 
 const MockComponent = (addons: IPropsPresetCollection[]) =>
   render(
@@ -42,9 +49,9 @@ describe("testing props-presets render", () => {
 
     MockComponent([propsPresetsMock.customCollection])
 
-    await waitFor(() => {})
-
-    expect(screen.getByPlaceholderText(/write something/)).toBeInTheDocument()
+    expect(
+      await screen.findByPlaceholderText(/write something/)
+    ).toBeInTheDocument()
   })
 
   it("should render field with props:preset with collection", async () => {
@@ -57,9 +64,8 @@ describe("testing props-presets render", () => {
       propsPresetsMock.secondCollection,
     ])
 
-    await waitFor(() => {})
     expect(
-      screen.getByPlaceholderText(/second collection cod/)
+      await screen.findByPlaceholderText(/second collection cod/)
     ).toBeInTheDocument()
   })
 
@@ -70,7 +76,8 @@ describe("testing props-presets render", () => {
 
     MockComponent([propsPresetsMock.customCollection])
 
-    await waitFor(() => {})
-    expect(screen.getByPlaceholderText(/Nome completo/)).toBeInTheDocument()
+    expect(
+      await screen.findByPlaceholderText(/Nome completo/)
+    ).toBeInTheDocument()
   })
 })

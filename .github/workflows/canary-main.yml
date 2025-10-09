@@ -1,0 +1,172 @@
+name: Canary
+
+on:
+  pull_request:
+    branches: [main, latest]
+    types: [opened, synchronize, reopened, ready_for_review]
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+  pull-requests: write
+  packages: write
+
+concurrency:
+  group: canary-pr-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  canary:
+    name: Canary publish (tests + publish next)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          fetch-tags: true
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 20
+          cache: yarn
+      - name: Setup npm auth
+        run: |
+          echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > .npmrc
+          npm whoami || true
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - name: Install deps
+        run: yarn install --frozen-lockfile
+      - name: Build libs
+        run: yarn build:libs
+      - name: Test client-core (aggregate)
+        run: |
+          set +e
+          yarn test:client-core:coverage
+          RC=$?
+          if [ $RC -ne 0 ]; then echo client-core >> failed-tests.txt; fi
+          exit 0
+      - name: Report Client Core Coverage
+        if: always()
+        uses: davelosert/vitest-coverage-report-action@v2
+        with:
+          name: client-core
+          json-summary-path: coverage/coverage-summary.json
+          json-final-path: coverage/coverage-final.json
+      - name: Test client (aggregate)
+        run: |
+          set +e
+          yarn test:client:coverage
+          RC=$?
+          if [ $RC -ne 0 ]; then echo client >> failed-tests.txt; fi
+          exit 0
+      - name: Report Client Coverage
+        if: always()
+        uses: davelosert/vitest-coverage-report-action@v2
+        with:
+          name: client
+          json-summary-path: coverage/coverage-summary.json
+          json-final-path: coverage/coverage-final.json
+      - name: Test validators (aggregate)
+        run: |
+          set +e
+          yarn test:validators:coverage
+          RC=$?
+          if [ $RC -ne 0 ]; then echo validators >> failed-tests.txt; fi
+          exit 0
+      - name: Report Validators Coverage
+        if: always()
+        uses: davelosert/vitest-coverage-report-action@v2
+        with:
+          name: validators
+          json-summary-path: coverage/coverage-summary.json
+          json-final-path: coverage/coverage-final.json
+      - name: Evaluate aggregated test result
+        run: |
+          if [ -f failed-tests.txt ]; then
+            echo "::error::Falhas em pacotes de teste:";
+            cat failed-tests.txt | sed 's/^/- /';
+            echo "Marcando job como failed";
+            exit 1;
+          else
+            echo "Todos os testes passaram em todos os pacotes";
+          fi
+      - name: Compute ephemeral canary version
+        if: success()
+        id: version
+        run: |
+          BASE_VERSION=$(node -p 'require("./lerna.json").version')
+          SHORT_SHA=$(git rev-parse --short HEAD)
+          EPHEMERAL_VERSION="${BASE_VERSION}-next.${SHORT_SHA}.${GITHUB_RUN_ATTEMPT}"
+          echo "EPHEMERAL_VERSION=$EPHEMERAL_VERSION" >> $GITHUB_ENV
+          echo "EPHEMERAL_VERSION=$EPHEMERAL_VERSION" >> $GITHUB_OUTPUT
+      - name: Inject ephemeral version in packages
+        if: success()
+        run: |
+          EPV="$EPHEMERAL_VERSION"
+          echo "Aplicando versão efêmera $EPV nos package.json (sem commit)"
+          jq --arg v "$EPV" '.version = $v' lerna.json > lerna.tmp && mv lerna.tmp lerna.json
+          for PKG in packages/*/package.json; do
+            jq --arg v "$EPV" '.version = $v' "$PKG" > "$PKG.tmp" && mv "$PKG.tmp" "$PKG" || exit 1
+          done
+      - name: Git identity for ephemeral commit
+        if: success()
+        run: |
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+      - name: Ephemeral commit (local, not pushed)
+        if: success()
+        run: |
+          echo "HEAD_ORIG=$(git rev-parse HEAD)" >> $GITHUB_ENV
+          git add lerna.json packages/*/package.json || true
+          if git diff --cached --quiet; then
+            echo "Sem mudanças para commit (rerun?)"
+          else
+            git commit -m "chore(ci): ephemeral canary version $EPHEMERAL_VERSION" || true
+          fi
+          git status --short
+      - name: Publish canary (no commit/tag)
+        if: success()
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: |
+          npx lerna publish from-package --dist-tag next --yes --no-verify-access || echo "Nenhum pacote alterado para publicar (ok)"
+          echo "CURRENT_VERSION=$EPHEMERAL_VERSION" >> $GITHUB_ENV
+
+      - name: Revert ephemeral commit (keep tree clean for PR)
+        if: success()
+        run: |
+          if [ -n "$HEAD_ORIG" ]; then
+            git reset --hard "$HEAD_ORIG" || true
+            git status --short
+          fi
+      - name: PR Success Comment
+        if: success()
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const curr = process.env.CURRENT_VERSION;
+            const number = context.payload.pull_request.number;
+            const body = `Canary publicado: v${curr}`;
+            await github.rest.issues.createComment({
+              issue_number: number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body
+            });
+      - name: PR Failure Comment
+        if: failure()
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const number = context.payload.pull_request.number;
+            const body = 'Canary não publicado: testes falharam. Verifique os logs do workflow.';
+            await github.rest.issues.createComment({
+              issue_number: number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body
+            });

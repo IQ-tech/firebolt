@@ -24,8 +24,13 @@
     "build:validators": "cd packages/validators && yarn build",
     "build:libs": "lerna run build --scope @iq-firebolt/client-core --scope @iq-firebolt/validators --scope @iq-firebolt/client",
     "versionup": "lerna version --conventional-commits --exact --create-release github --yes",
-    "publish:libs": "lerna publish from-package --yes --no-verify-access",
-    "publish:canary": "lerna publish --canary patch --exact --preid next --dist-tag next --force-publish='*' --yes --no-verify-access --no-git-tag-version",
+    "version:prerelease": "lerna version prerelease --preid next --exact --yes --force-publish='*'",
+    "version:patch": "lerna version patch --exact --yes",
+    "version:minor": "lerna version minor --exact --yes",
+    "publish:from-package": "lerna publish from-package --yes --no-verify-access",
+    "publish:canary": "yarn version:prerelease && yarn publish:from-package --dist-tag next",
+    "publish:patch": "yarn version:patch && yarn publish:from-package",
+    "publish:minor": "yarn version:minor && yarn publish:from-package",
     "prepare": "husky"
   },
   "devDependencies": {
