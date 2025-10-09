@@ -1,9 +1,10 @@
-name: Canary (after tests)
+name: Canary
 
 on:
-  workflow_run:
-    workflows: ["Packages tests (vitest)"]
-    types: [completed]
+  pull_request:
+    branches: [main, latest]
+    types: [opened, synchronize, reopened, ready_for_review]
+  workflow_dispatch: {}
 
 permissions:
   contents: write
@@ -11,43 +12,17 @@ permissions:
   packages: write
 
 concurrency:
-  group: canary-main-${{ github.event.workflow_run.id }}
+  group: canary-pr-${{ github.event.pull_request.number }}
   cancel-in-progress: true
 
 jobs:
   canary:
-    name: Canary publish next
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    name: Canary publish (tests + publish next)
     runs-on: ubuntu-latest
     steps:
-      - name: Download workflow run event payload
-        uses: actions/download-artifact@v4
-        if: false # placeholder (não usamos artifacts, mas mantemos passo visível para debug futuro)
-      - name: Extract PR data
-        id: pr
-        uses: actions/github-script@v6
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          script: |
-            // Recupera lista de commits do workflow_run para identificar PR associado
-            const runId = context.payload.workflow_run.id;
-            const {data: prList} = await github.rest.search.issuesAndPullRequests({
-              q: `repo:${context.repo.owner}/${context.repo.repo} type:pr is:open sha:${context.payload.workflow_run.head_sha}`
-            });
-            if (!prList.items.length) {
-              core.setFailed('Nenhum PR aberto encontrado para head_sha');
-              return;
-            }
-            const pr = prList.items[0];
-            core.setOutput('number', pr.number);
-            core.setOutput('head_ref', context.payload.workflow_run.head_branch);
-            console.log(`PR identificado #${pr.number} branch ${context.payload.workflow_run.head_branch}`);
-            core.exportVariable('PR_NUMBER', pr.number);
-            core.exportVariable('PR_HEAD_REF', context.payload.workflow_run.head_branch);
-      - name: Checkout PR branch
+      - name: Checkout
         uses: actions/checkout@v3
         with:
-          ref: ${{ github.event.workflow_run.head_branch }}
           fetch-depth: 0
           fetch-tags: true
       - name: Setup Node
@@ -55,57 +30,107 @@ jobs:
         with:
           node-version: 20
           cache: yarn
-      - name: Git identity
-        run: |
-          git config --global user.name 'github-actions[bot]'
-          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
       - name: Setup npm auth
         run: |
           echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > .npmrc
           npm whoami || true
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-      - name: Install
+      - name: Install deps
         run: yarn install --frozen-lockfile
       - name: Build libs
         run: yarn build:libs
+      - name: Check changed packages
+        uses: dorny/paths-filter@v2
+        id: changes
+        with:
+          filters: |
+            client:
+              - 'packages/client/src/**'
+            validators:
+              - 'packages/validators/src/**'
+            clientCore:
+              - 'packages/client-core/lib/**'
+      - name: test client core
+        if: steps.changes.outputs.clientCore == 'true'
+        run: yarn test:client-core:coverage
+      - name: Report Client Core Coverage
+        if: steps.changes.outputs.clientCore == 'true'
+        uses: davelosert/vitest-coverage-report-action@v2
+        with:
+          name: client-core
+          json-summary-path: coverage/coverage-summary.json
+          json-final-path: coverage/coverage-final.json
+      - name: test client
+        if: steps.changes.outputs.client == 'true'
+        run: yarn test:client:coverage
+      - name: Report Client Coverage
+        if: steps.changes.outputs.client == 'true'
+        uses: davelosert/vitest-coverage-report-action@v2
+        with:
+          name: client
+          json-summary-path: coverage/coverage-summary.json
+          json-final-path: coverage/coverage-final.json
+      - name: test validators
+        if: steps.changes.outputs.validators == 'true'
+        run: yarn test:validators:coverage
+      - name: Report Validators Coverage
+        if: steps.changes.outputs.validators == 'true'
+        uses: davelosert/vitest-coverage-report-action@v2
+        with:
+          name: validators
+          json-summary-path: coverage/coverage-summary.json
+          json-final-path: coverage/coverage-final.json
       - name: Compute ephemeral canary version
+        if: success()
         id: version
         run: |
           BASE_VERSION=$(node -p 'require("./lerna.json").version')
           SHORT_SHA=$(git rev-parse --short HEAD)
-          EPHEMERAL_VERSION="${BASE_VERSION}-next.${SHORT_SHA}"
+          EPHEMERAL_VERSION="${BASE_VERSION}-next.${SHORT_SHA}.${GITHUB_RUN_ATTEMPT}"
           echo "EPHEMERAL_VERSION=$EPHEMERAL_VERSION" >> $GITHUB_ENV
           echo "EPHEMERAL_VERSION=$EPHEMERAL_VERSION" >> $GITHUB_OUTPUT
       - name: Inject ephemeral version in packages
+        if: success()
         run: |
           EPV="$EPHEMERAL_VERSION"
-          echo "Aplicando versão efêmera $EPV nos package.json (sem commit)" 
+          echo "Aplicando versão efêmera $EPV nos package.json (sem commit)"
           jq --arg v "$EPV" '.version = $v' lerna.json > lerna.tmp && mv lerna.tmp lerna.json
           for PKG in packages/*/package.json; do
             jq --arg v "$EPV" '.version = $v' "$PKG" > "$PKG.tmp" && mv "$PKG.tmp" "$PKG" || exit 1
           done
       - name: Publish canary (no commit/tag)
+        if: success()
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: |
-          # Publica todos os pacotes com a versão efêmera e dist-tag next sem criar git commit/tag
           npx lerna publish from-package --dist-tag next --yes --no-verify-access || echo "Nenhum pacote alterado para publicar (ok)"
           echo "CURRENT_VERSION=$EPHEMERAL_VERSION" >> $GITHUB_ENV
-      - name: PR Comment
+      - name: PR Success Comment
+        if: success()
         uses: actions/github-script@v6
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
             const curr = process.env.CURRENT_VERSION;
-            const prNumber = Number(process.env.PR_NUMBER || '0');
-            if (!prNumber) {
-              core.warning('PR não identificado para comentar.');
-              return;
-            }
-            const body = `Canary Publicado: v${curr}`;
+            const number = context.payload.pull_request.number;
+            const body = `Canary publicado: v${curr}`;
             await github.rest.issues.createComment({
-              issue_number: prNumber,
+              issue_number: number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body
+            });
+      - name: PR Failure Comment
+        if: failure()
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const number = context.payload.pull_request.number;
+            const body = 'Canary não publicado: testes falharam. Verifique os logs do workflow.';
+            await github.rest.issues.createComment({
+              issue_number: number,
               owner: context.repo.owner,
               repo: context.repo.repo,
               body
