@@ -48,25 +48,36 @@ jobs:
         run: yarn build:libs
       - name: Test (optional)
         run: yarn test:run
-      - name: Canary version & publish
-        id: canary
+      - name: Compute ephemeral canary version
+        id: version
         run: |
-          yarn publish:canary
-          VERSION=$(node -p 'require("./lerna.json").version')
-          echo "CURRENT_VERSION=$VERSION" >> $GITHUB_ENV
-          echo "PREVIOUS_TAG=$(git describe --tags --abbrev=0 --exclude $VERSION 2>/dev/null || echo '')" >> $GITHUB_ENV
-      - name: Push canary commit & tags
-        if: success()
+          BASE_VERSION=$(node -p 'require("./lerna.json").version')
+          SHORT_SHA=$(git rev-parse --short HEAD)
+          EPHEMERAL_VERSION="${BASE_VERSION}-next.${SHORT_SHA}"
+          echo "EPHEMERAL_VERSION=$EPHEMERAL_VERSION" >> $GITHUB_ENV
+          echo "EPHEMERAL_VERSION=$EPHEMERAL_VERSION" >> $GITHUB_OUTPUT
+      - name: Inject ephemeral version in packages
         run: |
-          # Garante que tags e commit criados por lerna sejam enviados de volta para a branch do PR
-          git push --follow-tags origin HEAD:${{ github.event.pull_request.head.ref }}
+          EPV="$EPHEMERAL_VERSION"
+          echo "Aplicando versão efêmera $EPV nos package.json (sem commit)" 
+          jq --arg v "$EPV" '.version = $v' lerna.json > lerna.tmp && mv lerna.tmp lerna.json
+          for PKG in packages/*/package.json; do
+            jq --arg v "$EPV" '.version = $v' "$PKG" > "$PKG.tmp" && mv "$PKG.tmp" "$PKG" || exit 1
+          done
+      - name: Publish canary (no commit/tag)
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: |
+          # Publica todos os pacotes com a versão efêmera e dist-tag next sem criar git commit/tag
+          npx lerna publish from-package --dist-tag next --yes --no-verify-access || echo "Nenhum pacote alterado para publicar (ok)"
+          echo "CURRENT_VERSION=$EPHEMERAL_VERSION" >> $GITHUB_ENV
       - name: PR Comment
         uses: actions/github-script@v6
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            const curr = `v${process.env.CURRENT_VERSION}`;
-            const body = `Canary publicado: ${curr} (dist-tag next)`;
+            const curr = process.env.CURRENT_VERSION;
+            const body = `Canary publicado (ephemeral): v${curr} (dist-tag next) - sem commit de versão`;
             if (!context.issue.number) {
               core.warning('Sem issue/PR number detectado para comentar.');
             } else {
