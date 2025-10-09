@@ -2,7 +2,8 @@ name: Packages tests (vitest)
 
 on:
   pull_request:
-    branches: [main, latest, synchronize]
+    branches: [main, latest]
+    types: [opened, synchronize, reopened, ready_for_review]
   workflow_dispatch: {}
 
 jobs:
