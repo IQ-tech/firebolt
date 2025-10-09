@@ -44,6 +44,8 @@ jobs:
             gh issue comment ${{ github.event.pull_request.number }} --body-file comment.txt
             exit 1
           fi
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Fail if version not bumped
         run: |
