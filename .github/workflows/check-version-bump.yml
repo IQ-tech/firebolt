@@ -40,7 +40,7 @@ jobs:
       - name: Compare versions and comment if invalid
         run: |
           if printf "%s\n%s" "$MAIN_VERSION" "$PR_VERSION" | sort -V | head -n1 | grep -q "$PR_VERSION"; then
-            echo -e "⚠️ A versão do lerna.json no PR ($PR_VERSION) não é válida.\n\nEla deve ser **MAIOR** que a versão atual da main ($MAIN_VERSION).\n\nPor favor, atualize sua branch com a main e rode o seguinte comando para corrigir:\n\nyarn version:patch" > comment.txt
+            echo -e "⚠️ A versão do lerna.json no PR ($PR_VERSION) não é válida.\n\nEla deve ser **MAIOR** que a versão atual da main ($MAIN_VERSION).\n\nPor favor, atualize sua branch com a main e rode o seguinte comando para corrigir:\n\n`yarn version:patch`" > comment.txt
             gh issue comment ${{ github.event.pull_request.number }} --body-file comment.txt
             exit 1
           fi
