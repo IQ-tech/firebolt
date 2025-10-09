@@ -1,10 +1,9 @@
-name: Canary (PR -> main)
+name: Canary (after tests)
 
 on:
-  pull_request:
-    types: [opened, synchronize, reopened, ready_for_review]
-    branches:
-      - main
+  workflow_run:
+    workflows: ["Packages tests (vitest)"]
+    types: [completed]
 
 permissions:
   contents: write
@@ -12,19 +11,43 @@ permissions:
   packages: write
 
 concurrency:
-  group: canary-main-${{ github.event.pull_request.number }}
+  group: canary-main-${{ github.event.workflow_run.id }}
   cancel-in-progress: true
 
 jobs:
   canary:
     name: Canary publish next
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
+      - name: Download workflow run event payload
+        uses: actions/download-artifact@v4
+        if: false # placeholder (não usamos artifacts, mas mantemos passo visível para debug futuro)
+      - name: Extract PR data
+        id: pr
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            // Recupera lista de commits do workflow_run para identificar PR associado
+            const runId = context.payload.workflow_run.id;
+            const {data: prList} = await github.rest.search.issuesAndPullRequests({
+              q: `repo:${context.repo.owner}/${context.repo.repo} type:pr is:open sha:${context.payload.workflow_run.head_sha}`
+            });
+            if (!prList.items.length) {
+              core.setFailed('Nenhum PR aberto encontrado para head_sha');
+              return;
+            }
+            const pr = prList.items[0];
+            core.setOutput('number', pr.number);
+            core.setOutput('head_ref', context.payload.workflow_run.head_branch);
+            console.log(`PR identificado #${pr.number} branch ${context.payload.workflow_run.head_branch}`);
+            core.exportVariable('PR_NUMBER', pr.number);
+            core.exportVariable('PR_HEAD_REF', context.payload.workflow_run.head_branch);
+      - name: Checkout PR branch
         uses: actions/checkout@v3
         with:
-          # Precisamos estar na branch do PR (não em detached HEAD) para o 'lerna version' poder commitar e taggear
-          ref: ${{ github.event.pull_request.head.ref }}
+          ref: ${{ github.event.workflow_run.head_branch }}
           fetch-depth: 0
           fetch-tags: true
       - name: Setup Node
@@ -44,10 +67,8 @@ jobs:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
       - name: Install
         run: yarn install --frozen-lockfile
-      - name: Build (optional)
+      - name: Build libs
         run: yarn build:libs
-      - name: Test (optional)
-        run: yarn test:run
       - name: Compute ephemeral canary version
         id: version
         run: |
@@ -77,14 +98,15 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
             const curr = process.env.CURRENT_VERSION;
-            const body = `Canary publicado (ephemeral): v${curr} (dist-tag next) - sem commit de versão`;
-            if (!context.issue.number) {
-              core.warning('Sem issue/PR number detectado para comentar.');
-            } else {
-              await github.rest.issues.createComment({
-                issue_number: context.issue.number,
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                body
-              });
+            const prNumber = Number(process.env.PR_NUMBER || '0');
+            if (!prNumber) {
+              core.warning('PR não identificado para comentar.');
+              return;
             }
+            const body = `Canary Publicado: v${curr}`;
+            await github.rest.issues.createComment({
+              issue_number: prNumber,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body
+            });

@@ -2,7 +2,7 @@ name: Packages tests (vitest)
 
 on:
   pull_request:
-    branches: [main, latest]
+    branches: [main, latest, synchronize]
   workflow_dispatch: {}
 
 jobs:
