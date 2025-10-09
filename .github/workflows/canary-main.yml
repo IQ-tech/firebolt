@@ -40,47 +40,58 @@ jobs:
         run: yarn install --frozen-lockfile
       - name: Build libs
         run: yarn build:libs
-      - name: Check changed packages
-        uses: dorny/paths-filter@v2
-        id: changes
-        with:
-          filters: |
-            client:
-              - 'packages/client/src/**'
-            validators:
-              - 'packages/validators/src/**'
-            clientCore:
-              - 'packages/client-core/lib/**'
-      - name: test client core
-        if: steps.changes.outputs.clientCore == 'true'
-        run: yarn test:client-core:coverage
+      - name: Test client-core (aggregate)
+        run: |
+          set +e
+          yarn test:client-core:coverage
+          RC=$?
+          if [ $RC -ne 0 ]; then echo client-core >> failed-tests.txt; fi
+          exit 0
       - name: Report Client Core Coverage
-        if: steps.changes.outputs.clientCore == 'true'
+        if: always()
         uses: davelosert/vitest-coverage-report-action@v2
         with:
           name: client-core
           json-summary-path: coverage/coverage-summary.json
           json-final-path: coverage/coverage-final.json
-      - name: test client
-        if: steps.changes.outputs.client == 'true'
-        run: yarn test:client:coverage
+      - name: Test client (aggregate)
+        run: |
+          set +e
+          yarn test:client:coverage
+          RC=$?
+          if [ $RC -ne 0 ]; then echo client >> failed-tests.txt; fi
+          exit 0
       - name: Report Client Coverage
-        if: steps.changes.outputs.client == 'true'
+        if: always()
         uses: davelosert/vitest-coverage-report-action@v2
         with:
           name: client
           json-summary-path: coverage/coverage-summary.json
           json-final-path: coverage/coverage-final.json
-      - name: test validators
-        if: steps.changes.outputs.validators == 'true'
-        run: yarn test:validators:coverage
+      - name: Test validators (aggregate)
+        run: |
+          set +e
+          yarn test:validators:coverage
+          RC=$?
+          if [ $RC -ne 0 ]; then echo validators >> failed-tests.txt; fi
+          exit 0
       - name: Report Validators Coverage
-        if: steps.changes.outputs.validators == 'true'
+        if: always()
         uses: davelosert/vitest-coverage-report-action@v2
         with:
           name: validators
           json-summary-path: coverage/coverage-summary.json
           json-final-path: coverage/coverage-final.json
+      - name: Evaluate aggregated test result
+        run: |
+          if [ -f failed-tests.txt ]; then
+            echo "::error::Falhas em pacotes de teste:";
+            cat failed-tests.txt | sed 's/^/- /';
+            echo "Marcando job como failed";
+            exit 1;
+          else
+            echo "Todos os testes passaram em todos os pacotes";
+          fi
       - name: Compute ephemeral canary version
         if: success()
         id: version
@@ -99,6 +110,17 @@ jobs:
           for PKG in packages/*/package.json; do
             jq --arg v "$EPV" '.version = $v' "$PKG" > "$PKG.tmp" && mv "$PKG.tmp" "$PKG" || exit 1
           done
+      - name: Ephemeral commit (local, not pushed)
+        if: success()
+        run: |
+          echo "HEAD_ORIG=$(git rev-parse HEAD)" >> $GITHUB_ENV
+          git add lerna.json packages/*/package.json || true
+          if git diff --cached --quiet; then
+            echo "Sem mudanças para commit (rerun?)"
+          else
+            git commit -m "chore(ci): ephemeral canary version $EPHEMERAL_VERSION" || true
+          fi
+          git status --short
       - name: Publish canary (no commit/tag)
         if: success()
         env:
@@ -106,6 +128,13 @@ jobs:
         run: |
           npx lerna publish from-package --dist-tag next --yes --no-verify-access || echo "Nenhum pacote alterado para publicar (ok)"
           echo "CURRENT_VERSION=$EPHEMERAL_VERSION" >> $GITHUB_ENV
+      - name: Revert ephemeral commit (keep tree clean for PR)
+        if: success()
+        run: |
+          if [ -n "$HEAD_ORIG" ]; then
+            git reset --hard "$HEAD_ORIG" || true
+            git status --short
+          fi
       - name: PR Success Comment
         if: success()
         uses: actions/github-script@v6
