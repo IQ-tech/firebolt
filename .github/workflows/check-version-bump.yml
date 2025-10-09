@@ -1,0 +1,53 @@
+name: Check Version Bump
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  check-version:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout PR branch
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          ref: ${{ github.head_ref }}
+
+      - name: Get Lerna version from PR branch
+        id: pr
+        run: echo "version=$(jq -r .version lerna.json)" >> $GITHUB_OUTPUT
+
+      - name: Checkout main branch
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          ref: main
+
+      - name: Get Lerna version from main
+        id: main
+        run: echo "version=$(jq -r .version lerna.json)" >> $GITHUB_OUTPUT
+
+      - name: Compare versions and comment if invalid
+        if: steps.pr.outputs.version <= steps.main.outputs.version
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const number = context.payload.pull_request.number;
+            const prVersion = steps.pr.outputs.version;
+            const mainVersion = steps.main.outputs.version;
+            const body = `⚠️ A versão do lerna.json no PR (${prVersion}) não é válida.\n\nEla deve ser **maior** que a versão atual da main (${mainVersion}).\n\nPor favor, atualize sua branch com a main e rode o seguinte comando para corrigir:\n\n\`yarn version:patch\``;
+            await github.rest.issues.createComment({
+              issue_number: number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body
+            });
+
+      - name: Fail if version not bumped
+        if: steps.pr.outputs.version <= steps.main.outputs.version
+        run: |
+          echo "A versão do lerna.json no PR não é válida. Atualize sua branch com a main e rode o comando 'yarn version:patch'."
+          exit 1

@@ -40,13 +40,6 @@ jobs:
         run: yarn install --frozen-lockfile
       - name: Build libs
         run: yarn build:libs
-      - name: Patch version & publish
-        id: patch
-        run: |
-          yarn publish:patch
-          VERSION=$(node -p 'require("./lerna.json").version')
-          echo "CURRENT_VERSION=$VERSION" >> $GITHUB_ENV
-          echo "PREVIOUS_TAG=$(git describe --tags --abbrev=0 --exclude $VERSION 2>/dev/null || echo '')" >> $GITHUB_ENV
       - name: PR Comment
         uses: actions/github-script@v6
         with:

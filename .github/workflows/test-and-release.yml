@@ -1,0 +1,34 @@
+name: Test and Release
+
+on:
+  workflow_run:
+    workflows:
+      - check-version-bump.yml
+    types:
+      - completed
+
+jobs:
+  run-tests:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Run tests
+        run: |
+          echo "Running tests..."
+          # Add your test commands here
+
+  release:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    needs: run-tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Release
+        run: |
+          echo "Releasing..."
+          # Add your release commands here
