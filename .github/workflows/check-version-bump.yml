@@ -1,12 +1,15 @@
 name: Check Version Bump
 
 on:
-  pull_request:
-    branches:
-      - main
+  workflow_run:
+    workflows:
+      - Packages tests (vitest)
+    types:
+      - completed
 
 jobs:
   check-version:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout PR branch
@@ -36,8 +39,8 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
             const number = context.payload.pull_request.number;
-            const prVersion = steps.pr.outputs.version;
-            const mainVersion = steps.main.outputs.version;
+            const prVersion = process.env.PR_VERSION;
+            const mainVersion = process.env.MAIN_VERSION;
             const body = `⚠️ A versão do lerna.json no PR (${prVersion}) não é válida.\n\nEla deve ser **maior** que a versão atual da main (${mainVersion}).\n\nPor favor, atualize sua branch com a main e rode o seguinte comando para corrigir:\n\n\`yarn version:patch\``;
             await github.rest.issues.createComment({
               issue_number: number,
@@ -45,6 +48,9 @@ jobs:
               repo: context.repo.repo,
               body
             });
+        env:
+          PR_VERSION: ${{ steps.pr.outputs.version }}
+          MAIN_VERSION: ${{ steps.main.outputs.version }}
 
       - name: Fail if version not bumped
         if: steps.pr.outputs.version <= steps.main.outputs.version
