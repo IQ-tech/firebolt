@@ -51,9 +51,6 @@ jobs:
           git fetch origin main
           git checkout main
 
-          # Log active branch after switching to main
-          echo "Branch ativa após checkout para main: $(git rev-parse --abbrev-ref HEAD)"
-
           # Get Lerna version from main branch
           main_version=$(jq -r .version lerna.json)
           echo "MAIN_VERSION=$main_version" >> $GITHUB_ENV
@@ -150,22 +147,21 @@ jobs:
           echo "CANARY_VERSION=$canary_version" >> $GITHUB_ENV
           echo "Canary version set to: $canary_version"
 
-      - name: Publish canary (no commit/tag)
-        if: success()
-        env:
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-        run: |
-          echo "Publicando versão canary..."
-          echo "Conteúdo do lerna.json:"
-          cat lerna.json
-          echo "Versão extraída:"
-          jq -r .version lerna.json || echo "Erro ao acessar a versão no lerna.json"
-          if [ -n "$CANARY_VERSION" ]; then
-            npx lerna publish from-package --dist-tag next --yes --no-verify-access || echo "Nenhum pacote alterado para publicar (ok)"
-            echo "CURRENT_VERSION=$CANARY_VERSION" >> $GITHUB_ENV
-          else
-            echo "Nenhuma versão publicada."
-          fi
+      # - name: Publish canary (no commit/tag)
+      #   if: success()
+      #   env:
+      #     NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+      #   run: |
+      #     echo "Publicando versão canary..."
+      #     echo "Conteúdo do lerna.json:"
+      #     cat lerna.json
+      #     echo "Versão extraída:"
+      #     jq -r .version lerna.json || echo "Erro ao acessar a versão no lerna.json"
+      #     if [ -n "$CANARY_VERSION" ]; then
+      #       npx lerna publish from-package --dist-tag next --yes --no-verify-access || echo "Nenhum pacote alterado para publicar (ok)"
+      #       echo "CURRENT_VERSION=$CANARY_VERSION" >> $GITHUB_ENV
+      #     else
+      #       echo "Nenhuma versão publicada."
 
       - name: PR Success Comment
         if: success()
