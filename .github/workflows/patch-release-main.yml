@@ -40,6 +40,10 @@ jobs:
         run: yarn install --frozen-lockfile
       - name: Build libs
         run: yarn build:libs
+      - name: Publish to NPM
+        run: lerna publish from-package --yes --no-verify-access
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
       - name: PR Comment
         uses: actions/github-script@v6
         with:
