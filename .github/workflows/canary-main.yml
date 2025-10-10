@@ -128,15 +128,6 @@ jobs:
           else
             echo "Todos os testes passaram em todos os pacotes";
           fi
-      - name: Confirm branch for tests
-        run: |
-          echo "Branch atual para execução dos testes: $(git rev-parse --abbrev-ref HEAD)"
-
-      - name: Ensure PR branch is checked out
-        run: |
-          git fetch origin ${{ github.head_ref }}
-          git checkout ${{ github.head_ref }}
-          echo "Branch do PR garantida: $(git rev-parse --abbrev-ref HEAD)"
       - name: Validate and set canary version
         run: |
           # Ensure we are on the PR branch
