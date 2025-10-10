@@ -43,15 +43,26 @@ jobs:
         run: yarn build:libs
       - name: Validate Lerna version
         run: |
-          version=$(jq -r .version lerna.json)
-          echo "PR_VERSION=$version" >> $GITHUB_ENV
+          # Checkout PR branch
+          git fetch origin ${{ github.head_ref }}
+          git checkout ${{ github.head_ref }}
 
+          # Get Lerna version from PR branch
+          pr_version=$(jq -r .version lerna.json)
+          echo "PR_VERSION=$pr_version" >> $GITHUB_ENV
+
+          # Checkout main branch
           git fetch origin main
-          main_version=$(git show origin/main:lerna.json | jq -r .version)
+          git checkout main
+
+          # Get Lerna version from main branch
+          main_version=$(jq -r .version lerna.json)
           echo "MAIN_VERSION=$main_version" >> $GITHUB_ENV
 
-          if printf "%s\n%s" "$MAIN_VERSION" "$PR_VERSION" | sort -V | head -n1 | grep -q "$PR_VERSION"; then
-            echo "⚠️ A versão do lerna.json no PR ($PR_VERSION) não é válida.\nEla deve ser maior que a versão atual da main ($MAIN_VERSION).\nPor favor, atualize sua branch com a main e rode o seguinte comando para corrigir:\n\nyarn version:patch"
+          # Compare versions
+          if printf "%s\n%s" "$main_version" "$pr_version" | sort -V | head -n1 | grep -q "$pr_version"; then
+            echo -e "⚠️ A versão do lerna.json no PR ($pr_version) não é válida.\n\nEla deve ser **MAIOR** que a versão atual da main ($main_version).\n\nPor favor, atualize sua branch com a main e rode o seguinte comando para corrigir:\n\n`yarn version:patch`" > comment.txt
+            gh issue comment ${{ github.event.pull_request.number }} --body-file comment.txt
             exit 1
           fi
       - name: Test client-core (aggregate)
