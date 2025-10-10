@@ -37,10 +37,6 @@ jobs:
           npm whoami || true
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-      - name: Install deps
-        run: yarn install --frozen-lockfile
-      - name: Build libs
-        run: yarn build:libs
       - name: Validate Lerna version
         run: |
           # Checkout PR branch
@@ -59,12 +55,20 @@ jobs:
           main_version=$(jq -r .version lerna.json)
           echo "MAIN_VERSION=$main_version" >> $GITHUB_ENV
 
+          # Display versions being compared
+          echo "VERSION MAIN: $main_version"
+          echo "VERSION PR: $pr_version"
+
           # Compare versions
           if printf "%s\n%s" "$main_version" "$pr_version" | sort -V | head -n1 | grep -q "$pr_version"; then
             echo -e "⚠️ A versão do lerna.json no PR ($pr_version) não é válida.\n\nEla deve ser **MAIOR** que a versão atual da main ($main_version).\n\nPor favor, atualize sua branch com a main e rode o seguinte comando para corrigir:\n\n`yarn version:patch`" > comment.txt
             gh issue comment ${{ github.event.pull_request.number }} --body-file comment.txt
             exit 1
           fi
+      - name: Install deps
+        run: yarn install --frozen-lockfile
+      - name: Build libs
+        run: yarn build:libs
       - name: Test client-core (aggregate)
         run: |
           set +e
@@ -154,8 +158,12 @@ jobs:
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: |
+          echo "Publicando versão canary..."
           npx lerna publish from-package --dist-tag next --yes --no-verify-access || echo "Nenhum pacote alterado para publicar (ok)"
-          echo "CURRENT_VERSION=$EPHEMERAL_VERSION" >> $GITHUB_ENV
+          if [ -n "$CANARY_VERSION" ]; then
+            echo "CURRENT_VERSION=$CANARY_VERSION" >> $GITHUB_ENV
+          else
+            echo "Nenhuma versão publicada."
 
       - name: Revert ephemeral commit (keep tree clean for PR)
         if: success()
@@ -172,7 +180,12 @@ jobs:
           script: |
             const curr = process.env.CURRENT_VERSION;
             const number = context.payload.pull_request.number;
-            const body = `Canary publicado: v${curr}`;
+            let body;
+            if (curr) {
+              body = `Canary publicado: v${curr}`;
+            } else {
+              body = 'Nenhuma versão publicada: nenhum pacote foi alterado.';
+            }
             await github.rest.issues.createComment({
               issue_number: number,
               owner: context.repo.owner,
