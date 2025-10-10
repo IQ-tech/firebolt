@@ -2,9 +2,12 @@ name: Canary
 
 on:
   pull_request:
-    branches: [main, latest]
-    types: [opened, synchronize, reopened, ready_for_review]
-  workflow_dispatch: {}
+    types:
+      - opened
+      - synchronize
+      - reopened
+    branches:
+      - main
 
 permissions:
   contents: write
@@ -12,7 +15,7 @@ permissions:
   packages: write
 
 concurrency:
-  group: canary-pr-${{ github.event.pull_request.number }}
+  group: canary-${{ github.run_id }}
   cancel-in-progress: true
 
 jobs:
@@ -36,6 +39,44 @@ jobs:
           npm whoami || true
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - name: Configure Git identity
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+      - name: Set GitHub CLI token
+        run: echo "GH_TOKEN=${{ secrets.GITHUB_TOKEN }}" >> $GITHUB_ENV
+      - name: Validate Lerna version
+        run: |
+          # Checkout PR branch
+          git fetch origin ${{ github.head_ref }}
+          git checkout ${{ github.head_ref }}
+
+          # Get Lerna version from PR branch
+          pr_version=$(jq -r .version lerna.json)
+          echo "PR_VERSION=$pr_version" >> $GITHUB_ENV
+
+          # Checkout main branch
+          git fetch origin main
+          git checkout main
+
+          # Get Lerna version from main branch
+          main_version=$(jq -r .version lerna.json)
+          echo "MAIN_VERSION=$main_version" >> $GITHUB_ENV
+
+          # Return to PR branch
+          git checkout ${{ github.head_ref }}
+          echo "Branch ativa após retornar para PR: $(git rev-parse --abbrev-ref HEAD)"
+
+          # Display versions being compared
+          echo "VERSION MAIN: $main_version"
+          echo "VERSION PR: $pr_version"
+
+          # Compare versions
+          if printf "%s\n%s" "$main_version" "$pr_version" | sort -V | head -n1 | grep -q "$pr_version"; then
+            echo -e "⚠️ A versão do lerna.json no PR ($pr_version) não é válida.\n\nEla deve ser **MAIOR** que a versão atual da main ($main_version).\n\nPor favor, atualize sua branch com a main e rode o seguinte script para corrigir: version:patch" > comment.txt
+            gh issue comment ${{ github.event.pull_request.number }} --body-file comment.txt
+            exit 1
+          fi
       - name: Install deps
         run: yarn install --frozen-lockfile
       - name: Build libs
@@ -96,25 +137,19 @@ jobs:
         if: success()
         id: version
         run: |
-          BASE_VERSION=$(node -p 'require("./lerna.json").version')
-          SHORT_SHA=$(git rev-parse --short HEAD)
-          EPHEMERAL_VERSION="${BASE_VERSION}-next.${SHORT_SHA}.${GITHUB_RUN_ATTEMPT}"
-          echo "EPHEMERAL_VERSION=$EPHEMERAL_VERSION" >> $GITHUB_ENV
-          echo "EPHEMERAL_VERSION=$EPHEMERAL_VERSION" >> $GITHUB_OUTPUT
+          BASE_VERSION=$(jq -r .version lerna.json)
+          CANARY_VERSION="${BASE_VERSION}-next.$(git rev-parse --short HEAD)"
+          echo "CANARY_VERSION=$CANARY_VERSION" >> $GITHUB_ENV
+          echo "CANARY_VERSION=$CANARY_VERSION" >> $GITHUB_OUTPUT
       - name: Inject ephemeral version in packages
         if: success()
         run: |
-          EPV="$EPHEMERAL_VERSION"
+          EPV="$CANARY_VERSION"
           echo "Aplicando versão efêmera $EPV nos package.json (sem commit)"
           jq --arg v "$EPV" '.version = $v' lerna.json > lerna.tmp && mv lerna.tmp lerna.json
           for PKG in packages/*/package.json; do
             jq --arg v "$EPV" '.version = $v' "$PKG" > "$PKG.tmp" && mv "$PKG.tmp" "$PKG" || exit 1
           done
-      - name: Git identity for ephemeral commit
-        if: success()
-        run: |
-          git config --global user.name 'github-actions[bot]'
-          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
       - name: Ephemeral commit (local, not pushed)
         if: success()
         run: |
@@ -123,7 +158,7 @@ jobs:
           if git diff --cached --quiet; then
             echo "Sem mudanças para commit (rerun?)"
           else
-            git commit -m "chore(ci): ephemeral canary version $EPHEMERAL_VERSION" || true
+            git commit -m "chore(ci): ephemeral canary version $CANARY_VERSION" || true
           fi
           git status --short
       - name: Publish canary (no commit/tag)
@@ -132,8 +167,7 @@ jobs:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: |
           npx lerna publish from-package --dist-tag next --yes --no-verify-access || echo "Nenhum pacote alterado para publicar (ok)"
-          echo "CURRENT_VERSION=$EPHEMERAL_VERSION" >> $GITHUB_ENV
-
+          echo "CURRENT_VERSION=$CANARY_VERSION" >> $GITHUB_ENV
       - name: Revert ephemeral commit (keep tree clean for PR)
         if: success()
         run: |
@@ -150,20 +184,6 @@ jobs:
             const curr = process.env.CURRENT_VERSION;
             const number = context.payload.pull_request.number;
             const body = `Canary publicado: v${curr}`;
-            await github.rest.issues.createComment({
-              issue_number: number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              body
-            });
-      - name: PR Failure Comment
-        if: failure()
-        uses: actions/github-script@v6
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          script: |
-            const number = context.payload.pull_request.number;
-            const body = 'Canary não publicado: testes falharam. Verifique os logs do workflow.';
             await github.rest.issues.createComment({
               issue_number: number,
               owner: context.repo.owner,

@@ -81,3 +81,9 @@ describe("testing props-presets render", () => {
     ).toBeInTheDocument()
   })
 })
+
+describe("Force failure", () => {
+  it("should pass intentionally", () => {
+    expect(true).toBe(true)
+  })
+})
