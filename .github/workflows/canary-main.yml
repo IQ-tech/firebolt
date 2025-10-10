@@ -124,8 +124,11 @@ jobs:
       - name: Set canary version
         run: |
           pr_version=$(jq -r .version lerna.json)
+          if [[ ! $pr_version == *-next* ]]; then
+            pr_version="$pr_version-next"
+          fi
           hash=$(git rev-parse --short HEAD)
-          canary_version="$pr_version-next.$hash"
+          canary_version="$pr_version.$hash"
           echo "CANARY_VERSION=$canary_version" >> $GITHUB_ENV
           echo "Canary version set to $canary_version"
 
