@@ -37,6 +37,12 @@ jobs:
           npm whoami || true
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - name: Configure Git identity
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+      - name: Set GitHub CLI token
+        run: echo "GH_TOKEN=${{ secrets.GITHUB_TOKEN }}" >> $GITHUB_ENV
       - name: Validate Lerna version
         run: |
           # Checkout PR branch
@@ -125,44 +131,48 @@ jobs:
           else
             echo "Todos os testes passaram em todos os pacotes";
           fi
-      - name: Validate and set canary version
+      - name: Compute ephemeral canary version
+        if: success()
+        id: version
         run: |
-          # Ensure we are on the PR branch
-          echo "Branch atual: $(git rev-parse --abbrev-ref HEAD)"
-
-          # Extract version from lerna.json
-          pr_version=$(jq -r .version lerna.json)
-          echo "Versão extraída do lerna.json: $pr_version"
-
-          # Ensure the version includes the '-next' suffix
-          if [[ ! $pr_version == *-next* ]]; then
-            pr_version="$pr_version-next"
+          BASE_VERSION=$(jq -r .version lerna.json)
+          CANARY_VERSION="${BASE_VERSION}-next.$(git rev-parse --short HEAD)"
+          echo "CANARY_VERSION=$CANARY_VERSION" >> $GITHUB_ENV
+          echo "CANARY_VERSION=$CANARY_VERSION" >> $GITHUB_OUTPUT
+      - name: Inject ephemeral version in packages
+        if: success()
+        run: |
+          EPV="$CANARY_VERSION"
+          echo "Aplicando versão efêmera $EPV nos package.json (sem commit)"
+          jq --arg v "$EPV" '.version = $v' lerna.json > lerna.tmp && mv lerna.tmp lerna.json
+          for PKG in packages/*/package.json; do
+            jq --arg v "$EPV" '.version = $v' "$PKG" > "$PKG.tmp" && mv "$PKG.tmp" "$PKG" || exit 1
+          done
+      - name: Ephemeral commit (local, not pushed)
+        if: success()
+        run: |
+          echo "HEAD_ORIG=$(git rev-parse HEAD)" >> $GITHUB_ENV
+          git add lerna.json packages/*/package.json || true
+          if git diff --cached --quiet; then
+            echo "Sem mudanças para commit (rerun?)"
+          else
+            git commit -m "chore(ci): ephemeral canary version $CANARY_VERSION" || true
           fi
-
-          # Append commit hash to create the canary version
-          hash=$(git rev-parse --short HEAD)
-          canary_version="$pr_version.$hash"
-
-          # Export the canary version
-          echo "CANARY_VERSION=$canary_version" >> $GITHUB_ENV
-          echo "Canary version set to: $canary_version"
-
-      # - name: Publish canary (no commit/tag)
-      #   if: success()
-      #   env:
-      #     NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-      #   run: |
-      #     echo "Publicando versão canary..."
-      #     echo "Conteúdo do lerna.json:"
-      #     cat lerna.json
-      #     echo "Versão extraída:"
-      #     jq -r .version lerna.json || echo "Erro ao acessar a versão no lerna.json"
-      #     if [ -n "$CANARY_VERSION" ]; then
-      #       npx lerna publish from-package --dist-tag next --yes --no-verify-access || echo "Nenhum pacote alterado para publicar (ok)"
-      #       echo "CURRENT_VERSION=$CANARY_VERSION" >> $GITHUB_ENV
-      #     else
-      #       echo "Nenhuma versão publicada."
-
+          git status --short
+      - name: Publish canary (no commit/tag)
+        if: success()
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: |
+          npx lerna publish from-package --dist-tag next --yes --no-verify-access || echo "Nenhum pacote alterado para publicar (ok)"
+          echo "CURRENT_VERSION=$CANARY_VERSION" >> $GITHUB_ENV
+      - name: Revert ephemeral commit (keep tree clean for PR)
+        if: success()
+        run: |
+          if [ -n "$HEAD_ORIG" ]; then
+            git reset --hard "$HEAD_ORIG" || true
+            git status --short
+          fi
       - name: PR Success Comment
         if: success()
         uses: actions/github-script@v6
@@ -171,23 +181,10 @@ jobs:
           script: |
             const curr = process.env.CURRENT_VERSION;
             const number = context.payload.pull_request.number;
-            let body;
-            if (curr) {
-              body = `Canary publicado: v${curr}`;
-            } else {
-              body = 'Nenhuma versão publicada: nenhum pacote foi alterado.';
-            }
+            const body = `Canary publicado: v${curr}`;
             await github.rest.issues.createComment({
               issue_number: number,
               owner: context.repo.owner,
               repo: context.repo.repo,
               body
             });
-      - name: PR Failure Comment
-        if: failure()
-        uses: actions/github-script@v6
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          script: |
-            const number = context.payload.pull_request.number;
-            const body = 'Canary não publicado: testes falharam. Verifique os logs do workflow.';
