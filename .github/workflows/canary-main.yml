@@ -6,6 +6,8 @@ on:
       - opened
       - synchronize
       - reopened
+    branches:
+      - main
 
 permissions:
   contents: write
