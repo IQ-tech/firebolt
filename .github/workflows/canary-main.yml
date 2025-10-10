@@ -51,9 +51,16 @@ jobs:
           git fetch origin main
           git checkout main
 
+          # Log active branch after switching to main
+          echo "Branch ativa após checkout para main: $(git rev-parse --abbrev-ref HEAD)"
+
           # Get Lerna version from main branch
           main_version=$(jq -r .version lerna.json)
           echo "MAIN_VERSION=$main_version" >> $GITHUB_ENV
+
+          # Return to PR branch
+          git checkout ${{ github.head_ref }}
+          echo "Branch ativa após retornar para PR: $(git rev-parse --abbrev-ref HEAD)"
 
           # Display versions being compared
           echo "VERSION MAIN: $main_version"
@@ -121,16 +128,36 @@ jobs:
           else
             echo "Todos os testes passaram em todos os pacotes";
           fi
-      - name: Set canary version
+      - name: Confirm branch for tests
         run: |
+          echo "Branch atual para execução dos testes: $(git rev-parse --abbrev-ref HEAD)"
+
+      - name: Ensure PR branch is checked out
+        run: |
+          git fetch origin ${{ github.head_ref }}
+          git checkout ${{ github.head_ref }}
+          echo "Branch do PR garantida: $(git rev-parse --abbrev-ref HEAD)"
+      - name: Validate and set canary version
+        run: |
+          # Ensure we are on the PR branch
+          echo "Branch atual: $(git rev-parse --abbrev-ref HEAD)"
+
+          # Extract version from lerna.json
           pr_version=$(jq -r .version lerna.json)
+          echo "Versão extraída do lerna.json: $pr_version"
+
+          # Ensure the version includes the '-next' suffix
           if [[ ! $pr_version == *-next* ]]; then
             pr_version="$pr_version-next"
           fi
+
+          # Append commit hash to create the canary version
           hash=$(git rev-parse --short HEAD)
           canary_version="$pr_version.$hash"
+
+          # Export the canary version
           echo "CANARY_VERSION=$canary_version" >> $GITHUB_ENV
-          echo "Canary version set to $canary_version"
+          echo "Canary version set to: $canary_version"
 
       - name: Publish canary (no commit/tag)
         if: success()
@@ -142,11 +169,12 @@ jobs:
           cat lerna.json
           echo "Versão extraída:"
           jq -r .version lerna.json || echo "Erro ao acessar a versão no lerna.json"
-          npx lerna publish from-package --dist-tag next --yes --no-verify-access || echo "Nenhum pacote alterado para publicar (ok)"
           if [ -n "$CANARY_VERSION" ]; then
+            npx lerna publish from-package --dist-tag next --yes --no-verify-access || echo "Nenhum pacote alterado para publicar (ok)"
             echo "CURRENT_VERSION=$CANARY_VERSION" >> $GITHUB_ENV
           else
             echo "Nenhuma versão publicada."
+          fi
 
       - name: PR Success Comment
         if: success()
