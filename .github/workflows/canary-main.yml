@@ -71,7 +71,7 @@ jobs:
 
           # Compare versions
           if printf "%s\n%s" "$main_version" "$pr_version" | sort -V | head -n1 | grep -q "$pr_version"; then
-            echo -e "⚠️ A versão do lerna.json no PR ($pr_version) não é válida.\n\nEla deve ser **MAIOR** que a versão atual da main ($main_version).\n\nPor favor, atualize sua branch com a main e rode o seguinte script para corrigir:\n\n`version:patch`" > comment.txt
+            echo -e "⚠️ A versão do lerna.json no PR ($pr_version) não é válida.\n\nEla deve ser **MAIOR** que a versão atual da main ($main_version).\n\nPor favor, atualize sua branch com a main e rode o seguinte script para corrigir: version:patch" > comment.txt
             gh issue comment ${{ github.event.pull_request.number }} --body-file comment.txt
             exit 1
           fi
