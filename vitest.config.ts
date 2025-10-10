@@ -38,7 +38,7 @@ export default defineConfig({
     // Coverage configuration
     coverage: {
       provider: "v8",
-      reporter: ["text", "json", "html", "lcov"],
+      reporter: ["text", "json", "json-summary", "html", "lcov"], // Added json-summary
       // Only include files that have corresponding tests
       all: false,
       include: [
