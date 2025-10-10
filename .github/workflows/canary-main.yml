@@ -41,6 +41,19 @@ jobs:
         run: yarn install --frozen-lockfile
       - name: Build libs
         run: yarn build:libs
+      - name: Validate Lerna version
+        run: |
+          version=$(jq -r .version lerna.json)
+          echo "PR_VERSION=$version" >> $GITHUB_ENV
+
+          git fetch origin main
+          main_version=$(git show origin/main:lerna.json | jq -r .version)
+          echo "MAIN_VERSION=$main_version" >> $GITHUB_ENV
+
+          if printf "%s\n%s" "$MAIN_VERSION" "$PR_VERSION" | sort -V | head -n1 | grep -q "$PR_VERSION"; then
+            echo "⚠️ A versão do lerna.json no PR ($PR_VERSION) não é válida.\nEla deve ser maior que a versão atual da main ($MAIN_VERSION).\nPor favor, atualize sua branch com a main e rode o seguinte comando para corrigir:\n\nyarn version:patch"
+            exit 1
+          fi
       - name: Test client-core (aggregate)
         run: |
           set +e
@@ -93,15 +106,13 @@ jobs:
           else
             echo "Todos os testes passaram em todos os pacotes";
           fi
-      - name: Compute ephemeral canary version
-        if: success()
-        id: version
+      - name: Set canary version
         run: |
-          BASE_VERSION=$(node -p 'require("./lerna.json").version')
-          SHORT_SHA=$(git rev-parse --short HEAD)
-          EPHEMERAL_VERSION="${BASE_VERSION}-next.${SHORT_SHA}.${GITHUB_RUN_ATTEMPT}"
-          echo "EPHEMERAL_VERSION=$EPHEMERAL_VERSION" >> $GITHUB_ENV
-          echo "EPHEMERAL_VERSION=$EPHEMERAL_VERSION" >> $GITHUB_OUTPUT
+          version=$(jq -r .version lerna.json)
+          hash=$(git rev-parse --short HEAD)
+          canary_version="$version-next.$hash"
+          echo "CANARY_VERSION=$canary_version" >> $GITHUB_ENV
+          echo "Canary version set to $canary_version"
       - name: Inject ephemeral version in packages
         if: success()
         run: |
