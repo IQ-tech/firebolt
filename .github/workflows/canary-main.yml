@@ -123,36 +123,12 @@ jobs:
           fi
       - name: Set canary version
         run: |
-          version=$(jq -r .version lerna.json)
+          pr_version=$(jq -r .version lerna.json)
           hash=$(git rev-parse --short HEAD)
-          canary_version="$version-next.$hash"
+          canary_version="$pr_version-next.$hash"
           echo "CANARY_VERSION=$canary_version" >> $GITHUB_ENV
           echo "Canary version set to $canary_version"
-      - name: Inject ephemeral version in packages
-        if: success()
-        run: |
-          EPV="$EPHEMERAL_VERSION"
-          echo "Aplicando versão efêmera $EPV nos package.json (sem commit)"
-          jq --arg v "$EPV" '.version = $v' lerna.json > lerna.tmp && mv lerna.tmp lerna.json
-          for PKG in packages/*/package.json; do
-            jq --arg v "$EPV" '.version = $v' "$PKG" > "$PKG.tmp" && mv "$PKG.tmp" "$PKG" || exit 1
-          done
-      - name: Git identity for ephemeral commit
-        if: success()
-        run: |
-          git config --global user.name 'github-actions[bot]'
-          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
-      - name: Ephemeral commit (local, not pushed)
-        if: success()
-        run: |
-          echo "HEAD_ORIG=$(git rev-parse HEAD)" >> $GITHUB_ENV
-          git add lerna.json packages/*/package.json || true
-          if git diff --cached --quiet; then
-            echo "Sem mudanças para commit (rerun?)"
-          else
-            git commit -m "chore(ci): ephemeral canary version $EPHEMERAL_VERSION" || true
-          fi
-          git status --short
+
       - name: Publish canary (no commit/tag)
         if: success()
         env:
@@ -169,13 +145,6 @@ jobs:
           else
             echo "Nenhuma versão publicada."
 
-      - name: Revert ephemeral commit (keep tree clean for PR)
-        if: success()
-        run: |
-          if [ -n "$HEAD_ORIG" ]; then
-            git reset --hard "$HEAD_ORIG" || true
-            git status --short
-          fi
       - name: PR Success Comment
         if: success()
         uses: actions/github-script@v6
