@@ -159,6 +159,10 @@ jobs:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: |
           echo "Publicando versão canary..."
+          echo "Conteúdo do lerna.json:"
+          cat lerna.json
+          echo "Versão extraída:"
+          jq -r .version lerna.json || echo "Erro ao acessar a versão no lerna.json"
           npx lerna publish from-package --dist-tag next --yes --no-verify-access || echo "Nenhum pacote alterado para publicar (ok)"
           if [ -n "$CANARY_VERSION" ]; then
             echo "CURRENT_VERSION=$CANARY_VERSION" >> $GITHUB_ENV
