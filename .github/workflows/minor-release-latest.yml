@@ -59,6 +59,6 @@ jobs:
           git add .
           git commit -m "chore: bump patch version"
           git push origin $BRANCH_NAME
-          gh pr create --title "chore: bump patch version" --body "This PR bumps the patch version." --base main --head $BRANCH_NAME
+          gh pr create --title "[skip] chore: bump patch version" --body "This PR bumps the patch version." --base main --head $BRANCH_NAME
         env:
           GITHUB_TOKEN: ${{ secrets.IQ_ADM_TIM_TOKEN }}
