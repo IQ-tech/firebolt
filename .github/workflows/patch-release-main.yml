@@ -17,6 +17,21 @@ jobs:
     runs-on: ubuntu-latest
     name: Patch publish
     steps:
+      - name: Check for [skip] in PR title
+        if: contains(github.event.pull_request.title, '[skip]')
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const prNumber = context.payload.pull_request.number;
+            const body = 'Workflow aborted due to [skip] in the PR title.';
+            await github.rest.issues.createComment({
+              issue_number: prNumber,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body,
+            });
+            core.setFailed('Workflow aborted due to [skip] in the PR title.');
       - name: Checkout
         uses: actions/checkout@v3
         with:
@@ -41,7 +56,6 @@ jobs:
       - name: Build libs
         run: yarn build:libs
       - name: Publish NPM
-        run: yarn publish:patch
+        run: yarn publish:from-package
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-          GITHUB_TOKEN: ${{ secrets.IQ_ADM_TIM_TOKEN }}
