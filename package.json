@@ -30,7 +30,7 @@
     "publish:from-package": "lerna publish from-package --yes --no-verify-access",
     "publish:canary": "yarn version:prerelease && yarn publish:from-package --dist-tag next",
     "publish:patch": "yarn version:patch && yarn publish:from-package",
-    "publish:minor": "yarn version:minor && yarn publish:from-package",
+    "publish:minor": "yarn version:minor --create-release github && yarn publish:from-package",
     "prepare": "husky"
   },
   "devDependencies": {
