@@ -1,7 +1,7 @@
 import React from "react"
-import FormControl from "@material-ui/core/FormControl"
-import Checkbox from "@material-ui/core/Checkbox"
-import FormControlLabel from "@material-ui/core/FormControlLabel"
+import FormControl from "@mui/material/FormControl"
+import Checkbox from "@mui/material/Checkbox"
+import FormControlLabel from "@mui/material/FormControlLabel"
 
 const CheckWidget = ({
   hasError,

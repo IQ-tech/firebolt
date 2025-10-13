@@ -1,17 +1,17 @@
 {
   "name": "@iq-firebolt/lab",
-  "version": "0.9.0",
+  "version": "0.9.9",
   "private": true,
   "license": "Apache-2.0",
   "dependencies": {
-    "@iq-firebolt/blueberry-theme": "0.9.0",
-    "@iq-firebolt/br-addons": "0.9.0",
-    "@iq-firebolt/client": "0.9.0",
-    "@iq-firebolt/client-core": "0.9.0",
-    "@iq-firebolt/material-theme": "0.9.0",
-    "iq-blueberry": "0.0.40",
-    "react": "^17.0.0",
-    "react-dom": "^17.0.0",
+    "@iq-firebolt/blueberry-theme": "0.9.9",
+    "@iq-firebolt/br-addons": "0.9.9",
+    "@iq-firebolt/client": "0.9.9",
+    "@iq-firebolt/client-core": "0.9.9",
+    "@iq-firebolt/material-theme": "0.9.9",
+    "iq-blueberry": "^0.0.88",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
     "react-router-dom": "^5.3.0"
   },
   "scripts": {
@@ -21,7 +21,7 @@
   },
   "devDependencies": {
     "@originjs/vite-plugin-commonjs": "^1.0.3",
-    "@vitejs/plugin-react": "^1.0.0",
-    "vite": "^2.6.2"
+    "@vitejs/plugin-react": "^5.0.4",
+    "vite": "^7.1.8"
   }
 }

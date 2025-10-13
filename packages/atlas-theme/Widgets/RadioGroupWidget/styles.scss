@@ -1,15 +1,28 @@
+* {
+  font-family: 'Source Sans Pro';
+}
+
+.radio-group {
+  margin-bottom: 32px;
+}
+
+p {
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 21px;
+  color: #454A54;
+  margin: 16px 0;
+}
+
 .radio__option {
   display: flex;
   align-items: center;
   border: 0;
   margin-bottom: 16px;
-
-  label {
-    font-size: 16px;
-    line-height: 24px;
-    font-weight: 400;
-    color: #5E6573;
-  }
+  font-size: 16px;
+  line-height: 24px;
+  font-weight: 400;
+  color: #5E6573;
 
   input[type="radio"] {
     min-width: 24px;

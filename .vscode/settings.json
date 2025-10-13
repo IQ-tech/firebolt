@@ -12,5 +12,6 @@
     "br-addons"
   ],
   "conventionalCommits.promptFooter": false,
-  "conventionalCommits.promptBody": false
+  "conventionalCommits.promptBody": false,
+  "vitest.disableWorkspaceWarning": true
 }

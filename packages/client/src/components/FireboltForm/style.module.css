@@ -6,19 +6,30 @@
   width: 100%;
 }
 
-@media (min-width: 720px) {
-  .firebolt-form-wrapper {
-    display: -webkit-box;
-    display: -ms-flexbox;
-    display: flex;
-    -ms-flex-wrap: wrap;
-    flex-wrap: wrap;
-    -webkit-box-pack: justify;
-    -ms-flex-pack: justify;
-    justify-content: space-between;
+.firebolt-form-wrapper {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap;
+  -webkit-box-pack: justify;
+  -ms-flex-pack: justify;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+@media (min-width: 320px) {
+  .firebolt-input.firebolt-input--half {
+    flex: 1;
   }
 
-  .firebolt-input.firebolt-input--half {
-    width: 48%;
+  .firebolt-input.firebolt-input--half-2 {
+    flex: 2;
+    min-width: 50%;
+  }
+
+  .firebolt-input.firebolt-input--half-3 {
+    flex: 3;
+    min-width: 50%;
   }
 }

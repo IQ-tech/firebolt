@@ -12,11 +12,12 @@ const App = () => {
             display: "flex",
             justifyContent: "space-evenly",
             marginBottom: "20px",
-            border: "2px solid",
+            borderBottom: "2px solid",
+            padding: "10px",
             alignItems: "center",
           }}
         >
-          <h1>Debug Lab</h1>
+          <h4>Debug Lab</h4>
           <Link style={{ textDecoration: "none" }} to="/debug/core">
             Core{" "}
           </Link>
@@ -24,7 +25,7 @@ const App = () => {
             Form
           </Link>
         </div>
-        <div>
+        <div style={{ padding: "20px" }}>
           <Switch>
             <Route path="/debug/form">
               <FormDemo />

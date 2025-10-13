@@ -37,7 +37,7 @@ export default function useFormRendering({
       const shouldHideField = widgetName === "hidden" || !isConditionallyValid
       const fieldValidators = field?.validators || []
       const isRequiredField = !!fieldValidators.find(
-        (validator: { type: string }) => validator?.type === "required"
+        (validator: { type: string }) => validator?.type === "required" || validator?.type === "requiredboolean"
       )
       const FieldComponent = getFieldComponent({
         widgetName,

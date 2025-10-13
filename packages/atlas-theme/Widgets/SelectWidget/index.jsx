@@ -2,7 +2,6 @@ import React, { useState, useRef, useEffect } from "react"
 import FieldHolder from "../../FieldHolder"
 import classNames from "classnames"
 
-import IconSlash from "./icons/IconSlash.svg"
 import IconChevronDown from "./icons/icon-chevron-down.svg"
 import IconChevronUp from "./icons/icon-chevron-up.svg"
 import IconCheck from "./icons/icon-check.svg"
@@ -11,28 +10,25 @@ import "./styles.scss"
 
 const SelectWidget = ({
   slug,
+  version,
   options = [],
   label,
+  sublabel,
   placeholder,
 
   hasError,
   errorMessage,
-  value = "",
   fieldId,
-  isRequired,
   disabled = false,
-  optional = false,
-
   onChange,
-  onBlur,
-  onFocus,
+  value,
+  isRequired
 }) => {
   const selectRef = useRef(null)
   const [isOpenSelect, setIsOpenSelect] = useState(false)
-  const [selectedValue, setSelectedValue] = useState("")
-  const [selectedLabel, setSelectedLabel] = useState("Selecione")
 
   const [optionsState, setOptionsState] = useState(options)
+  const [selectedOption, setSelectedOption] = useState(null)
 
   const backupOptions = options
 
@@ -41,28 +37,61 @@ const SelectWidget = ({
     setOptionsState(backupOptions)
   }
 
+  const escPress = (e) => {
+    if (isOpenSelect && e.key === "Escape") {
+      setIsOpenSelect(!isOpenSelect)
+    }
+  }
+
+  const outsideClick = (e) => {
+    if (
+      isOpenSelect &&
+      selectRef.current &&
+      !selectRef.current.contains(e.target)
+    ) {
+      setIsOpenSelect(!isOpenSelect)
+    }
+  }
+
+  useEffect(() => {
+    document.addEventListener("keydown", escPress, false)
+
+    return () => {
+      document.removeEventListener("keydown", escPress, false)
+    }
+  }, [escPress])
+
+  useEffect(() => {
+    document.addEventListener("click", outsideClick)
+
+    return () => {
+      document.removeEventListener("click", outsideClick)
+    }
+  }, [outsideClick])
+
+  useEffect(() => {
+    if (value) {
+      const optionSelected = options.find(
+        (option) => option.value.toString() === value
+      )
+      setSelectedOption(optionSelected)
+    }
+  }, [value])
+
   function onClickOption(e) {
     if (disabled) return
     const valueSelected = e.currentTarget.value
     const labelSelected = e.currentTarget.dataset.label
-    setSelectedValue((prevState) => valueSelected ?? prevState)
-    setSelectedLabel((prevState) => labelSelected ?? prevState)
+    setSelectedOption({ value: valueSelected, label: labelSelected })
     onChange(valueSelected)
 
-    const pointerType = e.nativeEvent.pointerType
-    const codeType = e.nativeEvent.code
-    if (
-      ["mouse", "touch"].includes(pointerType) ||
-      ["Enter", "Space"].includes(codeType)
-    ) {
-      selectRef.current?.click()
-    }
+    selectRef.current.dispatchEvent(new MouseEvent("click", { bubbles: true }))
   }
 
   function removeAccents(value) {
     const valueWithoutAccents = value
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "");
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
 
     return valueWithoutAccents
   }
@@ -70,7 +99,9 @@ const SelectWidget = ({
   function filterOptions(value) {
     if (value !== "") {
       const newOptions = options.filter((option) => {
-        return removeAccents(option.label).toLowerCase().includes(removeAccents(value).toLowerCase())
+        return removeAccents(option.label)
+          .toLowerCase()
+          .includes(removeAccents(value).toLowerCase())
       })
 
       setOptionsState(newOptions)
@@ -83,63 +114,77 @@ const SelectWidget = ({
     "is-open": isOpenSelect,
   })
 
+  const valueClass = classNames("ac-select__selected-value", {
+    "value-placeholder": !selectedOption?.label,
+  })
+
   return (
     <FieldHolder label={label}>
-      {/* <h3>{ label }</h3> */}
-
       <div className={classSelect}>
-      <div className="ac-select__wrap">
-        <label htmlFor={slug} className="float-label">
-          {placeholder}
-        </label>
+        <div className="ac-select__wrap">
+          <div
+            className="ac-select__button"
+            onClick={onClickSelect}
+            ref={selectRef}
+            id={slug}
+          >
+            {isOpenSelect && version === "search" ? (
+              <input
+                type="text"
+                placeholder={
+                  selectedOption?.label || placeholder || "Digite ou selecione"
+                }
+                className="input__search"
+                autoFocus
+                onChange={(e) => filterOptions(e.target.value)}
+              />
+            ) : (
+              <div className={valueClass}>
+                {selectedOption?.label || placeholder}
+              </div>
+            )}
 
-        <div 
-          className="ac-select__button" 
-          onClick={onClickSelect}
-          ref={selectRef}
-          id={slug}
-        >
-          {
-            isOpenSelect ? 
-            <input 
-              type="text" 
-              placeholder="Digite ou selecione" 
-              className="input__search" 
-              autoFocus
-              onChange={(e) => filterOptions(e.target.value)}
-            /> :
-            <div className="ac-select__selected-value">{selectedLabel}</div>}
-
-          <div className="ac-select__icons">
-            {isOpenSelect ? <img src={IconChevronUp} /> : <img src={IconChevronDown} />}
+            <div className="ac-select__icons">
+              {isOpenSelect ? (
+                <img src={IconChevronUp} />
+              ) : (
+                <img src={IconChevronDown} />
+              )}
+            </div>
           </div>
+          <label htmlFor={slug} className={classNames({ required: isRequired })}>{sublabel}</label>
+
+          {hasError && errorMessage ? (
+            <span className="input-error-message">{errorMessage}</span>
+          ) : null}
         </div>
 
-        
+        {isOpenSelect ? (
+          <div className="ac-select__options">
+            {optionsState.map((option) => (
+              <div className="ac-select__option" key={option.value}>
+                <input
+                  type="radio"
+                  name={fieldId}
+                  className="ac--select__item"
+                  value={option.value}
+                  data-label={option.label}
+                  onClick={onClickOption}
+                  onKeyDown={onClickOption}
+                  defaultChecked={selectedOption?.value === option.value}
+                />
+
+                <span className="ac-select__option-label">{option.label}</span>
+                {selectedOption?.value === option?.value ? (
+                  <img src={IconCheck} />
+                ) : null}
+              </div>
+            ))}
+          </div>
+        ) : null}
       </div>
-
-      {isOpenSelect ? 
-        <div className="ac-select__options">
-          {optionsState.map((option) => (
-            <div className="ac-select__option" key={option.value}>
-              <input
-                type="radio"
-                name={fieldId}
-                className="ac--select__item"
-                value={option.value}
-                data-label={option.label}
-                onClick={onClickOption}
-                onKeyDown={onClickOption}
-              />
-
-              <span className="ac-select__option-label">{option.label}</span>
-              {selectedValue === option.value ? <img src={IconCheck} /> : null}
-            </div>
-          ))}
-        </div> : null
-      }
-    </div>
-  </FieldHolder>)
+    </FieldHolder>
+  )
 }
 
 export default SelectWidget

@@ -1,5 +1,6 @@
 import React from "react"
 import FieldHolder from "../../FieldHolder"
+import classNames from "classnames";
 
 const TextWidget = ({
   // html attributtes
@@ -8,20 +9,26 @@ const TextWidget = ({
   placeholder,
   isRequired,
   className,
+  maxLength,
+  min,
+  max,
 
   // custom props
   slug,
   errorMessage,
   hasError,
   label,
+  sublabel,
   fieldId,
 
   // events
   onChange,
+  
   onBlur,
   onFocus,
   inputRef,
 }) => {
+
   return (
     <FieldHolder label={label}>
       <div className="input-container">
@@ -34,33 +41,23 @@ const TextWidget = ({
           ref={inputRef}
           id={slug}
           name={slug}
-          // maxlength="this.maxLength"
-          // required="this.required"
-          // inputmode="this.inputmode"
-          // placeholder="this.placeholder"
-          // disabled="this.disabled"
-          // ngClass="{
-          //   'ac-input-fail': this.formErrors.includes(this.controlName) && checkInputTouch()
-          // }"
-          // textMask="{ mask: this.inputMasksthis.type, guide: false }"
-          // formControlName="this.controlName"
+          placeholder={placeholder}
+          type={htmlType}
+          maxLength={maxLength}
+          required={isRequired}
+          min={min}
+          max={max}
         />
 
-        <label htmlFor={slug} className="float-label">
-          {placeholder}
+        <label htmlFor={slug} className={classNames({ required: isRequired })}>
+          {sublabel}
         </label>
 
-        {/* <div class="option-label-container">
-      </div> */}
-
-        <span
-          // *ngIf="this.formErrors.includes(this.controlName) && checkInputTouch()"
+        {hasError && errorMessage ? <span
           className="input-error-message"
         >
-          {/* {
-            genericErrorMessage[controlName] || partnerErrorMessage[controlName]
-          } */}
-        </span>
+          {errorMessage}
+        </span> : null}
       </div>
     </FieldHolder>
   )

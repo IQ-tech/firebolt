@@ -12,7 +12,7 @@ import {
   IRequestMetadata,
   IFormResponseData,
   IFormStep,
-  IStepData
+  IStepData,
 } from "./types"
 
 class FireboltFormEngine {
@@ -21,6 +21,7 @@ class FireboltFormEngine {
   debug?: boolean
   addons?: IAddonsConfig
   APIService: APIService
+  enforceNewSession = false
   private mockStep?: IStepData
 
   constructor(
@@ -30,6 +31,7 @@ class FireboltFormEngine {
       debug = false,
       addons = {},
       mockStep,
+      enforceNewSession = false,
     }: IFormEngineOptions = {}
   ) {
     this.requestsMetadata = requestsMetadata
@@ -38,6 +40,7 @@ class FireboltFormEngine {
     this.addons = addons
     this.APIService = new APIService({ formAccess, debug })
     this.mockStep = mockStep
+    this.enforceNewSession = enforceNewSession
   }
 
   private decideStepResponse(
@@ -50,7 +53,7 @@ class FireboltFormEngine {
         ...safeResponse,
         step: {
           ...safeStep,
-          data: this.mockStep
+          data: this.mockStep,
         },
       }
     }
@@ -66,24 +69,36 @@ class FireboltFormEngine {
       //TODO to avaliate
       this.clearSession()
     }
-
     const sessionId = urlParams?.session_id
-    const formSessionKey = sessionId ? sessionId : getFormSession(this.formName)
+    const fireboltId = urlParams?.firebolt_id
 
-    if (formSessionKey) {
-      createFormSession(this.formName, formSessionKey)
-    }
-    const firstStepData = await this.APIService.getStartForm(formSessionKey)
+    const formSessionKey = (() => {
+      if (this.enforceNewSession) return ""
+      else if (sessionId) return sessionId
+      else return getFormSession(this.formName)
+    })()
+
+    const firstStepData = await this.APIService.getStartForm(
+      formSessionKey,
+      fireboltId
+    )
+
     const usedStepData = this.decideStepResponse(firstStepData)
     const formattedData = formatFormOutput(usedStepData, {
       autofillData,
       addons: this.addons,
     })
 
-    if (!formSessionKey) {
-      createFormSession(this.formName, formattedData?.auth)
+    createFormSession(this.formName, formattedData?.auth)
+    if (fireboltId) {
+      const urlParams = new URLSearchParams(window.location.search)
+      urlParams.delete("firebolt_id")
+      window.history.replaceState(
+        {},
+        document.title,
+        `${window.location.pathname}?${urlParams.toString()}`
+      )
     }
-
     return formattedData
   }
 

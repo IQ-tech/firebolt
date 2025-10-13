@@ -1,6 +1,8 @@
 export interface IFormAccess {
   /** Firebolt root endpoint */
   root: string
+  /** Firebolt api key */
+  apiKey?: string
   /** Identifier to find form on endpoint */
   formName: string
 }
@@ -55,6 +57,7 @@ export interface IFormEngineOptions {
   requestsMetadata?: Object
   debug?: boolean
   addons?: IAddonsConfig
+  enforceNewSession?: boolean
   mockStep?: IStepData // provisional way to mock step response - remove on albus version
 }
 export interface IDefaultStep {
@@ -124,6 +127,8 @@ export interface IStepConfigField {
   }[]
   "ui:styles"?: {
     size: "full" | "half"
+    grow?: "1" | "2" | "3"
+
   }
   meta: Object
   component: string

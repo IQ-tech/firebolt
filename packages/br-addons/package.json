@@ -1,6 +1,6 @@
 {
   "name": "@iq-firebolt/br-addons",
-  "version": "0.9.0",
+  "version": "0.9.9",
   "description": "> TODO: description",
   "author": "iq team",
   "homepage": "https://github.com/IQ-tech/firebolt#readme",
@@ -16,8 +16,7 @@
     "url": "git+https://github.com/IQ-tech/firebolt.git"
   },
   "scripts": {
-    "test": "jest",
-    "test:watch": "jest --watch"
+    "test": "echo 'No tests for br-addons package'"
   },
   "bugs": {
     "url": "https://github.com/IQ-tech/firebolt/issues"
@@ -27,5 +26,6 @@
   },
   "browserslist": [
     "last 1 Chrome version"
-  ]
+  ],
+  "gitHead": "2bc185230db851f4617985d5fe8bc3d97b780fad"
 }

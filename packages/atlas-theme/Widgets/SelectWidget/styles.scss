@@ -1,6 +1,11 @@
+* {
+  font-family: "Source Sans Pro";
+}
+
 .ac-select {
   & {
     position: relative;
+    margin-top: 40px;
   }
 
   &__wrap {
@@ -9,7 +14,7 @@
     }
 
     &:has(.ac-select__field:checked) label {
-      color: #0048DB;
+      color: #0048db;
     }
 
     &__options {
@@ -18,7 +23,7 @@
   }
 
   &__label {
-    color: #454A54;
+    color: #454a54;
     font-weight: 600;
     font-size: 14px;
     line-height: 22px;
@@ -38,46 +43,46 @@
       all: unset;
       position: absolute;
       inset: 0;
-      
     }
 
-    &:focus+[class*="button"],
-    &:checked+[class*="button"] {
-      border: 1px solid #0048DB;
+    &:focus + [class*="button"],
+    &:checked + [class*="button"] {
+      border: 1px solid #0048db;
     }
 
-    &:checked+[class*="button"] [class*="icons"] svg {
-      color: #0048DB;
+    &:checked + [class*="button"] [class*="icons"] svg {
+      color: #0048db;
     }
 
-    &:checked+[class*="button"] [class*="chevronup"] {
+    &:checked + [class*="button"] [class*="chevronup"] {
       display: block;
     }
 
-    &:checked+[class*="button"] [class*="chevrondown"] {
+    &:checked + [class*="button"] [class*="chevrondown"] {
       display: none;
     }
   }
 
-  .float-label {
-    display: inline-block;
+  label {
     font-size: 14px;
     font-weight: 600;
     line-height: 24px;
-    color: #454A54;
-    text-align: center;
-    background: white;
-    padding: 0 8px;
-    pointer-events: none;
-    transition: all .3s ease-out;
-    transform: translate(16px, 18px);
+    color: #454a54;
+    transition: all 0.3s ease-out;
+    transform: translate(0px, -90px);
+    display: block;
+    &.required::after {
+      content: " *";
+      color: #E52222; 
+      font-weight: bold;
+    }
   }
 
   &__button {
     margin-top: 8px;
     border-radius: 8px;
-    border: 1px solid #454A54;
-    padding: 16px;
+    border: 1px solid #c4c9d4;
+    padding: 16px 24px;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -90,7 +95,6 @@
       height: 58px;
       width: 75%;
       z-index: 10;
-      padding-left: 8px;
       font-size: 16px;
       outline: none;
       border: 0;
@@ -100,13 +104,13 @@
   &__selected-value {
     font-size: 16px;
     line-height: 24px;
-    color: #454A54;
+    color: #454a54;
     font-weight: 400px;
   }
 
   &__icons {
     svg {
-      color: #5E6573;
+      color: #5e6573;
     }
 
     [class*="chevronup"] {
@@ -115,9 +119,9 @@
   }
 
   &__options {
-    border: 1px solid #0048DB;
+    border: 1px solid #0048db;
     border-radius: 8px;
-    margin-top: 16px;
+    margin-top: -16px;
     background-color: white;
     position: absolute;
     width: 100%;
@@ -157,7 +161,7 @@
     }
 
     &:has(input:checked) {
-      background-color: #0048DB;
+      background-color: #0048db;
 
       [class*="label"] {
         color: white;
@@ -167,11 +171,11 @@
     }
 
     &:hover {
-      background-color: #F6F7FA;
+      background-color: #f6f7fa;
     }
 
     &:has(input:focus) {
-      outline: 1px solid #1737A4;
+      outline: 1px solid #1737a4;
     }
 
     input[type="radio"] {
@@ -185,7 +189,7 @@
   &--disabled {
     [class*="label"],
     [class*="label"] svg {
-      color: #5E6573;
+      color: #5e6573;
     }
 
     [class*="field"] {
@@ -193,26 +197,37 @@
     }
 
     [class*="button"] {
-      border: 1px solid #5E6573;
+      border: 1px solid #5e6573;
     }
 
     [class*="selected-value"] {
-      color: #5E6573;
+      color: #5e6573;
     }
 
     [class*="icons"] svg {
-      color: #5E6573;
+      color: #5e6573;
     }
   }
 }
 
 .is-open {
-
   .float-label {
-    color: #0048DB;
+    color: #0048db;
   }
 
   .ac-select__button {
-    border: 1px solid #0048DB;
+    border: 1px solid #0048db;
   }
+
+  .ac-select__wrap {
+    label {
+      color: #0048db;
+      font-weight: 600;
+      transition: all 0.3s ease-out;
+    }
+  }
+}
+
+.value-placeholder {
+  color: #454a54be !important;
 }

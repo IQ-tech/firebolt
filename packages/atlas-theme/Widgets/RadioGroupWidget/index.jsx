@@ -7,6 +7,7 @@ const RadioGroupWidget = ({
   options = [],
   fieldId,
   label = "Choose value",
+  sublabel,
   onChange,
   value,
   onBlur,
@@ -17,20 +18,24 @@ const RadioGroupWidget = ({
 }) => {
   return (
     <FieldHolder label={label} useLabel fieldName={fieldId}>
-      {options.map((option) => (
-        <fieldset className="radio__option" key={option.value}>
-          <input
-            type="radio"
-            checked={value === option.value}
-            onBlur={(e) => onBlur(e?.target?.value)}
-            value={option.value}
-            onChange={(e) => onChange(e?.target?.value)}
-            onFocus={(e) => onFocus(e?.target?.value)}
-          />
+      <div className="radio-group">
+        <p>{sublabel}</p>
 
-          <label>{option.label}</label>
-        </fieldset>
-      ))}
+        {options.map((option) => (
+          <label className="radio__option" key={option.value}>
+            <input
+              type="radio"
+              checked={value === option.value}
+              onBlur={(e) => onBlur(e?.target?.value)}
+              value={option.value}
+              onChange={(e) => onChange(e?.target?.value)}
+              onFocus={(e) => onFocus(e?.target?.value)}
+            />
+
+            {option.label}
+          </label>
+        ))}
+      </div>
     </FieldHolder>
   )
 }

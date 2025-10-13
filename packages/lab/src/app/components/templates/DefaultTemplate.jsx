@@ -3,7 +3,9 @@ import { StepForm, FireboltForm, useFirebolt } from "@iq-firebolt/client/src"
 // import Theme from "@iq-firebolt/blueberry-theme"
 import { CheckboxGroup } from "iq-blueberry"
 /* import Theme from "@iq-firebolt/material-theme" */
-import Theme from "../../../../../atlas-theme/index"
+// import Theme from "../../../../../atlas-theme/index"
+
+import Theme from "../../../../../aurora-theme/index"
 
 const mockFields = [
   {
@@ -46,9 +48,7 @@ const mockFields = [
         "-",
         "/\\d/",
         "/\\d/",
-      ]
-      
-
+      ],
     },
     "ui:styles": {
       "size": "half",
@@ -69,57 +69,15 @@ const mockFields = [
 ]
 
 const DefaultTemplate = ({ fireboltStep }) => {
-  const { remoteErrors, addFieldRemoteError } = useFirebolt()
-  useEffect(() => {
-    console.log(remoteErrors)
-  }, [remoteErrors])
-
-  useEffect(() => {
-    console.log(fireboltStep)
-    // addFieldRemoteError("full_name", "cebola")
-  }, [])
-
   return (
     <div className="tooltip-wrapper">
       <div style={{ maxWidth: "600px", margin: "0 auto" }}>
         <p>{fireboltStep?.friendlyName}</p>
+        <br />
         <StepForm
           theme={Theme}
-          onChangeField={(inputConfig, { value, isValid }, formPayload) => {
-            console.log("mudou")
-            console.log(formPayload)
-          }}
-/*           autoFill={{
-            "cpf": "01234567890",
-            "full_name": "carrot top",
-            "email": "teste@teste.com",
-
-          }} */
-          /* schema={mockFields} */
-/*           onFocusField={(fieldConfig, formPayload) => {
-            console.log("focus")
-            console.log({ fieldConfig, formPayload })
-          }}
-          onChangeField={(fieldConfig, value, formPayload) => {
-            console.log("change")
-            console.log({ fieldConfig, value, formPayload })
-          }}
-          onBlurField={(fieldConfig, value, formPayload) => {
-            console.log("blur")
-            console.log({ fieldConfig, value, formPayload })
-          }}
-          onChange={(test) => {
-            console.log(test)
-          }} */
           onSubmit={(payload) => fireboltStep.goNextStep(payload)}
           onGoBack={fireboltStep.goPreviousStep}
-        /*           customActionsChild={({ formData }) => {
-          return formData.isFormValid ? (
-            <button>next liberado</button>
-          ) : (
-            <button>next bloqueado</button>
-          )
-        }} */
         ></StepForm>
       </div>
     </div>

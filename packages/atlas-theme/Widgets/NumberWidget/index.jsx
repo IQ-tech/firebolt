@@ -1,8 +1,35 @@
 import React from "react"
 import TextWidget from "../TextWidget"
 
-const NumberWidget = (props) => {
-  return <TextWidget {...props} htmlType="number" />
+const NumberWidget = ({ min = "0", max, ...rest }) => {
+  const handleChange = (value) => {
+    rest.onChange(value);
+  }
+
+  const handleBlur = (value) => {
+    if (value === "" || value === "-") {
+      rest.onChange(value);
+      return;
+    }
+
+    const numericValue = Number(value);
+    const minValue = Number(min);
+    const maxValue = max !== undefined ? Number(max) : Infinity;
+    const clampedValue = Math.max(minValue, Math.min(numericValue, maxValue));
+
+    rest.onChange(clampedValue.toString());
+  };
+
+  return (
+    <TextWidget
+      {...rest}
+      htmlType="number"
+      min={min}
+      max={max}
+      onChange={handleChange}
+      onBlur={handleBlur}
+    />
+  );
 }
 
-export default NumberWidget
+export default NumberWidget;

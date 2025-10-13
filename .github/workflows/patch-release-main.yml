@@ -1,0 +1,63 @@
+name: Patch Release (merge -> main)
+
+on:
+  pull_request:
+    types: [closed]
+    branches:
+      - main
+
+permissions:
+  contents: write
+  pull-requests: write
+  packages: write
+
+jobs:
+  patch:
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+    name: Patch publish
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 20
+          cache: yarn
+      - name: Git identity
+        run: |
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+      - name: Setup npm auth
+        run: |
+          echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > .npmrc
+          npm whoami || true
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - name: Install
+        run: yarn install --frozen-lockfile
+      - name: Build libs
+        run: yarn build:libs
+      - name: Publish to NPM
+        run: lerna publish from-package --yes --no-verify-access
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - name: PR Comment
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const curr = `v${process.env.CURRENT_VERSION}`;
+            const body = `Patch release publicado: ${curr}`;
+            if (!context.issue.number) {
+              core.warning('Sem issue/PR number detectado para comentar.');
+            } else {
+              await github.rest.issues.createComment({
+                issue_number: context.issue.number,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                body
+              });
+            }

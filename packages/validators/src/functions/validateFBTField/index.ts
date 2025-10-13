@@ -40,7 +40,7 @@ export default function validateFBTField({
   const validationsResults = filteredContextValidations.map(
     ({ type, properties }) => {
       const processedProperties = !!properties
-        ? processProperties(properties, formPayload)
+        ? processProperties(properties, field, formPayload)
         : properties;
       const validation = validate(type, fieldValue, processedProperties);
       return validation;
