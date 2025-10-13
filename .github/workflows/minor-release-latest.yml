@@ -30,6 +30,7 @@ jobs:
         run: |
           git config --global user.name 'github-actions[bot]'
           git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+          echo "GITHUB_TOKEN=${{ secrets.IQ_ADM_TIM_TOKEN }}" >> $GITHUB_ENV
       - name: Setup npm auth
         run: |
           echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > .npmrc
@@ -47,20 +48,13 @@ jobs:
           VERSION=$(node -p 'require("./lerna.json").version')
           echo "CURRENT_VERSION=$VERSION" >> $GITHUB_ENV
           echo "PREVIOUS_TAG=$(git describe --tags --abbrev=0 --exclude $VERSION 2>/dev/null || echo '')" >> $GITHUB_ENV
-      - name: PR Comment
-        uses: actions/github-script@v6
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          script: |
-            const curr = `v${process.env.CURRENT_VERSION}`;
-            const body = `Minor release publicado: ${curr}`;
-            if (!context.issue.number) {
-              core.warning('Sem issue/PR number detectado para comentar.');
-            } else {
-              await github.rest.issues.createComment({
-                issue_number: context.issue.number,
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                body
-              });
-            }
+        env:
+          GITHUB_TOKEN: ${{ secrets.IQ_ADM_TIM_TOKEN }}
+      - name: Merge latest into main
+        run: |
+          git checkout main
+          git pull origin main
+          git merge latest
+          git push origin main
+        env:
+          GITHUB_TOKEN: ${{ secrets.IQ_ADM_TIM_TOKEN }}
