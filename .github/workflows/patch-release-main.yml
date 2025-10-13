@@ -40,24 +40,8 @@ jobs:
         run: yarn install --frozen-lockfile
       - name: Build libs
         run: yarn build:libs
-      - name: Publish to NPM
-        run: lerna publish from-package --yes --no-verify-access
+      - name: Publish NPM
+        run: yarn publish:patch
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-      - name: PR Comment
-        uses: actions/github-script@v6
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          script: |
-            const curr = `v${process.env.CURRENT_VERSION}`;
-            const body = `Patch release publicado: ${curr}`;
-            if (!context.issue.number) {
-              core.warning('Sem issue/PR number detectado para comentar.');
-            } else {
-              await github.rest.issues.createComment({
-                issue_number: context.issue.number,
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                body
-              });
-            }
+          GITHUB_TOKEN: ${{ secrets.IQ_ADM_TIM_TOKEN }}
