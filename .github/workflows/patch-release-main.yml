@@ -41,7 +41,6 @@ jobs:
       - name: Build libs
         run: yarn build:libs
       - name: Publish NPM
-        run: yarn publish:patch
+        run: yarn publish:from-package
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-          GITHUB_TOKEN: ${{ secrets.IQ_ADM_TIM_TOKEN }}

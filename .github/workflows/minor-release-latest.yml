@@ -41,20 +41,24 @@ jobs:
         run: yarn install --frozen-lockfile
       - name: Build libs
         run: yarn build:libs
-      - name: Minor version & publish
-        id: minor
+      - name: Increment ephemeral version
         run: |
-          yarn publish:minor
-          VERSION=$(node -p 'require("./lerna.json").version')
-          echo "CURRENT_VERSION=$VERSION" >> $GITHUB_ENV
-          echo "PREVIOUS_TAG=$(git describe --tags --abbrev=0 --exclude $VERSION 2>/dev/null || echo '')" >> $GITHUB_ENV
+          npx lerna version patch --yes --no-push
+      - name: Publish NPM
+        run: yarn publish:from-package
         env:
-          GITHUB_TOKEN: ${{ secrets.IQ_ADM_TIM_TOKEN }}
-      - name: Merge latest into main
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - name: Revert ephemeral commit
         run: |
-          git checkout main
-          git pull origin main
-          git merge latest
-          git push origin main
+          git reset --hard HEAD~1
+      - name: Create branch and PR to main
+        run: |
+          BRANCH_NAME="update-patch-$(date +%s)"
+          git checkout -b $BRANCH_NAME
+          npx lerna version patch --yes --no-push
+          git add .
+          git commit -m "chore: bump patch version"
+          git push origin $BRANCH_NAME
+          gh pr create --title "chore: bump patch version" --body "This PR bumps the patch version." --base main --head $BRANCH_NAME
         env:
           GITHUB_TOKEN: ${{ secrets.IQ_ADM_TIM_TOKEN }}
