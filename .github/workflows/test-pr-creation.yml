@@ -1,0 +1,40 @@
+name: Test PR Creation
+
+on:
+  push:
+    branches:
+      - ci/fix/minor-create
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  test-pr:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Define branch name
+        id: define-branch
+        run: echo "::set-output name=branch_name::test-pr-$(date +%s)"
+
+      - name: Create branch and bump version
+        run: |
+          git checkout -b ${{ steps.define-branch.outputs.branch_name }}
+          git push origin ${{ steps.define-branch.outputs.branch_name }}
+          npx lerna version patch --yes
+
+      - name: Open PR to main
+        uses: peter-evans/create-pull-request@v5
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          branch: ${{ steps.define-branch.outputs.branch_name }}
+          base: main
+          title: "[skip] Validate PR creation"
+          body: |
+            This is a test PR to validate the workflow logic.
+          commit-message: "test: validate PR creation"
