@@ -55,10 +55,8 @@ jobs:
         run: |
           BRANCH_NAME="update-minor-$(date +%s)"
           git checkout -b $BRANCH_NAME
-          npx lerna version minor --yes --force-git-tag
-          git add .
-          git commit -m "chore: bump minor version"
           git push origin $BRANCH_NAME
+          npx lerna version minor --yes --force-git-tag
           gh pr create --title "[skip] chore: bump minor version" --body "This PR bumps the minor version." --base main --head $BRANCH_NAME
         env:
           GITHUB_TOKEN: ${{ secrets.IQ_ADM_TIM_TOKEN }}
