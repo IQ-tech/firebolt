@@ -43,7 +43,7 @@ jobs:
         run: yarn build:libs
       - name: Increment ephemeral version
         run: |
-          npx lerna version patch --yes --no-push
+          npx lerna version minor --yes --no-git-tag-version --no-push
       - name: Publish NPM
         run: yarn publish:from-package
         env:
@@ -53,12 +53,12 @@ jobs:
           git reset --hard HEAD~1
       - name: Create branch and PR to main
         run: |
-          BRANCH_NAME="update-patch-$(date +%s)"
+          BRANCH_NAME="update-minor-$(date +%s)"
           git checkout -b $BRANCH_NAME
-          npx lerna version patch --yes --no-push
+          npx lerna version minor --yes
           git add .
-          git commit -m "chore: bump patch version"
+          git commit -m "chore: bump minor version"
           git push origin $BRANCH_NAME
-          gh pr create --title "[skip] chore: bump patch version" --body "This PR bumps the patch version." --base main --head $BRANCH_NAME
+          gh pr create --title "[skip] chore: bump minor version" --body "This PR bumps the minor version." --base main --head $BRANCH_NAME
         env:
           GITHUB_TOKEN: ${{ secrets.IQ_ADM_TIM_TOKEN }}
