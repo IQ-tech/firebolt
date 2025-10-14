@@ -51,14 +51,23 @@ jobs:
       - name: Revert ephemeral commit
         run: |
           git reset --hard HEAD~1
-      - name: Create branch and PR to main
+      - name: Define branch name
+        id: define-branch
+        run: echo "::set-output name=branch_name::update-minor-$(date +%s)"
+      - name: Create branch and bump version
         run: |
-          BRANCH_NAME="update-minor-$(date +%s)"
-          git checkout -b $BRANCH_NAME
+          git checkout -b ${{ steps.define-branch.outputs.branch_name }}
+          git push origin ${{ steps.define-branch.outputs.branch_name }}
           npx lerna version minor --yes --force-git-tag
-          git add .
-          git commit -m "chore: bump minor version"
-          git push origin $BRANCH_NAME
-          gh pr create --title "[skip] chore: bump minor version" --body "This PR bumps the minor version." --base main --head $BRANCH_NAME
+      - name: Open PR to main
+        uses: peter-evans/create-pull-request@v5
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          branch: ${{ steps.define-branch.outputs.branch_name }}
+          base: main
+          title: "[skip] chore: bump minor version"
+          body: |
+            This PR bumps the minor version.
+          commit-message: "chore: bump minor version"
         env:
           GITHUB_TOKEN: ${{ secrets.IQ_ADM_TIM_TOKEN }}
