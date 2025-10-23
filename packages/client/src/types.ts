@@ -6,24 +6,31 @@ import {
   IFormMetadata,
   IRequestMetadata,
   IStepData,
+  IFormStep,
 } from "@iq-firebolt/client-core"
+import { WebhookResult } from "@iq-firebolt/client-core/lib/types"
 import React from "react"
+
+// Utility types
+export type ThemeConfig = Record<string, unknown>
+export type FormPayload = Record<string, unknown>
+export type ClassesConfig = Record<string, string>
 
 export interface IFireboltProvider {
   formAccess: IFormAccess
   debug?: boolean
-  requestsMetadata?: Object
+  requestsMetadata?: Record<string, unknown>
   stepQueryParam?: string
   children?: React.ReactElement
   withHistory?: boolean
-  theme?: Object
+  theme?: ThemeConfig
   addons?: IAddonsConfig
   mockStep?: IStepData
   enforceNewSession?: boolean
 }
 
 export interface IFieldsObject {
-  [key: string]: string
+  [key: string]: string | number | boolean | null | undefined
 }
 
 export interface IActionsChildData {
@@ -37,59 +44,59 @@ export interface INextStepFunction {
   (
     stepFieldsPayload?: IFieldsObject,
     extraMetadata?: IRequestMetadata
-  ): Promise<void | object>
+  ): Promise<void | Record<string, unknown>>
 }
 
 export interface IStepProps {
   [key: string]: IDefaultStep
 }
 export interface IWizardHook {
-  onChangeStep?(arg0: IStepProps): void
-  onConnectionError?(arg0?: object): void
-  onFinishForm?(arg0?: object): void
-  onBeforeChangeStep?(arg0?: Function, arg1?: IStepProps): void
-  onBeforeProceed?(sendingStep, formPayload): void
+  onChangeStep?(stepProps: IStepProps): void
+  onConnectionError?(error?: Record<string, unknown>): void
+  onFinishForm?(formData?: Record<string, unknown>): void
+  onBeforeChangeStep?(callback?: () => void, stepProps?: IStepProps): void
+  onBeforeProceed?(sendingStep: IDefaultStep, formPayload: IFieldsObject): void
 }
 
 export interface IWizardComponent {
-  children: React.ReactElement
+  children: React.ReactElement | React.ReactElement[]
   fallback?: React.ReactElement
-  onChangeStep?(arg0: IStepProps): void
-  onConnectionError?(arg0?: object): void
-  onFinishForm?(arg0?: object): void
-  onBeforeChangeStep?(arg0?: Function, arg1?: IStepProps): void
-  onBeforeProceed?(sendingStep, formPayload): void
+  onChangeStep?(stepProps: IStepProps): void
+  onConnectionError?(error?: Record<string, unknown>): void
+  onFinishForm?(formData?: Record<string, unknown>): void
+  onBeforeChangeStep?(callback?: () => void, stepProps?: IStepProps): void
+  onBeforeProceed?(sendingStep: IDefaultStep, formPayload: IFieldsObject): void
 }
 
 export interface IUseFireboltForm {
   schema: Array<IStepConfigField>
-  children?: Object[]
+  children?: React.ReactElement[]
   onChange?: (formPayload: IFieldsObject) => void
   onSubmit?(): void
-  theme?: Object
+  theme?: ThemeConfig
   autoFill?: IFieldsObject
   remoteErrors?: Array<IFieldsObject>
   onGoBack?(): void
-  classes: Object
-  onFocusField?: (field: IStepConfigField, formPayload?: Object) => void
+  classes: ClassesConfig
+  onFocusField?: (field: IStepConfigField, formPayload?: FormPayload) => void
   onBlurField?: (
     field: IStepConfigField,
     value: string,
-    formPayload?: Object
+    formPayload?: FormPayload
   ) => void
   onChangeField?: (
     field: IStepConfigField,
-    values: { value: any; previousValue: any },
-    formPayload?: Object
+    values: { value: unknown; previousValue: unknown },
+    formPayload?: FormPayload
   ) => void
   addons?: IAddonsConfig
   clearRemoteFieldError?: (fieldSlug: string) => void
-  orderFields?: Object[]
+  orderFields?: Array<Record<string, unknown>>
 }
 
 export interface IFormState {
   schema: Array<IStepConfigField>
-  autoFill?: object
+  autoFill?: IFieldsObject
   addons?: IAddonsConfig
   remoteErrors?: Array<IFieldsObject>
 }
@@ -104,11 +111,11 @@ export interface IBrowserNavigation {
   stepQueryParam?: string
 }
 
-export interface IFormEndPayload {
-  webhookResult?: object
+export interface IFormEndPayload<T = unknown> {
+  webhookResult?: WebhookResult<T>
   metadata?: IFormMetadata
   capturedData?: {
-    [key: string]: any
+    [key: string]: unknown
   }
 }
 
@@ -123,24 +130,36 @@ export interface IFireboltForm {
   className?: string
   addons?: IAddonsConfig
   schema: Array<IStepConfigField>
-  children?: Object[]
+  children?: React.ReactElement[]
   onChange?: (formPayload: IFieldsObject) => void
   onSubmit?(): void
-  theme?: Object
+  theme?: ThemeConfig
   autoFill?: IFieldsObject
   remoteErrors?: Array<IFieldsObject>
   onGoBack?(): void
-  onFocusField?: (field: IStepConfigField, formPayload?: Object) => void
+  onFocusField?: (field: IStepConfigField, formPayload?: FormPayload) => void
   onBlurField?: (
     field: IStepConfigField,
     value: string,
-    formPayload?: Object
+    formPayload?: FormPayload
   ) => void
   onChangeField?: (
     field: IStepConfigField,
-    values: { value: any; previousValue: any },
-    formPayload?: Object
+    values: { value: unknown; previousValue: unknown },
+    formPayload?: FormPayload
   ) => void
   clearRemoteFieldError?: (fieldSlug: string) => void
-  orderFields?: Object[]
+  orderFields?: Array<Record<string, unknown>>
+}
+
+export interface IFireboltStep<
+  T extends Record<string, unknown> = Record<string, unknown>
+> extends IStepData<T> {
+  clearSession?(): void
+  clearRemoteFieldError(fieldSlug: string): void
+  goNextStep: INextStepFunction
+  goPreviousStep?(): Promise<void | Record<string, unknown>>
+  capturedData: Record<string, unknown>
+  remoteErrors: Array<IFieldsObject>
+  formflowMetadata: IFormMetadata
 }
