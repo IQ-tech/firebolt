@@ -11,6 +11,7 @@ const defaultStep: IDefaultStep = {
     slug: "",
     type: "",
     friendlyName: "",
+    stepName: "",
     fields: [],
   },
   position: 0,
