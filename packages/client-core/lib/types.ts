@@ -7,20 +7,16 @@ export interface IFormAccess {
   formName: string
 }
 
-// ----------- V2-todo ------------
-
 export interface RemoteFormConfig {
   access: IFormAccess
   debug: boolean
-  requestMetadata: any
+  requestMetadata: Record<string, unknown>
 }
 
 export interface LocalFormConfig {
-  schema: Object
+  schema: Record<string, unknown>
   debug: boolean
 }
-
-// --------- end v2
 
 export interface IApiService {
   formAccess: IFormAccess
@@ -47,42 +43,51 @@ export interface IUrlParams {
 export interface IPropsPresetCollection {
   name: string
   presets: {
-    [key: string]: any
+    [key: string]: unknown
   }
 }
 export interface IAddonsConfig {
   uiPropsPresets?: IPropsPresetCollection[]
 }
+
+export interface WebhookResult<T = Record<string, unknown>> {
+  preventContinue?: boolean
+  errorSlugField?: string
+  errorMessage?: string
+  newTrackSlug?: string
+  processedData?: T
+  inputFieldErrors?: Array<{
+    slug: string
+    message: string
+  }>
+  [key: string]: unknown
+}
+
 export interface IFormEngineOptions {
-  requestsMetadata?: Object
+  requestsMetadata?: Record<string, unknown>
   debug?: boolean
   addons?: IAddonsConfig
   enforceNewSession?: boolean
-  mockStep?: IStepData // provisional way to mock step response - remove on albus version
+  mockStep?: IStepData
 }
 export interface IDefaultStep {
-  data: {
-    slug: string
-    type: string
-    friendlyName: string
-    fields: IStepConfigField[]
-  }
+  data: IStepData
   position: number
-  webhookResult: Object
+  webhookResult: WebhookResult
 }
 
 export interface IFormResponseData {
   auth: string
   meta: IFormMetadata
   capturedData: {
-    [key: string]: any
+    [key: string]: unknown
   }
   step: IFormStep
 }
 
 export interface IFormStep {
   data: IStepData
-  webhookResult: Object
+  webhookResult: WebhookResult
   position: number
 }
 
@@ -97,45 +102,90 @@ export interface IFormMetadata {
   steps: IFormStepBasicInfo[]
 }
 
-export interface IStepData {
+export interface IStepData<T = Record<string, unknown>> {
   slug: string
   type: string
   friendlyName: string
+  stepName: string
   fields: IStepConfigField[]
+  extraInfo?: string
+  position?: number
+  webhookResult?: WebhookResult<T>
 }
 
 export interface IStepConfigFieldUiProps {
   label?: string
+  sublabel?: string
   placeholder?: string
-  [key: string]: any
+  htmlType?: string
+  options?: {
+    value: string
+    label: string
+  }[]
+  [key: string]: unknown
 }
+
 export interface IStepConfigFieldValidator {
   type: string
+  context?: 'server' | 'client'
+  properties?: {
+    [key: string]: unknown
+  }
 }
 
 export interface IStepConfigField {
   slug: string
   "ui:widget": string
   "ui:props": IStepConfigFieldUiProps
-  validators: IStepConfigFieldValidator[]
-  conditional?: string
-  "ui:props-conditional"?: {
+  "ui:props-preset"?: string
+  "ui:props-conditional"?: Array<{
     conditional: string
     props: {
-      [propKey: string]: any
+      [propKey: string]: unknown
     }
-  }[]
+  }>
   "ui:styles"?: {
     size: "full" | "half"
     grow?: "1" | "2" | "3"
-
   }
-  meta: Object
+  validators: IStepConfigFieldValidator[]
+  conditional?: string
+  meta: Record<string, unknown>
   component: string
-  value?: any
+  value?: unknown
 }
 
 export interface IRequestMetadata {
-  extraRequestsMetaData?: Object
-  [key: string]: any
+  extraRequestsMetaData?: Record<string, unknown>
+  [key: string]: unknown
+}
+
+export interface ICustomField {
+  clearManuallySetError: () => void
+  errorMessage: string
+  fieldId: string
+  fieldValidators: IStepConfigFieldValidator[]
+  hasError: boolean
+  inputRef: { current: HTMLElement | null }
+  isOptional: boolean
+  isRequired: boolean
+  isValid: boolean
+  label: string
+  manuallySetFieldError: (message: string) => void
+  meta: Record<string, unknown>
+  modifyPayloadKeys: (newData?: Record<string, unknown>) => void
+  onBlur: (value: string) => void
+  onChange: (value: string) => void
+  onFocus: () => void
+  payload: Record<string, unknown>
+  placeholder: string
+  slug: string
+  sublabel: string
+  value: string
+  options?: Array<{ label: string; value: string }>
+  uploadLabels?: {
+    button: string
+    description: string
+    sentButton: string
+  }
 }

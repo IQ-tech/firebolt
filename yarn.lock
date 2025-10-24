@@ -1810,12 +1810,25 @@
   dependencies:
     "@swc/helpers" "^0.5.0"
 
-"@iq-firebolt/br-addons@0.8.3-next.148":
-  version "0.8.3-next.148"
-  resolved "https://registry.yarnpkg.com/@iq-firebolt/br-addons/-/br-addons-0.8.3-next.148.tgz#0037cb1cd13de185239010071ab60699d76364b7"
-  integrity sha512-3fi8Av9dxotk6GchUsMFSTxK5f3kSdFudOWxxGfAYl5Bquzd72l0gkRWSxUwiScNzBHguffCr+GcSX/yWaayAw==
+"@iq-firebolt/material-theme@0.9.9":
+  version "0.9.9"
+  resolved "https://registry.yarnpkg.com/@iq-firebolt/material-theme/-/material-theme-0.9.9.tgz#f9812b7e6bd0d6214327f16f22acda29ebc012e0"
+  integrity sha512-i53XSmAiZde18Q+AeDBiwwKAwnJ5OMOqlLj9//TaeUCnie9jw+7XSkUff9IAHtoLCFdhDYVf1T1vivcnCrzNnQ==
   dependencies:
-    text-mask-addons "^3.8.0"
+    "@emotion/react" "^11.14.0"
+    "@emotion/styled" "^11.14.0"
+    "@mui/icons-material" "^6.0.0"
+    "@mui/lab" "^6.0.0-beta.12"
+    "@mui/material" "^6.0.0"
+
+"@iq-firebolt/validators@0.9.9":
+  version "0.9.9"
+  resolved "https://registry.yarnpkg.com/@iq-firebolt/validators/-/validators-0.9.9.tgz#b9401736c2d1cd3826ba17ed2100347eef03b36a"
+  integrity sha512-+LKjBsP7Pt7VMgWvSldxzdn/0qGauVHNwEo4oxWmYVmZuQOXkKEcXl9ijobcsIzQg9Rgoc9rLuCNmeH4DaGOqA==
+  dependencies:
+    "@faker-js/faker" "^9.3.0"
+    cpf-cnpj-validator "^1.0.3"
+    simple-evaluate "^1.4.3"
 
 "@isaacs/balanced-match@^4.0.1":
   version "4.0.1"

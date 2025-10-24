@@ -107,7 +107,7 @@ function useFireboltProvider({
   function goNextStep(
     stepFieldsPayload?: IFieldsObject,
     { extraRequestsMetaData = {} }: IRequestMetadata = {}
-  ): Promise<void | Object> {
+  ): Promise<void | Record<string, unknown>> {
     setIsFormLoading(true)
     setBeforeProceedPayload(stepFieldsPayload)
     setLastSentPayload(stepFieldsPayload)
@@ -136,7 +136,7 @@ function useFireboltProvider({
       .catch((err) => _handleTransitionError(err, stepFieldsPayload))
   }
 
-  function goPreviousStep(): Promise<void | Object> {
+  function goPreviousStep(): Promise<void | Record<string, unknown>> {
     setIsFormLoading(true)
     return formEngine.current
       .previousStep(currentStep.data.slug)
@@ -163,7 +163,7 @@ function useFireboltProvider({
     formEngine.current.removeRequestMetadataItem(key)
   }
 
-  function getRequestsMetadata(): Object {
+  function getRequestsMetadata(): Record<string, unknown> {
     return formEngine.current.requestsMetadata
   }
 

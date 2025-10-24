@@ -4,7 +4,7 @@ import {
   IFormStep,
   IFormMetadata,
 } from "@iq-firebolt/client-core"
-import { IFieldsObject, INextStepFunction } from "./types"
+import { IFieldsObject, INextStepFunction, ThemeConfig, IFormEndPayload } from "./types"
 
 export interface IFireboltContext {
   //states

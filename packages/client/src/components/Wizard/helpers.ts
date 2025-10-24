@@ -1,9 +1,9 @@
 import React from "react"
 
 export function filterChildren(
-  children: React.ReactElement,
+  children: React.ReactElement | React.ReactElement[],
   currentStepSlug: string
-) {
+): React.ReactElement | null {
   if (!children) return null
 
   const childrenArray = React.Children.toArray(children)
@@ -18,5 +18,6 @@ export function filterChildren(
       return !childMatch || childMatch === "*"
     })
 
-  return exactMatch ? exactMatch : getFirstGeneralCaseItem()
+  const result = exactMatch ? exactMatch : getFirstGeneralCaseItem()
+  return result as React.ReactElement | null
 }
