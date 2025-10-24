@@ -1810,12 +1810,93 @@
   dependencies:
     "@swc/helpers" "^0.5.0"
 
-"@iq-firebolt/br-addons@0.8.3-next.148":
-  version "0.8.3-next.148"
-  resolved "https://registry.yarnpkg.com/@iq-firebolt/br-addons/-/br-addons-0.8.3-next.148.tgz#0037cb1cd13de185239010071ab60699d76364b7"
-  integrity sha512-3fi8Av9dxotk6GchUsMFSTxK5f3kSdFudOWxxGfAYl5Bquzd72l0gkRWSxUwiScNzBHguffCr+GcSX/yWaayAw==
+"@iq-firebolt/blueberry-theme@0.10.7-next.db0be14":
+  version "0.10.7-next.db0be14"
+  resolved "https://registry.yarnpkg.com/@iq-firebolt/blueberry-theme/-/blueberry-theme-0.10.7-next.db0be14.tgz#acd64778674004044a881292a545b4723cc05d18"
+  integrity sha512-5FmXaTDvcQ+1cAc1dXD8RCBwqv2DSbdVrAA8vUHmIiejOk3wCjF0E54KuMZk0AkZUmz3zwSq0yGOGLpcy/IFbg==
+  dependencies:
+    iq-blueberry "^0.0.88"
+
+"@iq-firebolt/br-addons@0.10.7-next.db0be14":
+  version "0.10.7-next.db0be14"
+  resolved "https://registry.yarnpkg.com/@iq-firebolt/br-addons/-/br-addons-0.10.7-next.db0be14.tgz#6be89ed1c597e56be381b02528174c4a4e3a2e64"
+  integrity sha512-WQl5ytDa+Jdxhoi9hZvSos8jXz4Rs0V3FZpTnWC3Cg4Mb4Qu+31vMjDPWRJ8v7bQwNtWDSoaLffu7ckn3qvVpw==
   dependencies:
     text-mask-addons "^3.8.0"
+
+"@iq-firebolt/client-core@0.10.7-next.db0be14":
+  version "0.10.7-next.db0be14"
+  resolved "https://registry.yarnpkg.com/@iq-firebolt/client-core/-/client-core-0.10.7-next.db0be14.tgz#c063216445216bea4536e7ff553e533b8214d381"
+  integrity sha512-15fFeYFNqN43N45JV0GKNWUzDZOOqi3qW3vgUZlbYaUSgpD6dHM5wDzV9vC3Ydq7nvj7oBfQbLu6e4luR0rQNg==
+  dependencies:
+    axios "^1.12.2"
+    simple-evaluate "^1.4.3"
+    text-mask-addons "^3.8.0"
+    text-mask-core "^5.1.2"
+
+"@iq-firebolt/client-core@0.9.9":
+  version "0.9.9"
+  resolved "https://registry.yarnpkg.com/@iq-firebolt/client-core/-/client-core-0.9.9.tgz#e2fd3edf7cf259fdad932029b55d988c44a2fec0"
+  integrity sha512-p1ThZPDf/EXec0awXGfA3zMNYv2Stb6RHzFrdsaAJJKRj4pk97Ubqvo7sO9nu0nACMXVSU8CMad4DXk0/xst1A==
+  dependencies:
+    axios "^1.12.2"
+    simple-evaluate "^1.4.3"
+    text-mask-addons "^3.8.0"
+    text-mask-core "^5.1.2"
+
+"@iq-firebolt/client@0.10.7-next.db0be14":
+  version "0.10.7-next.db0be14"
+  resolved "https://registry.yarnpkg.com/@iq-firebolt/client/-/client-0.10.7-next.db0be14.tgz#21cc35de88913db06aeb4812679f39d82bf626ec"
+  integrity sha512-EIseN3E2a1gYEsW4XY9Bxdqje5qU1qGNht+p4torAAhotv4w1iPUpvpEFOzPaHxVoTHWoaeGy67VRJ6kugDW+Q==
+  dependencies:
+    "@babel/runtime" "^7.16.3"
+    "@iq-firebolt/client-core" "0.9.9"
+    "@iq-firebolt/validators" "0.9.9"
+    classnames "^2.3.1"
+    fast-levenshtein "^3.0.0"
+    regex-parser "^2.2.11"
+    simple-evaluate "^1.4.3"
+    text-mask-addons "^3.8.0"
+
+"@iq-firebolt/material-theme@0.10.7-next.db0be14":
+  version "0.10.7-next.db0be14"
+  resolved "https://registry.yarnpkg.com/@iq-firebolt/material-theme/-/material-theme-0.10.7-next.db0be14.tgz#7e3e502af572ea210d8d115b49509532365f6241"
+  integrity sha512-P5fpJcmnhaiD0wmURmhxUJ5apkYX+30EY9Z93pLyEapwq0BauuEQtFXXev2HTJoV+VNl+EjXtSfv2PEML4LMQQ==
+  dependencies:
+    "@emotion/react" "^11.14.0"
+    "@emotion/styled" "^11.14.0"
+    "@mui/icons-material" "^6.0.0"
+    "@mui/lab" "^6.0.0-beta.12"
+    "@mui/material" "^6.0.0"
+
+"@iq-firebolt/material-theme@0.9.9":
+  version "0.9.9"
+  resolved "https://registry.yarnpkg.com/@iq-firebolt/material-theme/-/material-theme-0.9.9.tgz#f9812b7e6bd0d6214327f16f22acda29ebc012e0"
+  integrity sha512-i53XSmAiZde18Q+AeDBiwwKAwnJ5OMOqlLj9//TaeUCnie9jw+7XSkUff9IAHtoLCFdhDYVf1T1vivcnCrzNnQ==
+  dependencies:
+    "@emotion/react" "^11.14.0"
+    "@emotion/styled" "^11.14.0"
+    "@mui/icons-material" "^6.0.0"
+    "@mui/lab" "^6.0.0-beta.12"
+    "@mui/material" "^6.0.0"
+
+"@iq-firebolt/validators@0.10.7-next.db0be14":
+  version "0.10.7-next.db0be14"
+  resolved "https://registry.yarnpkg.com/@iq-firebolt/validators/-/validators-0.10.7-next.db0be14.tgz#8105a86b35a118c9e8b70ec59267f281c16abe75"
+  integrity sha512-0wsNlx6vWHFKnqcYZoGU/Wt3xMZLmqh7gZgzgh+AB0Csyhka3bbIMSFEeoxHF4c8vOCVJoNQoIP0c0779CEwTg==
+  dependencies:
+    "@faker-js/faker" "^9.3.0"
+    cpf-cnpj-validator "^1.0.3"
+    simple-evaluate "^1.4.3"
+
+"@iq-firebolt/validators@0.9.9":
+  version "0.9.9"
+  resolved "https://registry.yarnpkg.com/@iq-firebolt/validators/-/validators-0.9.9.tgz#b9401736c2d1cd3826ba17ed2100347eef03b36a"
+  integrity sha512-+LKjBsP7Pt7VMgWvSldxzdn/0qGauVHNwEo4oxWmYVmZuQOXkKEcXl9ijobcsIzQg9Rgoc9rLuCNmeH4DaGOqA==
+  dependencies:
+    "@faker-js/faker" "^9.3.0"
+    cpf-cnpj-validator "^1.0.3"
+    simple-evaluate "^1.4.3"
 
 "@isaacs/balanced-match@^4.0.1":
   version "4.0.1"
