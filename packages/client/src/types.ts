@@ -51,21 +51,16 @@ export interface IStepProps {
   [key: string]: IDefaultStep
 }
 export interface IWizardHook {
-  onChangeStep?(stepProps: IStepProps): void
-  onConnectionError?(error?: Record<string, unknown>): void
-  onFinishForm?(formData?: Record<string, unknown>): void
-  onBeforeChangeStep?(callback?: () => void, stepProps?: IStepProps): void
-  onBeforeProceed?(sendingStep: IDefaultStep, formPayload: IFieldsObject): void
+  onChangeStep?(arg0: IStepProps): void
+  onConnectionError?(arg0?: object): void
+  onFinishForm?(arg0?: object): void
+  onBeforeChangeStep?(arg0?: Function, arg1?: IStepProps): void
+  onBeforeProceed?(sendingStep, formPayload): void
 }
 
-export interface IWizardComponent {
+export interface IWizardComponent extends IWizardHook {
   children: React.ReactElement | React.ReactElement[]
   fallback?: React.ReactElement
-  onChangeStep?(stepProps: IStepProps): void
-  onConnectionError?(error?: Record<string, unknown>): void
-  onFinishForm?(formData?: Record<string, unknown>): void
-  onBeforeChangeStep?(callback?: () => void, stepProps?: IStepProps): void
-  onBeforeProceed?(sendingStep: IDefaultStep, formPayload: IFieldsObject): void
 }
 
 export interface IUseFireboltForm {
