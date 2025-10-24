@@ -1810,45 +1810,6 @@
   dependencies:
     "@swc/helpers" "^0.5.0"
 
-"@iq-firebolt/blueberry-theme@0.11.1":
-  version "0.11.0"
-  dependencies:
-    iq-blueberry "^0.0.88"
-
-"@iq-firebolt/br-addons@0.11.1":
-  version "0.11.0"
-  dependencies:
-    text-mask-addons "^3.8.0"
-
-"@iq-firebolt/client-core@0.11.1":
-  version "0.11.0"
-  dependencies:
-    axios "^1.12.2"
-    simple-evaluate "^1.4.3"
-    text-mask-addons "^3.8.0"
-    text-mask-core "^5.1.2"
-
-"@iq-firebolt/client@0.11.1":
-  version "0.11.0"
-  dependencies:
-    "@babel/runtime" "^7.16.3"
-    "@iq-firebolt/client-core" "0.11.1"
-    "@iq-firebolt/validators" "0.11.1"
-    classnames "^2.3.1"
-    fast-levenshtein "^3.0.0"
-    regex-parser "^2.2.11"
-    simple-evaluate "^1.4.3"
-    text-mask-addons "^3.8.0"
-
-"@iq-firebolt/material-theme@0.11.1":
-  version "0.11.0"
-  dependencies:
-    "@emotion/react" "^11.14.0"
-    "@emotion/styled" "^11.14.0"
-    "@mui/icons-material" "^6.0.0"
-    "@mui/lab" "^6.0.0-beta.12"
-    "@mui/material" "^6.0.0"
-
 "@iq-firebolt/material-theme@0.9.9":
   version "0.9.9"
   resolved "https://registry.yarnpkg.com/@iq-firebolt/material-theme/-/material-theme-0.9.9.tgz#f9812b7e6bd0d6214327f16f22acda29ebc012e0"
@@ -1859,13 +1820,6 @@
     "@mui/icons-material" "^6.0.0"
     "@mui/lab" "^6.0.0-beta.12"
     "@mui/material" "^6.0.0"
-
-"@iq-firebolt/validators@0.11.1":
-  version "0.11.0"
-  dependencies:
-    "@faker-js/faker" "^9.3.0"
-    cpf-cnpj-validator "^1.0.3"
-    simple-evaluate "^1.4.3"
 
 "@iq-firebolt/validators@0.9.9":
   version "0.9.9"
