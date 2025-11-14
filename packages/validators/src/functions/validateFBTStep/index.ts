@@ -50,10 +50,8 @@ export default function validateFBTStep({
     [],
   );
 
-  const hasInvalidFields = !!invalidFields.length;
-
   return {
-    isValid: !hasInvalidFields,
+    isValid: invalidFields.length > 0,
     invalidFields,
   };
 }
