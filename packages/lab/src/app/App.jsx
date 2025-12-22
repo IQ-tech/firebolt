@@ -1,30 +1,15 @@
 import FormDemo from "./pages/debug/FormDemo"
 import CoreDemo from "./pages/debug/Core"
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom"
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom"
+import Header from "./components/Header"
 import "iq-blueberry/dist/styles.css"
+import "./darkmode.css"
 
 const App = () => {
   return (
     <Router>
       <div className="container" style={{ fontSize: "30px" }}>
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "space-evenly",
-            marginBottom: "20px",
-            borderBottom: "2px solid",
-            padding: "10px",
-            alignItems: "center",
-          }}
-        >
-          <h4>Debug Lab</h4>
-          <Link style={{ textDecoration: "none" }} to="/debug/core">
-            Core{" "}
-          </Link>
-          <Link style={{ textDecoration: "none" }} to="/debug/form">
-            Form
-          </Link>
-        </div>
+        <Header />
         <div style={{ padding: "20px" }}>
           <Switch>
             <Route path="/debug/form">
@@ -47,9 +32,7 @@ const App = () => {
                 <img
                   src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSAuhF8WgdyUkYM7UtRzt0ZbiwWbN_SlShhUuOX766kRAKtgXKKwmuZUO5eFCBIXC5VcXM&usqp=CAU"
                   alt="Algo de errado não está certo."
-                />{" "}
-                {/* &#128540;&#128514;
-                <img src="https://pa1.narvii.com/6326/5c4a1bb861089e73828287285446e268c69e1012_00.gif" alt="Algo de errado não está certo." /> */}
+                />
                 <p style={{ fontSize: "100px" }}>&#129300;404&#128579;</p>
               </h1>
             </Route>
