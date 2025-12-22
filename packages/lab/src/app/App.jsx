@@ -11,22 +11,20 @@ const App = () => {
     <Router>
       <div className="container" style={{ fontSize: "30px" }}>
         <Header />
-        <div style={{ padding: "20px" }}>
-          <Switch>
-            <Route path="/debug/form">
-              <FormDemo />
-            </Route>
-            <Route path="/debug/core">
-              <CoreDemo />
-            </Route>
-            <Route exact path="/">
-              <p>home</p>
-            </Route>
-            <Route exact path="*">
-              <NotFound />
-            </Route>
-          </Switch>
-        </div>
+        <Switch>
+          <Route path="/debug/form">
+            <FormDemo />
+          </Route>
+          <Route path="/debug/core">
+            <CoreDemo />
+          </Route>
+          <Route exact path="/">
+            <p>home</p>
+          </Route>
+          <Route exact path="*">
+            <NotFound />
+          </Route>
+        </Switch>
       </div>
     </Router>
   )

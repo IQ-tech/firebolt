@@ -29,12 +29,9 @@ body.dark-mode textarea {
   border-color: #444;
 }
 
-body.dark-mode button:not([style*="background"]) {
-  background-color: #333;
-  color: #e0e0e0;
-  border-color: #555;
-}
-
-body.dark-mode button:not([style*="background"]):hover {
-  background-color: #444;
+body.dark-mode .au-text--color-common,
+body.dark-mode .au-text--color-secondary,
+body.dark-mode .au-field__header-label,
+body.dark-mode .au-checkbox__label {
+  color: #e0e0e0 !important;
 }
