@@ -5,6 +5,7 @@ import Header from "./components/Header"
 import "iq-blueberry/dist/styles.css"
 import "./darkmode.css"
 import { NotFound } from "./components/NotFound"
+import Home from "./pages/Home"
 
 const App = () => {
   return (
@@ -19,7 +20,7 @@ const App = () => {
             <CoreDemo />
           </Route>
           <Route exact path="/">
-            <p>home</p>
+            <Home />
           </Route>
           <Route exact path="*">
             <NotFound />
