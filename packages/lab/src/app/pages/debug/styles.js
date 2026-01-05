@@ -1,8 +1,9 @@
 export const styleButton = {
-  fontSize: "15px",
-  width: "100px",
-  height: "30px",
-  margin: "20px",
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
+  gap: "8px",
+  margin: "16px"
 }
 
 export const styleContainer = {

@@ -3,6 +3,7 @@ import { useEffect, useState, useRef } from "react"
 import { createFireboltForm } from "@iq-firebolt/client-core"
 import * as S from "./styles.js"
 import transmorphersPropsPresets from "../../constants/transmorphers-props-presets"
+import { Button } from "@consumidor-positivo/aurora"
 
 // import BrPropsPresets from "@iq-firebolt/br-presets"
 
@@ -58,15 +59,13 @@ const CoreTest = () => {
   return (
     <div style={S.styleContainer}>
       <p>stepSlug: {stepSlug} </p>
-      <div>
-        {/* <button onClick={proceed}>Next</button> */}
-
-        <button style={S.styleButton} onClick={proceedPrevious}>
+      <div style={S.styleButton}>
+        <Button onClick={proceedPrevious}>
           Previous
-        </button>
-        <button style={S.styleButton} onClick={proceedNext}>
+        </Button>
+        <Button onClick={proceedNext}>
           Next
-        </button>
+        </Button>
       </div>
     </div>
   )
