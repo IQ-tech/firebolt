@@ -82,3 +82,28 @@ describe("API Error handling work correctly", () => {
   test.todo("throw correct errors on connection error")
   test.todo("throw correct errors on validation error")
 })
+
+describe("Auth header", () => {
+  const withKey = new APIService({
+    formAccess: {
+      root: "https://api.test",
+      formName: "form",
+      apiKey: "the-client-id",
+    },
+  })
+
+  test("sends the client id as x-client-id, not x-api-key", async () => {
+    const getMock = axios.get as MockedFunction<typeof axios.get>
+    getMock.mockClear()
+    getMock.mockResolvedValue({ data: startFormResponse })
+
+    await withKey.getStartForm()
+
+    const [, config] = getMock.mock.calls[0] as [
+      string,
+      { headers?: Record<string, string> },
+    ]
+    expect(config?.headers?.["x-client-id"]).toBe("the-client-id")
+    expect(config?.headers?.["x-api-key"]).toBeUndefined()
+  })
+})
