@@ -2,7 +2,7 @@ import axios, { AxiosRequestConfig } from "axios"
 import { formatStepResponseData, formatReqPayload } from "../helpers/formatData"
 import { IApiService, IFormResponseData } from "../types"
 
-const X_API_KEY = "x-api-key"
+const CLIENT_ID_HEADER = "x-client-id"
 
 class APIService {
   debug?: boolean
@@ -35,7 +35,7 @@ class APIService {
     }
 
     if (this.endpoints?.apiKey) {
-      headers[X_API_KEY] = this.endpoints.apiKey
+      headers[CLIENT_ID_HEADER] = this.endpoints.apiKey
     }
 
     return await axios
@@ -53,7 +53,7 @@ class APIService {
     }
 
     if (this.endpoints?.apiKey) {
-      headers[X_API_KEY] = this.endpoints.apiKey
+      headers[CLIENT_ID_HEADER] = this.endpoints.apiKey
     }
 
     const endpoint = `${this.endpoints.base}/next`
@@ -73,7 +73,7 @@ class APIService {
       authorization: `Bearer ${sessionKey}`,
     }
     if (this.endpoints?.apiKey) {
-      headers[X_API_KEY] = this.endpoints.apiKey
+      headers[CLIENT_ID_HEADER] = this.endpoints.apiKey
     }
 
     const endpoint = `${this.endpoints.base}/${currentStepSlug}/previous`
@@ -86,7 +86,7 @@ class APIService {
   async getDebugStep(stepSlug) {
     const headers = {}
     if (this.endpoints?.apiKey) {
-      headers[X_API_KEY] = this.endpoints.apiKey
+      headers[CLIENT_ID_HEADER] = this.endpoints.apiKey
     }
 
     const endpoint = `${this.endpoints.root}/debug/${this.formName}/${stepSlug}`
@@ -102,7 +102,7 @@ class APIService {
       "Content-Type": "multipart/form-data",
     }
     if (this.endpoints?.apiKey) {
-      headers[X_API_KEY] = this.endpoints.apiKey
+      headers[CLIENT_ID_HEADER] = this.endpoints.apiKey
     }
 
     const formData = new FormData()
